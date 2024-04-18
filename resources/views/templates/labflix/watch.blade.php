@@ -1,7 +1,6 @@
 @extends($activeTemplate . 'layouts.frontend')
 @section('content')
     <div class="pt-80 pb-80">
-        <h2>Test</h2>
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
