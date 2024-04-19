@@ -112,8 +112,8 @@ class EpisodeController extends Controller {
             $sevenTwentyLink  = 'nullable';
             $sevenTwentyVideo = 'nullable';
         } else {
-            $sevenTwentyLink  = 'required_if:video_type_seven_twenty,0';
-            $sevenTwentyVideo = 'required_if:video_type_seven_twenty,1';
+            $sevenTwentyLink  = 'required_if:video_type,0';
+            $sevenTwentyVideo = 'required_if:video_type,1';
         }
 
         ini_set('memory_limit', '-1');
