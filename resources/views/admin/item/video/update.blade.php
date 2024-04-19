@@ -25,8 +25,8 @@
                             <div class="tab-pane fade show active" id="pills-720p" role="tabpanel" aria-labelledby="pills-720p-tab" tabindex="0">
                                 <x-update-video-form video="{{ $video->seven_twenty_video }}" selectValue="{{ $video->video_type_seven_twenty }}" videoType="seven-twenty" fileType="720P" />
 
-                                @if ($videoFile['seven_twenty'])
-                                    <x-admin-video-player :poster="$posterImage" :videoFile="$videoFile['seven_twenty']" />
+                                @if ($videoFile['seven_twenty_video'])
+                                    <x-admin-video-player :poster="$posterImage" :videoFile="$videoFile['seven_twenty_video']" />
                                 @endif
                             </div>
 
