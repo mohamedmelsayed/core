@@ -325,7 +325,7 @@ class ItemController extends Controller {
     public function updateVideo(Request $request, $id) {
         $item  = Item::findOrFail($id);
         $video = $item->video;
-
+dd($video);
         if (!$video) {
             $notify[] = ['error', 'Video not found'];
             return back()->withNotify($notify);
