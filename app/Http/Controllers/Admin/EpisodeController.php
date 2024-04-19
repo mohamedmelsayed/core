@@ -121,13 +121,13 @@ class EpisodeController extends Controller {
     
             'video_type'    => 'required',
             'seven_twenty_link'          => "$sevenTwentyLink",
-            'seven_twenty_video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
+            'video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
 
           
         ], [
         
             'seven_twenty_link'          => 'Video file 720P link is required',
-            'seven_twenty_video'         => 'Video file 720P video is required',
+            'video'         => 'Video file 720P video is required',
             
         ]);
 
