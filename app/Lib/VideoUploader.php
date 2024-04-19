@@ -52,7 +52,6 @@ class VideoUploader {
 
     public function uploadToCurrentServer() {
         $file     = $this->file;
-        dd($file);
         $location = 'assets/videos/';
         $path     = $location . $this->date;
 
