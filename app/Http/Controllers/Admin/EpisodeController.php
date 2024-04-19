@@ -134,18 +134,11 @@ class EpisodeController extends Controller {
             'thousand_eighty_link'       => 'nullable',
             'thousand_eighty_video'      => ['nullable', new FileTypeValidate(['mp4', 'mkv', '3gp'])],
         ], [
-            'video_type_three_sixty'     => 'Video file 360P type is required',
-            'three_sixty_link'           => 'Video file 360P link is required',
-            'three_sixty_video'          => 'Video file 360P video is required',
-            'video_type_four_eighty'     => 'Video file 480P type is required',
-            'four_eighty_link'           => 'Video file 480P link is required',
-            'four_eighty_video'          => 'Video file 480P video is required',
+        
             'video_type_seven_twenty'    => 'Video file 720P type is required',
             'seven_twenty_link'          => 'Video file 720P link is required',
             'seven_twenty_video'         => 'Video file 720P video is required',
-            'video_type_thousand_eighty' => 'Video file 1080P type is required',
-            'thousand_eighty_link'       => 'Video file 1080P link is required',
-            'thousand_eighty_video'      => 'Video file 1080P video is required',
+            
         ]);
 
         if ($validator->fails()) {
@@ -161,24 +154,8 @@ class EpisodeController extends Controller {
             $video->episode_id = $episode->id;
         }
 
-        if ($request->hasFile('three_sixty_video') || $request->three_sixty_link) {
-            $uploadThreeSixty = MultiVideoUploader::multiQualityVideoUpload($video, 'three_sixty');
-            if ($uploadThreeSixty['error']) {
-                return response()->json(['error' => $sizeValidation['message']]);
-            }
-            $video->video_type_three_sixty = @$request->video_type_three_sixty;
-            $video->three_sixty_video      = @$uploadThreeSixty['three_sixty_video'];
-            $video->server_three_sixty     = @$uploadThreeSixty['server'] ?? 0;
-        }
-        if ($request->hasFile('four_eighty_video') || $request->four_eighty_link) {
-            $uploadFourEighty = MultiVideoUploader::multiQualityVideoUpload($video, 'four_eighty');
-            if ($uploadFourEighty['error']) {
-                return response()->json(['error' => $sizeValidation['message']]);
-            }
-            $video->video_type_four_eighty = @$request->video_type_four_eighty;
-            $video->four_eighty_video      = @$uploadFourEighty['four_eighty_video'];
-            $video->server_four_eighty     = @$uploadFourEighty['server'] ?? 0;
-        }
+     
+  
         if ($request->hasFile('seven_twenty_video') || $request->seven_twenty_link) {
             $uploadSevenTwenty = MultiVideoUploader::multiQualityVideoUpload($video, 'seven_twenty');
             if ($uploadSevenTwenty['error']) {
@@ -188,15 +165,7 @@ class EpisodeController extends Controller {
             $video->seven_twenty_video      = @$uploadSevenTwenty['seven_twenty_video'];
             $video->server_seven_twenty     = @$uploadSevenTwenty['server'] ?? 0;
         }
-        if ($request->hasFile('thousand_eighty_video') || $request->thousand_eighty_link) {
-            $uploadThousandEighty = MultiVideoUploader::multiQualityVideoUpload($video, 'thousand_eighty');
-            if ($uploadThousandEighty['error']) {
-                return response()->json(['error' => $sizeValidation['message']]);
-            }
-            $video->video_type_thousand_eighty = @$request->video_type_thousand_eighty;
-            $video->thousand_eighty_video      = @$uploadThousandEighty['thousand_eighty_video'];
-            $video->server_thousand_eighty     = @$uploadThousandEighty['server'] ?? 0;
-        }
+        
 
         $video->save();
         return response()->json('success');
