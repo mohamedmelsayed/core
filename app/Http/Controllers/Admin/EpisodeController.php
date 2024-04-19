@@ -119,14 +119,13 @@ class EpisodeController extends Controller {
         ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
     
-            'video_type_seven_twenty'    => 'required',
+            'video_type'    => 'required',
             'seven_twenty_link'          => "$sevenTwentyLink",
             'seven_twenty_video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
 
           
         ], [
         
-            'video_type_seven_twenty'    => 'Video file 720P type is required',
             'seven_twenty_link'          => 'Video file 720P link is required',
             'seven_twenty_video'         => 'Video file 720P video is required',
             

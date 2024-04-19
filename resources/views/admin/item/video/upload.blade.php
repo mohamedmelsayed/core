@@ -32,7 +32,7 @@
                                         <div class="bar bg--primary"></div>
                                         <div class="percent">0%</div>
                                     </div>
-                                    <input class="upload-video-file" name="video" type="file" />
+                                    <input class="upload-video-file" name="seven_twenty_video" type="file" />
                                 </div>
                                 <div class="form-group" id="link">
                                     <label>@lang('Insert Link')</label>
