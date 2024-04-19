@@ -10,6 +10,7 @@ class VideoUploader {
     private $general;
 
     public $fileName;
+    public $uploadedServer;
     public $error;
 
     public function __construct() {
@@ -22,15 +23,20 @@ class VideoUploader {
         try {
             switch ($uploadDisk) {
                 case Status::CURRENT_SERVER:
+                    $this->uploadedServer = Status::CURRENT_SERVER;
                     $this->uploadToCurrentServer();
                     break;
                 case Status::FTP_SERVER:
+                    $this->uploadedServer = Status::FTP_SERVER;
+
                     $this->uploadToServer('custom-ftp', 'videos');
                     break;
                 case Status::WASABI_SERVER:
+                    $this->uploadedServer = Status::WASABI_SERVER;
                     $this->uploadToServer('wasabi', 'videos');
                     break;
                 case Status::DIGITAL_OCEAN_SERVER:
+                    $this->uploadedServer = Status::DIGITAL_OCEAN_SERVER;
                     $this->uploadToServer('digital_ocean', 'videos');
                     break;
                 default:
