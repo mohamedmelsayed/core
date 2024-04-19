@@ -21,16 +21,16 @@ class VideoUploader {
 
         try {
             switch ($uploadDisk) {
-                case 'current':
+                case Status::CURRENT_SERVER:
                     $this->uploadToCurrentServer();
                     break;
-                case 'custom-ftp':
+                case Status::FTP_SERVER:
                     $this->uploadToServer('custom-ftp', 'videos');
                     break;
-                case 'wasabi':
+                case Status::WASABI_SERVER:
                     $this->uploadToServer('wasabi', 'videos');
                     break;
-                case 'digital_ocean':
+                case Status::DIGITAL_OCEAN_SERVER:
                     $this->uploadToServer('digital_ocean', 'videos');
                     break;
                 default:
