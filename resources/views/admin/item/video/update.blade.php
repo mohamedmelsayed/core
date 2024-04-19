@@ -26,7 +26,7 @@
                                 <x-update-video-form video="{{ $video->seven_twenty_video }}" selectValue="{{ $video->video_type_seven_twenty }}" videoType="seven-twenty" fileType="720P" />
 
                                 @if ($video['seven_twenty_video'])
-                                    <x-admin-video-player :poster="$posterImage" :videoFile="$videoFile" />
+                                    <x-admin-video-player :poster="$image" :videoFile="$videoFile" />
                                 @endif
                             </div>
 
