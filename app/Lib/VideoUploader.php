@@ -32,7 +32,7 @@ class VideoUploader {
         if ($this->oldFile) {
             $this->removeOldFile();
         }
-        if ($uploadDisk == 'wasabi') {
+        if ($uploadDisk == 'current') {
             $this->uploadedServer = Status::CURRENT_SERVER;
             return $this->uploadToCurrentServer();
         }
@@ -40,7 +40,7 @@ class VideoUploader {
             $this->uploadedServer = Status::FTP_SERVER;
             $this->uploadToServer('custom-ftp', 'videos');
         }
-        if ($uploadDisk == 'wasabicurrent') {
+        if ($uploadDisk == 'wasabi') {
             $this->uploadedServer = Status::WASABI_SERVER;
             $this->uploadToServer('wasabi', 'videos');
         }
