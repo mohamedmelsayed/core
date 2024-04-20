@@ -380,7 +380,7 @@ class ItemController extends Controller
         }
 
         $videoUploader            = new VideoUploader();
-        $videoUploader->oldFile   = $video->content;
+        $videoUploader->oldFile   = $video->seven_twenty_video;
         $videoUploader->oldServer = $video->server;
 
         if ($request->hasFile('video')) {
