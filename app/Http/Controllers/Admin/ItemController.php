@@ -411,7 +411,7 @@ class ItemController extends Controller
 
         $video->item_id    = $item->id;
         $video->seven_twenty_video    = $content;
-        $video->server     = $server;
+        // $video->server     = $server;
         $video->save();
 
         return response()->json('success');
