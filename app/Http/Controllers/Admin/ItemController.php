@@ -23,33 +23,39 @@ use Illuminate\Validation\ValidationException;
 use ProtoneMedia\LaravelFFMpeg\Filters\TileFactory;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
-class ItemController extends Controller {
+class ItemController extends Controller
+{
 
-    public function items() {
+    public function items()
+    {
         $pageTitle = "Video Items";
         $items     = $this->itemsData();
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
-    public function singleItems() {
+    public function singleItems()
+    {
         $pageTitle = "Single Video Items";
         $items     = $this->itemsData('singleItems');
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
-    public function episodeItems() {
+    public function episodeItems()
+    {
         $pageTitle = "Episode Video Items";
         $items     = $this->itemsData('episodeItems');
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
-    public function trailerItems() {
+    public function trailerItems()
+    {
         $pageTitle = "Trailer Video Items";
         $items     = $this->itemsData('trailerItems');
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
-    private function itemsData($scope = null) {
+    private function itemsData($scope = null)
+    {
 
         if ($scope) {
             $items = Item::$scope()->with('category', 'sub_category', 'video');
@@ -60,20 +66,22 @@ class ItemController extends Controller {
         $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
 
         return $items;
-
     }
 
-    public function create() {
+    public function create()
+    {
         $pageTitle  = "Add Item";
-        $categories = Category::active()->with(['subcategories' => function ($subcategory) {
-            $subcategory->where('status', 1);
-        },
+        $categories = Category::active()->with([
+            'subcategories' => function ($subcategory) {
+                $subcategory->where('status', 1);
+            },
         ])->orderBy('id', 'desc')->get();
         $types = Plan::get();
-        return view('admin.item.singleCreate', compact('pageTitle', 'categories','types'));
+        return view('admin.item.singleCreate', compact('pageTitle', 'categories', 'types'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $this->itemValidation($request, 'create');
         $team = [
             'director' => implode(',', $request->director),
@@ -100,18 +108,21 @@ class ItemController extends Controller {
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $item       = Item::findOrFail($id);
         $pageTitle  = "Edit : " . $item->title;
-        $categories = Category::active()->with(['subcategories' => function ($subcategory) {
-            $subcategory->where('status', 1);
-        },
+        $categories = Category::active()->with([
+            'subcategories' => function ($subcategory) {
+                $subcategory->where('status', 1);
+            },
         ])->orderBy('id', 'desc')->get();
         $subcategories = SubCategory::where('status', 1)->where('category_id', $item->category_id)->orderBy('id', 'desc')->get();
         return view('admin.item.edit', compact('pageTitle', 'item', 'categories', 'subcategories'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $this->itemValidation($request, 'update');
 
         $team = [
@@ -146,7 +157,8 @@ class ItemController extends Controller {
         return back()->withNotify($notify);
     }
 
-    private function itemValidation($request, $type) {
+    private function itemValidation($request, $type)
+    {
         $validation = $type == 'create' ? 'required' : 'nullable';
         $versions   = implode(',', [Status::FREE_VERSION, Status::PAID_VERSION, Status::RENT_VERSION]);
         $request->validate([
@@ -168,7 +180,8 @@ class ItemController extends Controller {
         ]);
     }
 
-    private function imageUpload($request, $item, $type) {
+    private function imageUpload($request, $item, $type)
+    {
         $landscape = @$item->image->landscape;
         $portrait  = @$item->image->portrait;
 
@@ -197,7 +210,6 @@ class ItemController extends Controller {
             } catch (\Exception $e) {
                 throw ValidationException::withMessages(['landscape' => 'Landscape image could not be uploaded']);
             }
-
         }
 
         if ($request->portrait_url) {
@@ -225,7 +237,6 @@ class ItemController extends Controller {
             } catch (\Exception $e) {
                 throw ValidationException::withMessages(['portrait' => 'Portrait image could not be uploaded']);
             }
-
         }
 
         $image = [
@@ -235,7 +246,8 @@ class ItemController extends Controller {
         return $image;
     }
 
-    private function saveItem($request, $team, $image, $item) {
+    private function saveItem($request, $team, $image, $item)
+    {
         $version = $request->version ? 1 : 0;
         if ($request->item_type && $request->item_type == 2) {
             $version = 2;
@@ -253,7 +265,8 @@ class ItemController extends Controller {
         $item->save();
     }
 
-    public function uploadVideo($id) {
+    public function uploadVideo($id)
+    {
         $item  = Item::findOrFail($id);
         $video = $item->video;
 
@@ -267,7 +280,8 @@ class ItemController extends Controller {
         return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl'));
     }
 
-    public function upload(Request $request, $id) {
+    public function upload(Request $request, $id)
+    {
 
         ini_set('memory_limit', '-1');
         $validation_rule['video_type'] = 'required';
@@ -313,19 +327,20 @@ class ItemController extends Controller {
         }
         $videoObj             = new Video();
         $videoObj->item_id    = $item->id;
-    //    $videoObj->video_type = $request->video_type;
-        $videoObj->video_type_seven_twenty=1;
+        //    $videoObj->video_type = $request->video_type;
+        $videoObj->video_type_seven_twenty = 1;
         $videoObj->seven_twenty_video     = $video;
-       // $videoObj->server     = $server;
+        // $videoObj->server     = $server;
         $videoObj->save();
 
         return response()->json('success');
     }
 
-    public function updateVideo(Request $request, $id) {
+    public function updateVideo(Request $request, $id)
+    {
         $item  = Item::findOrFail($id);
         $video = $item->video;
-// dd($video);
+        // dd($video);
         if (!$video) {
             $notify[] = ['error', 'Video not found'];
             return back()->withNotify($notify);
@@ -341,7 +356,8 @@ class ItemController extends Controller {
         return view('admin.item.video.update', compact('item', 'pageTitle', 'video', 'videoFile', 'image', 'prevUrl'));
     }
 
-    public function updateItemVideo(Request $request, $id) {
+    public function updateItemVideo(Request $request, $id)
+    {
         ini_set('memory_limit', '-1');
         $validation_rule['video_type'] = 'required';
         $validation_rule['link']       = 'required_without:video';
@@ -374,14 +390,6 @@ class ItemController extends Controller {
             if ($videoSize > 4194304000) {
                 return response()->json(['errors' => 'File size must be lower then 4 gb']);
             }
-            FFMpeg::open($file)
-                ->exportTile(function (TileFactory $factory) {
-                    $factory->interval(5)
-                        ->scale(120, 80)
-                        ->grid(20, 2)
-                        ->generateVTT('thumbnails.vtt');
-                })
-                ->save('thumbnails.jpg');
 
             $videoUploader->file = $file;
             $videoUploader->upload();
@@ -394,7 +402,6 @@ class ItemController extends Controller {
 
             $content = $videoUploader->fileName;
             $server  = $videoUploader->uploadedServer;
-
         } else {
             $videoUploader->removeOldFile();
 
@@ -403,15 +410,15 @@ class ItemController extends Controller {
         }
 
         $video->item_id    = $item->id;
-        $video->video_type = $request->video_type;
-        $video->content    = $content;
+        $video->seven_twenty_video    = $content;
         $video->server     = $server;
         $video->save();
 
         return response()->json('success');
     }
 
-    public function itemList(Request $request) {
+    public function itemList(Request $request)
+    {
         $items = Item::query();
 
         if (request()->search) {
@@ -430,7 +437,8 @@ class ItemController extends Controller {
         return $response ?? [];
     }
 
-    public function itemFetch(Request $request) {
+    public function itemFetch(Request $request)
+    {
         $validate = Validator::make($request->all(), [
             'id'        => 'required|integer',
             'item_type' => 'required|integer|in:1,2',
@@ -465,7 +473,8 @@ class ItemController extends Controller {
         ]);
     }
 
-    public function sendNotification($id) {
+    public function sendNotification($id)
+    {
         $item      = Item::where('status', 1)->findOrFail($id);
         $clickUrl  = route('watch', $item->id);
         $users     = User::active()->cursor();
@@ -474,14 +483,14 @@ class ItemController extends Controller {
         ];
 
         foreach ($users as $user) {
-            notify($user, 'SEND_ITEM_NOTIFICATION', $shortCode, clickValue:$clickUrl);
+            notify($user, 'SEND_ITEM_NOTIFICATION', $shortCode, clickValue: $clickUrl);
         }
         $notify[] = ['success', 'Notification send successfully'];
         return back()->withNotify($notify);
-
     }
 
-    public function adsDuration($id, $episodeId = 0) {
+    public function adsDuration($id, $episodeId = 0)
+    {
         $pageTitle = 'Ads Configuration';
         $item      = Item::findOrFail($id);
 
@@ -498,7 +507,8 @@ class ItemController extends Controller {
         return view('admin.item.video.ads', compact('pageTitle', 'item', 'video', 'videoFile', 'episodeId'));
     }
 
-    public function adsDurationStore(Request $request, $id = 0, $episodeId = 0) {
+    public function adsDurationStore(Request $request, $id = 0, $episodeId = 0)
+    {
         $request->validate([
             'ads_time'   => 'required|array',
             'ads_time.*' => 'required',
@@ -524,10 +534,10 @@ class ItemController extends Controller {
 
         $notify[] = ['success', 'Ads time added successfully'];
         return back()->withNotify($notify);
-
     }
 
-    public function subtitles($id, $videoId = 0) {
+    public function subtitles($id, $videoId = 0)
+    {
         $itemId    = 0;
         $episodeId = 0;
         if ($videoId == 0) {
@@ -545,7 +555,8 @@ class ItemController extends Controller {
         return view('admin.item.video.subtitles', compact('pageTitle', 'item', 'subtitles', 'videoId', 'episodeId', 'itemId'));
     }
 
-    public function subtitleStore(Request $request, $itemId, $episodeId, $videoId, $id = 0) {
+    public function subtitleStore(Request $request, $itemId, $episodeId, $videoId, $id = 0)
+    {
         $validate = $id ? 'nullable' : 'required';
         $request->validate([
             'language' => 'required|string|max:40',
@@ -576,7 +587,8 @@ class ItemController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function subtitleDelete($id) {
+    public function subtitleDelete($id)
+    {
         $subtitle = Subtitle::where('id', $id)->firstOrFail();
         fileManager()->removeFile(getFilePath('subtitle') . '/' . $subtitle->file);
         $subtitle->delete();
@@ -584,7 +596,8 @@ class ItemController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function report($id, $videoId = 0) {
+    public function report($id, $videoId = 0)
+    {
         if ($videoId == 0) {
             $item        = Item::with('videoReport')->findOrFail($id);
             $videoReport = $item->videoReport;
@@ -606,5 +619,4 @@ class ItemController extends Controller {
         $pageTitle = 'Report - ' . $item->title;
         return view('admin.item.report', compact('pageTitle', 'reports', 'item', 'totalViews', 'title'));
     }
-
 }
