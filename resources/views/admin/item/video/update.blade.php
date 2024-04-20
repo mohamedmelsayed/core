@@ -1,6 +1,8 @@
 @extends('admin.layouts.app')
 @section('panel')
     <div class="row">
+    <h1>TEst</h1>
+
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">

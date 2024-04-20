@@ -2,7 +2,6 @@
 
 @section('panel')
     <div class="row">
-        <h1>TEst</h1>
         <div class="col-lg-12">
             <div class="card upload-card">
                 <form id="upload-video" action="" method="post" enctype="multipart/form-data">
