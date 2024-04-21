@@ -600,8 +600,7 @@ class ItemController extends Controller
     {
         $item        = Item::findOrFail($id);
         if ($item->count() > 0) {
-            if ($item->video()) {
-                dd($item->video());
+            if ($item->video()->count()>0) {
                 $videoUploader            = new VideoUploader();
                 $videoUploader->oldFile   = $video->seven_twenty_video;
                 
