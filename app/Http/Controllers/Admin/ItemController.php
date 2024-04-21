@@ -602,7 +602,7 @@ class ItemController extends Controller
         if ($item->count() > 0) {
             if ($item->video()->count()>0) {
                 $videoUploader            = new VideoUploader();
-                $videoUploader->oldServer = $video->server;
+                $videoUploader->oldServer = $item->video->server;
                 $videoUploader->oldFile   = $item->video->seven_twenty_video;
                 
                 $videoUploader->removeOldFile();
