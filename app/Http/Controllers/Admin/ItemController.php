@@ -598,6 +598,7 @@ class ItemController extends Controller
 
     public function delete($id)
     {
+        $pageTitle = "Video Items";
         $item        = Item::findOrFail($id);
         if ($item->count() > 0) {
             if ($item->video()->count()>0) {
