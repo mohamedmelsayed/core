@@ -613,6 +613,8 @@ class ItemController extends Controller
                 $item->episodes->delete();
             }
             $item->delete();
+            $items     = $this->itemsData();
+            return view('admin.item.index', compact('pageTitle', 'items'));
         }
     }
 
