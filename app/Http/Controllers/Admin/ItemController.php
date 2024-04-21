@@ -596,6 +596,20 @@ class ItemController extends Controller
         return back()->withNotify($notify);
     }
 
+    public function delete($id){
+        $item        = Item::findOrFail($id);
+        if($item->count()>0){
+            if($item->video!==null){
+                $item->video->delete();
+            }
+            if($item->episodes->count()>0){
+                $item->episodes->delete();
+            }
+            $item->delete();
+        }
+      
+    }
+
     public function report($id, $videoId = 0)
     {
         if ($videoId == 0) {
