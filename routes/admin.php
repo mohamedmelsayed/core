@@ -81,6 +81,7 @@ Route::middleware('admin')->group(function () {
         Route::get('list', 'itemList')->name('list');
 
         Route::post('item/fetch', 'itemFetch')->name('fetch');
+        Route::delete('/{id}', 'delete')->name('delete');
         Route::post('send/notification/{id}', 'sendNotification')->name('send.notification');
         Route::get('ads/duration/{id}/{episode_id?}', 'adsDuration')->name('ads.duration');
         Route::post('ads/duration/{id}/{episode_id?}', 'adsDurationStore')->name('ads.duration.store');
