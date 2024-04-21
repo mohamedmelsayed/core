@@ -43,7 +43,7 @@
                                         <a class="btn btn-sm btn-outline--primary" href="{{ route('admin.item.edit', $item->id) }}">
                                             <i class="la la-pencil"></i>@lang('Edit')
                                         </a>
-                                        <a class="dropdown-item threshold" href="{{ route('admin.item.delete', $item->id) }}">
+                                        <a class="btn btn-sm btn-outline--primary" href="{{ route('admin.item.delete', $item->id) }}">
                                             <i class="las la-recycle"></i> @lang('Delete Video')
                                         </a>
                                         <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
