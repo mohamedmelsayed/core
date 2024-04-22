@@ -611,7 +611,9 @@ class ItemController extends Controller
                 $item->video->delete();
             }
             if ($item->episodes->count() > 0) {
-                $item->episodes->delete();
+                $item->episodes->each(function ($model) {
+                    $model->delete();
+                });
             }
             $item->delete();
             $items     = $this->itemsData();
