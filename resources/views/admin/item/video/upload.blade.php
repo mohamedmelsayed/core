@@ -284,3 +284,64 @@
         })(jQuery)
     </script>
 @endpush
+
+
+<div class="modal fade" id="cancelUploadModal" tabindex="-1" role="dialog" aria-labelledby="cancelUploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelUploadModalLabel">Cancel Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel the uploading process?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmCancelUpload">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@push('script')
+<script>
+    var isUploading = false;
+
+    // Notify user before leaving the page while uploading
+    window.addEventListener('beforeunload', function(event) {
+        if (isUploading) {
+            event.preventDefault();
+            event.returnValue = '';
+            $('#cancelUploadModal').modal('show');
+        }
+    });
+
+    // Handle cancel upload confirmation
+    $('#confirmCancelUpload').on('click', function() {
+        isUploading = false;
+        $('#cancelUploadModal').modal('hide');
+    });
+
+    $('form').ajaxForm({
+        beforeSubmit: validate,
+        dataType: 'json',
+        beforeSend: function() {
+            isUploading = true;
+            // Other code...
+        },
+        success: function(data) {
+            isUploading = false;
+            // Other code...
+        }
+    });
+
+    // Add confirmation for leaving the page manually
+    $('form').on('submit', function() {
+        $(window).off('beforeunload');
+    });
+</script>
+@endpush
