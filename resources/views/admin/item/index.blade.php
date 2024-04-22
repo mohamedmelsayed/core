@@ -43,9 +43,10 @@
                                         <a class="btn btn-sm btn-outline--primary" href="{{ route('admin.item.edit', $item->id) }}">
                                             <i class="la la-pencil"></i>@lang('Edit')
                                         </a>
-                                        <a class="btn btn-sm btn-outline--danger" href="{{ route('admin.item.delete', $item->id) }}">
+                                        <a class="btn btn-sm btn-outline--danger deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
                                             <i class="las la-recycle"></i> @lang('Delete')
                                         </a>
+
                                         <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item threshold" href="{{ route('watch', $item->slug) }}" target="_blank"> <i class="las la-eye"></i> @lang('Preview') </a>
@@ -117,3 +118,41 @@
     }
 </style>
 @endpush
+
+@push('script')
+<script>
+    $(document).ready(function() {
+        $('.deleteBtn').click(function() {
+            var itemId = $(this).data('item-id');
+            var deleteUrl = "{{ route('admin.item.delete', ':id') }}".replace(':id', itemId);
+            $('#deleteForm').attr('action', deleteUrl);
+            $('#confirmationModal').modal('show');
+        });
+    });
+</script>
+@endpush
+
+
+
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">@lang('Confirmation')</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @lang('Are you sure you want to delete this item?')
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('Cancel')</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">@lang('Delete')</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
