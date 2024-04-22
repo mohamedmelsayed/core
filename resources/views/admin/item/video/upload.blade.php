@@ -32,8 +32,7 @@
                                         <div class="bar bg--primary"></div>
                                         <div class="percent">0%</div>
                                     </div>
-                                    <input class="upload-video-file" name="video" type="file" onchange="handleFileSelect(this)" />
-                                    <span id="selectedFileName"></span>
+                                    <input class="upload-video-file" name="video" type="file" />
                                 </div>
                                 <div class="form-group" id="link" style="display: none;">
                                     <label>@lang('Insert Link')</label>
@@ -142,12 +141,6 @@
             opacity: 0;
             position: fixed;
         }
-
-        #selectedFileName {
-            display: block;
-            margin-top: 10px;
-            font-size: 14px;
-        }
     </style>
 @endpush
 
@@ -157,18 +150,16 @@
 
 @push('style-lib')
     <link href="{{ asset('assets/admin/css/bootstrap-clockpicker.min.css') }}" rel="stylesheet">
-    <link href="https://cdn.plyr.io/3.6.8/plyr.css" rel="stylesheet">
 @endpush
 
 @push('script-lib')
     <script src="{{ asset('assets/admin/js/bootstrap-clockpicker.min.js') }}"></script>
-    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
 @endpush
 
 @push('script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
     <script>
-        "use strict"
+        "use strict";
 
         var isUploading = false;
 
@@ -187,7 +178,9 @@
 
             video_drop_block[0].ondrop = function(event) {
                 event.preventDefault();
-                video_drop_block.removeClass('hover');
+               
+
+ video_drop_block.removeClass('hover');
                 var file = event.dataTransfer.files;
                 $('#upload-video').find('input').prop('files', file);
                 $('#upload-video').submit();
@@ -314,13 +307,6 @@
                 event.preventDefault();
                 event.returnValue = '';
                 $('#cancelUploadModal').modal('show');
-            }
-        }
-
-        function handleFileSelect(input) {
-            if (input.files && input.files[0]) {
-                var fileName = input.files[0].name;
-                $('#selectedFileName').text('Selected File: ' + fileName);
             }
         }
     </script>
