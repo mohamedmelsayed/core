@@ -22,7 +22,7 @@
                                             <svg class="feather feather-upload" fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z" />
                                             </svg>
-                                            <h4> @lang('Darg Drop Video')</h4>
+                                            <h4> @lang('Drag Drop Video')</h4>
                                             <p>@lang('or Click to choose File')</p>
                                             <button class="btn btn--primary" type="button">@lang('Upload')</button>
                                         </div>
@@ -34,9 +34,9 @@
                                     </div>
                                     <input class="upload-video-file" name="video" type="file" />
                                 </div>
-                                <div class="form-group" id="link">
+                                <div class="form-group" id="link" style="display: none;">
                                     <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="link" type="text" placeholder="@lang('Inert Link')" />
+                                    <input class="form-control" name="link" type="text" placeholder="@lang('Insert Link')" />
                                 </div>
                             </div>
                         </div>
@@ -49,6 +49,26 @@
         </div>
     </div>
 @endsection
+
+<div class="modal fade" id="cancelUploadModal" tabindex="-1" role="dialog" aria-labelledby="cancelUploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelUploadModalLabel">Cancel Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel the uploading process?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmCancelUpload">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @push('style')
     <style type="text/css">
@@ -123,6 +143,7 @@
         }
     </style>
 @endpush
+
 @push('breadcrumb-plugins')
     <a class="btn btn-sm btn-outline--primary" href="{{ $prevUrl }}"><i class="la la-undo"></i> @lang('Back')</a>
 @endpush
@@ -134,208 +155,159 @@
 @push('script-lib')
     <script src="{{ asset('assets/admin/js/bootstrap-clockpicker.min.js') }}"></script>
 @endpush
+
 @push('script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
     <script>
-    "use strict";
+        "use strict";
 
-    var isUploading = false;
+        var isUploading = false;
 
-    var video_drop_block = $("[data-block='video-drop-zone']");
+        var video_drop_block = $("[data-block='video-drop-zone']");
 
-    if (typeof(window.FileReader)) {
-        video_drop_block[0].ondragover = function() {
-            video_drop_block.addClass('hover');
-            return false;
-        };
-
-        video_drop_block[0].ondragleave = function() {
-            video_drop_block.removeClass('hover');
-            return false;
-        };
-
-        video_drop_block[0].ondrop = function(event) {
-            event.preventDefault();
-            video_drop_block.removeClass('hover');
-            var file = event.dataTransfer.files;
-            $('#upload-video').find('input').prop('files', file);
-            $('#upload-video').submit();
-        };
-    }
-
-    $(document).on("click", ".upload-video-file", function(e) {
-        e.stopPropagation();
-        //some code
-    });
-    $(document).on("click", ".upload", function(e) {
-        $('.upload-video-file').trigger("click");
-    });
-
-    function validate(formData, jqForm, options) {
-        var form = jqForm[0];
-        if (form.video_type.value == 0) {
-            if (!form.link.value) {
-                notify('error', 'Link field is required');
+        if (typeof(window.FileReader)) {
+            video_drop_block[0].ondragover = function() {
+                video_drop_block.addClass('hover');
                 return false;
-            }
-        } else {
-            if (!form.video.value) {
-                notify('error', 'File Not Found');
+            };
+
+            video_drop_block[0].ondragleave = function() {
+                video_drop_block.removeClass('hover');
                 return false;
-            }
-            if (form.video.files[0].size > 4194304000) {
-                notify('error', 'File size must be lower then 4 gb');
-                return false;
-            }
-            @if ($video)
-                notify('error', 'Video Already Exist');
-                return false;
-            @endif
+            };
+
+            video_drop_block[0].ondrop = function(event) {
+                event.preventDefault();
+               
+
+ video_drop_block.removeClass('hover');
+                var file = event.dataTransfer.files;
+                $('#upload-video').find('input').prop('files', file);
+                $('#upload-video').submit();
+            };
         }
-    }
 
-    var bar = $('.bar');
-    var percent = $('.percent');
+        $(document).on("click", ".upload-video-file", function(e) {
+            e.stopPropagation();
+            //some code
+        });
 
-    $('form').ajaxForm({
-        beforeSubmit: validate,
-        dataType: 'json',
-        beforeSend: function() {
-            isUploading = true;
-            if ($('#video_type').val() == '0') {
-                $('form').find('.submitButton').text('Saving...');
-                $('form').find('.submitButton').attr('disabled', '');
+        $(document).on("click", ".upload", function(e) {
+            $('.upload-video-file').trigger("click");
+        });
+
+        function validate(formData, jqForm, options) {
+            var form = jqForm[0];
+            if (form.video_type.value == 0) {
+                if (!form.link.value) {
+                    notify('error', 'Link field is required');
+                    return false;
+                }
             } else {
-                $('form').find('.card-footer').addClass('d-none');
-            }
-            var percentVal = '0%';
-            bar.width(percentVal);
-            percent.html(percentVal);
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-            if ($('#video_type').val() == '1') {
-                if (percentComplete > 50) {
-                    percent.addClass('text-white');
+                if (!form.video.value) {
+                    notify('error', 'File Not Found');
+                    return false;
                 }
-                var percentVal = percentComplete + '%';
-                if (percentComplete == 100) {
-                    $('.percent').attr('style', 'top:2px');
-                    percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
+                if (form.video.files[0].size > 4194304000) {
+                    notify('error', 'File size must be lower than 4 GB');
+                    return false;
+                }
+                @if ($video)
+                    notify('error', 'Video Already Exist');
+                    return false;
+                @endif
+            }
+        }
+
+        var bar = $('.bar');
+        var percent = $('.percent');
+
+        $('form').ajaxForm({
+            beforeSubmit: validate,
+            dataType: 'json',
+            beforeSend: function() {
+                isUploading = true;
+                if ($('#video_type').val() == '0') {
+                    $('form').find('.submitButton').text('Saving...');
+                    $('form').find('.submitButton').attr('disabled', '');
                 } else {
-                    percent.html(percentVal);
+                    $('form').find('.card-footer').addClass('d-none');
                 }
-                bar.width(percentVal);
-            }
-        },
-        success: function(data) {
-            isUploading = false;
-            if (data.demo) {
-                notify('warning', data.demo);
-            } else if (data.errors) {
-                percent.removeClass('text-white');
-                $('.percent').attr('style', 'top:8px');
                 var percentVal = '0%';
                 bar.width(percentVal);
                 percent.html(percentVal);
-                $('form').find('.card-footer').removeClass('d-none');
-                notify('error', data.errors);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                if ($('#video_type').val() == '1') {
+                    if (percentComplete > 50) {
+                        percent.addClass('text-white');
+                    }
+                    var percentVal = percentComplete + '%';
+                    if (percentComplete == 100) {
+                        $('.percent').attr('style', 'top:2px');
+                        percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
+                    } else {
+                        percent.html(percentVal);
+                    }
+                    bar.width(percentVal);
+                }
+            },
+            success: function(data) {
+                isUploading = false;
+                if (data.demo) {
+                    notify('warning', data.demo);
+                } else if (data.errors) {
+                    percent.removeClass('text-white');
+                    $('.percent').attr('style', 'top:8px');
+                    var percentVal = '0%';
+                    bar.width(percentVal);
+                    percent.html(percentVal);
+                    $('form').find('.card-footer').removeClass('d-none');
+                    notify('error', data.errors);
+                }
+                if (data == 'success') {
+                    $('.percent').attr('style', 'top:8px');
+                    bar.addClass('bg--success');
+                    percent.html('Success');
+                    $('form').find('.submitButton').text('Upload Video');
+                    $('form').find('.submitButton').removeAttr('disabled');
+                    $('form').trigger("reset");
+                    notify('success', 'video uploaded');
+                    window.location = "{{ route('admin.item.ads.duration', [$item->id, @$episode->id]) }}";
+                }
             }
-            if (data == 'success') {
-                $('.percent').attr('style', 'top:8px');
-                bar.addClass('bg--success');
-                percent.html('Success');
-                $('form').find('.submitButton').text('Upload Video');
-                $('form').find('.submitButton').removeAttr('disabled');
-                $('form').trigger("reset");
-                notify('success', 'video uploaded');
-                window.location = "{{ route('admin.item.ads.duration', [$item->id, @$episode->id]) }}";
+        });
+
+        $("#video_type").change(function() {
+            if ($(this).val() == '0') {
+                $("#link").show();
+                $("#video").hide();
+            } else {
+                $("#link").hide();
+                $("#video").show();
+            }
+        }).change();
+
+        // Notify user before leaving the page while uploading
+        window.addEventListener('beforeunload', showUploadCancelModal);
+
+        // Handle cancel upload confirmation
+        $('#confirmCancelUpload').on('click', function() {
+            isUploading = false;
+            $('#cancelUploadModal').modal('hide');
+        });
+
+        // Add confirmation for leaving the page manually
+        $('form').on('submit', function() {
+            $(window).off('beforeunload');
+        });
+
+        function showUploadCancelModal(event) {
+            if (isUploading) {
+                event.preventDefault();
+                event.returnValue = '';
+                $('#cancelUploadModal').modal('show');
             }
         }
-    });
-
-    $("#video_type").change(function() {
-        if ($(this).val() == '0') {
-            $("#link").show();
-            $("#video").hide();
-        } else {
-            $("#link").hide();
-            $("#video").show();
-        }
-    }).change();
-
-    // Notify user before leaving the page while uploading
-    window.addEventListener('beforeunload', function(event) {
-        if (isUploading) {
-            event.preventDefault();
-            event.returnValue = '';
-            $('#cancelUploadModal').modal('show');
-        }
-    });
-
-    // Handle cancel upload confirmation
-    $('#confirmCancelUpload').on('click', function() {
-        isUploading = false;
-        $('#cancelUploadModal').modal('hide');
-    });
-
-    // Add confirmation for leaving the page manually
-    $('form').on('submit', function() {
-        $(window).off('beforeunload');
-    });
-
-    // Function to show modal when leaving the page
-    function showUploadCancelModal() {
-        if (isUploading) {
-            $('#cancelUploadModal').modal('show');
-            return "You have uploads in progress. Are you sure you want to leave this page?";
-        }
-    }
-
-    // Notify user before leaving the page while uploading
-    window.addEventListener('beforeunload', showUploadCancelModal);
-
-    // Handle cancel upload confirmation
-    $('#confirmCancelUpload').on('click', function() {
-        isUploading = false;
-        $('#cancelUploadModal').modal('hide');
-    });
-
-    // Add confirmation for leaving the page manually
-    $('form').on('submit', function() {
-        $(window).off('beforeunload');
-    });
-
-    // Trigger the beforeunload event manually when navigating away or refreshing the page
-    $(document).on('click', 'a[href]:not([href^="#"])', function(event) {
-        alert("hello");
-        if (isUploading) {
-            event.preventDefault();
-            var href = $(this).attr('href');
-            setTimeout(function() {
-                window.location.href = href;
-            }, 1000); // Delay to ensure the modal appears before navigating
-        }
-    });
-</script>
-
+    </script>
 @endpush
-
-<div class="modal fade" id="cancelUploadModal" tabindex="-1" role="dialog" aria-labelledby="cancelUploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cancelUploadModalLabel">Cancel Upload</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to cancel the uploading process?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="confirmCancelUpload">Yes, Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
