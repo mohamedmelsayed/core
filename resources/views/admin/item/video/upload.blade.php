@@ -285,7 +285,6 @@
 
     // Function to show modal when leaving the page
     function showUploadCancelModal() {
-    alert(isUploading);
         if (isUploading) {
             $('#cancelUploadModal').modal('show');
             return "You have uploads in progress. Are you sure you want to leave this page?";
