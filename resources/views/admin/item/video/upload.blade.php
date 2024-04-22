@@ -139,7 +139,6 @@
     <script>
         "use strict"
 
-        var isUploading = false;
 
         var video_drop_block = $("[data-block='video-drop-zone']");
 
@@ -201,7 +200,6 @@
             beforeSubmit: validate,
             dataType: 'json',
             beforeSend: function() {
-                isUploading = true;
                 if ($('#video_type').val() == '0') {
                     $('form').find('.submitButton').text('Saving...');
                     $('form').find('.submitButton').attr('disabled', '');
@@ -228,7 +226,6 @@
                 }
             },
             success: function(data) {
-                isUploading = false;
                 if (data.demo) {
                     notify('warning', data.demo);
                 } else if (data.errors) {
@@ -263,27 +260,31 @@
             }
         }).change();
 
-        // Notify user before leaving the page while uploading
-        window.addEventListener('beforeunload', function(event) {
-            if (isUploading) {
-                event.preventDefault();
-                event.returnValue = '';
-                $('#cancelUploadModal').modal('show');
+
+
+        (function() {
+            $('.addBtn').on('click', function() {
+                $('.add-timeline-area').append(`<div class="col-md-12 mb-2">
+                                                    <div class="input-group clockpicker">
+                                                        <input class="form-control single-input" id="single-input" type="text" value="00:5">
+                                                    </div>
+                                                </div>`);
+
+                initClock()
+            });
+
+            function initClock() {
+                $('.single-input').clockpicker({
+                    placement: 'bottom',
+                    align: 'right',
+                    autoclose: true,
+                    'default': '20:48'
+                });
             }
-        });
-
-        // Handle cancel upload confirmation
-        $('#confirmCancelUpload').on('click', function() {
-            isUploading = false;
-            $('#cancelUploadModal').modal('hide');
-        });
-
-        // Add confirmation for leaving the page manually
-        $('form').on('submit', function() {
-            $(window).off('beforeunload');
-        });
+        })(jQuery)
     </script>
 @endpush
+
 
 <div class="modal fade" id="cancelUploadModal" tabindex="-1" role="dialog" aria-labelledby="cancelUploadModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -304,3 +305,43 @@
         </div>
     </div>
 </div>
+
+
+@push('script')
+<script>
+    var isUploading = false;
+
+    // Notify user before leaving the page while uploading
+    window.addEventListener('beforeunload', function(event) {
+        if (isUploading) {
+            event.preventDefault();
+            event.returnValue = '';
+            $('#cancelUploadModal').modal('show');
+        }
+    });
+
+    // Handle cancel upload confirmation
+    $('#confirmCancelUpload').on('click', function() {
+        isUploading = false;
+        $('#cancelUploadModal').modal('hide');
+    });
+
+    $('form').ajaxForm({
+        beforeSubmit: validate,
+        dataType: 'json',
+        beforeSend: function() {
+            isUploading = true;
+            // Other code...
+        },
+        success: function(data) {
+            isUploading = false;
+            // Other code...
+        }
+    });
+
+    // Add confirmation for leaving the page manually
+    $('form').on('submit', function() {
+        $(window).off('beforeunload');
+    });
+</script>
+@endpush
