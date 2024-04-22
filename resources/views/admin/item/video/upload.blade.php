@@ -285,6 +285,7 @@
 
     // Function to show modal when leaving the page
     function showUploadCancelModal() {
+    alert(isUploading);
         if (isUploading) {
             $('#cancelUploadModal').modal('show');
             return "You have uploads in progress. Are you sure you want to leave this page?";
@@ -307,7 +308,6 @@
 
     // Trigger the beforeunload event manually when navigating away or refreshing the page
     $(document).on('click', 'a[href]:not([href^="#"])', function(event) {
-        alert("hello");
         if (isUploading) {
             event.preventDefault();
             var href = $(this).attr('href');
