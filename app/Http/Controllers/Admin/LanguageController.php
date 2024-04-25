@@ -21,7 +21,7 @@ class LanguageController extends Controller {
 
         $validatedData = $request->validate([
             'type' => 'required|string|in:video,audio,live', // Add more types if needed
-            'id' => 'required|exists:videos,id', // Assuming 'videos' is the table name
+            'id' => 'required|exists:items,id', // Assuming 'videos' is the table name
             'language' => 'required|string|in:ar,en,fr',
             'translated_title' => 'required|string|max:255',
             'translated_description' => 'nullable|string',
