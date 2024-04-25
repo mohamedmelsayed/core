@@ -86,7 +86,6 @@
                         <th>@lang('Translated Description')</th>
                         <th>@lang('Translated Tags')</th>
                         <th>@lang('Translated Keywords')</th>
-                        <th>@lang('Actions')</th> <!-- New column for actions -->
                     </tr>
                 </thead>
                 <tbody>
