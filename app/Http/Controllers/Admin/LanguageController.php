@@ -61,11 +61,11 @@ class LanguageController extends Controller
          
         }
 
-        $existingTranslation = ContentTranslation::where('item_id', $id)->get();
+        $existingTranslations  = ContentTranslation::where('item_id', $id)->get();
 
     
         // Redirect back with the saved data
-        return redirect()->back()->with('success', 'Translation saved successfully!')->with('savedTranslation', $existingTranslation);
+        return redirect()->back()->with('success', 'Translation saved successfully!')->with('existingTranslations', $existingTranslations );
     }
     
   
@@ -365,11 +365,11 @@ class LanguageController extends Controller
         if ($type === 'video') {
             $reference = Item::find($id);
         }
-        $existingTranslation = ContentTranslation::where('item_id', $id)->get();
+        $existingTranslations = ContentTranslation::where('item_id', $id)->get();
 
         if (!$reference) {
             abort(404);
         }
-        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle','existingTranslation'));
+        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle','existingTranslations'));
     }
 }
