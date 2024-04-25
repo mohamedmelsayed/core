@@ -345,10 +345,10 @@ class LanguageController extends Controller
         if ($type === 'video') {
             $reference = Item::find($id);
         }
-
+        $savedTranslation=new ContentTranslation();
         if (!$reference) {
             abort(404);
         }
-        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle'));
+        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle','savedTranslation'));
     }
 }
