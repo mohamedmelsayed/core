@@ -30,12 +30,12 @@ class LanguageController extends Controller {
         ]);
 
         $contentTranslation=new ContentTranslation();
-        $contentTranslation->translated_keywords=$validatedData->translated_keywords;
-        $contentTranslation->language=$validatedData->language;
-        $contentTranslation->type=$validatedData->type;
-        $contentTranslation->translated_title=$validatedData->translated_title;
-        $contentTranslation->translated_tags=$validatedData->translated_tags;
-        $contentTranslation->id=$validatedData->id;
+        $contentTranslation->translated_keywords=$validatedData["translated_keywords"];
+        $contentTranslation->language=$validatedData["language"];
+        $contentTranslation->type=$validatedData["type"];
+        $contentTranslation->translated_title=$validatedData["translated_title"];
+        $contentTranslation->translated_tags=$validatedData["translated_tags"];
+        $contentTranslation->id=$validatedData["id"];
         $contentTranslation->save();
 
         // Handle storing the translation data here
