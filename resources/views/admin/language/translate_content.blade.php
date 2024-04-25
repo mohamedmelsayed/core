@@ -52,14 +52,14 @@
                         <div class="form-group row">
                             <label for="translated_tags" class="col-md-4 col-form-label text-md-right">@lang('Translated Tags'):</label>
                             <div class="col-md-6">
-                                <input type="text" id="translated_tags" name="translated_tags" class="form-control select2-tags">
+                                <select id="translated_tags" name="translated_tags[]" class="form-control select2-tags" multiple="multiple"></select>
                             </div>
                         </div>
                         
                         <div class="form-group row">
                             <label for="translated_keywords" class="col-md-4 col-form-label text-md-right">@lang('Translated Keywords'):</label>
                             <div class="col-md-6">
-                                <input type="text" id="translated_keywords" name="translated_keywords" class="form-control select2-tags">
+                                <select id="translated_keywords" name="translated_keywords[]" class="form-control select2-tags" multiple="multiple"></select>
                             </div>
                         </div>
                         
@@ -93,7 +93,7 @@
         // Initialize Select2 for tags input fields
         $('.select2-tags').select2({
             tags: true,
-            tokenSeparators: [','],
+            tokenSeparators: [',', ' '],
             width: '100%'
         });
     })(jQuery);
