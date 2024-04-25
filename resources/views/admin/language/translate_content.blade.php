@@ -97,10 +97,7 @@
                         <td>{{ $translation->translated_description }}</td>
                         <td>{{ $translation->translated_tags }}</td>
                         <td>{{ $translation->translated_keywords }}</td>
-                        <td>
-                            <a href="{{ route('admin.language.translate2.edit', ['id' => $translation->id]) }}" class="btn btn-primary">@lang('Edit')</a>
-                            <!-- Add a button to edit the translation -->
-                        </td>
+                     
                     </tr>
                     @endforeach
                 </tbody>
