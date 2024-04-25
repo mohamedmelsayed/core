@@ -18,33 +18,34 @@ class LanguageController extends Controller {
     public function storeTranslation(Request $request)
     {
         // Validate the incoming request data
-
         $validatedData = $request->validate([
             'type' => 'required|string|in:video,audio,live', // Add more types if needed
-            'id' => 'required|exists:items,id', // Assuming 'videos' is the table name
+            'id' => 'required|exists:items,id', // Assuming 'items' is the table name
             'language' => 'required|string|in:ar,en,fr',
             'translated_title' => 'required|string|max:255',
             'translated_description' => 'nullable|string',
-            'translated_tags' => 'nullable|string',
-            'translated_keywords' => 'nullable|string',
+            'translated_tags' => 'nullable|array',
+            'translated_tags.*' => 'nullable|string',
+            'translated_keywords' => 'nullable|array',
+            'translated_keywords.*' => 'nullable|string',
         ]);
-
-        $contentTranslation=new ContentTranslation();
-        $contentTranslation->translated_keywords=$validatedData["translated_keywords"];
-        $contentTranslation->language=$validatedData["language"];
-        $contentTranslation->type=$validatedData["type"];
-        $contentTranslation->translated_title=$validatedData["translated_title"];
-        $contentTranslation->translated_tags=$validatedData["translated_tags"];
-        $contentTranslation->id=$validatedData["id"];
+    
+        $contentTranslation = new ContentTranslation();
+        $contentTranslation->translated_keywords = implode(',', $validatedData["translated_keywords"] ?? []);
+        $contentTranslation->language = $validatedData["language"];
+        $contentTranslation->type = $validatedData["type"];
+        $contentTranslation->translated_title = $validatedData["translated_title"];
+        $contentTranslation->translated_tags = implode(',', $validatedData["translated_tags"] ?? []);
+        $contentTranslation->id = $validatedData["id"];
         $contentTranslation->save();
-
+    
         // Handle storing the translation data here
         // You can access the input data using $request->input('field_name')
-
+    
         // Once stored, you can redirect back or to another page
         return redirect()->back()->with('success', 'Translation saved successfully!');
     }
-
+    
     public function langManage($lang = false) {
         $pageTitle = 'Language Manager';
         $languages = Language::orderBy('is_default', 'desc')->get();
