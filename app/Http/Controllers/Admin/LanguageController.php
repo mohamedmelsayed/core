@@ -32,7 +32,9 @@ class LanguageController extends Controller
         ]);
     
         // Check if a record with the same id and language exists
-        $existingTranslation = ContentTranslation::where('item_id', $validatedData['item_id'])->get();
+        $existingTranslation = ContentTranslation::where('item_id', $validatedData['item_id'])
+                                                 ->where('language', $validatedData['language'])
+                                                 ->first();
     
         if ($existingTranslation) {
             // Update the existing translation
@@ -44,6 +46,7 @@ class LanguageController extends Controller
             ]);
     
             // Retrieve the updated data
+
         } else {
             // Create a new translation
             $contentTranslation = new ContentTranslation();
@@ -55,9 +58,11 @@ class LanguageController extends Controller
             $contentTranslation->item_id = $validatedData["item_id"];
             $contentTranslation->save();
     
-            // Retrieve the saved data
-            $savedTranslation = $contentTranslation;
+         
         }
+
+        $existingTranslation = ContentTranslation::where('item_id', $id)->get();
+
     
         // Redirect back with the saved data
         return redirect()->back()->with('success', 'Translation saved successfully!')->with('savedTranslation', $existingTranslation);
