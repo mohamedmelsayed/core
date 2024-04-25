@@ -1,4 +1,4 @@
-@props(['type', 'id', 'reference'])
+@props(['type', 'id', 'reference', 'savedTranslation'])
 
 @extends('admin.layouts.app')
 
@@ -38,28 +38,40 @@
                         <div class="form-group row">
                             <label for="translated_title" class="col-md-4 col-form-label text-md-right">@lang('Translated Title'):</label>
                             <div class="col-md-6">
-                                <input type="text" id="translated_title" name="translated_title" class="form-control">
+                                <input type="text" id="translated_title" name="translated_title" class="form-control" value="{{ $savedTranslation ? $savedTranslation->translated_title : '' }}">
                             </div>
                         </div>
                         
                         <div class="form-group row">
                             <label for="translated_description" class="col-md-4 col-form-label text-md-right">@lang('Translated Description'):</label>
                             <div class="col-md-6">
-                                <textarea id="translated_description" name="translated_description" class="form-control"></textarea>
+                                <textarea id="translated_description" name="translated_description" class="form-control">{{ $savedTranslation ? $savedTranslation->translated_description : '' }}</textarea>
                             </div>
                         </div>
                         
                         <div class="form-group row">
                             <label for="translated_tags" class="col-md-4 col-form-label text-md-right">@lang('Translated Tags'):</label>
                             <div class="col-md-6">
-                                <select id="translated_tags" name="translated_tags[]" class="form-control select2-tags" multiple="multiple"></select>
+                                <select id="translated_tags" name="translated_tags[]" class="form-control select2-tags" multiple="multiple">
+                                    @if($savedTranslation)
+                                        @foreach(explode(',', $savedTranslation->translated_tags) as $tag)
+                                            <option value="{{ $tag }}" selected>{{ $tag }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                         
                         <div class="form-group row">
                             <label for="translated_keywords" class="col-md-4 col-form-label text-md-right">@lang('Translated Keywords'):</label>
                             <div class="col-md-6">
-                                <select id="translated_keywords" name="translated_keywords[]" class="form-control select2-tags" multiple="multiple"></select>
+                                <select id="translated_keywords" name="translated_keywords[]" class="form-control select2-tags" multiple="multiple">
+                                    @if($savedTranslation)
+                                        @foreach(explode(',', $savedTranslation->translated_keywords) as $keyword)
+                                            <option value="{{ $keyword }}" selected>{{ $keyword }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                         

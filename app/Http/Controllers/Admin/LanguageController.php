@@ -12,9 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\File;
 
-class LanguageController extends Controller {
+class LanguageController extends Controller
+{
 
-   
+
     public function storeTranslation(Request $request)
     {
         // Validate the incoming request data
@@ -29,7 +30,7 @@ class LanguageController extends Controller {
             'translated_keywords' => 'nullable|array',
             'translated_keywords.*' => 'nullable|string',
         ]);
-    
+
         $contentTranslation = new ContentTranslation();
         $contentTranslation->translated_keywords = implode(',', $validatedData["translated_keywords"] ?? []);
         $contentTranslation->language = $validatedData["language"];
@@ -38,21 +39,26 @@ class LanguageController extends Controller {
         $contentTranslation->translated_tags = implode(',', $validatedData["translated_tags"] ?? []);
         $contentTranslation->id = $validatedData["id"];
         $contentTranslation->save();
-    
+
         // Handle storing the translation data here
         // You can access the input data using $request->input('field_name')
-    
-        // Once stored, you can redirect back or to another page
-        return redirect()->back()->with('success', 'Translation saved successfully!');
+        $savedTranslation = ContentTranslation::where('id', $validatedData['id'])
+            ->where('language', $validatedData['language'])
+            ->first();
+
+        // Redirect back with the saved data
+        return redirect()->back()->with('success', 'Translation saved successfully!')->with('savedTranslation', $savedTranslation);
     }
-    
-    public function langManage($lang = false) {
+
+    public function langManage($lang = false)
+    {
         $pageTitle = 'Language Manager';
         $languages = Language::orderBy('is_default', 'desc')->get();
         return view('admin.language.lang', compact('pageTitle', 'languages'));
     }
 
-    public function langStore(Request $request) {
+    public function langStore(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:40',
             'code' => 'required|string|max:40|unique:languages',
@@ -82,7 +88,8 @@ class LanguageController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function langUpdate(Request $request, $id) {
+    public function langUpdate(Request $request, $id)
+    {
         $request->validate([
             'name' => 'required',
         ]);
@@ -113,7 +120,8 @@ class LanguageController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function langDelete($id) {
+    public function langDelete($id)
+    {
         $lang = Language::find($id);
         fileManager()->removeFile(resource_path('lang/') . $lang->code . '.json');
         $lang->delete();
@@ -121,7 +129,8 @@ class LanguageController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function langEdit($id) {
+    public function langEdit($id)
+    {
         $lang      = Language::find($id);
         $pageTitle = "Update " . $lang->name . " Keywords";
         $json      = file_get_contents(resource_path('lang/') . $lang->code . '.json');
@@ -162,7 +171,8 @@ class LanguageController extends Controller {
         return view('admin.language.edit_lang', compact('pageTitle', 'json', 'lang', 'list_lang'));
     }
 
-    public function langImport(Request $request) {
+    public function langImport(Request $request)
+    {
         $tolang = Language::find($request->toLangid);
         if ($request->id != 999) {
             $fromLang = Language::find($request->id);
@@ -189,7 +199,8 @@ class LanguageController extends Controller {
         return 'success';
     }
 
-    public function storeLanguageJson(Request $request, $id) {
+    public function storeLanguageJson(Request $request, $id)
+    {
         $lang = Language::find($id);
         $this->validate($request, [
             'key'   => 'required',
@@ -212,7 +223,8 @@ class LanguageController extends Controller {
             return back()->withNotify($notify);
         }
     }
-    public function deleteLanguageJson(Request $request, $id) {
+    public function deleteLanguageJson(Request $request, $id)
+    {
         $this->validate($request, [
             'key'   => 'required',
             'value' => 'required',
@@ -230,7 +242,8 @@ class LanguageController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function updateLanguageJson(Request $request, $id) {
+    public function updateLanguageJson(Request $request, $id)
+    {
         $this->validate($request, [
             'key'   => 'required',
             'value' => 'required',
@@ -252,7 +265,8 @@ class LanguageController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function getKeys() {
+    public function getKeys()
+    {
         $langKeys = [];
         $dirname  = resource_path('views');
         foreach ($this->getAllFiles($dirname) as $file) {
@@ -275,7 +289,8 @@ class LanguageController extends Controller {
         return response()->json($langKeys);
     }
 
-    private function getAllFiles($dir) {
+    private function getAllFiles($dir)
+    {
         $root = $dir;
 
         $iter = new \RecursiveIteratorIterator(
@@ -294,7 +309,8 @@ class LanguageController extends Controller {
         return $files;
     }
 
-    private function getLangKeys($path) {
+    private function getLangKeys($path)
+    {
         $code      = file_get_contents($path);
         $exp       = explode("')", $code);
         $finalcode = '';
@@ -307,7 +323,8 @@ class LanguageController extends Controller {
         return $this->fixMultiIssue($keys[1]);
     }
 
-    private function fixMultiIssue($arr) {
+    private function fixMultiIssue($arr)
+    {
         $res = array();
         foreach ($arr as $keys) {
             $exp = explode("')", $keys);
@@ -332,7 +349,6 @@ class LanguageController extends Controller {
         if (!$reference) {
             abort(404);
         }
-        return view('admin.language.translate_content', compact('type', 'id', 'reference','pageTitle'));
+        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle'));
     }
-
 }
