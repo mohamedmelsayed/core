@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
+use App\Models\ContentTranslation;
 use App\Models\Frontend;
 use App\Models\Item;
 use App\Models\Language;
@@ -27,6 +28,15 @@ class LanguageController extends Controller {
             'translated_tags' => 'nullable|string',
             'translated_keywords' => 'nullable|string',
         ]);
+
+        $contentTranslation=new ContentTranslation();
+        $contentTranslation->translated_keywords=$request->translated_keywords;
+        $contentTranslation->language=$request->language;
+        $contentTranslation->type=$request->type;
+        $contentTranslation->translated_title=$request->translated_title;
+        $contentTranslation->translated_tags=$request->translated_tags;
+        $contentTranslation->id=$request->id;
+        $contentTranslation->save();
 
         // Handle storing the translation data here
         // You can access the input data using $request->input('field_name')
