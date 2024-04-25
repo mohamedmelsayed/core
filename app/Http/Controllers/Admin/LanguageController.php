@@ -32,9 +32,7 @@ class LanguageController extends Controller
         ]);
     
         // Check if a record with the same id and language exists
-        $existingTranslation = ContentTranslation::where('item_id', $validatedData['item_id'])
-                                                 ->where('language', $validatedData['language'])
-                                                 ->first();
+        $existingTranslation = ContentTranslation::where('item_id', $validatedData['item_id'])->get();
     
         if ($existingTranslation) {
             // Update the existing translation
@@ -46,7 +44,6 @@ class LanguageController extends Controller
             ]);
     
             // Retrieve the updated data
-            $savedTranslation = $existingTranslation;
         } else {
             // Create a new translation
             $contentTranslation = new ContentTranslation();
@@ -63,7 +60,7 @@ class LanguageController extends Controller
         }
     
         // Redirect back with the saved data
-        return redirect()->back()->with('success', 'Translation saved successfully!')->with('savedTranslation', $savedTranslation);
+        return redirect()->back()->with('success', 'Translation saved successfully!')->with('savedTranslation', $existingTranslation);
     }
     
   
@@ -363,10 +360,11 @@ class LanguageController extends Controller
         if ($type === 'video') {
             $reference = Item::find($id);
         }
-        $savedTranslation=new ContentTranslation();
+        $existingTranslation = ContentTranslation::where('item_id', $id)->get();
+
         if (!$reference) {
             abort(404);
         }
-        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle','savedTranslation'));
+        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle','existingTranslation'));
     }
 }
