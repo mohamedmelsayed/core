@@ -16,7 +16,7 @@
                         
                         <!-- Display original title from reference table -->
                         <div class="form-group row">
-                            <label for="original_title" class="col-md-4 col-form-label text-md-right">Original Title :  {{$type}}</label>
+                            <label for="original_title" class="col-md-4 col-form-label text-md-right">@lang('Original Title'): {{ $type }}</label>
                             <div class="col-md-6">
                                 <input type="text" id="original_title" name="original_title" value="{{ $reference->title }}" class="form-control" readonly>
                             </div>
@@ -24,40 +24,40 @@
                         
                         <!-- Select language code -->
                         <div class="form-group row">
-                            <label for="language" class="col-md-4 col-form-label text-md-right">Language:</label>
+                            <label for="language" class="col-md-4 col-form-label text-md-right">@lang('Language'):</label>
                             <div class="col-md-6">
                                 <select name="language" id="language" class="form-control">
-                                    <option value="ar">Arabic</option>
-                                    <option value="en">English</option>
-                                    <option value="fr">French</option>
+                                    <option value="ar">@lang('Arabic')</option>
+                                    <option value="en">@lang('English')</option>
+                                    <option value="fr">@lang('French')</option>
                                 </select>
                             </div>
                         </div>
                         
                         <!-- Translation fields -->
                         <div class="form-group row">
-                            <label for="translated_title" class="col-md-4 col-form-label text-md-right">Translated Title:</label>
+                            <label for="translated_title" class="col-md-4 col-form-label text-md-right">@lang('Translated Title'):</label>
                             <div class="col-md-6">
                                 <input type="text" id="translated_title" name="translated_title" class="form-control">
                             </div>
                         </div>
                         
                         <div class="form-group row">
-                            <label for="translated_description" class="col-md-4 col-form-label text-md-right">Translated Description:</label>
+                            <label for="translated_description" class="col-md-4 col-form-label text-md-right">@lang('Translated Description'):</label>
                             <div class="col-md-6">
                                 <textarea id="translated_description" name="translated_description" class="form-control"></textarea>
                             </div>
                         </div>
                         
                         <div class="form-group row">
-                            <label for="translated_tags" class="col-md-4 col-form-label text-md-right">Translated Tags:</label>
+                            <label for="translated_tags" class="col-md-4 col-form-label text-md-right">@lang('Translated Tags'):</label>
                             <div class="col-md-6">
                                 <input type="text" id="translated_tags" name="translated_tags" class="form-control select2-tags">
                             </div>
                         </div>
                         
                         <div class="form-group row">
-                            <label for="translated_keywords" class="col-md-4 col-form-label text-md-right">Translated Keywords:</label>
+                            <label for="translated_keywords" class="col-md-4 col-form-label text-md-right">@lang('Translated Keywords'):</label>
                             <div class="col-md-6">
                                 <input type="text" id="translated_keywords" name="translated_keywords" class="form-control select2-tags">
                             </div>
@@ -66,7 +66,7 @@
                         <!-- Submit button -->
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">Submit Translation</button>
+                                <button type="submit" class="btn btn-primary">@lang('Submit Translation')</button>
                             </div>
                         </div>
                     </form>
