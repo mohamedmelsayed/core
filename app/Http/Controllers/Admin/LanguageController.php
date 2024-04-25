@@ -30,25 +30,43 @@ class LanguageController extends Controller
             'translated_keywords' => 'nullable|array',
             'translated_keywords.*' => 'nullable|string',
         ]);
-
-        $contentTranslation = new ContentTranslation();
-        $contentTranslation->translated_keywords = implode(',', $validatedData["translated_keywords"] ?? []);
-        $contentTranslation->language = $validatedData["language"];
-        $contentTranslation->type = $validatedData["type"];
-        $contentTranslation->translated_title = $validatedData["translated_title"];
-        $contentTranslation->translated_tags = implode(',', $validatedData["translated_tags"] ?? []);
-        $contentTranslation->id = $validatedData["id"];
-        $contentTranslation->save();
-
-        // Handle storing the translation data here
-        // You can access the input data using $request->input('field_name')
-        $savedTranslation = ContentTranslation::where('id', $validatedData['id'])
-            ->where('language', $validatedData['language'])
-            ->first();
-
+    
+        // Check if a record with the same id and language exists
+        $existingTranslation = ContentTranslation::where('id', $validatedData['id'])
+                                                 ->where('language', $validatedData['language'])
+                                                 ->first();
+    
+        if ($existingTranslation) {
+            // Update the existing translation
+            $existingTranslation->update([
+                'translated_keywords' => implode(',', $validatedData["translated_keywords"] ?? []),
+                'translated_title' => $validatedData["translated_title"],
+                'translated_description' => $validatedData["translated_description"],
+                'translated_tags' => implode(',', $validatedData["translated_tags"] ?? []),
+            ]);
+    
+            // Retrieve the updated data
+            $savedTranslation = $existingTranslation;
+        } else {
+            // Create a new translation
+            $contentTranslation = new ContentTranslation();
+            $contentTranslation->translated_keywords = implode(',', $validatedData["translated_keywords"] ?? []);
+            $contentTranslation->language = $validatedData["language"];
+            $contentTranslation->type = $validatedData["type"];
+            $contentTranslation->translated_title = $validatedData["translated_title"];
+            $contentTranslation->translated_tags = implode(',', $validatedData["translated_tags"] ?? []);
+            $contentTranslation->id = $validatedData["id"];
+            $contentTranslation->save();
+    
+            // Retrieve the saved data
+            $savedTranslation = $contentTranslation;
+        }
+    
         // Redirect back with the saved data
         return redirect()->back()->with('success', 'Translation saved successfully!')->with('savedTranslation', $savedTranslation);
     }
+    
+  
 
     public function langManage($lang = false)
     {
