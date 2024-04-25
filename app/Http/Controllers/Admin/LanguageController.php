@@ -21,7 +21,7 @@ class LanguageController extends Controller
         // Validate the incoming request data
         $validatedData = $request->validate([
             'type' => 'required|string|in:video,audio,live', // Add more types if needed
-            'id' => 'required|exists:items,id', // Assuming 'items' is the table name
+            'item_id' => 'required|exists:items,id', // Assuming 'items' is the table name
             'language' => 'required|string|in:ar,en,fr',
             'translated_title' => 'required|string|max:255',
             'translated_description' => 'nullable|string',
@@ -32,7 +32,7 @@ class LanguageController extends Controller
         ]);
     
         // Check if a record with the same id and language exists
-        $existingTranslation = ContentTranslation::where('id', $validatedData['id'])
+        $existingTranslation = ContentTranslation::where('item_id', $validatedData['item_id'])
                                                  ->where('language', $validatedData['language'])
                                                  ->first();
     
@@ -55,7 +55,7 @@ class LanguageController extends Controller
             $contentTranslation->type = $validatedData["type"];
             $contentTranslation->translated_title = $validatedData["translated_title"];
             $contentTranslation->translated_tags = implode(',', $validatedData["translated_tags"] ?? []);
-            $contentTranslation->id = $validatedData["id"];
+            $contentTranslation->item_id = $validatedData["item_id"];
             $contentTranslation->save();
     
             // Retrieve the saved data
