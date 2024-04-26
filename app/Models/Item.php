@@ -23,6 +23,10 @@ class Item extends Model {
     public function subtitles() {
         return $this->hasMany(Subtitle::class);
     }
+
+    public function translations() {
+        return $this->hasMany(ContentTranslation::class);
+    }
     public function videoReport() {
         return $this->hasMany(VideoReport::class);
     }

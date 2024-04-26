@@ -365,7 +365,7 @@ class LanguageController extends Controller
         if ($type === 'video') {
             $reference = Item::find($id);
         }
-        $existingTranslations = ContentTranslation::where('item_id', $id)->get();
+        $existingTranslations = $reference->translations();
 
         if (!$reference) {
             abort(404);
