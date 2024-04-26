@@ -12,6 +12,6 @@ class ContentTranslation extends Model {
 
     protected $fillable = [
         'translated_tags','translated_description','translated_title','translated_keywords','type '
-    ]
+    ];
 
 }
