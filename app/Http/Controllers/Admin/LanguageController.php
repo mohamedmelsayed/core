@@ -61,7 +61,7 @@ class LanguageController extends Controller
          
         }
 
-        $existingTranslations  = ContentTranslation::where('item_id', $id)->get();
+        $existingTranslations  = ContentTranslation::where('item_id', $validatedData["item_id"])->get();
 
     
         // Redirect back with the saved data
