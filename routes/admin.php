@@ -256,7 +256,7 @@ Route::middleware('admin')->group(function () {
         Route::post('ftp', 'ftpUpdate');
         Route::get('wasabi', 'wasabi')->name('wasabi');
         Route::post('wasabi', 'wasabiUpdate');
-        Route::get('aws', 'wasabi')->name('aws');
+        Route::get('aws', 'aws')->name('aws');
         Route::post('aws', 'updateAwsCdn');
         Route::get('digital-ocean', 'digitalOcean')->name('digital.ocean');
         Route::post('digital-ocean', 'digitalOceanUpdate');
