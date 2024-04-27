@@ -30,7 +30,7 @@ class VideoUploader
                     break;
                 case Status::FTP_SERVER:
                     $this->uploadedServer = Status::FTP_SERVER;
-
+                    $this->configureFTP();
                     $this->uploadToServer('custom-ftp', 'videos');
                     break;
                 case Status::WASABI_SERVER:
