@@ -1,5 +1,4 @@
 <?php
-use League\Flysystem\Ftp\FtpAdapter;
 
 return [
 
