@@ -79,6 +79,7 @@ class VideoUploader
         $disk->put("$path/$video", $fileContents);
 
         $this->fileName = "$path/$video";
+        dd($this->fileName);
     }
 
     private function makeDirectory($path, $disk)
