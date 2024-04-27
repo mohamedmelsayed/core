@@ -11,6 +11,31 @@ class FileStorageController extends Controller {
         return view('admin.storage.ftp', compact('pageTitle'));
     }
 
+    public function aws() {
+        $pageTitle = "Amazon AWS CDN Setting";
+        return view('admin.storage.aws', compact('pageTitle'));
+    }
+    public function updateAwsCdn(Request $request) {
+        $validatedData = $request->validate([
+            'aws_cdn' => 'required|array',
+            'aws_cdn.domain' => 'nullable|string',
+            'aws_cdn.access_key' => 'nullable|string',
+            'aws_cdn.secret_key' => 'nullable|string',
+        ]);
+    
+        // Convert the array to JSON
+        $awsCdnJson = json_encode($validatedData['aws_cdn']);
+    
+        // Update the AWS CDN configuration in the database
+        $setting      = gs();
+        $setting->aws_cdn = $request->aws_cdn;
+        $setting->save();
+    
+       
+        $notify[] = ['success', 'AWS CDN credentials Updated'];
+        return back()->withNotify($notify);
+    }
+
     public function ftpUpdate(Request $request) {
         $request->validate([
             'ftp.host'     => 'required',
