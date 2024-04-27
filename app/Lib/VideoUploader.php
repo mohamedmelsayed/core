@@ -5,6 +5,8 @@ namespace App\Lib;
 use App\Constants\Status;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class VideoUploader
 {
@@ -87,30 +89,38 @@ class VideoUploader
             $disk->makeDirectory($path);
         }
     }
-
-    public function configureFTP()
-    {
+    public function configureFTP() {
         $general = $this->general;
-        dd($general);
+        //ftp
+        try {
         Config::set('filesystems.disks.custom-ftp.driver', 'ftp');
         Config::set('filesystems.disks.custom-ftp.host', $general->ftp->host);
         Config::set('filesystems.disks.custom-ftp.username', $general->ftp->username);
         Config::set('filesystems.disks.custom-ftp.password', $general->ftp->password);
         Config::set('filesystems.disks.custom-ftp.port', 21);
         Config::set('filesystems.disks.custom-ftp.root', $general->ftp->root);
+    } catch (\Exception $e) {
+        // Handle the error (e.g., log or display an error message)
+        // You can log the exception message for debugging purposes
+        Log::error('Error setting filesystem configuration: ' . $e->getMessage());
     }
 
-    public function configureDisk($server)
-    {
+    }
+    public function configureDisk($server) {
         $general = $this->general;
-
-        Config::set("filesystems.disks.$server.visibility", 'public');
-        Config::set("filesystems.disks.$server.driver", $general->$server->driver);
-        Config::set("filesystems.disks.$server.key", $general->$server->key);
-        Config::set("filesystems.disks.$server.secret", $general->$server->secret);
-        Config::set("filesystems.disks.$server.region", $general->$server->region);
-        Config::set("filesystems.disks.$server.bucket", $general->$server->bucket);
-        Config::set("filesystems.disks.$server.endpoint", $general->$server->endpoint);
+        try {
+            Config::set('filesystems.disks.' . $server . '.visibility', 'public');
+            Config::set('filesystems.disks.' . $server . '.driver', $general->$server->driver);
+            Config::set('filesystems.disks.' . $server . '.key', $general->$server->key);
+            Config::set('filesystems.disks.' . $server . '.secret', $general->$server->secret);
+            Config::set('filesystems.disks.' . $server . '.region', $general->$server->region);
+            Config::set('filesystems.disks.' . $server . '.bucket', $general->$server->bucket);
+            Config::set('filesystems.disks.' . $server . '.endpoint', $general->$server->endpoint);
+        } catch (\Exception $e) {
+            // Handle the error (e.g., log or display an error message)
+            // You can log the exception message for debugging purposes
+            Log::error('Error setting filesystem configuration: ' . $e->getMessage());
+        }
     }
 
     public function removeFtpVideo()
