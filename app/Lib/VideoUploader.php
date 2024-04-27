@@ -22,7 +22,6 @@ class VideoUploader
     public function upload()
     {
         $uploadDisk = $this->general->server;
-dd($uploadDisk);
         try {
             switch ($uploadDisk) {
                 case Status::CURRENT_SERVER:
@@ -76,6 +75,8 @@ dd($uploadDisk);
         $this->makeDirectory($path, $disk);
 
         $video = uniqid() . time() . '.' . $fileExtension;
+        dd($video);
+
         $disk->put("$path/$video", $fileContents);
 
         $this->fileName = "$path/$video";
