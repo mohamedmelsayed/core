@@ -6,18 +6,21 @@ use App\Constants\Status;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
-class VideoUploader {
+class VideoUploader
+{
     private $general;
 
     public $fileName;
     public $uploadedServer;
     public $error;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->general = gs();
     }
 
-    public function upload() {
+    public function upload()
+    {
         $uploadDisk = $this->general->server;
 
         try {
@@ -39,6 +42,10 @@ class VideoUploader {
                     $this->uploadedServer = Status::DIGITAL_OCEAN_SERVER;
                     $this->uploadToServer('digital_ocean', 'videos');
                     break;
+                case Status::AWS_CDN: // New case for AWS CDN
+                    $this->uploadedServer = Status::AWS_CDN;
+                    $this->uploadToAWSCDN(); // Call the new method to upload to AWS CDN
+                    break;
                 default:
                     throw new \Exception("Invalid upload disk: $uploadDisk");
             }
@@ -47,7 +54,8 @@ class VideoUploader {
         }
     }
 
-    private function uploadToCurrentServer() {
+    private function uploadToCurrentServer()
+    {
         $date = date('Y/m/d');
         $file = $this->file;
         $path = "assets/videos/$date";
@@ -55,7 +63,8 @@ class VideoUploader {
         $this->fileName = $date . '/' . fileUploader($file, $path, null);
     }
 
-    private function uploadToServer($server, $param) {
+    private function uploadToServer($server, $param)
+    {
         $date = date('Y/m/d');
         $file = $this->file;
         $path = "$param/$date";
@@ -72,13 +81,15 @@ class VideoUploader {
         $this->fileName = "$path/$video";
     }
 
-    private function makeDirectory($path, $disk) {
+    private function makeDirectory($path, $disk)
+    {
         if (!$disk->exists($path)) {
             $disk->makeDirectory($path);
         }
     }
 
-    public function configureFTP() {
+    public function configureFTP()
+    {
         $general = $this->general;
 
         Config::set('filesystems.disks.custom-ftp.driver', 'ftp');
@@ -89,7 +100,8 @@ class VideoUploader {
         Config::set('filesystems.disks.custom-ftp.root', $general->ftp->root);
     }
 
-    public function configureDisk($server) {
+    public function configureDisk($server)
+    {
         $general = $this->general;
 
         Config::set("filesystems.disks.$server.visibility", 'public');
@@ -101,7 +113,8 @@ class VideoUploader {
         Config::set("filesystems.disks.$server.endpoint", $general->$server->endpoint);
     }
 
-    public function removeFtpVideo() {
+    public function removeFtpVideo()
+    {
         $oldFile = $this->oldFile;
         $storage = Storage::disk('custom-ftp');
 
@@ -110,8 +123,11 @@ class VideoUploader {
         }
     }
 
-    public function removeOldFile() {
-        if ($this->oldServer == Status::CURRENT_SERVER) {
+    public function removeOldFile()
+    {
+        if ($this->oldServer == Status::AWS_CDN) {
+            $this->removeFromAWSCDN($this->oldFile); // Call the new method to remove from AWS CDN
+        } else if ($this->oldServer == Status::CURRENT_SERVER) {
             $location = "assets/videos/{$this->oldFile}";
             fileManager()->removeFile($location);
         } else if (in_array($this->oldServer, [Status::FTP_SERVER, Status::WASABI_SERVER, Status::DIGITAL_OCEAN_SERVER])) {
@@ -129,6 +145,59 @@ class VideoUploader {
                 $disk->delete($this->oldFile);
             } catch (\Exception $e) {
             }
+        }
+    }
+
+
+    private function uploadToAWSCDN()
+    {
+        $date = date('Y/m/d');
+        $file = $this->file;
+        $path = "videos/$date";
+
+        $fileExtension = $file->getClientOriginalExtension();
+        $fileContents = file_get_contents($file);
+
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => $this->general->aws->region,
+            'credentials' => [
+                'key'    => $this->general->aws->key,
+                'secret' => $this->general->aws->secret,
+            ],
+        ]);
+
+        try {
+            $s3->putObject([
+                'Bucket' => $this->general->aws->bucket,
+                'Key'    => "$path/{$file->getClientOriginalName()}",
+                'Body'   => $fileContents,
+                'ACL'    => 'public-read',
+            ]);
+
+            $this->fileName = "$path/{$file->getClientOriginalName()}";
+        } catch (S3Exception $e) {
+            $this->error = true;
+        }
+    }
+    private function removeFromAWSCDN($oldFile)
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => $this->general->aws->region,
+            'credentials' => [
+                'key'    => $this->general->aws->key,
+                'secret' => $this->general->aws->secret,
+            ],
+        ]);
+
+        try {
+            $s3->deleteObject([
+                'Bucket' => $this->general->aws->bucket,
+                'Key'    => $oldFile,
+            ]);
+        } catch (S3Exception $e) {
+            // Handle deletion error
         }
     }
 }

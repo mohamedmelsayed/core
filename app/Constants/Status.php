@@ -47,6 +47,7 @@ class Status {
     const FTP_SERVER           = 1;
     const WASABI_SERVER        = 2;
     const DIGITAL_OCEAN_SERVER = 3;
+    const AWS_CDN = 4;
 
 
     
