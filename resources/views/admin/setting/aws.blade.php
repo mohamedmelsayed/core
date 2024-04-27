@@ -5,7 +5,7 @@
     <div class="col-lg-12 col-md-12 mb-30">
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('admin.settings.updateAwsCdn') }}" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-4">
