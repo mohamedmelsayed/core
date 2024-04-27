@@ -13,7 +13,7 @@ class FileStorageController extends Controller {
 
     public function aws() {
         $pageTitle = "Amazon AWS CDN Setting";
-        return view('admin.storage.aws', compact('pageTitle'));
+        return view('admin.storage.aws_cdn', compact('pageTitle'));
     }
     public function updateAwsCdn(Request $request) {
         $validatedData = $request->validate([
