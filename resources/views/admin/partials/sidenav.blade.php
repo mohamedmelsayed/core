@@ -415,6 +415,12 @@
                                     <span class="menu-title">@lang('Wasabi')</span>
                                 </a>
                             </li>
+                            <li class="sidebar-menu-item {{ menuActive('admin.storage.aws') }}">
+                                <a class="nav-link" href="{{ route('admin.storage.aws') }}">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('AWS CDN')</span>
+                                </a>
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive('admin.storage.digital.ocean') }}">
                                 <a class="nav-link" href="{{ route('admin.storage.digital.ocean') }}">
                                     <i class="menu-icon las la-dot-circle"></i>
