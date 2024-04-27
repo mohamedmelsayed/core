@@ -75,7 +75,6 @@ class VideoUploader
         $this->makeDirectory($path, $disk);
 
         $video = uniqid() . time() . '.' . $fileExtension;
-        dd($video);
 
         $disk->put("$path/$video", $fileContents);
 
@@ -92,7 +91,7 @@ class VideoUploader
     public function configureFTP()
     {
         $general = $this->general;
-
+        dd($general);
         Config::set('filesystems.disks.custom-ftp.driver', 'ftp');
         Config::set('filesystems.disks.custom-ftp.host', $general->ftp->host);
         Config::set('filesystems.disks.custom-ftp.username', $general->ftp->username);
