@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Facade;
 
 require_once 'timezone.php';
+$timezone = "UTC";
+
 return [
 
     /*
