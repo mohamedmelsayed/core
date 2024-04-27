@@ -316,6 +316,7 @@ class ItemController extends Controller
             $videoUploader->file = $file;
             $videoUploader->upload();
             $error = $videoUploader->error;
+            dd($error);
             if ($error) {
                 return response()->json(['errors' => 'Could not upload the Video']);
             }
