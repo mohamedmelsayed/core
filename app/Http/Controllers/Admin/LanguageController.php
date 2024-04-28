@@ -54,6 +54,7 @@ class LanguageController extends Controller
             $contentTranslation->language = $validatedData["language"];
             $contentTranslation->type = $validatedData["type"];
             $contentTranslation->translated_title = $validatedData["translated_title"];
+            $contentTranslation->translated_description = $validatedData["translated_description"];
             $contentTranslation->translated_tags = implode(',', $validatedData["translated_tags"] ?? []);
             $contentTranslation->item_id = $validatedData["item_id"];
             $contentTranslation->save();
