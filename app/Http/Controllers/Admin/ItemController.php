@@ -334,6 +334,8 @@ class ItemController extends Controller
             return response()->json(['error' => $validator->errors()->all()]);
         }
 
+        dd("from line 337");
+
         $sizeValidation = MultiVideoUploader::checkSizeValidation();
         if ($sizeValidation['error']) {
             return response()->json(['error' => $sizeValidation['message']]);
