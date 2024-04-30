@@ -1,64 +1,23 @@
 @extends('admin.layouts.app')
+
 @section('panel')
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <form action="" id="uploadForm" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <ul class="nav nav-pills mb-3 video-quality" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-360p-tab" data-bs-toggle="pill" data-bs-target="#pills-360p" type="button" role="tab" aria-controls="pills-360p" aria-selected="true">@lang('Video File 360P')</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-480p-tab" data-bs-toggle="pill" data-bs-target="#pills-480p" type="button" role="tab" aria-controls="pills-480p" aria-selected="false">@lang('Video File 480P')</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pills-720p-tab" data-bs-toggle="pill" data-bs-target="#pills-720p" type="button" role="tab" aria-controls="pills-720p" aria-selected="false">@lang('Video File 720P')</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-1080p-tab" data-bs-toggle="pill" data-bs-target="#pills-1080p" type="button" role="tab" aria-controls="pills-1080p" aria-selected="false">@lang('Video File 1080P')</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade" id="pills-360p" role="tabpanel" aria-labelledby="pills-360p-tab" tabindex="0">
-                                <h5 class="my-4">@lang('Video File 360P')</h5>
-                                <div class="form-group col-md-12">
-                                    <label>@lang('Video Type')</label>
-                                    <select class="form-control" name="video_type_seven_twenty" required>
-                                        <option value="1">@lang('Video')</option>
-                                        <option value="0">@lang('Link')</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="seven_twenty_video">
-                                    <div class="upload three-sixty-video" data-block="video-drop-zone">
-                                        <div>
-                                            <svg class="feather feather-upload" fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z" />
-                                            </svg>
-                                            <h4> @lang('Darg Drop Video')</h4>
-                                            <p>@lang('or Click to choose File')</p>
-                                            <button class="btn btn--primary" type="button">@lang('Upload')</button>
-                                        </div>
-                                    </div>
-                                    <input class="upload-video-file three-sixty" name="seven_twenty_video" type="file" accept=".mp4,.mkv,.3gp" />
-                                </div>
-                                <div class="form-group" id="seven_twenty_link">
-                                    <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="seven_twenty_link" type="text" placeholder="@lang('Inert Link')" />
-                                </div>
+        <div class="col-lg-12">
+            <div class="card upload-card">
+                <form id="upload-video" action="" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>@lang('Video Type')</label>
+                                <select class="form-control" name="video_type" required>
+                                    <option value="1">@lang('Video')</option>
+                                    <option value="0">@lang('Link')</option>
+                                </select>
                             </div>
-                            <div class="tab-pane fade" id="pills-480p" role="tabpanel" aria-labelledby="pills-480p-tab" tabindex="0">
-                                <h5 class="my-4">@lang('Video File 480P')</h5>
-                                <div class="form-group col-md-12">
-                                    <label>@lang('Video Type')</label>
-                                    <select class="form-control" name="video_type_four_eighty" required>
-                                            <option value="1">@lang('Video')</option>
-                                        <option value="0">@lang('Link')</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="four_eighty_video">
-                                    <div class="upload four-eighty-video" data-block="video-drop-zone">
+                            <div class="form-group col-md-12">
+                                <div class="form-group" id="video">
+                                    <div class="upload" data-block="video-drop-zone">
                                         <div>
                                             <svg class="feather feather-upload" fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z" />
@@ -68,81 +27,49 @@
                                             <button class="btn btn--primary" type="button">@lang('Upload')</button>
                                         </div>
                                     </div>
-                                    <input class="upload-video-file four-eighty" name="four_eighty_video" type="file" accept=".mp4,.mkv,.3gp" />
-                                </div>
-                                <div class="form-group" id="four_eighty_link">
-                                    <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="four_eighty_link" type="text" placeholder="@lang('Inert Link')" />
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show active" id="pills-720p" role="tabpanel" aria-labelledby="pills-720p-tab" tabindex="0">
-                                <h5 class="my-4">@lang('Video File 720P')</h5>
-                                <div class="form-group">
-                                    <label>@lang('Video Type')</label>
-                                    <select class="form-control" name="video_type_seven_twenty" required>
-                                        <option value="1">@lang('Video')</option>
-                                        <option value="0">@lang('Link')</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="seven_twenty_video">
-                                    <div class="upload seven-twenty-video" data-block="video-drop-zone">
-                                        <div>
-                                            <svg class="feather feather-upload" fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z" />
-                                            </svg>
-                                            <h4> @lang('Darg Drop Video')</h4>
-                                            <p>@lang('or Click to choose File')</p>
-                                            <button class="btn btn--primary" type="button">@lang('Upload')</button>
-                                        </div>
+                                    <small class="text-facebook">@lang('Only') <strong>@lang('mp4, mkv, 3gp')</strong> @lang('supported')</small>
+                                    <div class="progress mt-3">
+                                        <div class="bar bg--primary"></div>
+                                        <div class="percent">0%</div>
                                     </div>
-                                    <input class="upload-video-file seven-twenty" name="seven_twenty_video" type="file" accept=".mp4,.mkv,.3gp" />
+                                    <input class="upload-video-file" name="video" type="file" />
                                 </div>
-                                <div class="form-group" id="seven_twenty_link">
+                                <div class="form-group" id="link">
                                     <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="seven_twenty_link" type="text" placeholder="@lang('Inert Link')" />
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="pills-1080p" role="tabpanel" aria-labelledby="pills-1080p-tab" tabindex="0">
-                                <h5 class="my-4">@lang('Video File 1080P')</h5>
-                                <div class="form-group col-md-12">
-                                    <label>@lang('Video Type')</label>
-                                    <select class="form-control" name="video_type_thousand_eighty" required>
-                                        <option value="1">@lang('Video')</option>
-                                        <option value="0">@lang('Link')</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="thousand_eighty_video">
-                                    <div class="upload thousand-eighty-video" data-block="video-drop-zone">
-                                        <div>
-                                            <svg class="feather feather-upload" fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z" />
-                                            </svg>
-                                            <h4> @lang('Darg Drop Video')</h4>
-                                            <p>@lang('or Click to choose File')</p>
-                                            <button class="btn btn--primary" type="button">@lang('Upload')</button>
-                                        </div>
-                                    </div>
-                                    <input class="upload-video-file thousand-eighty" name="thousand_eighty_video" type="file" accept=".mp4,.mkv,.3gp" />
-                                </div>
-                                <div class="form-group" id="thousand_eighty_link">
-                                    <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="thousand_eighty_link" type="text" placeholder="@lang('Inert Link')" />
+                                    <input class="form-control" name="link" type="text" placeholder="@lang('Inert Link')" />
                                 </div>
                             </div>
                         </div>
-                        <div class="">
-                            <button class="btn btn--primary w-100 h-45" type="submit">@lang('Submit')</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn--primary w-100 submitButton h-45">@lang('Upload Video')</button>
+                    </div>
+                </form>
             </div>
-
         </div>
     </div>
 @endsection
 
 @push('style')
     <style type="text/css">
+        .progress {
+            position: relative;
+            width: 100%;
+        }
+
+        .bar {
+            width: 0%;
+            height: 20px;
+        }
+
+        .percent {
+            position: absolute;
+            display: inline-block;
+            left: 50%;
+            top: 8px;
+            color: #040608;
+        }
+
         .upload {
             margin-right: auto;
             margin-left: auto;
@@ -194,113 +121,166 @@
             opacity: 0;
             position: fixed;
         }
-
-        .video-quality .nav-link {
-            border: 1px solid #0d6efd;
-        }
-
-        .video-quality {
-            gap: 10px !important;
-        }
     </style>
 @endpush
-
 @push('breadcrumb-plugins')
     <a class="btn btn-sm btn-outline--primary" href="{{ $prevUrl }}"><i class="la la-undo"></i> @lang('Back')</a>
 @endpush
 
+@push('style-lib')
+    <link href="{{ asset('assets/admin/css/bootstrap-clockpicker.min.css') }}" rel="stylesheet">
+@endpush
+
+@push('script-lib')
+    <script src="{{ asset('assets/admin/js/bootstrap-clockpicker.min.js') }}"></script>
+@endpush
 @push('script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
     <script>
-        (function($) {
-            "use strict"
-            $(".three-sixty").on("click", function(e) {
-                e.stopPropagation();
-            });
-            $(".four-eighty").on("click", function(e) {
-                e.stopPropagation();
-            });
-            $(".seven-twenty").on("click", function(e) {
-                e.stopPropagation();
-            });
-            $(".thousand-eighty").on("click", function(e) {
-                e.stopPropagation();
-            });
-            $(".three-sixty-video").on("click", function(e) {
-                $('.three-sixty').trigger("click");
-            });
-            $(".four-eighty-video").on("click", function(e) {
-                $('.four-eighty').trigger("click");
-            });
-            $(".seven-twenty-video").on("click", function(e) {
-                $('.seven-twenty').trigger("click");
-            });
-            $(".thousand-eighty-video").on("click", function(e) {
-                $('.thousand-eighty').trigger("click");
-            });
-            $("[name=video_type_three_sixty]").on('change', function() {
-                if ($(this).val() == '0') {
-                    $("#seven_twenty_link").show();
-                    $("#seven_twenty_video").hide();
-                } else {
-                    $("#seven_twenty_link").hide();
-                    $("#seven_twenty_video").show();
+        "use strict"
+
+
+        var video_drop_block = $("[data-block='video-drop-zone']");
+
+        if (typeof(window.FileReader)) {
+            video_drop_block[0].ondragover = function() {
+                video_drop_block.addClass('hover');
+                return false;
+            };
+
+            video_drop_block[0].ondragleave = function() {
+                video_drop_block.removeClass('hover');
+                return false;
+            };
+
+            video_drop_block[0].ondrop = function(event) {
+                event.preventDefault();
+                video_drop_block.removeClass('hover');
+                var file = event.dataTransfer.files;
+                $('#upload-video').find('input').prop('files', file);
+                $('#upload-video').submit();
+            };
+        }
+
+        $(document).on("click", ".upload-video-file", function(e) {
+            e.stopPropagation();
+            //some code
+        });
+        $(document).on("click", ".upload", function(e) {
+            $('.upload-video-file').trigger("click");
+        });
+
+        function validate(formData, jqForm, options) {
+            var form = jqForm[0];
+            if (form.video_type.value == 0) {
+                if (!form.link.value) {
+                    notify('error', 'Link field is required');
+                    return false;
                 }
-            }).change();
-
-            $("[name=video_type_four_eighty]").on('change', function() {
-                if ($(this).val() == '0') {
-                    $("#four_eighty_link").show();
-                    $("#four_eighty_video").hide();
-                } else {
-                    $("#four_eighty_link").hide();
-                    $("#four_eighty_video").show();
+            } else {
+                if (!form.video.value) {
+                    notify('error', 'File Not Found');
+                    return false;
                 }
-            }).change();
-
-            $("[name=video_type_seven_twenty]").on('change', function() {
-                if ($(this).val() == '0') {
-                    $("#seven_twenty_link").show();
-                    $("#seven_twenty_video").hide();
-                } else {
-                    $("#seven_twenty_link").hide();
-                    $("#seven_twenty_video").show();
+                if (form.video.files[0].size > 4194304000) {
+                    notify('error', 'File size must be lower then 4 gb');
+                    return false;
                 }
-            }).change();
+                @if ($video)
+                    notify('error', 'Video Already Exist');
+                    return false;
+                @endif
+            }
+        }
 
-            $("[name=video_type_thousand_eighty]").on('change', function() {
-                if ($(this).val() == '0') {
-                    $("#thousand_eighty_link").show();
-                    $("#thousand_eighty_video").hide();
+        var bar = $('.bar');
+        var percent = $('.percent');
+
+        $('form').ajaxForm({
+            beforeSubmit: validate,
+            dataType: 'json',
+            beforeSend: function() {
+                if ($('#video_type').val() == '0') {
+                    $('form').find('.submitButton').text('Saving...');
+                    $('form').find('.submitButton').attr('disabled', '');
                 } else {
-                    $("#thousand_eighty_link").hide();
-                    $("#thousand_eighty_video").show();
+                    $('form').find('.card-footer').addClass('d-none');
                 }
-            }).change();
-
-
-            $('#uploadForm').on('submit', function(e) {
-                e.preventDefault();
-                var formData = new FormData($(this)[0]);
-                $.ajax({
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    },
-                    url: "{{ @$route }}",
-                    method: "POST",
-                    data: formData,
-                    async: false,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.error) {
-                            notify('error', response.error);
-                        } else {
-                            notify('success', response.success);
-                            window.location.href = "{{ route('admin.item.index') }}"
-                        }
+                var percentVal = '0%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                if ($('#video_type').val() == '1') {
+                    if (percentComplete > 50) {
+                        percent.addClass('text-white');
                     }
-                });
+                    var percentVal = percentComplete + '%';
+                    if (percentComplete == 100) {
+                        $('.percent').attr('style', 'top:2px');
+                        percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
+                    } else {
+                        percent.html(percentVal);
+                    }
+                    bar.width(percentVal);
+                }
+            },
+            success: function(data) {
+                if (data.demo) {
+                    notify('warning', data.demo);
+                } else if (data.errors) {
+                    percent.removeClass('text-white');
+                    $('.percent').attr('style', 'top:8px');
+                    var percentVal = '0%';
+                    bar.width(percentVal);
+                    percent.html(percentVal);
+                    $('form').find('.card-footer').removeClass('d-none');
+                    notify('error', data.errors);
+                }
+                if (data == 'success') {
+                    $('.percent').attr('style', 'top:8px');
+                    bar.addClass('bg--success');
+                    percent.html('Success');
+                    $('form').find('.submitButton').text('Upload Video');
+                    $('form').find('.submitButton').removeAttr('disabled');
+                    $('form').trigger("reset");
+                    notify('success', 'video uploaded');
+                    window.location = "{{ route('admin.item.ads.duration', [$item->id, @$episode->id]) }}";
+                }
+            }
+        });
+
+        $("#video_type").change(function() {
+            if ($(this).val() == '0') {
+                $("#link").show();
+                $("#video").hide();
+            } else {
+                $("#link").hide();
+                $("#video").show();
+            }
+        }).change();
+
+
+
+        (function() {
+            $('.addBtn').on('click', function() {
+                $('.add-timeline-area').append(`<div class="col-md-12 mb-2">
+                                                    <div class="input-group clockpicker">
+                                                        <input class="form-control single-input" id="single-input" type="text" value="00:5">
+                                                    </div>
+                                                </div>`);
+
+                initClock()
             });
+
+            function initClock() {
+                $('.single-input').clockpicker({
+                    placement: 'bottom',
+                    align: 'right',
+                    autoclose: true,
+                    'default': '20:48'
+                });
+            }
         })(jQuery)
     </script>
 @endpush
