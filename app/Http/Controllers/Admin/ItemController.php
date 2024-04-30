@@ -280,60 +280,106 @@ class ItemController extends Controller
         return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl'));
     }
 
-    public function upload(Request $request, $id)
-    {
+    public function upload(Request $request, $id) {
 
-        ini_set('memory_limit', '-1');
-        $validation_rule['video_type'] = 'required';
-        $validation_rule['link']       = 'required_without:video';
-
-        if ($request->video_type == 1) {
-            $validation_rule['video'] = ['required_without:link', new FileTypeValidate(['mp4', 'mkv', '3gp'])];
+        $item = Item::where('id', $id)->first();
+        if (!$item) {
+            return response()->json(['error' => 'Item not found']);
         }
 
-        $validator = Validator::make($request->all(), $validation_rule);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()]);
-        }
-
-        $item  = Item::findOrFail($id);
         $video = $item->video;
 
         if ($video) {
-            return response()->json(['errors' => 'Already video exist']);
-        }
-
-        if ($request->hasFile('video')) {
-            $file      = $request->file('video');
-            $videoSize = $file->getSize();
-
-            if ($videoSize > 4194304000) {
-                return response()->json(['errors' => 'File size must be lower then 4 gb']);
-            }
-
-            $videoUploader       = new VideoUploader();
-            $videoUploader->file = $file;
-            $videoUploader->upload();
-            $error = $videoUploader->error;
-            if ($error) {
-                return response()->json(['errors' => 'Could not upload the Video']);
-            }
-            $server = $videoUploader->uploadedServer;
-            $video  = $videoUploader->fileName;
+            $sevenTwentyLink  = 'nullable';
+            $sevenTwentyVideo = 'nullable';
         } else {
-            $video  = $request->link;
-            $server = 2;
+            $sevenTwentyLink  = 'required_if:video_type_seven_twenty,0';
+            $sevenTwentyVideo = 'required_if:video_type_seven_twenty,1';
         }
-        $videoObj             = new Video();
-        $videoObj->item_id    = $item->id;
-        //    $videoObj->video_type = $request->video_type;
-        $videoObj->video_type_seven_twenty = 1;
-        $videoObj->seven_twenty_video     = $video;
-        // $videoObj->server     = $server;
-        $videoObj->save();
 
-        return response()->json('success');
+        ini_set('memory_limit', '-1');
+        $validator = Validator::make($request->all(), [
+            'video_type_three_sixty'     => 'required',
+            'three_sixty_link'           => 'nullable',
+            'three_sixty_video'          => ['nullable', new FileTypeValidate(['mp4', 'mkv', '3gp'])],
+
+            'video_type_four_eighty'     => 'required',
+            'four_eighty_link'           => 'nullable',
+            'four_eighty_video'          => ['nullable', new FileTypeValidate(['mp4', 'mkv', '3gp'])],
+
+            'video_type_seven_twenty'    => 'required',
+            'seven_twenty_link'          => "$sevenTwentyLink",
+            'seven_twenty_video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
+
+            'video_type_thousand_eighty' => 'required',
+            'thousand_eighty_link'       => 'nullable',
+            'thousand_eighty_video'      => ['nullable', new FileTypeValidate(['mp4', 'mkv', '3gp'])],
+        ], [
+            'video_type_three_sixty'     => 'Video file 360P type is required',
+            'three_sixty_link'           => 'Video file 360P link is required',
+            'three_sixty_video'          => 'Video file 360P video is required',
+            'video_type_four_eighty'     => 'Video file 480P type is required',
+            'four_eighty_link'           => 'Video file 480P link is required',
+            'four_eighty_video'          => 'Video file 480P video is required',
+            'video_type_seven_twenty'    => 'Video file 720P type is required',
+            'seven_twenty_link'          => 'Video file 720P link is required',
+            'seven_twenty_video'         => 'Video file 720P video is required',
+            'video_type_thousand_eighty' => 'Video file 1080P type is required',
+            'thousand_eighty_link'       => 'Video file 1080P link is required',
+            'thousand_eighty_video'      => 'Video file 1080P video is required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
+
+        $sizeValidation = MultiVideoUploader::checkSizeValidation();
+        if ($sizeValidation['error']) {
+            return response()->json(['error' => $sizeValidation['message']]);
+        }
+
+        $uploadThreeSixty = MultiVideoUploader::multiQualityVideoUpload($video, 'three_sixty');
+        if ($uploadThreeSixty['error']) {
+            return response()->json(['error' => $sizeValidation['message']]);
+        }
+
+        $uploadFourEighty = MultiVideoUploader::multiQualityVideoUpload($video, 'four_eighty');
+        if ($uploadFourEighty['error']) {
+            return response()->json(['error' => $sizeValidation['message']]);
+        }
+
+        $uploadSevenTwenty = MultiVideoUploader::multiQualityVideoUpload($video, 'seven_twenty');
+        if ($uploadSevenTwenty['error']) {
+            return response()->json(['error' => $sizeValidation['message']]);
+        }
+
+        $uploadThousandEighty = MultiVideoUploader::multiQualityVideoUpload($video, 'thousand_eighty');
+        if ($uploadThousandEighty['error']) {
+            return response()->json(['error' => $sizeValidation['message']]);
+        }
+
+        if (!$video) {
+            $video          = new Video();
+            $video->item_id = $item->id;
+        }
+
+        $video->video_type_three_sixty     = @$request->video_type_three_sixty;
+        $video->video_type_four_eighty     = @$request->video_type_four_eighty;
+        $video->video_type_seven_twenty    = @$request->video_type_seven_twenty;
+        $video->video_type_thousand_eighty = @$request->video_type_thousand_eighty;
+
+        $video->three_sixty_video     = @$uploadThreeSixty['three_sixty_video'];
+        $video->four_eighty_video     = @$uploadFourEighty['four_eighty_video'];
+        $video->seven_twenty_video    = @$uploadSevenTwenty['seven_twenty_video'];
+        $video->thousand_eighty_video = @$uploadThousandEighty['thousand_eighty_video'];
+
+        $video->server_three_sixty     = @$uploadThreeSixty['server'] ?? 0;
+        $video->server_four_eighty     = @$uploadFourEighty['server'] ?? 0;
+        $video->server_seven_twenty    = @$uploadSevenTwenty['server'] ?? 0;
+        $video->server_thousand_eighty = @$uploadThousandEighty['server'] ?? 0;
+
+        $video->save();
+        return response()->json(['success' => 'Video uploaded successfully']);
     }
 
     public function updateVideo(Request $request, $id)
