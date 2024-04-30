@@ -326,20 +326,12 @@ class ItemController extends Controller
             $video->item_id = $item->id;
         }
 
-        $video->video_type_three_sixty     = @$request->video_type_three_sixty;
-        $video->video_type_four_eighty     = @$request->video_type_four_eighty;
+       
         $video->video_type_seven_twenty    = @$request->video_type_seven_twenty;
-        $video->video_type_thousand_eighty = @$request->video_type_thousand_eighty;
 
-        $video->three_sixty_video     = @$uploadThreeSixty['three_sixty_video'];
-        $video->four_eighty_video     = @$uploadFourEighty['four_eighty_video'];
         $video->seven_twenty_video    = @$uploadSevenTwenty['seven_twenty_video'];
-        $video->thousand_eighty_video = @$uploadThousandEighty['thousand_eighty_video'];
 
-        $video->server_three_sixty     = @$uploadThreeSixty['server'] ?? 0;
-        $video->server_four_eighty     = @$uploadFourEighty['server'] ?? 0;
         $video->server_seven_twenty    = @$uploadSevenTwenty['server'] ?? 0;
-        $video->server_thousand_eighty = @$uploadThousandEighty['server'] ?? 0;
 
         $video->save();
         return response()->json(['success' => 'Video uploaded successfully']);
