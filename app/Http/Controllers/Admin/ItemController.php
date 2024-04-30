@@ -300,22 +300,13 @@ class ItemController extends Controller
 
         ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
-            'video_type_three_sixty'     => 'required',
-            'three_sixty_link'           => 'nullable',
-            'three_sixty_video'          => ['nullable', new FileTypeValidate(['mp4', 'mkv', '3gp'])],
-
-            'video_type_four_eighty'     => 'required',
-            'four_eighty_link'           => 'nullable',
-            'four_eighty_video'          => ['nullable', new FileTypeValidate(['mp4', 'mkv', '3gp'])],
+            
 
             'video_type_seven_twenty'    => 'required',
             'seven_twenty_link'          => "$sevenTwentyLink",
             'seven_twenty_video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
 
-            'video_type_thousand_eighty' => 'required',
-            'thousand_eighty_link'       => 'nullable',
-            'thousand_eighty_video'      => ['nullable', new FileTypeValidate(['mp4', 'mkv', '3gp'])],
-        ], [
+            ], [
             'video_type_three_sixty'     => 'Video file 360P type is required',
             'three_sixty_link'           => 'Video file 360P link is required',
             'three_sixty_video'          => 'Video file 360P video is required',
