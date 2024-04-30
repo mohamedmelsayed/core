@@ -281,7 +281,8 @@ class ItemController extends Controller
         return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl'));
     }
 
-    public function upload(Request $request, $id) {
+    public function upload(Request $request, $id)
+    {
 
         $item = Item::where('id', $id)->first();
         if (!$item) {
@@ -300,57 +301,25 @@ class ItemController extends Controller
 
         ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
-            
+
 
             'video_type_seven_twenty'    => 'required',
             'seven_twenty_link'          => "$sevenTwentyLink",
             'seven_twenty_video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
 
-            ], [
-            'video_type_three_sixty'     => 'Video file 360P type is required',
-            'three_sixty_link'           => 'Video file 360P link is required',
-            'three_sixty_video'          => 'Video file 360P video is required',
-            'video_type_four_eighty'     => 'Video file 480P type is required',
-            'four_eighty_link'           => 'Video file 480P link is required',
-            'four_eighty_video'          => 'Video file 480P video is required',
-            'video_type_seven_twenty'    => 'Video file 720P type is required',
-            'seven_twenty_link'          => 'Video file 720P link is required',
-            'seven_twenty_video'         => 'Video file 720P video is required',
-            'video_type_thousand_eighty' => 'Video file 1080P type is required',
-            'thousand_eighty_link'       => 'Video file 1080P link is required',
-            'thousand_eighty_video'      => 'Video file 1080P video is required',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()]);
-        }
 
         dd("from line 337");
 
-        $sizeValidation = MultiVideoUploader::checkSizeValidation();
-        if ($sizeValidation['error']) {
-            return response()->json(['error' => $sizeValidation['message']]);
-        }
-
-        $uploadThreeSixty = MultiVideoUploader::multiQualityVideoUpload($video, 'three_sixty');
-        if ($uploadThreeSixty['error']) {
-            return response()->json(['error' => $sizeValidation['message']]);
-        }
-
-        $uploadFourEighty = MultiVideoUploader::multiQualityVideoUpload($video, 'four_eighty');
-        if ($uploadFourEighty['error']) {
-            return response()->json(['error' => $sizeValidation['message']]);
-        }
+   
 
         $uploadSevenTwenty = MultiVideoUploader::multiQualityVideoUpload($video, 'seven_twenty');
         if ($uploadSevenTwenty['error']) {
             return response()->json(['error' => $sizeValidation['message']]);
         }
 
-        $uploadThousandEighty = MultiVideoUploader::multiQualityVideoUpload($video, 'thousand_eighty');
-        if ($uploadThousandEighty['error']) {
-            return response()->json(['error' => $sizeValidation['message']]);
-        }
+   
 
         if (!$video) {
             $video          = new Video();
@@ -641,11 +610,11 @@ class ItemController extends Controller
         $pageTitle = "Video Items";
         $item        = Item::findOrFail($id);
         if ($item->count() > 0) {
-            if ($item->video()->count()>0) {
+            if ($item->video()->count() > 0) {
                 $videoUploader            = new VideoUploader();
                 $videoUploader->oldServer = $item->video->server;
                 $videoUploader->oldFile   = $item->video->seven_twenty_video;
-                
+
                 $videoUploader->removeOldFile();
 
                 $item->video->delete();
