@@ -96,7 +96,7 @@
                             </div>
                             <div class="movie-widget-area">
                             </div>
-                            <p class="movie-widget__desc">{{ __($item->preview_text) }}</p>
+                            <p class="movie-widget__desc">{{ __($seoContents["social_description"]) }}</p>
                         </div>
                     </div>
 
