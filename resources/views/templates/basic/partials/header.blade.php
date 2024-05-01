@@ -142,23 +142,27 @@
 
 
 <script>
-    document.getElementById('language-toggle').addEventListener('click', function() {
+    document.getElementById('language-toggle').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default anchor tag behavior
+
         // Determine the target language (Arabic or English)
         var targetLang = "{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}";
+
         // Send a request to change the language
-        fetch("{{ route('user.lang', ['lang' => ':lang']) }}".replace(':lang', targetLang))
-            .then(response => {
-                alert($response.error);
-
-                if (response.ok) {
-                    alert("okj");
-                    // Reload the page to apply the new language
-                    window.location.reload();
-                } else {
-
-                    console.error('Failed to change language:', response.statusText);
-                }
-            })
-            .catch(error => console.error('Error changing language:', error));
+        fetch("{{ url('user/lang') }}/" + targetLang, {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token header
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Reload the page to apply the new language
+                window.location.reload();
+            } else {
+                console.error('Failed to change language:', response.statusText);
+            }
+        })
+        .catch(error => console.error('Error changing language:', error));
     });
 </script>
