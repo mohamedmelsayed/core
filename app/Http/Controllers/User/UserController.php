@@ -25,6 +25,8 @@ class UserController extends Controller {
         $user->lang = $lang;
         $user->save();
 
+        dd($user);
+
         // Store the selected language in the session or any other storage mechanism if needed
 
         // Redirect back or return a response as needed
