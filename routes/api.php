@@ -93,6 +93,7 @@ Route::namespace('Api')->name('api.')->group(function () {
 
                 //Profile setting
                 Route::controller('UserController')->group(function () {
+                     Route::get('lang/{lang}', 'changeLanguage')->name('lang');
                     Route::post('profile-setting', 'submitProfile');
                     Route::post('change-password', 'submitPassword');
                     Route::get('validate-purchase', 'validatePurchase');
