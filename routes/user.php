@@ -3,6 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 Route::namespace('User\Auth')->name('user.')->group(function () {
+    Route::controller('UserController')->group(function () {
+        Route::get('lang/{lang}', 'changeLanguage')->name('user.lang');
+
+    });
+
     Route::controller('SocialiteController')->group(function () {
         Route::get('social-login/{provider}', 'socialLogin')->name('social.login');
         Route::get('login/callback/{provider}', 'callback')->name('social.login.callback');

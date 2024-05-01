@@ -12,6 +12,26 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller {
+
+    public function changeLanguage($lang)
+    {
+        // Validate the language parameter if needed
+
+        // Change the application language
+        app()->setLocale($lang);
+
+        // Update the user's language preference in the database
+        $user = Auth::user();
+        $user->lang = $lang;
+        $user->save();
+
+        // Store the selected language in the session or any other storage mechanism if needed
+
+        // Redirect back or return a response as needed
+        return back();
+    }
+
+
     public function home() {
         return to_route('home');
     }
