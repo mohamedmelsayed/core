@@ -149,7 +149,7 @@
         var targetLang = "{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}";
 
         // Send a request to change the language
-        fetch("{{ url('user/lang') }}/" + targetLang, {
+        fetch("{{ url('api/lang') }}/" + targetLang, {
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token header

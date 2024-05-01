@@ -26,6 +26,31 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller {
+    public function changeLanguage($lang)
+    {
+        // Validate the language parameter if needed
+
+        // Change the application language
+        app()->setLocale($lang);
+
+        // Update the user's language preference in the database
+        $user = auth()->user();
+        $user->lang = $lang;
+        $user->save();
+
+
+        // Store the selected language in the session or any other storage mechanism if needed
+
+        // Redirect back or return a response as needed
+        return response()->json([
+            'remark'  => 'dashboard',
+            'status'  => 'success',
+            'message' => ['success' => 'Dashboard Data'],
+            'data'    => [
+               'lang'=>$lang
+            ],
+        ]);
+    }
 
     public function dashboard() {
         $data['sliders']        = Slider::with('item', 'item.category', 'item.sub_category')->latest()->limit(4)->get();
