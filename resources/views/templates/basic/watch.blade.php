@@ -45,7 +45,7 @@
                         <div class="movie-content">
                             <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                                 <div class="movie-content-left">
-                                    <h3 class="title">{{ __($seoContents->social_title) }}</h3>
+                                    <h3 class="title">{{ __($seoContents["social_title"]) }}</h3>
                                     <span class="sub-title">@lang('Category') : <span class="cat">{{ @$item->category->name }}</span>
                                         @if ($item->sub_category)
                                             @lang('Sub Category'): {{ @$item->sub_category->name }}
