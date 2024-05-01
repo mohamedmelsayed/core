@@ -44,7 +44,7 @@
                     <div class="movie-content">
                         <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                             <div class="movie-content-left">
-                                <h3 class="title">{{ __($item->title) }}</h3>
+                                <h3 class="title">{{ __($seoContents->social_title) }}</h3>
                                 <span class="sub-title">@lang('Category') : <span class="cat">{{ @$item->category->name }}</span>
                                     @if ($item->sub_category)
                                         @lang('Sub Category'): {{ @$item->sub_category->name }}
@@ -87,7 +87,7 @@
                                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"><i class="lab la-facebook-f"></i></a>
                                     </li>
                                     <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Linkedin')">
-                                        <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode(url()->current()) }}&amp;title={{ __(@$seoContents->social_title) }}&amp;summary=@php echo strLimit(strip_tags($item->description), 130); @endphp"><i class="lab la-linkedin-in"></i></a>
+                                        <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode(url()->current()) }}&amp;title={{ __(@$item->title) }}&amp;summary=@php echo strLimit(strip_tags($item->description), 130); @endphp"><i class="lab la-linkedin-in"></i></a>
                                     </li>
                                     <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Twitter')">
                                         <a href="https://twitter.com/intent/tweet?text={{ __(@$item->title) }}%0A{{ url()->current() }}"><i class="lab la-twitter"></i></a>
