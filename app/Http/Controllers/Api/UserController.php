@@ -29,6 +29,7 @@ class UserController extends Controller {
     public function changeLanguage($lang)
     {
         // Validate the language parameter if needed
+        dd($lang);
 
         // Change the application language
         app()->setLocale($lang);
