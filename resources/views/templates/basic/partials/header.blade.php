@@ -153,7 +153,7 @@
                     // Reload the page to apply the new language
                     window.location.reload();
                 } else {
-                    alert("bad");
+                    alert($response);
 
                     console.error('Failed to change language:', response.statusText);
                 }
