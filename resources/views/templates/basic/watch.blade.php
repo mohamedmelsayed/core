@@ -6,6 +6,8 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
                         <div class="main-video">
+            <h2>test<h1>
+
                             <video class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($videos as $video)
                                     <source src="{{ $video->content }}" type="video/mp4" size="{{ $video->size }}" />
