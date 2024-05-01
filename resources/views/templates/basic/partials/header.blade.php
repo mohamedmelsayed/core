@@ -144,7 +144,7 @@
     document.getElementById('language-toggle').addEventListener('click', function() {
         // Determine the target language (Arabic or English)
         var targetLang = "{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}";
-
+        alert(targetLang);
         // Send a request to change the language
         fetch("{{ route('user.lang', ['lang' => ':lang']) }}".replace(':lang', targetLang))
             .then(response => {
