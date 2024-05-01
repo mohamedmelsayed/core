@@ -28,8 +28,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
-class SiteController extends Controller {
-    public function index() {
+class SiteController extends Controller
+{
+    public function index()
+    {
         $pageTitle      = 'Home';
         $sliders        = Slider::orderBy('id', 'desc')->where('status', 1)->with('item', 'item.category', 'item.video')->get();
         $featuredMovies = Item::active()->hasVideo()->where('featured', 1)->orderBy('id', 'desc')->get();
@@ -37,13 +39,15 @@ class SiteController extends Controller {
         return view($this->activeTemplate . 'home', compact('pageTitle', 'sliders', 'featuredMovies', 'advertise'));
     }
 
-    public function contact() {
+    public function contact()
+    {
         $pageTitle = "Contact Us";
         $user      = auth()->user();
         return view($this->activeTemplate . 'contact', compact('pageTitle', 'user'));
     }
 
-    public function contactSubmit(Request $request) {
+    public function contactSubmit(Request $request)
+    {
         $this->validate($request, [
             'name'    => 'required',
             'email'   => 'required',
@@ -88,7 +92,8 @@ class SiteController extends Controller {
         return to_route('ticket.view', [$ticket->ticket])->withNotify($notify);
     }
 
-    public function changeLanguage($lang = null) {
+    public function changeLanguage($lang = null)
+    {
         $language = Language::where('code', $lang)->first();
         if (!$language) {
             $lang = 'en';
@@ -98,18 +103,21 @@ class SiteController extends Controller {
         return back();
     }
 
-    public function cookieAccept() {
+    public function cookieAccept()
+    {
         $general = gs();
         Cookie::queue('gdpr_cookie', gs('site_name'), 43200);
     }
 
-    public function cookiePolicy() {
+    public function cookiePolicy()
+    {
         $pageTitle = 'Cookie Policy';
         $cookie    = Frontend::where('data_keys', 'cookie.data')->first();
         return view($this->activeTemplate . 'cookie', compact('pageTitle', 'cookie'));
     }
 
-    public function placeholderImage($size = null) {
+    public function placeholderImage($size = null)
+    {
         $imgWidth  = explode('x', $size)[0];
         $imgHeight = explode('x', $size)[1];
         $text      = $imgWidth . '×' . $imgHeight;
@@ -137,7 +145,8 @@ class SiteController extends Controller {
         imagedestroy($image);
     }
 
-    public function maintenance() {
+    public function maintenance()
+    {
         $pageTitle = 'Maintenance Mode';
         if (gs('maintenance_mode') == Status::DISABLE) {
             return to_route('home');
@@ -146,7 +155,8 @@ class SiteController extends Controller {
         return view($this->activeTemplate . 'maintenance', compact('pageTitle', 'maintenance'));
     }
 
-    public function getSection(Request $request) {
+    public function getSection(Request $request)
+    {
         $data = [];
         if ($request->sectionName == 'end') {
             return response('end');
@@ -173,14 +183,13 @@ class SiteController extends Controller {
         return view($this->activeTemplate . 'sections.' . $request->sectionName, $data);
     }
 
-    public function watchVideo($slug, $episodeId = null) {
+    public function watchVideo($slug, $episodeId = null)
+    {
         $item = Item::active()->where('slug', $slug)->with('video.subtitles')->firstOrFail();
         $item->increment('view');
 
-        $translate=ContentTranslation::where("item_id",$item->id)->get();
 
-        dd($translate);
-        
+
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
         if ($item->item_type == Status::EPISODE_ITEM) {
@@ -211,7 +220,6 @@ class SiteController extends Controller {
 
             $video              = $firstVideo;
             $checkWatchEligable = $this->checkWatchEligableEpisode($activeEpisode, $userHasSubscribed);
-
         } else {
             $this->storeHistory($item->id);
             $this->storeVideoReport($item->id);
@@ -239,7 +247,8 @@ class SiteController extends Controller {
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
-    protected function checkWatchEligableEpisode($episode, $userHasSubscribed) {
+    protected function checkWatchEligableEpisode($episode, $userHasSubscribed)
+    {
         if ($episode->version == Status::PAID_VERSION) {
             $watchEligable = $userHasSubscribed ? true : false;
         } else if ($episode->version == Status::RENT_VERSION) {
@@ -255,7 +264,8 @@ class SiteController extends Controller {
         return [$watchEligable, @$hasSubscribedItem ?? 0];
     }
 
-    protected function checkWatchEligableItem($item, $userHasSubscribed) {
+    protected function checkWatchEligableItem($item, $userHasSubscribed)
+    {
         if ($item->version == Status::PAID_VERSION) {
             $watchEligable = $userHasSubscribed ? true : false;
         } else if ($item->version == Status::RENT_VERSION) {
@@ -271,7 +281,8 @@ class SiteController extends Controller {
         return [$watchEligable, @$hasSubscribedItem ?? 0];
     }
 
-    private function videoList($video) {
+    private function videoList($video)
+    {
         $videoFile = [];
         if ($video->three_sixty_video) {
             $videoFile[] = [
@@ -301,7 +312,8 @@ class SiteController extends Controller {
         return json_decode(json_encode($videoFile, true));
     }
 
-    private function storeHistory($itemId = null, $episodeId = null) {
+    private function storeHistory($itemId = null, $episodeId = null)
+    {
         if (auth()->check()) {
             if ($itemId) {
                 $history = History::where('user_id', auth()->id())->orderBy('id', 'desc')->limit(1)->first();
@@ -324,7 +336,8 @@ class SiteController extends Controller {
         }
     }
 
-    protected function storeVideoReport($itemId = null, $episodeId = null) {
+    protected function storeVideoReport($itemId = null, $episodeId = null)
+    {
         $deviceId = md5($_SERVER['HTTP_USER_AGENT']);
 
         if ($itemId) {
@@ -343,35 +356,54 @@ class SiteController extends Controller {
         }
     }
 
-    private function getItemSeoContent($item) {
-        $seoContents['keywords']           = $item->meta_keywords ?? [];
-        $seoContents['social_title']       = $item->title;
-        $seoContents['description']        = strLimit(strip_tags($item->description), 150);
-        $seoContents['social_description'] = strLimit(strip_tags($item->description), 150);
+    private function getItemSeoContent($item)
+    {
+        $lang = "ar";
+        $user = auth()->user();
+        if ($user != null) {
+            $lang = $user->lang;
+        }
+
+        $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->get();
+        if ($translate != null) {
+            $seoContents['keywords']           = $translate->translated_keywords ?? [];
+            $seoContents['social_title']       = $translate->translated_title;
+            $seoContents['description']        = strLimit(strip_tags($translate->translated_description), 150);
+            $seoContents['social_description'] = strLimit(strip_tags($translate->translated_description), 150);
+        } else {
+            $seoContents['keywords']           = $item->meta_keywords ?? [];
+            $seoContents['social_title']       = $item->title;
+            $seoContents['description']        = strLimit(strip_tags($item->description), 150);
+            $seoContents['social_description'] = strLimit(strip_tags($item->description), 150);
+        }
         $seoContents['image']              = getImage(getFilePath('item_landscape') . '/' . $item->image->landscape);
         $seoContents['image_size']         = '900x600';
         return $seoContents;
     }
 
-    private function relatedItems($itemId, $itemType) {
+    private function relatedItems($itemId, $itemType)
+    {
         return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
     }
 
-    public function category($id) {
+    public function category($id)
+    {
         $category  = Category::findOrFail($id);
         $items     = Item::hasVideo()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
         $pageTitle = $category->name;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category'));
     }
 
-    public function subCategory($id) {
+    public function subCategory($id)
+    {
         $subcategory = SubCategory::findOrFail($id);
         $items       = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         $pageTitle   = $subcategory->name;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory'));
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $search = $request->search;
         if (!$search) {
             return redirect()->route('home');
@@ -384,7 +416,8 @@ class SiteController extends Controller {
         $pageTitle = "Result Showing For " . $search;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'search'));
     }
-    public function loadMore(Request $request) {
+    public function loadMore(Request $request)
+    {
         if (isset($request->category_id)) {
             $data['category'] = Category::find($request->category_id);
             $data['items']    = Item::hasVideo()->where('category_id', $request->category_id)->orderBy('id', 'desc')->where('id', '<', $request->id)->take(6)->get();
@@ -405,19 +438,22 @@ class SiteController extends Controller {
         return view($this->activeTemplate . 'item_ajax', $data);
     }
 
-    public function policy($id, $slug) {
+    public function policy($id, $slug)
+    {
         $item      = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'item'));
     }
 
-    public function links($id, $slug) {
+    public function links($id, $slug)
+    {
         $item      = Frontend::where('id', $id)->where('data_keys', 'short_links.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'item'));
     }
 
-    public function subscribe(Request $request) {
+    public function subscribe(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:40|unique:subscribers',
         ]);
@@ -430,20 +466,23 @@ class SiteController extends Controller {
         return response()->json(['success' => 'Subscribe successfully']);
     }
 
-    public function liveTelevision($id = 0) {
+    public function liveTelevision($id = 0)
+    {
         $pageTitle = 'Live TV list';
         $tvs       = LiveTelevision::where('status', 1)->get();
         return view($this->activeTemplate . 'live_tvs', compact('pageTitle', 'tvs'));
     }
 
-    public function watchTelevision($id) {
+    public function watchTelevision($id)
+    {
         $tv        = LiveTelevision::active()->findOrFail($id);
         $pageTitle = $tv->title;
         $otherTvs  = LiveTelevision::active()->where('id', '!=', $id)->get();
         return view($this->activeTemplate . 'watch_tv', compact('pageTitle', 'tv', 'otherTvs'));
     }
 
-    public function addWishList(Request $request) {
+    public function addWishList(Request $request)
+    {
         if (!auth()->check()) {
             return response()->json([
                 'status'  => 'error',
@@ -482,7 +521,8 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function removeWishlist(Request $request) {
+    public function removeWishlist(Request $request)
+    {
         if (!auth()->check()) {
             return response()->json([
                 'status'  => 'error',
@@ -505,13 +545,15 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function addClick(Request $request) {
+    public function addClick(Request $request)
+    {
         $ad = Advertise::find($request->id);
         $ad->increment('click');
         return response()->json("Success");
     }
 
-    public function storeDeviceToken(Request $request) {
+    public function storeDeviceToken(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'token' => 'required',
         ]);
@@ -535,14 +577,15 @@ class SiteController extends Controller {
         return ['success' => true, 'message' => 'Token save successfully'];
     }
 
-    public function templateswitch($name) {
+    public function templateswitch($name)
+    {
         session()->put('templates', $name);
 
         return redirect()->route('home');
-
     }
 
-    public function pusher($socketId, $channelName) {
+    public function pusher($socketId, $channelName)
+    {
         $general      = gs();
         $pusherSecret = $general->pusher_config->app_secret_key;
         $str          = $socketId . ":" . $channelName;
@@ -554,7 +597,8 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function subscription() {
+    public function subscription()
+    {
         $pageTitle = 'Subscribe';
         $plans     = Plan::active()->paginate(getPaginate());
         return view($this->activeTemplate . 'subscription', compact('pageTitle', 'plans'));
