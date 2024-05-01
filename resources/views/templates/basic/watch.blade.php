@@ -6,10 +6,7 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
                         <div class="main-video">
-                        @foreach ($videos as $video)
-
-            <h2>{{ $video->content }}<h1>
-            @endforeach
+                    
 
                             <video class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($videos as $video)
@@ -48,7 +45,7 @@
                         <div class="movie-content">
                             <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                                 <div class="movie-content-left">
-                                    <h3 class="title">{{ __($item->title) }}</h3>
+                                    <h3 class="title">{{ __($seoContents->social_title) }}</h3>
                                     <span class="sub-title">@lang('Category') : <span class="cat">{{ @$item->category->name }}</span>
                                         @if ($item->sub_category)
                                             @lang('Sub Category'): {{ @$item->sub_category->name }}
