@@ -21,7 +21,7 @@ class UserController extends Controller {
         app()->setLocale($lang);
 
         // Update the user's language preference in the database
-        $user = Auth::user();
+        $user = auth()->user();
         $user->lang = $lang;
         $user->save();
 

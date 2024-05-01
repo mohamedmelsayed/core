@@ -359,7 +359,7 @@ class SiteController extends Controller
     private function getItemSeoContent($item)
     {
         $lang = "ar";
-        $user = Auth::user();
+        $user = auth()->user();
         if ($user != null) {
             $lang = $user->lang;
         }
