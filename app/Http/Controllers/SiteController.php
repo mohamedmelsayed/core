@@ -6,6 +6,7 @@ use App\Constants\Status;
 use App\Models\AdminNotification;
 use App\Models\Advertise;
 use App\Models\Category;
+use App\Models\ContentTranslation;
 use App\Models\DeviceToken;
 use App\Models\Episode;
 use App\Models\Frontend;
@@ -176,6 +177,10 @@ class SiteController extends Controller {
         $item = Item::active()->where('slug', $slug)->with('video.subtitles')->firstOrFail();
         $item->increment('view');
 
+        $translate=ContentTranslation::where("item_id",$item->id)->get();
+
+        dd($translate);
+        
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
         if ($item->item_type == Status::EPISODE_ITEM) {
