@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::namespace('User\Auth')->name('user.')->group(function () {
     Route::controller('UserController')->group(function () {
-        Route::get('lang/{lang}', 'changeLanguage')->name('user.lang');
+        Route::get('lang/{lang}', 'changeLanguage')->name('lang');
 
     });
 
