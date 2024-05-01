@@ -148,12 +148,13 @@
         // Send a request to change the language
         fetch("{{ route('user.lang', ['lang' => ':lang']) }}".replace(':lang', targetLang))
             .then(response => {
+                alert($response.error);
+
                 if (response.ok) {
                     alert("okj");
                     // Reload the page to apply the new language
                     window.location.reload();
                 } else {
-                    alert($response);
 
                     console.error('Failed to change language:', response.statusText);
                 }
