@@ -364,7 +364,7 @@ class SiteController extends Controller
             $lang = $user->lang;
         }
 
-        $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->get();
+        $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
             $seoContents['keywords']           = $translate->translated_keywords ?? [];
             $seoContents['social_title']       = $translate->translated_title;
