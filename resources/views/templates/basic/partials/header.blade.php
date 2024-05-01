@@ -102,12 +102,13 @@
                                             <span class="header-user-icon"><i class="las la-chevron-circle-down"></i></span>
                                         </div>
                                     </button>
+                                    
+
+                                    <div class="dropdown-menu dropdown-menu--sm dropdown-menu-end border-0 p-0">
                                     <button id="language-toggle" class="dropdown-menu__item d-flex align-items-center px-3 py-2">
                                         <i class="dropdown-menu__icon las la-language"></i>
                                         <span class="dropdown-menu__caption">@lang('Change Language')</span>
-                                    </button>
-
-                                    <div class="dropdown-menu dropdown-menu--sm dropdown-menu-end border-0 p-0">
+                                    </button>  
                                         <a class="dropdown-menu__item d-flex align-items-center px-3 py-2" href="{{ route('user.profile.setting') }}">
                                             <i class="dropdown-menu__icon las la-user-circle"></i>
                                             <span class="dropdown-menu__caption">@lang('Profile Settings')</span>
@@ -144,7 +145,6 @@
     document.getElementById('language-toggle').addEventListener('click', function() {
         // Determine the target language (Arabic or English)
         var targetLang = "{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}";
-        alert(targetLang);
         // Send a request to change the language
         fetch("{{ route('user.lang', ['lang' => ':lang']) }}".replace(':lang', targetLang))
             .then(response => {
