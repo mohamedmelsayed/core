@@ -326,7 +326,7 @@ class ItemController extends Controller
         }
 
        
-        $video->video_type_seven_twenty    = @$request->video_type_seven_twenty;
+        $video->video_type_seven_twenty    = 1;
 
         $video->seven_twenty_video    = @$uploadSevenTwenty['seven_twenty_video'];
 
