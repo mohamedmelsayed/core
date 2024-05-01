@@ -406,7 +406,9 @@ function getVideoFile($video, $quality="seven_twenty") {
     if (!$content) {
         return false;
     }
-dd($server);
+    if($server==Status::LINK){
+        return $content;
+    }
    // dd( 'assets/videos/' . $content);
     if ($server == Status::CURRENT_SERVER) {
         $videoFile = asset('assets/videos/' . $content);

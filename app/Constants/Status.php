@@ -48,6 +48,7 @@ class Status {
     const WASABI_SERVER        = 2;
     const DIGITAL_OCEAN_SERVER = 3; 
     const AWS_CDN = 4;
+    const LINK = 5;
 
 
     
