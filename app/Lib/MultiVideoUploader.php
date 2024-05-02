@@ -76,6 +76,7 @@ class MultiVideoUploader {
                 $server = 4;
             }
         }
-        return ['error' => false, $qualityName => $video, 'server' => $server];
+
+        dd( ['error' => false, $qualityName => $video, 'server' => $server]);
     }
 }
