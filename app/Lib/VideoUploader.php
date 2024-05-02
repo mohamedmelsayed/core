@@ -62,6 +62,7 @@ class VideoUploader
         $path = "assets/videos/$date";
 
         $this->fileName = $date . '/' . fileUploader($file, $path, null);
+        dd($this);
     }
 
     private function uploadToServer($server, $param)
