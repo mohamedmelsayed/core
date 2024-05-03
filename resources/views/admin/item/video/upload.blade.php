@@ -174,7 +174,6 @@
         }
     });
 
-    $('select[name=video_type]').val('{{ $video->video_type }}');
 
 
 
