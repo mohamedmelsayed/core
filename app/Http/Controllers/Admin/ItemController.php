@@ -454,12 +454,12 @@ class ItemController extends Controller
             $videoUploader->removeOldFile();
 
             $content = $request->link;
-            $server  = 5;
+            $server  = Status::LINK;
         }
 
         $video->item_id    = $item->id;
         $video->seven_twenty_video    = $content;
-        // $video->server     = $server;
+        $video->server     = $server;
         $video->save();
 
         return response()->json('success');
