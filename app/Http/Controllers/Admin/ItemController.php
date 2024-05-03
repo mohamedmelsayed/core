@@ -292,20 +292,20 @@ class ItemController extends Controller
         $video = $item->video;
 
         if ($video) {
-            $link  = 'nullable';
-            $video = 'nullable';
+            $sevenTwentyLink  = 'nullable';
+            $sevenTwentyVideo = 'nullable';
         } else {
-            $link  = 'required_if:link,0';
-            $video = 'required_if:video_type_seven_twenty,1';
+            $sevenTwentyLink  = 'required_if:video_type_seven_twenty,0';
+            $sevenTwentyVideo = 'required_if:video_type_seven_twenty,1';
         }
 
         ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
 
 
-            'video_type'    => 'required',
-            'link'          => "$link",
-            'video'         => ["$video", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
+            'video_type_seven_twenty'    => 'required',
+            'seven_twenty_link'          => "$sevenTwentyLink",
+            'seven_twenty_video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
 
         ]);
 
@@ -326,11 +326,11 @@ class ItemController extends Controller
         }
 
        
-        $video->video_type    = 1;
+        $video->video_type_seven_twenty    = 1;
 
-        $video->seven_twenty_video    = @$uploadSevenTwenty['video'];
+        $video->seven_twenty_video    = @$uploadSevenTwenty['seven_twenty_video'];
 
-        $video->server_seven_twenty    =@$link==1?5: @$uploadSevenTwenty['server'] ?? 0;
+        $video->server_seven_twenty    =@$seven_twenty_link==1?5: @$uploadSevenTwenty['server'] ?? 0;
 
         $video->save();
         return response()->json(['success' => 'Video uploaded successfully']);
