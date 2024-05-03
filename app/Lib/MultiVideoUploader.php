@@ -2,6 +2,8 @@
 
 namespace App\Lib;
 
+use App\Constants\Status;
+
 class MultiVideoUploader {
     public static function checkSizeValidation() {
         $request = request();
@@ -73,7 +75,7 @@ class MultiVideoUploader {
                 $removeFile->removeOldFile();
 
                 $video  = $request->$linkName;
-                $server = 4;
+                $server = Status::LINK ;
             }
         }
 
