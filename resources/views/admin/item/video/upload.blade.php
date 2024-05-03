@@ -173,20 +173,20 @@
         function validate(formData, jqForm, options) {
             var form = jqForm[0];
             if (form.video_type_seven_twenty.value == 0) {
-                if (!form.link.value) {
+                if (!form.sevenTwentyLink.value) {
                     notify('error', 'Link field is required');
                     return false;
                 }
             } else {
-                if (!form.video.value) {
+                if (!form.seven_twenty_video.value) {
                     notify('error', 'File Not Found');
                     return false;
                 }
-                if (form.video.files[0].size > 4194304000) {
+                if (form.seven_twenty_video.files[0].size > 4194304000) {
                     notify('error', 'File size must be lower then 4 gb');
                     return false;
                 }
-                @if ($video)
+                @if ($seven_twenty_video)
                     notify('error', 'Video Already Exist');
                     return false;
                 @endif
