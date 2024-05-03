@@ -72,6 +72,7 @@ class MultiVideoUploader {
             } else {
                 $removeFile          = new VideoUploader();
                 $removeFile->oldFile = $video;
+                $removeFile->oldServer = $server;
                 $removeFile->removeOldFile();
 
                 $video  = $request->$linkName;

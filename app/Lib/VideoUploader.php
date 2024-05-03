@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 class VideoUploader
 {
     private $general;
-
+    private $oldServer;
     public $fileName;
     public $uploadedServer;
     public $error;
