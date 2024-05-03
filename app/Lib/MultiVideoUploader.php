@@ -70,6 +70,7 @@ class MultiVideoUploader {
                 $video  = $videoUploader->fileName;
                 $server = $videoUploader->uploadedServer;
             } else {
+                dd($video);
                 $removeFile          = new VideoUploader();
                 $removeFile->oldFile = $video;
                 $removeFile->removeOldFile();
