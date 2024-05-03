@@ -135,7 +135,6 @@ class VideoUploader
 
     public function removeOldFile()
     {
-        dd("here");
 
         if ($this->oldServer == Status::AWS_CDN) {
             $this->removeFromAWSCDN($this->oldFile); // Call the new method to remove from AWS CDN
