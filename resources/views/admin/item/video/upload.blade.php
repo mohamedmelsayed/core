@@ -186,7 +186,7 @@
                     notify('error', 'File size must be lower then 4 gb');
                     return false;
                 }
-                @if ($seven_twenty_video)
+                @if ($video)
                     notify('error', 'Video Already Exist');
                     return false;
                 @endif
