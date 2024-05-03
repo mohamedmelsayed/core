@@ -422,6 +422,7 @@ class ItemController extends Controller
 
         $item  = Item::findOrFail($id);
         $video = $item->video;
+        dd("here");
 
         if (!$video) {
             return response()->json(['errors' => 'Video not found']);
@@ -451,7 +452,6 @@ class ItemController extends Controller
             $content = $videoUploader->fileName;
             $server  = $videoUploader->uploadedServer;
         } else {
-            dd("here");
             $videoUploader->removeOldFile();
 
             $content = $request->link;
