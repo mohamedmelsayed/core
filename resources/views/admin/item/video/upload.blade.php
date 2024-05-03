@@ -32,11 +32,11 @@
                                         <div class="bar bg--primary"></div>
                                         <div class="percent">0%</div>
                                     </div>
-                                    <input class="upload-video-file" name="seven_twenty_video" type="file" />
+                                    <input class="upload-video-file" name="video" type="file" />
                                 </div>
                                 <div class="form-group" id="link">
                                     <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="sevenTwentyLink" type="text" placeholder="@lang('Inert Link')" />
+                                    <input class="form-control" name="link" type="text" placeholder="@lang('Inert Link')" />
                                 </div>
                             </div>
                         </div>
@@ -134,153 +134,172 @@
 @push('script-lib')
     <script src="{{ asset('assets/admin/js/bootstrap-clockpicker.min.js') }}"></script>
 @endpush
+
+
+
+
+@endsection
+@push('breadcrumb-plugins')
+<a href="{{ $prevUrl }}" class="btn btn-sm btn-outline--primary"><i class="la la-undo"></i> @lang('Back')</a>
+@endpush
+@push('style')
+<style type="text/css">
+    .progress { position:relative; width:100%; }
+        .bar { width:0%; height:20px; }
+        .percent { position:absolute; display:inline-block; left:50%;top: 8px; color: #040608;}
+        .upload { margin-right: auto; margin-left: auto; width: 100%; height: 200px; margin-top: 20px; border: 3px dashed #929292; line-height: 200px; font-size: 18px; line-height: unset !important; display: table; text-align: center; margin-bottom: 20px; color: #929292; }
+        .upload:hover { border: 3px dashed #04abf2; cursor: pointer; color: #04abf2; }
+        .upload.hover { border: 3px dashed #04abf2; cursor: pointer; color: #04abf2; }
+        .upload > div { display: table-cell; vertical-align: middle; }
+        .upload > div h4 { padding: 0; margin: 0; font-size: 25px; font-weight: 700; font-family: Lato, sans-serif; }
+        .upload > div p { padding: 0; margin: 0; font-family: Lato, sans-serif; }
+        .upload-video-file{
+            opacity: 0;
+            position: fixed;
+        }
+</style>
+@endpush
+
+
 @push('script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
-    <script>
-        "use strict"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
+<script>
 
+    "use strict"
 
-        var video_drop_block = $("[data-block='video-drop-zone']");
-
-        if (typeof(window.FileReader)) {
-            video_drop_block[0].ondragover = function() {
-                video_drop_block.addClass('hover');
-                return false;
-            };
-
-            video_drop_block[0].ondragleave = function() {
-                video_drop_block.removeClass('hover');
-                return false;
-            };
-
-            video_drop_block[0].ondrop = function(event) {
-                event.preventDefault();
-                video_drop_block.removeClass('hover');
-                var file = event.dataTransfer.files;
-                $('#upload-video').find('input').prop('files', file);
-                $('#upload-video').submit();
-            };
+	$("#video_type").change(function(){
+        if ($(this).val() == '0') {
+            $("#link").removeClass('d-none');
+            $("#video").addClass('d-none');
+        }else{
+            $("#link").addClass('d-none');
+            $("#video").removeClass('d-none');
         }
+    });
 
-        $(document).on("click", ".upload-video-file", function(e) {
-            e.stopPropagation();
-            //some code
-        });
-        $(document).on("click", ".upload", function(e) {
-            $('.upload-video-file').trigger("click");
+    $('select[name=video_type]').val('{{ $video->video_type }}');
+
+
+
+
+    var video_drop_block = $("[data-block='video-drop-zone']");
+
+   if (typeof(window.FileReader)){
+      video_drop_block[0].ondragover = function() {
+         video_drop_block.addClass('hover');
+         return false;
+      };
+
+      video_drop_block[0].ondragleave = function() {
+         video_drop_block.removeClass('hover');
+         return false;
+      };
+
+      video_drop_block[0].ondrop = function(event) {
+         event.preventDefault();
+         video_drop_block.removeClass('hover');
+         var file = event.dataTransfer.files;
+         $('#upload-video').find('input').prop('files', file);
+         $('#upload-video').submit();
+      };
+   }
+
+
+        $(document).on("click", ".upload-video-file", function (e) {
+             e.stopPropagation();
+                   //some code
+       });
+        $(document).on("click", ".upload", function (e) {
+            $( '.upload-video-file' ).trigger("click");
         });
 
-        function validate(formData, jqForm, options) {
-            var form = jqForm[0];
-            if (form.video_type_seven_twenty.value == 0) {
-                if (!form.sevenTwentyLink.value) {
-                    notify('error', 'Link field is required');
-                    return false;
-                }
-            } else {
-                if (!form.seven_twenty_video.value) {
-                    notify('error', 'File Not Found');
-                    return false;
-                }
-                if (form.seven_twenty_video.files[0].size > 4194304000) {
-                    notify('error', 'File size must be lower then 4 gb');
-                    return false;
-                }
-                @if ($video)
-                    notify('error', 'Video Already Exist');
-                    return false;
-                @endif
+function validate(formData, jqForm, options) {
+        var form = jqForm[0];
+        if (form.video_type.value == 0) {
+            if (!form.link.value) {
+                notify('error','Link field is required');
+                return false;
             }
+        }else{
+            if (!form.video.value) {
+                notify('error','File Not Found');
+                return false;
+            }
+            if (form.video.files[0].size > 4194304000) {
+                notify('error','File size must be lower then 4 gb');
+                return false;
+            }
+            @if(!$video)
+                notify('error','Video not found');
+                return false;
+            @endif
         }
+    }
 
-        var bar = $('.bar');
-        var percent = $('.percent');
-
-        $('form').ajaxForm({
-            beforeSubmit: validate,
-            dataType: 'json',
-            beforeSend: function() {
-                if ($('#video_type_seven_twenty').val() == '0') {
-                    $('form').find('.submitButton').text('Saving...');
-                    $('form').find('.submitButton').attr('disabled', '');
-                } else {
-                    $('form').find('.card-footer').addClass('d-none');
+    $('form').ajaxForm({
+        beforeSubmit: validate,
+        dataType:'json',
+        beforeSend: function() {
+            if($('#video_type').val() == '0'){
+                $('form').find('.submitBtn').text('Updating...');
+                $('form').find('.submitBtn').attr('disabled','');
+            }else{
+                $('form').find('.card-footer').addClass('d-none');
+            }
+            var percentVal = '0%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            if($('#video_type').val() == '1'){
+                if(percentComplete > 50) {
+                    percent.addClass('text-white');
                 }
+                var percentVal = percentComplete + '%';
+                if(percentComplete == 100){
+                    $('.percent').attr('style','top:2px');
+                    percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
+                }else{
+                    percent.html(percentVal);
+                }
+                bar.width(percentVal);
+            }
+        },
+        success: function(data) {
+            if(data.demo){
+                notify('warning', data.demo);
+                percent.removeClass('text-white');
+                $('.percent').attr('style','top:8px');
                 var percentVal = '0%';
                 bar.width(percentVal);
                 percent.html(percentVal);
-            },
-            uploadProgress: function(event, position, total, percentComplete) {
-                if ($('#video_type_seven_twenty').val() == '1') {
-                    if (percentComplete > 50) {
-                        percent.addClass('text-white');
-                    }
-                    var percentVal = percentComplete + '%';
-                    if (percentComplete == 100) {
-                        $('.percent').attr('style', 'top:2px');
-                        percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
-                    } else {
-                        percent.html(percentVal);
-                    }
-                    bar.width(percentVal);
-                }
-            },
-            success: function(data) {
-                if (data.demo) {
-                    notify('warning', data.demo);
-                } else if (data.errors) {
-                    percent.removeClass('text-white');
-                    $('.percent').attr('style', 'top:8px');
-                    var percentVal = '0%';
-                    bar.width(percentVal);
-                    percent.html(percentVal);
-                    $('form').find('.card-footer').removeClass('d-none');
-                    notify('error', data.errors);
-                }
-                if (data == 'success') {
-                    $('.percent').attr('style', 'top:8px');
-                    bar.addClass('bg--success');
-                    percent.html('Success');
-                    $('form').find('.submitButton').text('Upload Video');
-                    $('form').find('.submitButton').removeAttr('disabled');
-                    $('form').trigger("reset");
-                    notify('success', 'video uploaded');
-                    window.location = "{{ route('admin.item.ads.duration', [$item->id, @$episode->id]) }}";
-                }
+                $('form').find('.card-footer').removeClass('d-none');
+                $('form').find('.submitBtn').text('Update Video');
+                $('form').find('.submitBtn').removeAttr('disabled');
+                $('form').trigger("reset");
+            }else if (data.errors) {
+                percent.removeClass('text-white');
+                $('.percent').attr('style','top:8px');
+                var percentVal = '0%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+                $('form').find('.card-footer').removeClass('d-none');
+                $('form').find('.submitBtn').text('Update Video');
+                $('form').find('.submitBtn').removeAttr('disabled');
+                $('form').trigger("reset");
+                notify('error', data.errors);
             }
-        });
-
-        $("#video_type_seven_twenty").change(function() {
-            if ($(this).val() == '0') {
-                $("#link").show();
-                $("#video").hide();
-            } else {
-                $("#link").hide();
-                $("#video").show();
+            if(data == 'success') {
+                $('.percent').attr('style','top:8px');
+                bar.addClass('bg--success');
+                percent.html('Success');
+                location.reload();
             }
-        }).change();
+        }
+    });
 
+    var bar = $('.bar');
+    var percent = $('.percent');
 
-
-        (function() {
-            $('.addBtn').on('click', function() {
-                $('.add-timeline-area').append(`<div class="col-md-12 mb-2">
-                                                    <div class="input-group clockpicker">
-                                                        <input class="form-control single-input" id="single-input" type="text" value="00:5">
-                                                    </div>
-                                                </div>`);
-
-                initClock()
-            });
-
-            function initClock() {
-                $('.single-input').clockpicker({
-                    placement: 'bottom',
-                    align: 'right',
-                    autoclose: true,
-                    'default': '20:48'
-                });
-            }
-        })(jQuery)
-    </script>
+</script>
 @endpush
