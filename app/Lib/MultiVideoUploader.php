@@ -70,16 +70,15 @@ class MultiVideoUploader {
                 $video  = $videoUploader->fileName;
                 $server = $videoUploader->uploadedServer;
             } else {
-                dd($video);
                 $removeFile          = new VideoUploader();
                 $removeFile->oldFile = $video;
                 $removeFile->removeOldFile();
 
                 $video  = $request->$linkName;
-                $server = Status::LINK ;
+                $server = Status::LINK;
             }
         }
-
-        dd( ['error' => false, $qualityName => $video, 'server' => $server]);
+        
+        return ['error' => false, $qualityName => $video, 'server' => $server];
     }
 }
