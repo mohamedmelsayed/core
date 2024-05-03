@@ -415,6 +415,7 @@ class ItemController extends Controller
         }
 
         $validator = Validator::make($request->all(), $validation_rule);
+        dd("here");
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
@@ -422,7 +423,6 @@ class ItemController extends Controller
 
         $item  = Item::findOrFail($id);
         $video = $item->video;
-        dd("here");
 
         if (!$video) {
             return response()->json(['errors' => 'Video not found']);
