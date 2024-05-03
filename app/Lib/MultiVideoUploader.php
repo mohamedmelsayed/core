@@ -55,7 +55,7 @@ class MultiVideoUploader {
         }
 
         if (@$request->$linkName || @$request->$qualityName) {
-            if ($request->hasFile($qualityName)) {
+            if ($request->hasFile("video")) {
                 $videoUploader            = new VideoUploader();
                 $videoUploader->file      = $request->file("video");
                 $videoUploader->oldFile   = $video;
