@@ -10,7 +10,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label>@lang('Video Type')</label>
-                                <select class="form-control" name="video_type_seven_twenty" required>
+                                <select class="form-control" name="video_type" required>
                                     <option value="1">@lang('Video')</option>
                                     <option value="0">@lang('Link')</option>
                                 </select>
