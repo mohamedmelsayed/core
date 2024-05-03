@@ -138,10 +138,7 @@
 
 
 
-@endsection
-@push('breadcrumb-plugins')
-<a href="{{ $prevUrl }}" class="btn btn-sm btn-outline--primary"><i class="la la-undo"></i> @lang('Back')</a>
-@endpush
+
 @push('style')
 <style type="text/css">
     .progress { position:relative; width:100%; }
