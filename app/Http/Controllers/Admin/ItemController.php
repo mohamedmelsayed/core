@@ -451,6 +451,7 @@ class ItemController extends Controller
             $content = $videoUploader->fileName;
             $server  = $videoUploader->uploadedServer;
         } else {
+            dd("here");
             $videoUploader->removeOldFile();
 
             $content = $request->link;
