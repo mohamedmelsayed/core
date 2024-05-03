@@ -10,7 +10,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label>@lang('Video Type')</label>
-                                <select class="form-control" name="video_type" required>
+                                <select class="form-control" name="video_type_seven_twenty" required>
                                     <option value="1">@lang('Video')</option>
                                     <option value="0">@lang('Link')</option>
                                 </select>
@@ -32,11 +32,11 @@
                                         <div class="bar bg--primary"></div>
                                         <div class="percent">0%</div>
                                     </div>
-                                    <input class="upload-video-file" name="video" type="file" />
+                                    <input class="upload-video-file" name="seven_twenty_video" type="file" />
                                 </div>
                                 <div class="form-group" id="link">
                                     <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="link" type="text" placeholder="@lang('Inert Link')" />
+                                    <input class="form-control" name="sevenTwentyLink" type="text" placeholder="@lang('Inert Link')" />
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
 
         function validate(formData, jqForm, options) {
             var form = jqForm[0];
-            if (form.video_type.value == 0) {
+            if (form.video_type_seven_twenty.value == 0) {
                 if (!form.link.value) {
                     notify('error', 'Link field is required');
                     return false;
@@ -200,7 +200,7 @@
             beforeSubmit: validate,
             dataType: 'json',
             beforeSend: function() {
-                if ($('#video_type').val() == '0') {
+                if ($('#video_type_seven_twenty').val() == '0') {
                     $('form').find('.submitButton').text('Saving...');
                     $('form').find('.submitButton').attr('disabled', '');
                 } else {
@@ -211,7 +211,7 @@
                 percent.html(percentVal);
             },
             uploadProgress: function(event, position, total, percentComplete) {
-                if ($('#video_type').val() == '1') {
+                if ($('#video_type_seven_twenty').val() == '1') {
                     if (percentComplete > 50) {
                         percent.addClass('text-white');
                     }
@@ -250,7 +250,7 @@
             }
         });
 
-        $("#video_type").change(function() {
+        $("#video_type_seven_twenty").change(function() {
             if ($(this).val() == '0') {
                 $("#link").show();
                 $("#video").hide();
