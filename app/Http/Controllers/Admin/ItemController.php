@@ -415,7 +415,6 @@ class ItemController extends Controller
         }
 
         $validator = Validator::make($request->all(), $validation_rule);
-        dd("here");
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
