@@ -128,6 +128,7 @@ class VideoUploader
         } catch (\Exception $e) {
             // Handle the error (e.g., log or display an error message)
             // You can log the exception message for debugging purposes
+            dd($e->getMessage());
             Log::error('Error setting filesystem configuration: ' . $e->getMessage());
         }
     }
