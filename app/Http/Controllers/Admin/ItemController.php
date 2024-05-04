@@ -352,7 +352,7 @@ class ItemController extends Controller
 
         $uploadSevenTwenty = MultiVideoUploader::multiQualityVideoUpload($video, 'seven_twenty');
         if ($uploadSevenTwenty['error']) {
-            return response()->json(['error' => $sizeValidation['message']]);
+            return response()->json(['error' => $uploadSevenTwenty['error']]);
         }
 
         $uploadThousandEighty = MultiVideoUploader::multiQualityVideoUpload($video, 'thousand_eighty');
