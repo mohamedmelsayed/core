@@ -40,7 +40,6 @@ class VideoUploader
                 case Status::WASABI_SERVER:
                     $this->uploadedServer = Status::WASABI_SERVER;
                     $server=GeneralSetting::first()->wasabi;
-                    dd($server);
 
                     $this->configureDisk($server);
                     $this->uploadToServer('wasabi', 'videos');
