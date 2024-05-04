@@ -3,6 +3,7 @@
 namespace App\Lib;
 
 use App\Constants\Status;
+use App\Models\GeneralSetting;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -38,6 +39,10 @@ class VideoUploader
                     break;
                 case Status::WASABI_SERVER:
                     $this->uploadedServer = Status::WASABI_SERVER;
+                    $server=GeneralSetting::first()->wasabi;
+                    dd($server);
+
+                    $this->configureDisk($server);
                     $this->uploadToServer('wasabi', 'videos');
                     break;
                 case Status::DIGITAL_OCEAN_SERVER:
