@@ -39,7 +39,7 @@ class VideoUploader
                     break;
                 case Status::WASABI_SERVER:
                     $this->uploadedServer = Status::WASABI_SERVER;
-             //       $server=GeneralSetting::first()->wasabi;
+                    //       $server=GeneralSetting::first()->wasabi;
 
                     $this->configureDisk('wasabi');
                     $this->uploadToServer('wasabi', 'videos');
@@ -71,26 +71,24 @@ class VideoUploader
 
     private function uploadToServer($server, $param)
     {
+
         $date = date('Y/m/d');
         $file = $this->file;
         $path = "$param/$date";
-
-        $fileExtension = $file->getClientOriginalExtension();
-        $fileContents = file_get_contents($file);
-        $disk = Storage::disk($server);
-
-        $this->makeDirectory($path, $disk);
-
         $video = uniqid() . time() . '.' . $fileExtension;
-try{
-    $disk->put("$path/$video", $fileContents);
+        try {
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileContents = file_get_contents($file);
+            $disk = Storage::disk($server);
 
-}
-catch(Exception $ex)
-{
-    dd("exception ".$ex);
-}
-        $this->fileName = "$path/$video";
+            $this->makeDirectory($path, $disk);
+
+
+            $disk->put("$path/$video", $fileContents);
+            $this->fileName = "$path/$video";
+        } catch (Exception $ex) {
+            dd("exception " . $ex->getMessage());
+        }
     }
 
     private function makeDirectory($path, $disk)
@@ -99,24 +97,25 @@ catch(Exception $ex)
             $disk->makeDirectory($path);
         }
     }
-    public function configureFTP() {
+    public function configureFTP()
+    {
         $general = $this->general;
         //ftp
         try {
-        Config::set('filesystems.disks.custom-ftp.driver', 'ftp');
-        Config::set('filesystems.disks.custom-ftp.host', $general->ftp->host);
-        Config::set('filesystems.disks.custom-ftp.username', $general->ftp->username);
-        Config::set('filesystems.disks.custom-ftp.password', $general->ftp->password);
-        Config::set('filesystems.disks.custom-ftp.port', 21);
-        Config::set('filesystems.disks.custom-ftp.root', $general->ftp->root);
-    } catch (\Exception $e) {
-        // Handle the error (e.g., log or display an error message)
-        // You can log the exception message for debugging purposes
-        Log::error('Error setting filesystem configuration: ' . $e->getMessage());
+            Config::set('filesystems.disks.custom-ftp.driver', 'ftp');
+            Config::set('filesystems.disks.custom-ftp.host', $general->ftp->host);
+            Config::set('filesystems.disks.custom-ftp.username', $general->ftp->username);
+            Config::set('filesystems.disks.custom-ftp.password', $general->ftp->password);
+            Config::set('filesystems.disks.custom-ftp.port', 21);
+            Config::set('filesystems.disks.custom-ftp.root', $general->ftp->root);
+        } catch (\Exception $e) {
+            // Handle the error (e.g., log or display an error message)
+            // You can log the exception message for debugging purposes
+            Log::error('Error setting filesystem configuration: ' . $e->getMessage());
+        }
     }
-
-    }
-    public function configureDisk($server) {
+    public function configureDisk($server)
+    {
         $general = $this->general;
         try {
             Config::set('filesystems.disks.' . $server . '.visibility', 'public');
