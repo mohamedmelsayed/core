@@ -36,6 +36,7 @@ class VideoUploader
                     $this->uploadToServer('custom-ftp', 'videos');
                     break;
                 case Status::WASABI_SERVER:
+                    dd('we are here');
                     $this->uploadedServer = Status::WASABI_SERVER;
                     $this->uploadToServer('wasabi', 'videos');
                     break;
