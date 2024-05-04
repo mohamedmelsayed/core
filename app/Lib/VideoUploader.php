@@ -3,6 +3,7 @@
 namespace App\Lib;
 
 use App\Constants\Status;
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +37,6 @@ class VideoUploader
                     $this->uploadToServer('custom-ftp', 'videos');
                     break;
                 case Status::WASABI_SERVER:
-                    dd('we are here');
                     $this->uploadedServer = Status::WASABI_SERVER;
                     $this->uploadToServer('wasabi', 'videos');
                     break;
@@ -78,9 +78,14 @@ class VideoUploader
         $this->makeDirectory($path, $disk);
 
         $video = uniqid() . time() . '.' . $fileExtension;
+try{
+    $disk->put("$path/$video", $fileContents);
 
-        $disk->put("$path/$video", $fileContents);
-
+}
+catch(Exception $ex)
+{
+    dd("exception ".$ex);
+}
         $this->fileName = "$path/$video";
     }
 
