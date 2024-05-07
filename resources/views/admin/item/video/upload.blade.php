@@ -5,7 +5,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <form action="{{ $route }}" id="uploadForm" method="POST" enctype="multipart/form-data">
+                <form action="" id="uploadForm" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="tab-pane fade show active" id="pills-720p" role="tabpanel" aria-labelledby="pills-720p-tab" tabindex="0">
                         <!-- Content for 720P video -->
