@@ -130,14 +130,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="progress mt-3" style="display: none;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"></div>
-                    </div>
+                 
 
                     <div class="">
                         <button class="btn btn--primary w-100 h-45" type="submit">@lang('Submit')</button>
                     </div>
                 </form>
+                <h1>progress</h1>
+                <div class="progress mt-3" style="display: none;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"></div>
+                    </div>
             </div>
         </div>
 
@@ -291,40 +293,43 @@
 
 
         $('#uploadForm').on('submit', function(e) {
-            e.preventDefault();
-            var formData = new FormData($(this)[0]);
-            var progressBar = $('.progress');
-            $.ajax({
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                },
-                url: "{{ @$route }}",
-                method: "POST",
-                data: formData,
-                xhr: function() {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function(evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = evt.loaded / evt.total * 100;
-                            progressBar.show();
-                            progressBar.find('.progress-bar').css('width', percentComplete + '%');
-                        }
-                    }, false);
-                    return xhr;
-                },
-                async: false,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.error) {
-                        notify('error', response.error);
-                    } else {
-                        notify('success', response.success);
-                        window.location.href = "{{ route('admin.item.index') }}"
-                    }
+    e.preventDefault();
+    var formData = new FormData($(this)[0]);
+    var progressBar = $('.progress');
+    console.log(progressBar); // Check if progress bar element is selected
+    $.ajax({
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+        },
+        url: "{{ @$route }}",
+        method: "POST",
+        data: formData,
+        xhr: function() {
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener("progress", function(evt) {
+                if (evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total * 100;
+                    console.log('Upload Progress: ' + percentComplete + '%'); // Debug upload progress
+                    progressBar.show();
+                    progressBar.find('.progress-bar').css('width', percentComplete + '%');
                 }
-            });
-        });
+            }, false);
+            return xhr;
+        },
+        async: false,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.error) {
+                notify('error', response.error);
+            } else {
+                notify('success', response.success);
+                window.location.href = "{{ route('admin.item.index') }}"
+            }
+        }
+    });
+});
+
 
     })(jQuery)
 </script>
