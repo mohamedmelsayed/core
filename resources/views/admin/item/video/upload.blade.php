@@ -277,30 +277,69 @@
                 }
             }).change();
 
+            $('form').ajaxForm({
+        beforeSubmit: validate,
+        dataType:'json',
+        beforeSend: function() {
+            if($('#video_type').val() == '0'){
+                $('form').find('.submitBtn').text('uploading...');
+                $('form').find('.submitBtn').attr('disabled','');
+            }else{
+                $('form').find('.card-footer').addClass('d-none');
+            }
+            var percentVal = '0%';
+            bar.width(percentVal);
+            percent.html(percentVal);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            if($('#video_type').val() == '1'){
+                if(percentComplete > 50) {
+                    percent.addClass('text-white');
+                }
+                var percentVal = percentComplete + '%';
+                if(percentComplete == 100){
+                    $('.percent').attr('style','top:2px');
+                    percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
+                }else{
+                    percent.html(percentVal);
+                }
+                bar.width(percentVal);
+            }
+        },
+        success: function(data) {
+            if(data.demo){
+                notify('warning', data.demo);
+                percent.removeClass('text-white');
+                $('.percent').attr('style','top:8px');
+                var percentVal = '0%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+                $('form').find('.card-footer').removeClass('d-none');
+                $('form').find('.submitBtn').text('Update Video');
+                $('form').find('.submitBtn').removeAttr('disabled');
+                $('form').trigger("reset");
+            }else if (data.errors) {
+                percent.removeClass('text-white');
+                $('.percent').attr('style','top:8px');
+                var percentVal = '0%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+                $('form').find('.card-footer').removeClass('d-none');
+                $('form').find('.submitBtn').text('Update Video');
+                $('form').find('.submitBtn').removeAttr('disabled');
+                $('form').trigger("reset");
+                notify('error', data.errors);
+            }
+            if(data == 'success') {
+                $('.percent').attr('style','top:8px');
+                bar.addClass('bg--success');
+                percent.html('Success');
+                location.reload();
+            }
+        }
+    });
 
-            $('#uploadForm').on('submit', function(e) {
-                e.preventDefault();
-                var formData = new FormData($(this)[0]);
-                $.ajax({
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    },
-                    url: "{{ @$route }}",
-                    method: "POST",
-                    data: formData,
-                    async: false,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.error) {
-                            notify('error', response.error);
-                        } else {
-                            notify('success', response.success);
-                            window.location.href = "{{ route('admin.item.index') }}"
-                        }
-                    }
-                });
-            });
+           
         })(jQuery)
     </script>
 @endpush
