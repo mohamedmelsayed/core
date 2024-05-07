@@ -214,7 +214,7 @@
     }
 
     .progress-bar {
-        background-color: #007bff;
+        background-color: blue;
     }
 </style>
 @endpush
