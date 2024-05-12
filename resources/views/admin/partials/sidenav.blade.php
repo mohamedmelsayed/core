@@ -28,6 +28,8 @@
                     </a>
                 </li>
 
+                
+
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a class="{{ menuActive('admin.item*', 3) }}" href="javascript:void(0)">
                         <i class="menu-icon la la-video"></i>
@@ -55,7 +57,18 @@
                                     <span class="menu-title">@lang('Episode Items')</span>
                                 </a>
                             </li>
-
+                            <li class="sidebar-menu-item {{ menuActive(['admin.item.audio']) }}">
+                                <a class="nav-link" href="{{ route('admin.item.audio') }}">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Audio Items')</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item {{ menuActive(['admin.item.audio.episode']) }}">
+                                <a class="nav-link" href="{{ route('admin.item.audio.episode') }}">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('Audio Episode Items')</span>
+                                </a>
+                            </li>
                             <li class="sidebar-menu-item {{ menuActive(['admin.item.trailer']) }}">
                                 <a class="nav-link" href="{{ route('admin.item.trailer') }}">
                                     <i class="menu-icon las la-dot-circle"></i>

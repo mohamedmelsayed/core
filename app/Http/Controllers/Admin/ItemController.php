@@ -265,7 +265,20 @@ class ItemController extends Controller
         $item->ratings         = $request->ratings;
         $item->save();
     }
+    public function uploadAudio($id) {
+        $item  = Item::findOrFail($id);
 
+        $audio = $item->audio;
+
+        if ($audio) {
+            $notify[] = ['error', 'Already video exist'];
+            return back()->withNotify($notify);
+        }
+
+        $pageTitle ="Upload audio to: ". $item->title;
+        $prevUrl   = route('admin.item.index');
+        return view('admin.item.audio.upload', compact('item', 'pageTitle', 'audio', 'prevUrl'));
+    }
     public function uploadVideo($id)
     {
         $item  = Item::findOrFail($id);
@@ -359,6 +372,7 @@ class ItemController extends Controller
         if ($uploadThousandEighty['error']) {
             return response()->json(['error' => $sizeValidation['message']]);
         }
+
 
         if (!$video) {
             $video          = new Video();

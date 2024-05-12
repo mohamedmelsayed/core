@@ -69,6 +69,9 @@ Route::middleware('admin')->group(function () {
         Route::post('video-item-store', 'store')->name('store');
         Route::get('video-item-edit/{id}', 'edit')->name('edit');
         Route::post('video-item-update/{id}', 'update')->name('update');
+        Route::post('video-item-update-audio/{id}', 'updateItemAudio');
+        Route::get('video-item-upload-audio/{id}', 'uploadAudio')->name('uploadAudio');
+        Route::post('video-item-upload-video/{id}', 'upload')->name('upVideo');
 
         Route::get('video-item-upload-video/{id}', 'uploadVideo')->name('uploadVideo');
         Route::post('video-item-upload-video/{id}', 'upload')->name('upload.video');
