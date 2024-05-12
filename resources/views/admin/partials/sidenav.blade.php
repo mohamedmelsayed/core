@@ -58,13 +58,13 @@
                                 </a>
                             </li>
                             <li class="sidebar-menu-item {{ menuActive(['admin.item.audio']) }}">
-                                <a class="nav-link" href="{{ route('admin.item.audio') }}">
+                                <a class="nav-link" href="{{ route('admin.item.uploadAudio') }}">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Audio Items')</span>
                                 </a>
                             </li>
                             <li class="sidebar-menu-item {{ menuActive(['admin.item.audio.episode']) }}">
-                                <a class="nav-link" href="{{ route('admin.item.audio.episode') }}">
+                                <a class="nav-link" href="{{ route('admin.item.uploadAudio') }}">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Audio Episode Items')</span>
                                 </a>
