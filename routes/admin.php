@@ -61,7 +61,7 @@ Route::middleware('admin')->group(function () {
     Route::controller('ItemController')->name('item.')->group(function () {
         Route::get('video-item-status/{id}', 'status')->name('status');
         Route::get('video-items', 'items')->name('index');
-        Route::get('video-items', 'audioItems')->name('index');
+        Route::get('audio-items', 'audioItems')->name('audioItems');
         Route::get('video-items/single', 'singleItems')->name('single');
         Route::get('video-items/trailer', 'trailerItems')->name('trailer');
         Route::get('video-items/rent', 'rentItems')->name('rents');
