@@ -65,11 +65,11 @@
                     <input name="portrait_url" type="hidden" value="">
                     <input name="landscape_url" type="hidden" value="">
                     <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label>@lang('Title')</label>
                             <input class="form-control" name="title" type="text" value="{{ old('title') }}" placeholder="@lang('Title')">
                         </div>
-                        <div class="form-group col-md-3 version">
+                        <div class="form-group col-md-4 version">
                             <label>@lang('Version')</label>
                             <select class="form-control" name="version">
                                 <option value="">@lang('Select One')</option>
@@ -78,7 +78,7 @@
                                 <option value="2">@lang('Rent')</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-3 is_audio">
+                        <div class="form-group col-md-4 is_audio">
                             <label>@lang('Item Type')</label>
                             <select class="form-control" name="is_audio">
                                 <option value="">@lang('Select One')</option>
