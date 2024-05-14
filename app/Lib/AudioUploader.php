@@ -2,6 +2,7 @@
 
 namespace App\Lib;
 
+use App\Constants\Status;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -36,11 +37,11 @@ class AudioUploader
             $this->removeOldFile();
         }
 
-        if ($uploadDisk == 'current') {
+        if ($uploadDisk == Status::CURRENT_SERVER) {
             $this->uploadedServer = 0;
             return $this->uploadToCurrentServer();
         }
-        if ($uploadDisk == 'custom-ftp') {
+        if ($uploadDisk == Status::FTP_SERVER) {
             $this->uploadedServer = 1;
             $this->uploadToFtpServer();
         }

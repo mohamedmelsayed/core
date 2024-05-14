@@ -173,6 +173,7 @@ class ItemController extends Controller
             'casts'           => 'required',
             'tags'            => 'required',
             'item_type'       => "$validation|in:1,2",
+            'is_audio'       => "$validation|in:0,1",
             'version'         => "nullable|required_if:item_type,==,1|in:$versions",
             'ratings'         => 'required|numeric',
             'rent_price'      => 'required_if:version,==,2|nullable|numeric|gte:0',
@@ -261,11 +262,13 @@ class ItemController extends Controller
         $item->team            = $team;
         $item->tags            = implode(',', $request->tags);
         $item->image           = $image;
+        $item->is_audio         = $request->is_audio;
         $item->version         = $version;
         $item->ratings         = $request->ratings;
         $item->save();
     }
-    public function uploadAudio($id) {
+    public function uploadAudio($id)
+    {
         $item  = Item::findOrFail($id);
 
         $audio = $item->audio;
@@ -275,7 +278,7 @@ class ItemController extends Controller
             return back()->withNotify($notify);
         }
 
-        $pageTitle ="Upload audio to: ". $item->title;
+        $pageTitle = "Upload audio to: " . $item->title;
         $prevUrl   = route('admin.item.index');
         return view('admin.item.audio.upload', compact('item', 'pageTitle', 'audio', 'prevUrl'));
     }
@@ -294,8 +297,9 @@ class ItemController extends Controller
         return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl'));
     }
 
-   
-    public function upload(Request $request, $id) {
+
+    public function upload(Request $request, $id)
+    {
 
         $item = Item::where('id', $id)->first();
         if (!$item) {
