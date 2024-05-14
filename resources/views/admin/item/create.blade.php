@@ -78,7 +78,7 @@
                                     <option value="2">@lang('Rent')</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-4 version">
+                            <div class="form-group col-md-4">
                                 <label>@lang('Item Type')</label>
                                 <select class="form-control" name="is_audio">
                                     <option value="">@lang('Select One')</option>
