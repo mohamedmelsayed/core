@@ -30,38 +30,59 @@ class ItemController extends Controller
     public function items()
     {
         $pageTitle = "Video Items";
-        $items     = $this->itemsData();
+        $items     = $this->itemsDataVideo();
         return view('admin.item.index', compact('pageTitle', 'items'));
+    }
+
+    public function audioItems()
+    {
+        $pageTitle = "Video Items";
+        $items     = $this->itemsDataAudio();
+        return view('admin.item.audio-index', compact('pageTitle', 'items'));
     }
 
     public function singleItems()
     {
         $pageTitle = "Single Video Items";
-        $items     = $this->itemsData('singleItems');
+        $items     = $this->itemsDataVideo('singleItems');
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
     public function episodeItems()
     {
         $pageTitle = "Episode Video Items";
-        $items     = $this->itemsData('episodeItems');
+        $items     = $this->itemsDataVideo('episodeItems');
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
     public function trailerItems()
     {
         $pageTitle = "Trailer Video Items";
-        $items     = $this->itemsData('trailerItems');
+        $items     = $this->itemsDataVideo('trailerItems');
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
-    private function itemsData($scope = null)
+    private function itemsDataVideo($scope = null)
     {
 
         if ($scope) {
             $items = Item::$scope()->with('category', 'sub_category', 'video');
         } else {
             $items = Item::with('category', 'sub_category', 'video');
+        }
+
+        $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
+
+        return $items;
+    }
+
+    private function itemsDataAudio($scope = null)
+    {
+
+        if ($scope) {
+            $items = Item::where("is_audio",1)->$scope()->with('category', 'sub_category', 'video');
+        } else {
+            $items = Item::where("is_audio",1)->with('category', 'sub_category', 'video');
         }
 
         $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());

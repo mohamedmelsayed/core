@@ -74,6 +74,25 @@
                     </div>
                 </li>
 
+                <li class="sidebar-menu-item sidebar-dropdown">
+                    <a class="{{ menuActive('admin.item*', 3) }}" href="javascript:void(0)">
+                        <i class="menu-icon la la-audio"></i>
+                        <span class="menu-title">@lang('Audio Items') </span>
+                    </a>
+
+                    <div class="sidebar-submenu {{ menuActive('admin.item*', 2) }}">
+                        <ul>
+                            <li class="sidebar-menu-item {{ menuActive(['admin.item.audioItems']) }}">
+                                <a class="nav-link" href="{{ route('admin.item.audioItems') }}">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All Audio')</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                </li>
+
                 @if (gs('watch_party'))
                     <li class="sidebar-menu-item sidebar-dropdown">
                         <a class="{{ menuActive('admin.watch.party*', 3) }}" href="javascript:void(0)">

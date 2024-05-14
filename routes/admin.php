@@ -61,6 +61,7 @@ Route::middleware('admin')->group(function () {
     Route::controller('ItemController')->name('item.')->group(function () {
         Route::get('video-item-status/{id}', 'status')->name('status');
         Route::get('video-items', 'items')->name('index');
+        Route::get('video-items', 'audioItems')->name('index');
         Route::get('video-items/single', 'singleItems')->name('single');
         Route::get('video-items/trailer', 'trailerItems')->name('trailer');
         Route::get('video-items/rent', 'rentItems')->name('rents');
@@ -69,9 +70,6 @@ Route::middleware('admin')->group(function () {
         Route::post('video-item-store', 'store')->name('store');
         Route::get('video-item-edit/{id}', 'edit')->name('edit');
         Route::post('video-item-update/{id}', 'update')->name('update');
-        Route::post('video-item-update-audio/{id}', 'updateItemAudio');
-        Route::get('video-item-upload-audio/{id}', 'uploadAudio')->name('uploadAudio');
-        Route::post('video-item-upload-video/{id}', 'upload')->name('upVideo');
 
         Route::get('video-item-upload-video/{id}', 'uploadVideo')->name('uploadVideo');
         Route::post('video-item-upload-video/{id}', 'upload')->name('upload.video');
