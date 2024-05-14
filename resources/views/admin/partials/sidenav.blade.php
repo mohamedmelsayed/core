@@ -76,7 +76,7 @@
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a class="{{ menuActive('admin.item*', 3) }}" href="javascript:void(0)">
-                        <i class="menu-icon la la-audio"></i>
+                        <i class="menu-icon la la-music"></i>
                         <span class="menu-title">@lang('Audio Items') </span>
                     </a>
 
