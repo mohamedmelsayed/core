@@ -249,16 +249,16 @@
             });
         });
 
-        $('[name=category]').on('change', function() {
-            var subcategoryOption = '<option>@lang(\'
-            Select One \')</option>';
-            alert(subcategoryOption);
-            var subcategories = $(this).find(':selected').data('subcategories');
-            subcategories.forEach(subcategory => {
+        $('[name="category"]').on('change', function() {
+        var subcategoryOption = '<option value="">@lang('Select One')</option>';
+        var subcategories = $(this).find(':selected').data('subcategories');
+        if (subcategories) {
+            $.each(subcategories, function(index, subcategory) {
                 subcategoryOption += `<option value="${subcategory.id}">${subcategory.name}</option>`;
             });
-            $('[name=sub_category_id]').html(subcategoryOption);
-        });
+        }
+        $('[name="sub_category_id"]').html(subcategoryOption);
+    });
 
 
         $('[name=version]').on('change', function(e) {
