@@ -249,23 +249,15 @@
             });
         });
 
-        $(document).ready(function() {
-            $('select[name="category"]').on('change', function() {
-                var categoryId = $(this).val();
-                var subcategories = $(this).find(':selected').data('subcategories');
-
-                var subCategorySelect = $('select[name="sub_category_id"]');
-                subCategorySelect.empty();
-
-                if (subcategories) {
-                    subCategorySelect.append($('<option>').text('@lang(\'Select One\')').attr('value', ''));
-                    $.each(subcategories, function(key, value) {
-                        subCategorySelect.append($('<option>').text(value.name).attr('value', value.id));
-                    });
-                } else {
-                    subCategorySelect.append($('<option>').text('@lang(\'No subcategories available \')').attr('value', ''));
-                }
+        $('[name=category]').on('change', function() {
+            var subcategoryOption = '<option>@lang(\'
+            Select One \')</option>';
+            alert(subcategoryOption);
+            var subcategories = $(this).find(':selected').data('subcategories');
+            subcategories.forEach(subcategory => {
+                subcategoryOption += `<option value="${subcategory.id}">${subcategory.name}</option>`;
             });
+            $('[name=sub_category_id]').html(subcategoryOption);
         });
 
 
