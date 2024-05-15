@@ -65,10 +65,11 @@ class ItemController extends Controller
     private function itemsDataVideo($scope = null)
     {
 
+  
         if ($scope) {
-            $items = Item::$scope()->with('category', 'sub_category', 'video');
+            $items = Item::where("is_audio",0)->$scope()->with('category', 'sub_category', 'video');
         } else {
-            $items = Item::with('category', 'sub_category', 'video');
+            $items = Item::where("is_audio",0)->with('category', 'sub_category', 'video');
         }
 
         $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
