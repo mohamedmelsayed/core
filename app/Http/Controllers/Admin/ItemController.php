@@ -704,7 +704,7 @@ class ItemController extends Controller
                 });
             }
             $item->delete();
-            $items     = $this->itemsData();
+            $item->is_audio?$this->itemsDataAudio():$this->itemsDataVideo();
             return view('admin.item.index', compact('pageTitle', 'items'));
         }
     }
