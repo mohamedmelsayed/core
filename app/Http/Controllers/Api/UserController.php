@@ -28,6 +28,7 @@ use Illuminate\Validation\Rules\Password;
 class UserController extends Controller {
     public function changeLanguage($lang)
     {
+        dd($lang);
         session()->put('locale', $lang);
 
         app()->setLocale($lang);
