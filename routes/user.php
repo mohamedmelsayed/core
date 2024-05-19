@@ -33,8 +33,9 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
 
 Route::middleware('auth')->name('user.')->group(function () {
      Route::controller('UserController')->group(function () {
-         Route::get('lang/{lang}', 'changeLanguage')->name('lang');
-
+         Route::get('lang/{lang}', function ($lang){
+             dd($lang);
+         })->name('lang');
      });
     Route::namespace('User')->controller('AuthorizationController')->group(function () {
         Route::get('authorization', 'authorizeForm')->name('authorization');
