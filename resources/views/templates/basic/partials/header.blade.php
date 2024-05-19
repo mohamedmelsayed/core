@@ -97,10 +97,7 @@
 
 
                                     <div class="dropdown-menu dropdown-menu--sm dropdown-menu-end border-0 p-0">
-                                    <button id="language-toggle" class="dropdown-menu__item d-flex align-items-center px-3 py-2">
-                                        <i class="dropdown-menu__icon las la-language"></i>
-                                        <span class="dropdown-menu__caption">@lang('Change Language')</span>
-                                    </button>
+
                                         <a class="dropdown-menu__item d-flex align-items-center px-3 py-2" href="{{ route('user.profile.setting') }}">
                                             <i class="dropdown-menu__icon las la-user-circle"></i>
                                             <span class="dropdown-menu__caption">@lang('Profile Settings')</span>
@@ -130,31 +127,3 @@
         </div>
     </div>
 </header>
-
-
-
-<script>
-    document.getElementById('language-toggle').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default anchor tag behavior
-
-        // Determine the target language (Arabic or English)
-        var targetLang = "{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}";
-
-        // Send a request to change the language
-        fetch("{{ url('api/lang') }}/" + targetLang, {
-            method: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token header
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                // Reload the page to apply the new language
-                window.location.reload();
-            } else {
-                console.error('Failed to change language:', response.statusText);
-            }
-        })
-        .catch(error => console.error('Error changing language:', error));
-    });
-</script>
