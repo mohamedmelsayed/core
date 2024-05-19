@@ -32,14 +32,7 @@ class UserController extends Controller {
 
         app()->setLocale($lang);
 
-        return response()->json([
-            'remark'  => 'dashboard',
-            'status'  => 'success',
-            'message' => ['success' => 'Dashboard Data'],
-            'data'    => [
-               'lang'=>$lang
-            ],
-        ]);
+        return back();
     }
 
     public function dashboard() {
