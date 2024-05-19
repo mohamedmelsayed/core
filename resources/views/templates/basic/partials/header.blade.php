@@ -83,8 +83,6 @@
                                          {{app()->getLocale() == 'ar' ? "AR" :"EN" }}
                                     </a>
                                 </div>
-                                @endif
-                                @endif
 
                                 @auth
                                 <div class="header-right dropdown">
