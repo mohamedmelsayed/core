@@ -15,8 +15,8 @@ class LanguageMiddleware {
      * @return mixed
      */
     public function handle($request, Closure $next) {
-        session()->put('lang', $this->getCode());
-        app()->setLocale(session('lang', $this->getCode()));
+        app()->setLocale(session('locale', config('app.locale')));
+
         return $next($request);
     }
 

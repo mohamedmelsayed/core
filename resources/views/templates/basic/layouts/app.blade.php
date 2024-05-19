@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ config('app.locale') }}" itemscope itemtype="http://schema.org/WebPage">
+<html lang="{{ config('app.locale') }}" itemscope itemtype="http://schema.org/WebPage" dir="{{ app()->getLocale() == 'ar'? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="utf-8">

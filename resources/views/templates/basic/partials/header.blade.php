@@ -77,17 +77,11 @@
                             </div>
 
                             <div class="header-bottom-right">
-                                @if ($general->multi_language)
-                                @php
-                                $language = App\Models\Language::all();
-                                @endphp
-                                @if (!blank($language))
+
                                 <div class="language-select-area">
-                                    <select class="language-select langSel" id="langSel">
-                                        @foreach ($language as $lang)
-                                        <option value="{{ $lang->code }}" @if (Session::get('lang')===$lang->code) selected @endif>{{ __($lang->code) }}</option>
-                                        @endforeach
-                                    </select>
+                                    <a class="language-select langSel" id="langSel" href="{{ app()->getLocale() == 'ar' ? "/lang/en" :"/lang/ar" }}">
+                                         {{app()->getLocale() == 'ar' ? "AR" :"EN" }}
+                                    </a>
                                 </div>
                                 @endif
                                 @endif
@@ -102,13 +96,13 @@
                                             <span class="header-user-icon"><i class="las la-chevron-circle-down"></i></span>
                                         </div>
                                     </button>
-                                    
+
 
                                     <div class="dropdown-menu dropdown-menu--sm dropdown-menu-end border-0 p-0">
                                     <button id="language-toggle" class="dropdown-menu__item d-flex align-items-center px-3 py-2">
                                         <i class="dropdown-menu__icon las la-language"></i>
                                         <span class="dropdown-menu__caption">@lang('Change Language')</span>
-                                    </button>  
+                                    </button>
                                         <a class="dropdown-menu__item d-flex align-items-center px-3 py-2" href="{{ route('user.profile.setting') }}">
                                             <i class="dropdown-menu__icon las la-user-circle"></i>
                                             <span class="dropdown-menu__caption">@lang('Profile Settings')</span>

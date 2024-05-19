@@ -28,20 +28,10 @@ use Illuminate\Validation\Rules\Password;
 class UserController extends Controller {
     public function changeLanguage($lang)
     {
-        // Validate the language parameter if needed
+        session()->put('locale', $lang);
 
-        // Change the application language
         app()->setLocale($lang);
 
-        // Update the user's language preference in the database
-        $user = auth()->user();
-        $user->lang = $lang;
-        $user->save();
-
-
-        // Store the selected language in the session or any other storage mechanism if needed
-
-        // Redirect back or return a response as needed
         return response()->json([
             'remark'  => 'dashboard',
             'status'  => 'success',
@@ -492,7 +482,7 @@ class UserController extends Controller {
                 'message' => ['error' => 'Plan not found'],
             ]);
         }
-        
+
 
         if ($request->method_code == -1) {
             $general         = gs();
@@ -505,8 +495,8 @@ class UserController extends Controller {
             $packageName   = $request->packageName;
             $productId     = $request->productId;
             $purchaseToken = $request->token;
-            
-            
+
+
             $response = $service->purchases_products->get($packageName, $productId, $purchaseToken);
 
             if ($response->getPurchaseState() != 0) {
