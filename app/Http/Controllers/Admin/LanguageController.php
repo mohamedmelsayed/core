@@ -30,12 +30,12 @@ class LanguageController extends Controller
             'translated_keywords' => 'nullable|array',
             'translated_keywords.*' => 'nullable|string',
         ]);
-    
+
         // Check if a record with the same id and language exists
         $existingTranslation = ContentTranslation::where('item_id', $validatedData['item_id'])
                                                  ->where('language', $validatedData['language'])
                                                  ->first();
-    
+
         if ($existingTranslation) {
             // Update the existing translation
             $existingTranslation->update([
@@ -44,7 +44,7 @@ class LanguageController extends Controller
                 'translated_description' => $validatedData["translated_description"],
                 'translated_tags' => implode(',', $validatedData["translated_tags"] ?? []),
             ]);
-    
+
             // Retrieve the updated data
 
         } else {
@@ -58,18 +58,18 @@ class LanguageController extends Controller
             $contentTranslation->translated_tags = implode(',', $validatedData["translated_tags"] ?? []);
             $contentTranslation->item_id = $validatedData["item_id"];
             $contentTranslation->save();
-    
-         
+
+
         }
 
         $existingTranslations  = ContentTranslation::where('item_id', $validatedData["item_id"])->get();
 
-    
+
         // Redirect back with the saved data
         return redirect()->back()->with('success', 'Translation saved successfully!')->with('existingTranslations', $existingTranslations );
     }
-    
-  
+
+
 
     public function langManage($lang = false)
     {
@@ -361,7 +361,7 @@ class LanguageController extends Controller
     public function showTranslationForm($type, $id)
     {
         $pageTitle = 'Language Manager';
-
+        dd($type,$id);
         // Fetch the reference video based on type and id
         if ($type === 'video'|| $type==='audio') {
             $reference = Item::findOrFail($id);
