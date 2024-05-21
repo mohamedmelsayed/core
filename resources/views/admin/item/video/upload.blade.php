@@ -281,40 +281,93 @@
             }).change();
 
 
+        {{--    $('#uploadForm').on('submit', function(e) {--}}
+        {{--    e.preventDefault();--}}
+        {{--    var formData = new FormData($(this)[0]);--}}
+        {{--    var progressBar = $('.progress');--}}
+        {{--    $.ajax({--}}
+        {{--        headers: {--}}
+        {{--            "X-CSRF-TOKEN": "{{ csrf_token() }}",--}}
+        {{--        },--}}
+        {{--        url: $(this).attr('action'),--}}
+        {{--        method: "POST",--}}
+        {{--        data: formData,--}}
+        {{--        xhr: function() {--}}
+        {{--            var xhr = new window.XMLHttpRequest();--}}
+        {{--            xhr.upload.addEventListener("progress", function(evt) {--}}
+        {{--                if (evt.lengthComputable) {--}}
+        {{--                    var percentComplete = (evt.loaded / evt.total) * 100;--}}
+        {{--                    progressBar.show();--}}
+        {{--                    progressBar.find('.progress-bar').css('width', percentComplete + '%').text(percentComplete.toFixed(2) + '%');--}}
+        {{--                }--}}
+        {{--            }, false);--}}
+        {{--            return xhr;--}}
+        {{--        },--}}
+        {{--        processData: false,--}}
+        {{--        contentType: false,--}}
+        {{--        success: function(response) {--}}
+        {{--            if (response.error) {--}}
+        {{--                notify('error',response.error); // Show error message--}}
+        {{--            } else {--}}
+        {{--                notify('success',response.success); // Show success message--}}
+        {{--                window.location.reload(); // Reload the page--}}
+        {{--            }--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--});--}}
+        {{--})(jQuery)--}}
+            var isUploading = false;
+
             $('#uploadForm').on('submit', function(e) {
-            e.preventDefault();
-            var formData = new FormData($(this)[0]);
-            var progressBar = $('.progress');
-            $.ajax({
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                },
-                url: $(this).attr('action'),
-                method: "POST",
-                data: formData,
-                xhr: function() {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function(evt) {
-                        if (evt.lengthComputable) {
-                            var percentComplete = (evt.loaded / evt.total) * 100;
-                            progressBar.show();
-                            progressBar.find('.progress-bar').css('width', percentComplete + '%').text(percentComplete.toFixed(2) + '%');
-                        }
-                    }, false);
-                    return xhr;
-                },
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.error) {
-                        notify('error',response.error); // Show error message
-                    } else {
-                        notify('success',response.success); // Show success message
-                        window.location.reload(); // Reload the page
+                e.preventDefault();
+                var formData = new FormData($(this)[0]);
+                var progressBar = $('.progress');
+
+                isUploading = true;
+
+                $(window).on('beforeunload', function() {
+                    if (isUploading) {
+                        return "An upload is in progress. Are you sure you want to leave this page?";
                     }
-                }
+                });
+
+                $.ajax({
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    },
+                    url: $(this).attr('action'),
+                    method: "POST",
+                    data: formData,
+                    xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = (evt.loaded / evt.total) * 100;
+                                progressBar.show();
+                                progressBar.find('.progress-bar').css('width', percentComplete + '%').text(percentComplete.toFixed(2) + '%');
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        isUploading = false;
+                        $(window).off('beforeunload');
+                        if (response.error) {
+                            alert(response.error); // Show error message
+                        } else {
+                            alert(response.success); // Show success message
+                            window.location.reload(); // Reload the page
+                        }
+                    },
+                    error: function() {
+                        isUploading = false;
+                        $(window).off('beforeunload');
+                        alert('An error occurred while uploading the video.');
+                    }
+                });
             });
-        });
-        })(jQuery)
+        })(jQuery);
     </script>
 @endpush
