@@ -367,6 +367,6 @@ class LanguageController extends Controller
         }
         $existingTranslations = $reference->translations;
 
-        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle','existingTranslations'));
+        return  back();
     }
 }
