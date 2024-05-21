@@ -237,7 +237,7 @@ Route::middleware('admin')->group(function () {
 
     // Language Manager
     Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
-        Route::get('/{type}/{id}',  'showTranslationForm')->name('translate2.show');
+        Route::get('/content/{type}/{id}',  'showTranslationForm')->name('translate2.show');
         Route::post('/store',  'storeTranslation')->name('translate2.store');
     
         Route::get('/', 'langManage')->name('manage');
