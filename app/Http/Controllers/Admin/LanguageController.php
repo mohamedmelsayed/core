@@ -363,11 +363,11 @@ class LanguageController extends Controller
         $pageTitle = 'Language Manager';
         //dd([$type, $id]);
         // Fetch the reference video based on type and id
-        if ($type === 'edit') {
+        if ($type === 'video'|| $type==='audio') {
             $reference = Item::findOrFail($id);
         }
         $existingTranslations = $reference->translations;
 
-        return  back();
+        return view('admin.language.translate_content', compact('type', 'id', 'reference', 'pageTitle','existingTranslations'));
     }
 }
