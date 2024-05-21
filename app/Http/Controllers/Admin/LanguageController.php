@@ -360,12 +360,9 @@ class LanguageController extends Controller
 
     public function showTranslationForm($type, $id)
     {
-
-        dd([$type, $id]);
-
         $pageTitle = 'Language Manager';
         // Fetch the reference video based on type and id
-        if ($type === 'video'|| $type==='audio') {
+        if ($type === 'edit') {
             $reference = Item::findOrFail($id);
         }
         $existingTranslations = $reference->translations;
