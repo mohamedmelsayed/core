@@ -317,6 +317,7 @@
         {{--});--}}
         {{--})(jQuery)--}}
             var isUploading = false;
+            var xhr; // Declare xhr variable globally
 
             $('#uploadForm').on('submit', function(e) {
                 e.preventDefault();
@@ -339,7 +340,7 @@
                     method: "POST",
                     data: formData,
                     xhr: function() {
-                        var xhr = new window.XMLHttpRequest();
+                        xhr = new window.XMLHttpRequest();
                         xhr.upload.addEventListener("progress", function(evt) {
                             if (evt.lengthComputable) {
                                 var percentComplete = (evt.loaded / evt.total) * 100;
@@ -367,6 +368,20 @@
                         alert('An error occurred while uploading the video.');
                     }
                 });
+            });
+
+            $(window).on('beforeunload', function(e) {
+                if (isUploading) {
+                    var confirmationMessage = "An upload is in progress. Are you sure you want to leave this page?";
+                    (e || window.event).returnValue = confirmationMessage; // For old browsers
+                    return confirmationMessage;
+                }
+            });
+
+            $(window).on('unload', function() {
+                if (isUploading && xhr) {
+                    xhr.abort(); // Abort the upload if the user leaves the page
+                }
             });
         })(jQuery);
     </script>
