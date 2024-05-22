@@ -355,7 +355,7 @@
                             notify('error',response.error); // Show error message
                         } else {
                             notify('success',response.success); // Show success message
-                            window.location.reload(); // Reload the page
+                            window.history.back(); // Reload the page
                         }
                     },
                     error: function () {
