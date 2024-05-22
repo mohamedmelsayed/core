@@ -355,7 +355,9 @@
                             notify('error',response.error); // Show error message
                         } else {
                             notify('success',response.success); // Show success message
-                            window.history.back(); // Reload the page
+                            setTimeout(function() {
+                                window.history.back(); // Replace with the URL of the desired page
+                            }, 2000); // Reload the page
                         }
                     },
                     error: function () {
