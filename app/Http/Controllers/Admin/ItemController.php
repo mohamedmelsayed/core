@@ -65,7 +65,7 @@ class ItemController extends Controller
     private function itemsDataVideo($scope = null)
     {
 
-  
+
         if ($scope) {
             $items = Item::where("is_audio",0)->$scope()->with('category', 'sub_category', 'video');
         } else {
@@ -421,7 +421,8 @@ class ItemController extends Controller
         $video->server_thousand_eighty = @$uploadThousandEighty['server'] ?? 0;
 
         $video->save();
-        return response()->json(['success' => 'Video uploaded successfully']);
+        return  back()->with(['success' => 'Video uploaded successfully']);
+//        return response()->json(['success' => 'Video uploaded successfully']);
     }
 
     public function updateVideo(Request $request, $id)
