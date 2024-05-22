@@ -352,9 +352,9 @@
                         isUploading = false;
                         $(window).off('beforeunload');
                         if (response.error) {
-                            alert(response.error); // Show error message
+                            notify('error',response.error); // Show error message
                         } else {
-                            alert(response.success); // Show success message
+                            notify('success',response.success); // Show success message
                             window.location.reload(); // Reload the page
                         }
                     },
