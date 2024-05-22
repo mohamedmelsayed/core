@@ -421,8 +421,7 @@ class ItemController extends Controller
         $video->server_thousand_eighty = @$uploadThousandEighty['server'] ?? 0;
 
         $video->save();
-        return  back()->with(['success' => 'Video uploaded successfully']);
-//        return response()->json(['success' => 'Video uploaded successfully']);
+        return response()->json(['success' => 'Video uploaded successfully']);
     }
 
     public function updateVideo(Request $request, $id)
