@@ -51,7 +51,7 @@ class ItemController extends Controller
 
     public function audioItems()
     {
-        $pageTitle = "Video Items";
+        $pageTitle = "Audio Items";
         $items = $this->itemsDataAudio();
         return view('admin.item.audio-index', compact('pageTitle', 'items'));
     }
