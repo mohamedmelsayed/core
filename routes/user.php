@@ -33,6 +33,7 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
 });
 
 Route::middleware('auth')->name('user.')->group(function () {
+    Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
     Route::namespace('User')->controller('AuthorizationController')->group(function () {
         Route::get('authorization', 'authorizeForm')->name('authorization');
         Route::get('resend-verify/{type}', 'sendVerifyCode')->name('send.verify.code');
@@ -91,4 +92,3 @@ Route::middleware('auth')->name('user.')->group(function () {
         });
     });
 });
-Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
