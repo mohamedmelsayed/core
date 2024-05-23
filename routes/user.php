@@ -92,4 +92,3 @@ Route::middleware('auth')->name('user.')->group(function () {
     });
 });
 Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
-
