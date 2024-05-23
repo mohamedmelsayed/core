@@ -346,6 +346,9 @@
                                 progressBar.find('.progress-bar').css('width', percentComplete + '%').text(percentComplete.toFixed(2) + '%');
                             }
                         }, false);
+                        xhr.addEventListener("abort", function () {
+                            console.log("Upload aborted");
+                        });
                         return xhr;
                     },
                     processData: false,
