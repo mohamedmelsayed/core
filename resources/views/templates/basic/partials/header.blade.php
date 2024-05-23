@@ -97,7 +97,7 @@
 
                                 <div class="language-select-area">
                                     <a class="language-select langSel" id="langSel"
-                                       href="{{ app()->getLocale() == 'ar' ? route('lang','en') : route('lang','ar') }}">
+                                       href="{{ app()->getLocale() == 'ar' ?'/lang/en' : '/lang/en' }}">
                                         {{app()->getLocale() == 'ar' ? "EN" :"AR" }}
                                     </a>
                                 </div>
