@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('pusher/auth/{socketId}/{channelName}', 'SiteController@pusher')->name('pusher');
@@ -7,6 +8,8 @@ Route::post('pusher/auth/{socketId}/{channelName}', 'SiteController@pusher')->na
 Route::get('/clear', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 });
+Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
+
 
 // User Support Ticket
 Route::controller('TicketController')->prefix('ticket')->name('ticket.')->group(function () {
