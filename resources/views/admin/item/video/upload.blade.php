@@ -322,9 +322,11 @@
 
                 isUploading = true;
 
-                $(window).on('beforeunload', function () {
+                $(window).on('beforeunload', function (e) {
                     if (isUploading) {
-                        return "An upload is in progress. Are you sure you want to leave this page?";
+                        var confirmationMessage = "An upload is in progress. Are you sure you want to leave this page?";
+                        (e || window.event).returnValue = confirmationMessage; // For old browsers
+                        return confirmationMessage;
                     }
                 });
 
@@ -352,10 +354,10 @@
                         isUploading = false;
                         $(window).off('beforeunload');
                         if (response.error) {
-                            notify('error',response.error); // Show error message
+                            notify('error', response.error); // Show error message
                         } else {
-                            notify('success',response.success); // Show success message
-                            setTimeout(function() {
+                            notify('success', response.success); // Show success message
+                            setTimeout(function () {
                                 window.history.back(); // Replace with the URL of the desired page
                             }, 2000); // Reload the page
                         }
