@@ -14,18 +14,11 @@ class LanguageMiddleware {
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
         app()->setLocale(session('locale', config('app.locale')));
 
         return $next($request);
-    }
-
-    public function getCode() {
-        if (session()->has('lang')) {
-            return session('lang');
-        }
-        $language = Language::where('is_default', Status::ENABLE)->first();
-        return $language ? $language->code : 'en';
     }
 
 }

@@ -32,7 +32,6 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
     });
 });
 
-Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
 Route::middleware('auth')->name('user.')->group(function () {
     Route::namespace('User')->controller('AuthorizationController')->group(function () {
         Route::get('authorization', 'authorizeForm')->name('authorization');
@@ -92,3 +91,5 @@ Route::middleware('auth')->name('user.')->group(function () {
         });
     });
 });
+Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
+
