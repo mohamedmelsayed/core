@@ -9,6 +9,7 @@ Route::get('/clear', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 });
 
+Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
 
 // User Support Ticket
 Route::controller('TicketController')->prefix('ticket')->name('ticket.')->group(function () {
@@ -66,5 +67,4 @@ Route::controller('SiteController')->group(function () {
     Route::get('/', 'index')->name('home');
 });
 
-Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
 
