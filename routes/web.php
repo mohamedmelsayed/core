@@ -9,7 +9,7 @@ Route::get('/clear', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 });
 
-Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
+Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('change-Lang');
 
 // User Support Ticket
 Route::controller('TicketController')->prefix('ticket')->name('ticket.')->group(function () {
