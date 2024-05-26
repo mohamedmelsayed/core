@@ -8,7 +8,6 @@ Route::post('pusher/auth/{socketId}/{channelName}', 'SiteController@pusher')->na
 Route::get('/clear', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 });
-Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
 
 
 // User Support Ticket
@@ -66,3 +65,6 @@ Route::controller('SiteController')->group(function () {
 
     Route::get('/', 'index')->name('home');
 });
+
+Route::get('lang/{lang}', [UserController::class,'changeLanguage'])->name('lang');
+
