@@ -106,7 +106,6 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
         $this->itemValidation($request, 'create');
         $team = [
             'director' => implode(',', $request->director),
@@ -126,6 +125,10 @@ class ItemController extends Controller
         $this->saveItem($request, $team, $image, $item);
 
         $notify[] = ['success', 'Item added successfully'];
+        if ($item->is_audio){
+            return redirect()->route('admin.item.uploadVideo', $item->id)->withNotify($notify);
+
+        }
         if ($request->item_type == Status::EPISODE_ITEM) {
             return redirect()->route('admin.item.episodes', $item->id)->withNotify($notify);
         } else {
@@ -299,7 +302,7 @@ class ItemController extends Controller
         $audio = $item->audio;
 
         if ($audio) {
-            $notify[] = ['error', 'Already video exist'];
+            $notify[] = ['error', 'Already Audio exist'];
             return back()->withNotify($notify);
         }
 
