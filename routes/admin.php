@@ -73,6 +73,8 @@ Route::middleware('admin')->group(function () {
 
         Route::get('video-item-upload-video/{id}', 'uploadVideo')->name('uploadVideo');
         Route::post('video-item-upload-video/{id}', 'upload')->name('upload.video');
+        Route::get('audio-item-upload-audio/{id}', 'uploadAudio')->name('uploadAudio');
+        Route::post('audio-item-upload-audio/{id}', 'audio')->name('upload.audio');
 
         Route::get('video-item-update-video/{id}', 'updateVideo')->name('updateVideo');
         Route::post('video-item-update-video/{id}', 'updateItemVideo');
@@ -239,7 +241,7 @@ Route::middleware('admin')->group(function () {
     Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
         Route::get('/content/{type}/{id}',  'showTranslationForm')->name('translate2.show');
         Route::post('/store',  'storeTranslation')->name('translate2.store');
-    
+
         Route::get('/', 'langManage')->name('manage');
         Route::post('/', 'langStore')->name('manage.store');
         Route::post('delete/{id}', 'langDelete')->name('manage.delete');
@@ -366,7 +368,7 @@ Route::middleware('admin')->group(function () {
     });
 
 
-   
-  
+
+
 });
 
