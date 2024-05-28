@@ -93,6 +93,7 @@ class ItemController extends Controller
 
     public function create()
     {
+
         $pageTitle = "Add Item";
         $categories = Category::active()->with([
             'subcategories' => function ($subcategory) {
@@ -105,6 +106,7 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         $this->itemValidation($request, 'create');
         $team = [
             'director' => implode(',', $request->director),
