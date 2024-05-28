@@ -126,7 +126,7 @@ class ItemController extends Controller
 
         $notify[] = ['success', 'Item added successfully'];
         if ($item->is_audio){
-            return redirect()->route('admin.item.uploadVideo', $item->id)->withNotify($notify);
+            return redirect()->route('admin.item.uploadAudio', $item->id)->withNotify($notify);
 
         }
         if ($request->item_type == Status::EPISODE_ITEM) {
