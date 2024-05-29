@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Lib\CurlRequest;
 use App\Lib\MultiVideoUploader;
 use App\Lib\VideoUploader;
+use App\Models\Audio;
 use App\Models\Category;
 use App\Models\Episode;
 use App\Models\Item;
@@ -344,6 +345,7 @@ class ItemController extends Controller
 //        }
 
         if ($request->hasFile('audio')) {
+            dd("p");
             $audioFilePath = $request->file('audio')->store('audio', 'public');
         } else {
             $audioFilePath = $request->audio_link;
