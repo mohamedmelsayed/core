@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg-12">
     	<div class="card upload-card">
-    		<form action="" method="post" enctype="multipart/form-data" id="upload-audio">
+    		<form action="{{route('upload.audio')}}" method="post" enctype="multipart/form-data" id="upload-audio">
     			@csrf
     			<div class="card-body">
     				<div class="form-row">
@@ -70,131 +70,206 @@
 @push('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
 <script>
+    "use strict";
 
+    (function($) {
+        var isUploading = false;
+        var xhr;
 
-"use strict"
-
-
-var audio_drop_block = $("[data-block='audio-drop-zone']");
-
-   if (typeof(window.FileReader)){
-      audio_drop_block[0].ondragover = function() {
-         audio_drop_block.addClass('hover');
-         return false;
-      };
-
-      audio_drop_block[0].ondragleave = function() {
-         audio_drop_block.removeClass('hover');
-         return false;
-      };
-
-      audio_drop_block[0].ondrop = function(event) {
-         event.preventDefault();
-         audio_drop_block.removeClass('hover');
-         var file = event.dataTransfer.files;
-         $('#upload-audio').find('input').prop('files', file);
-         $('#upload-audio').submit();
-      };
-   }
-
-    $(document).on("click", ".upload-audio-file", function (e) {
-     e.stopPropagation();
-           //some code
-       });
-$(document).on("click", ".upload", function (e) {
-    $( '.upload-audio-file' ).trigger("click");
-});
-
-function validate(formData, jqForm, options) {
-    var form = jqForm[0];
-        if (form.audio_type.value == 0) {
-            if (!form.link.value) {
-                notify('error','Link field is required');
-                return false;
+        // CSRF token setup for AJAX
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        }else{
-            if (!form.audio.value) {
-                notify('error','File Not Found');
-                return false;
+        });
+
+        // Form submit handler
+        $('form').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            isUploading = true;
+            $.ajax({
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                },
+                url: $(this).attr('action'),
+                method: "POST",
+                data: formData,
+                xhr: function () {
+                    xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            progressBar.show();
+                            progressBar.find('.progress-bar').css('width', percentComplete + '%').text(percentComplete.toFixed(2) + '%');
+                        }
+                    }, false);
+                    xhr.addEventListener("abort", function () {
+                        console.log("Upload aborted");
+                    });
+                    return xhr;
+                },
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    isUploading = false;
+                    $(window).off('beforeunload');
+                    if (response.error) {
+                        notify('error', response.error); // Show error message
+                    } else {
+                        notify('success', response.success); // Show success message
+                        setTimeout(function () {
+                            window.history.back(); // Replace with the URL of the desired page
+                        }, 2000); // Reload the page
+                    }
+                },
+                error: function () {
+                    isUploading = false;
+                    $(window).off('beforeunload');
+                    alert('An error occurred while uploading the audio.');
+                }
+            });
+        });
+
+        $(window).on('beforeunload', function (e) {
+            if (isUploading) {
+                var confirmationMessage = "An upload is in progress. Are you sure you want to leave this page?";
+                (e || window.event).returnValue = confirmationMessage; // For old browsers
+                return confirmationMessage;
             }
-            if (form.audio.files[0].size > 4194304000) {
-                notify('error','File size must be lower then 4 gb');
-                return false;
+        });
+
+        $(window).on('unload', function () {
+            if (isUploading && xhr) {
+                xhr.abort(); // Abort the upload if the user leaves the page
             }
-            @if($audio)
-                notify('error','audio Already Exist');
+        });
+
+        // Drag and drop handler
+        var audioDropBlock = $("[data-block='audio-drop-zone']");
+
+        if (typeof(window.FileReader)) {
+            audioDropBlock[0].ondragover = function() {
+                audioDropBlock.addClass('hover');
                 return false;
-            @endif
+            };
+
+            audioDropBlock[0].ondragleave = function() {
+                audioDropBlock.removeClass('hover');
+                return false;
+            };
+
+            audioDropBlock[0].ondrop = function(event) {
+                event.preventDefault();
+                audioDropBlock.removeClass('hover');
+                var file = event.dataTransfer.files;
+                $('#upload-audio').find('input').prop('files', file);
+                $('#upload-audio').submit();
+            };
         }
-    }
 
-    var bar = $('.bar');
-    var percent = $('.percent');
+        $(document).on("click", ".upload-audio-file", function (e) {
+            e.stopPropagation();
+            // Some code for handling the click event if needed
+        });
 
-    $('form').ajaxForm({
-        beforeSubmit: validate,
-        dataType:'json',
-        beforeSend: function() {
-            if($('#audio_type').val() == '0'){
-                $('form').find('.submitButton').text('Saving...');
-                $('form').find('.submitButton').attr('disabled','');
-            }else{
-                $('form').find('.card-footer').addClass('d-none');
-            }
-            var percentVal = '0%';
-            bar.width(percentVal);
-            percent.html(percentVal);
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-            if($('#audio_type').val() == '1'){
-                if(percentComplete > 50) {
-                    percent.addClass('text-white');
+        $(document).on("click", ".upload", function (e) {
+            $('.upload-audio-file').trigger("click");
+        });
+
+        function validate(formData, jqForm, options) {
+            var form = jqForm[0];
+            if (form.audio_type.value == 0) {
+                if (!form.link.value) {
+                    notify('error','Link field is required');
+                    return false;
                 }
-                var percentVal = percentComplete + '%';
-                if(percentComplete == 100){
-                    $('.percent').attr('style','top:2px');
-                    percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
-                }else{
-                    percent.html(percentVal);
+            } else {
+                if (!form.audio.value) {
+                    notify('error','File Not Found');
+                    return false;
                 }
-                bar.width(percentVal);
+                if (form.audio.files[0].size > 4194304000) { // 4 GB
+                    notify('error','File size must be lower than 4 GB');
+                    return false;
+                }
+                @if($audio)
+                notify('error','Audio Already Exists');
+                return false;
+                @endif
             }
-        },
-        success: function(data) {
-            console.log(data);
-            if(data.demo){
-                notify('warning', data.demo);
-            }else if (data.errors) {
-                percent.removeClass('text-white');
-                $('.percent').attr('style','top:8px');
+        }
+
+        var bar = $('.bar');
+        var percent = $('.percent');
+
+        $('form').ajaxForm({
+            beforeSubmit: validate,
+            dataType: 'json',
+            beforeSend: function() {
+                if ($('#audio_type').val() == '0') {
+                    $('form').find('.submitButton').text('Saving...');
+                    $('form').find('.submitButton').attr('disabled', 'disabled');
+                } else {
+                    $('form').find('.card-footer').addClass('d-none');
+                }
                 var percentVal = '0%';
                 bar.width(percentVal);
                 percent.html(percentVal);
-                $('form').find('.card-footer').removeClass('d-none');
-                notify('error', data.errors);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                if ($('#audio_type').val() == '1') {
+                    if (percentComplete > 50) {
+                        percent.addClass('text-white');
+                    }
+                    var percentVal = percentComplete + '%';
+                    if (percentComplete == 100) {
+                        $('.percent').attr('style', 'top:2px');
+                        percent.html('<i class="fas fa-spinner fa-spin"></i> Processing');
+                    } else {
+                        percent.html(percentVal);
+                    }
+                    bar.width(percentVal);
+                }
+            },
+            success: function(data) {
+                console.log(data);
+                if (data.demo) {
+                    notify('warning', data.demo);
+                } else if (data.errors) {
+                    percent.removeClass('text-white');
+                    $('.percent').attr('style', 'top:8px');
+                    var percentVal = '0%';
+                    bar.width(percentVal);
+                    percent.html(percentVal);
+                    $('form').find('.card-footer').removeClass('d-none');
+                    notify('error', data.errors);
+                }
+                if (data == 'success') {
+                    $('.percent').attr('style', 'top:8px');
+                    bar.addClass('bg--success');
+                    percent.html('Success');
+                    $('form').find('.submitButton').text('Upload Audio');
+                    $('form').find('.submitButton').removeAttr('disabled');
+                    $('form').trigger("reset");
+                    notify('success', 'Audio uploaded');
+                    window.location = '{{ url()->previous() }}';
+                }
             }
-            if(data == 'success') {
-                $('.percent').attr('style','top:8px');
-                bar.addClass('bg--success');
-                percent.html('Success');
-                $('form').find('.submitButton').text('Upload Audio');
-                $('form').find('.submitButton').removeAttr('disabled');
-                $('form').trigger("reset");
-                notify('success', 'Audio uploaded');
-                window.location = '{{ url()->previous() }}';
+        });
+
+        // Handle audio type change
+        $("#audio_type").change(function() {
+            if ($(this).val() == '0') {
+                $("#link").show();
+                $("#audio").hide();
+            } else {
+                $("#link").hide();
+                $("#audio").show();
             }
-        }
-    });
+        }).change();
 
-	$("#audio_type").change(function(){
-        if ($(this).val() == '0') {
-            $("#link").show();
-            $("#audio").hide();
-        }else{
-            $("#link").hide();
-            $("#audio").show();
-        }
-    }).change();
-
+    })(jQuery);
 </script>
 @endpush
