@@ -127,6 +127,22 @@ function validate(formData, jqForm, options) {
             @endif
         }
     }
+var isUploading = false;
+
+$('#uploadForm').on('submit', function (e) {
+    e.preventDefault();
+    var formData = new FormData($(this)[0]);
+    var progressBar = $('.progress');
+
+    isUploading = true;
+
+    $(window).on('beforeunload', function (e) {
+        if (isUploading) {
+            var confirmationMessage = "An upload is in progress. Are you sure you want to leave this page?";
+            (e || window.event).returnValue = confirmationMessage; // For old browsers
+            return confirmationMessage;
+        }
+    });
 
     var bar = $('.bar');
     var percent = $('.percent');
@@ -139,7 +155,7 @@ function validate(formData, jqForm, options) {
         },
         url: $(this).attr('action'),
         method: "POST",
-        data: form,
+        data: formData,
         beforeSend: function() {
             if($('#audio_type').val() == '0'){
                 $('form').find('.submitButton').text('Saving...');
