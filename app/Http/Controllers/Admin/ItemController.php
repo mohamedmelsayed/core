@@ -335,8 +335,8 @@ class ItemController extends Controller
             'audio_file' => [$audioFileRule, new FileTypeValidate(['mp3', 'wav', 'aac'])],
         ], [
             'audio_type.required' => 'Audio file type is required',
-            'audio_link.required_if' => 'Audio link is required when audio type is link',
-            'audio_file.required_if' => 'Audio file is required when audio type is file',
+            'audio_link.required_if:audio_type,0' => 'Audio link is required when audio type is link',
+            'audio_file.required_if:audio_type,1' => 'Audio file is required when audio type is file',
         ]);
 
         if ($validator->fails()) {
