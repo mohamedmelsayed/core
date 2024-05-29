@@ -144,79 +144,81 @@ $('#uploadForm').on('submit', function (e) {
         }
     });
 
-    var bar = $('.bar');
-    var percent = $('.percent');
+    var isUploading = false;
+    var xhr; // Declare xhr variable globally
 
-    $('form').ajaxForm({
-        beforeSubmit: validate,
-        dataType:'json',
-        headers: {
-            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-        },
-        url: $(this).attr('action'),
-        method: "POST",
-        data: formData,
-        beforeSend: function() {
-            if($('#audio_type').val() == '0'){
-                $('form').find('.submitButton').text('Saving...');
-                $('form').find('.submitButton').attr('disabled','');
-            }else{
-                $('form').find('.card-footer').addClass('d-none');
+    $('#uploadForm').on('submit', function (e) {
+        e.preventDefault();
+        var formData = new FormData($(this)[0]);
+        var progressBar = $('.progress');
+
+        isUploading = true;
+
+        $(window).on('beforeunload', function (e) {
+            if (isUploading) {
+                var confirmationMessage = "An upload is in progress. Are you sure you want to leave this page?";
+                (e || window.event).returnValue = confirmationMessage; // For old browsers
+                return confirmationMessage;
             }
-            var percentVal = '0%';
-            bar.width(percentVal);
-            percent.html(percentVal);
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-            if($('#audio_type').val() == '1'){
-                if(percentComplete > 50) {
-                    percent.addClass('text-white');
+        });
+
+        $.ajax({
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            },
+            url: $(this).attr('action'),
+            method: "POST",
+            data: formData,
+            xhr: function () {
+                xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = (evt.loaded / evt.total) * 100;
+                        progressBar.show();
+                        progressBar.find('.progress-bar').css('width', percentComplete + '%').text(percentComplete.toFixed(2) + '%');
+                    }
+                }, false);
+                xhr.addEventListener("abort", function () {
+                    console.log("Upload aborted");
+                });
+                return xhr;
+            },
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                isUploading = false;
+                $(window).off('beforeunload');
+                if (response.error) {
+                    notify('error', response.error); // Show error message
+                } else {
+                    notify('success', response.success); // Show success message
+                    setTimeout(function () {
+                        window.history.back(); // Replace with the URL of the desired page
+                    }, 2000); // Reload the page
                 }
-                var percentVal = percentComplete + '%';
-                if(percentComplete == 100){
-                    $('.percent').attr('style','top:2px');
-                    percent.html(`<i class="fas fa-spinner fa-spin"></i> Processing`);
-                }else{
-                    percent.html(percentVal);
-                }
-                bar.width(percentVal);
+            },
+            error: function () {
+                isUploading = false;
+                $(window).off('beforeunload');
+                alert('An error occurred while uploading the video.');
             }
-        },
-        success: function(data) {
-            console.log(data);
-            if(data.demo){
-                notify('warning', data.demo);
-            }else if (data.errors) {
-                percent.removeClass('text-white');
-                $('.percent').attr('style','top:8px');
-                var percentVal = '0%';
-                bar.width(percentVal);
-                percent.html(percentVal);
-                $('form').find('.card-footer').removeClass('d-none');
-                notify('error', data.errors);
-            }
-            if(data == 'success') {
-                $('.percent').attr('style','top:8px');
-                bar.addClass('bg--success');
-                percent.html('Success');
-                $('form').find('.submitButton').text('Upload Audio');
-                $('form').find('.submitButton').removeAttr('disabled');
-                $('form').trigger("reset");
-                notify('success', 'Audio uploaded');
-                window.location = '{{ url()->previous() }}';
-            }
+        });
+    });
+
+    $(window).on('beforeunload', function (e) {
+        if (isUploading) {
+            var confirmationMessage = "An upload is in progress. Are you sure you want to leave this page?";
+            (e || window.event).returnValue = confirmationMessage; // For old browsers
+            return confirmationMessage;
         }
     });
 
-	$("#audio_type").change(function(){
-        if ($(this).val() == '0') {
-            $("#link").show();
-            $("#audio").hide();
-        }else{
-            $("#link").hide();
-            $("#audio").show();
+    $(window).on('unload', function () {
+        if (isUploading && xhr) {
+            xhr.abort(); // Abort the upload if the user leaves the page
         }
-    }).change();
+    });
+})(jQuery);
 
 </script>
 @endpush
