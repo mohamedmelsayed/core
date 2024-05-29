@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg-12">
     	<div class="card upload-card">
-    		<form action="{{route('item.upload.audio')}}" method="post" enctype="multipart/form-data" id="upload-audio">
+    		<form action="{{route('item.upload.audio.file')}}" method="post" enctype="multipart/form-data" id="upload-audio">
     			@csrf
     			<div class="card-body">
     				<div class="form-row">

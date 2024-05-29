@@ -74,7 +74,7 @@ Route::middleware('admin')->group(function () {
         Route::get('video-item-upload-video/{id}', 'uploadVideo')->name('uploadVideo');
         Route::post('video-item-upload-video/{id}', 'upload')->name('upload.video');
         Route::get('audio-item-upload-audio/{id}', 'uploadAudio')->name('uploadAudio');
-        Route::post('audio-item-upload-audio/{id}', 'uploadAudioFile')->name('upload.audio');
+        Route::post('audio-item-upload-audio/{id}', 'uploadAudioFile')->name('upload.audio.file');
 
         Route::get('video-item-update-video/{id}', 'updateVideo')->name('updateVideo');
         Route::post('video-item-update-video/{id}', 'updateItemVideo');
