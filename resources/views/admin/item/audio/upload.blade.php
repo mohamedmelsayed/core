@@ -30,7 +30,7 @@
                                         <div class="bar bg--primary"></div >
                                         <div class="percent">0%</div >
                                     </div>
-                                    <input type="file" class="upload-audio-file" name="audio" accept="audio/*"/>
+                                    <input type="file" class="upload-audio-file" name="audio" accept="mp3"/>
 	    					</div>
 	    					<div class="form-group" id="link">
 	    						<label>@lang('Insert Link')</label>
@@ -134,6 +134,12 @@ function validate(formData, jqForm, options) {
     $('form').ajaxForm({
         beforeSubmit: validate,
         dataType:'json',
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+        },
+        url: $(this).attr('action'),
+        method: "POST",
+        data: form,
         beforeSend: function() {
             if($('#audio_type').val() == '0'){
                 $('form').find('.submitButton').text('Saving...');
