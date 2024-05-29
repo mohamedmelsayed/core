@@ -345,12 +345,11 @@ class ItemController extends Controller
 //        }
 
         if ($request->hasFile('audio')) {
-            dd("p");
             $audioFilePath = $request->file('audio')->store('audio', 'public');
         } else {
             $audioFilePath = $request->audio_link;
         }
-
+        dd($audio);
         if (!$audio) {
             $audio = new Audio();
             $audio->item_id = $item->id;
