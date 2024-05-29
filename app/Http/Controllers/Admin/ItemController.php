@@ -313,7 +313,6 @@ class ItemController extends Controller
 
     public function uploadAudioFile(Request $request, $id)
     {
-        dd("p");
         $item = Item::where('id', $id)->first();
         if (!$item) {
             return response()->json(['error' => 'Item not found']);
