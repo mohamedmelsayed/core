@@ -311,6 +311,60 @@ class ItemController extends Controller
         return view('admin.item.audio.upload', compact('item', 'pageTitle', 'audio', 'prevUrl'));
     }
 
+    public function uploadAudioFile(Request $request, $id)
+    {
+        dd("p");
+        $item = Item::where('id', $id)->first();
+        if (!$item) {
+            return response()->json(['error' => 'Item not found']);
+        }
+
+        $audio = $item->audio;
+
+        if ($audio) {
+            $audioLinkRule = 'nullable';
+            $audioFileRule = 'nullable';
+        } else {
+            $audioLinkRule = 'required_if:audio_type,0';
+            $audioFileRule = 'required_if:audio_type,1';
+        }
+
+        ini_set('memory_limit', '-1');
+        $validator = Validator::make($request->all(), [
+            'audio_type' => 'required',
+            'audio_link' => $audioLinkRule,
+            'audio_file' => [$audioFileRule, new FileTypeValidate(['mp3', 'wav', 'aac'])],
+        ], [
+            'audio_type.required' => 'Audio file type is required',
+            'audio_link.required_if' => 'Audio link is required when audio type is link',
+            'audio_file.required_if' => 'Audio file is required when audio type is file',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
+
+        if ($request->hasFile('audio_file')) {
+            $audioFilePath = $request->file('audio_file')->store('audio', 'public');
+        } else {
+            $audioFilePath = $request->audio_link;
+        }
+
+        if (!$audio) {
+            $audio = new Audio();
+            $audio->item_id = $item->id;
+        }
+
+        $audio->audio_type = $request->audio_type;
+        $audio->audio_link = $request->audio_link;
+        $audio->audio_file = $audioFilePath;
+
+        $audio->save();
+
+        return response()->json(['success' => 'Audio uploaded successfully']);
+    }
+
+
     public function uploadVideo($id)
     {
         $item = Item::findOrFail($id);
