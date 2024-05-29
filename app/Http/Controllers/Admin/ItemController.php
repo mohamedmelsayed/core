@@ -329,22 +329,22 @@ class ItemController extends Controller
         }
 
         ini_set('memory_limit', '-1');
-        $validator = Validator::make($request->all(), [
-            'audio_type' => 'required',
-            'audio_link' => $audioLinkRule,
-            'audio_file' => [$audioFileRule, new FileTypeValidate(['mp3', 'wav', 'aac'])],
-        ], [
-            'audio_type.required' => 'Audio file type is required',
-            'audio.required_if:audio_type,1' => 'Audio link is required when audio type is link',
-            'link.required_if:audio_type,0' => 'Audio file is required when audio type is file',
-        ]);
+//        $validator = Validator::make($request->all(), [
+//            'audio_type' => 'required',
+//            'audio_link' => $audioLinkRule,
+//            'audio_file' => [$audioFileRule, new FileTypeValidate(['mp3', 'wav', 'aac'])],
+//        ], [
+//            'audio_type.required' => 'Audio file type is required',
+//            'audio.required_if:audio_type,1' => 'Audio link is required when audio type is link',
+//            'link.required_if:audio_type,0' => 'Audio file is required when audio type is file',
+//        ]);
+//
+//        if ($validator->fails()) {
+//            return response()->json(['error' => $validator->errors()->all()]);
+//        }
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->all()]);
-        }
-
-        if ($request->hasFile('audio_file')) {
-            $audioFilePath = $request->file('audio_file')->store('audio', 'public');
+        if ($request->hasFile('audio')) {
+            $audioFilePath = $request->file('audio')->store('audio', 'public');
         } else {
             $audioFilePath = $request->audio_link;
         }
