@@ -313,7 +313,6 @@ class ItemController extends Controller
 
     public function uploadAudioFile(Request $request, $id)
     {
-        dd($request->all());
         $item = Item::where('id', $id)->first();
         if (!$item) {
             return response()->json(['error' => 'Item not found']);
@@ -336,8 +335,8 @@ class ItemController extends Controller
             'audio_file' => [$audioFileRule, new FileTypeValidate(['mp3', 'wav', 'aac'])],
         ], [
             'audio_type.required' => 'Audio file type is required',
-            'audio.required_if:audio_type,0' => 'Audio link is required when audio type is link',
-            'link.required_if:audio_type,1' => 'Audio file is required when audio type is file',
+            'audio.required_if:audio_type,1' => 'Audio link is required when audio type is link',
+            'link.required_if:audio_type,0' => 'Audio file is required when audio type is file',
         ]);
 
         if ($validator->fails()) {
