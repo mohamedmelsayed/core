@@ -349,7 +349,6 @@ class ItemController extends Controller
         } else {
             $audioFilePath = $request->audio_link;
         }
-        dd($audio);
         if (!$audio) {
             $audio = new Audio();
             $audio->item_id = $item->id;
