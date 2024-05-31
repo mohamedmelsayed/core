@@ -353,7 +353,6 @@ class ItemController extends Controller
             $audio = new Audio();
             $audio->item_id = $item->id;
         }
-        dd($audio);
 
         $audio->audio_type = $request->audio_type;
         $audio->link = $request->server;
