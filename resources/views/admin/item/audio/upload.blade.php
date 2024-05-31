@@ -263,6 +263,16 @@ $('#uploadForm').on('submit', function (e) {
             xhr.abort(); // Abort the upload if the user leaves the page
         }
     });
+
+    $("#audio_type").change(function() {
+        if ($(this).val() == '0') {
+            $("#link").show();
+            $("#audio").hide();
+        } else {
+            $("#link").hide();
+            $("#audio").show();
+        }
+    }).change();
 })(jQuery);
 
 </script>
