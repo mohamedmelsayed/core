@@ -73,8 +73,8 @@
                                                 <i class="las la-chart-area"></i> @lang('Report')
                                             </a>
                                             @else
-                                            <a class="dropdown-item threshold" href="{{ route('admin.item.uploadVideo', $item->id) }}">
-                                                <i class="las la-cloud-upload-alt"></i> @lang('Upload Video')
+                                            <a class="dropdown-item threshold" href="{{ route('admin.item.uploadAudio', $item->id) }}">
+                                                <i class="las la-cloud-upload-alt"></i> @lang('Upload Audio')
                                             </a>
                                             @endif
                                             @endif
