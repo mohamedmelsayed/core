@@ -355,7 +355,7 @@ class ItemController extends Controller
         }
 
         $audio->audio_type = $request->audio_type;
-        $audio->server = $request->link;
+//        $audio->server = $request->link ;
         $audio->content = $audioFilePath;
 
         $audio->save();
