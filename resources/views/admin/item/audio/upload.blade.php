@@ -47,21 +47,66 @@
     </div>
 </div>
 @endsection
-@push('style')
-<style type="text/css">
-    .progress { position:relative; width:100%; }
-        .bar { width:0%; height:20px; }
-        .percent { position:absolute; display:inline-block; left:50%;top: 8px; color: #040608;}
-        .upload { margin-right: auto; margin-left: auto; width: 100%; height: 200px; margin-top: 20px; border: 3px dashed #929292; line-height: 200px; font-size: 18px; line-height: unset !important; display: table; text-align: center; margin-bottom: 20px; color: #929292; }
-        .upload:hover { border: 3px dashed #04abf2; cursor: pointer; color: #04abf2; }
-        .upload.hover { border: 3px dashed #04abf2; cursor: pointer; color: #04abf2; }
-        .upload > div { display: table-cell; vertical-align: middle; }
-        .upload > div h4 { padding: 0; margin: 0; font-size: 25px; font-weight: 700; font-family: Lato, sans-serif; }
-        .upload > div p { padding: 0; margin: 0; font-family: Lato, sans-serif; }
-        .upload-audio-file{
-            opacity: 0;
-            position: fixed;
-        }
+@push('style')  <style type="text/css">
+    .upload {
+        margin-right: auto;
+        margin-left: auto;
+        width: 100%;
+        height: 200px;
+        margin-top: 20px;
+        border: 3px dashed #929292;
+        line-height: 200px;
+        font-size: 18px;
+        line-height: unset !important;
+        display: table;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #929292;
+    }
+
+    .upload:hover {
+        border: 3px dashed #04abf2;
+        cursor: pointer;
+        color: #04abf2;
+    }
+
+    .upload.hover {
+        border: 3px dashed #04abf2;
+        cursor: pointer;
+        color: #04abf2;
+    }
+
+    .upload > div {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .upload > div h4 {
+        padding: 0;
+        margin: 0;
+        font-size: 25px;
+        font-weight: 700;
+        font-family: Lato, sans-serif;
+    }
+
+    .upload > div p {
+        padding: 0;
+        margin: 0;
+        font-family: Lato, sans-serif;
+    }
+
+    .upload-video-file {
+        opacity: 0;
+        position: fixed;
+    }
+
+    .video-quality .nav-link {
+        border: 1px solid #0d6efd;
+    }
+
+    .video-quality {
+        gap: 10px !important;
+    }
 </style>
 @endpush
 @push('breadcrumb-plugins')
@@ -193,7 +238,7 @@ $('#uploadForm').on('submit', function (e) {
                 } else {
                     notify('success', response.success); // Show success message
                     setTimeout(function () {
-                        window.history.back(); // Replace with the URL of the desired page
+                        window.history.§(); // Replace with the URL of the desired page
                     }, 2000); // Reload the page
                 }
             },
