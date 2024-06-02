@@ -17,7 +17,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="form-group" id="audio">
-                                    <div class="upload" data-block="audio-drop-zone">
+                                    <div class="upload thousand-eighty-video" data-block="audio-drop-zone">
                                         <div>
                                             <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24"
                                                  xmlns="http://www.w3.org/2000/svg" class="feather feather-upload">
@@ -31,34 +31,13 @@
                                     </div>
                                     <small class="text-facebook">@lang('Only')
                                         <strong>@lang('mp3')</strong> @lang('supported')</small>
-                                    <input type="file" class=seven_twenty_video" name="audio" accept="mp3"/>
+                                    <input type="file" class="upload seven-twenty-video" name="audio" accept="mp3"/>
                                 </div>
                                 <div class="form-group" id="link">
                                     <label>@lang('Insert Link')</label>
                                     <input type="text" class="form-control" placeholder="@lang('Inert Link')"
                                            name="link"/>
                                 </div>
-                            </div>
-                            <div class="form-group" id="thousand_eighty_video">
-                                <div class="upload thousand-eighty-video" data-block="video-drop-zone">
-                                    <div>
-                                        <svg class="feather feather-upload" fill="currentColor" height="24"
-                                             viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z"/>
-                                        </svg>
-                                        <h4> @lang('Darg Drop Video')</h4>
-                                        <p>@lang('or Click to choose File')</p>
-                                        <button class="btn btn--primary" type="button">@lang('Upload')</button>
-                                    </div>
-                                </div>
-                                <input class="upload-video-file thousand-eighty" name="thousand_eighty_video"
-                                       type="file" accept=".mp4,.mkv,.3gp"/>
-                            </div>
-                            <div class="form-group" id="thousand_eighty_link">
-                                <label>@lang('Insert Link')</label>
-                                <input class="form-control" name="thousand_eighty_link" type="text"
-                                       placeholder="@lang('Inert Link')"/>
                             </div>
                             <div class="progress mt-3" style="display: none;">
                                 <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
