@@ -124,7 +124,12 @@
     <script>
         (function ($) {
             "use strict"
-
+            $(".three-sixty").on("click", function (e) {
+                e.stopPropagation();
+            });
+            $(".three-sixty-video").on("click", function (e) {
+                $('.three-sixty').trigger("click");
+            });
             $("[name=audio_type]").on('change', function () {
                 if ($(this).val() == '0') {
                     $("#three_sixty_link").show();
