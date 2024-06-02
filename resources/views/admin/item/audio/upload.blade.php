@@ -6,7 +6,29 @@
                 <div class="card-body">
                     <form action="" id="uploadForm" method="POST" enctype="multipart/form-data">
                         @csrf
-
+                        <ul class="nav nav-pills mb-3 video-quality" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-360p-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-360p" type="button" role="tab" aria-controls="pills-360p"
+                                        aria-selected="true">@lang('Video File 360P')</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-480p-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-480p" type="button" role="tab" aria-controls="pills-480p"
+                                        aria-selected="false">@lang('Video File 480P')</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="pills-720p-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-720p" type="button" role="tab" aria-controls="pills-720p"
+                                        aria-selected="false">@lang('Video File 720P')</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-1080p-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-1080p" type="button" role="tab"
+                                        aria-controls="pills-1080p"
+                                        aria-selected="false">@lang('Video File 1080P')</button>
+                            </li>
+                        </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade" id="pills-360p" role="tabpanel" aria-labelledby="pills-360p-tab"
                                  tabindex="0">
