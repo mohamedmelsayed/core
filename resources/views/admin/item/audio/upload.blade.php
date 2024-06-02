@@ -38,17 +38,17 @@
                                     <input type="text" class="form-control" placeholder="@lang('Inert Link')"
                                            name="link"/>
                                 </div>
-                                <div class="progress mt-3" style="display: none;">
-                                    <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-                                         role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
-                                         aria-valuemax="100">0%
-                                    </div>
+                            </div>
+                            <div class="progress mt-3" style="display: none;">
+                                <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                     role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+                                     aria-valuemax="100">0%
                                 </div>
                             </div>
+                            <div class="">
+                                <button class="btn btn--primary w-100 h-45" type="submit">@lang('Submit')</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn btn--primary w-100 submitButton h-45">@lang('Upload Audio')</button>
                     </div>
                 </form>
             </div>
