@@ -31,7 +31,7 @@
                                     </div>
                                     <small class="text-facebook">@lang('Only')
                                         <strong>@lang('mp3')</strong> @lang('supported')</small>
-                                    <input type="file" class="upload seven-twenty-video" name="audio" accept="mp3"/>
+                                    <input type="file" class=seven_twenty_video" name="audio" accept="mp3"/>
                                 </div>
                                 <div class="form-group" id="link">
                                     <label>@lang('Insert Link')</label>
