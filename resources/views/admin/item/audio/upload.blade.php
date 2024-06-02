@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                             <input class="upload-video-file three-sixty" name="audio" type="file"
-                                   accept="audio/*"/>
+                                   accept="mp3"/>
                         </div>
                         <div class="form-group" id="three_sixty_link">
                             <label>@lang('Insert Link')</label>
