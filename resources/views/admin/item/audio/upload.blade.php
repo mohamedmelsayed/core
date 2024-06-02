@@ -110,7 +110,6 @@
     <a href="{{ $prevUrl }}" class="btn btn-sm btn-outline--primary"><i class="la la-undo"></i> @lang('Back')</a>
 @endpush
 @push('script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
     <script>
         (function ($) {
             "use strict"
