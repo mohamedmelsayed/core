@@ -6,37 +6,14 @@
                 <div class="card-body">
                     <form action="" id="uploadForm" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <ul class="nav nav-pills mb-3 video-quality" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-360p-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-360p" type="button" role="tab" aria-controls="pills-360p"
-                                        aria-selected="true">@lang('Video File 360P')</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-480p-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-480p" type="button" role="tab" aria-controls="pills-480p"
-                                        aria-selected="false">@lang('Video File 480P')</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pills-720p-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-720p" type="button" role="tab" aria-controls="pills-720p"
-                                        aria-selected="false">@lang('Video File 720P')</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-1080p-tab" data-bs-toggle="pill"
-                                        data-bs-target="#pills-1080p" type="button" role="tab"
-                                        aria-controls="pills-1080p"
-                                        aria-selected="false">@lang('Video File 1080P')</button>
-                            </li>
-                        </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade" id="pills-360p" role="tabpanel" aria-labelledby="pills-360p-tab"
                                  tabindex="0">
-                                <h5 class="my-4">@lang('Video File 360P')</h5>
+                                <h5 class="my-4">@lang('audio')</h5>
                                 <div class="form-group col-md-12">
-                                    <label>@lang('Video Type')</label>
-                                    <select class="form-control" name="video_type_three_sixty" required>
-                                        <option value="1">@lang('Video')</option>
+                                    <label>@lang('Audio Type')</label>
+                                    <select class="form-control" name="audio_type" required>
+                                        <option value="1">@lang('Audio')</option>
                                         <option value="0">@lang('Link')</option>
                                     </select>
                                 </div>
@@ -53,12 +30,12 @@
                                             <button class="btn btn--primary" type="button">@lang('Upload')</button>
                                         </div>
                                     </div>
-                                    <input class="upload-video-file three-sixty" name="three_sixty_video" type="file"
-                                           accept=".mp4,.mkv,.3gp"/>
+                                    <input class="upload-video-file three-sixty" name="audio" type="file"
+                                           accept="mp3"/>
                                 </div>
                                 <div class="form-group" id="three_sixty_link">
                                     <label>@lang('Insert Link')</label>
-                                    <input class="form-control" name="three_sixty_link" type="text"
+                                    <input class="form-control" name="link" type="text"
                                            placeholder="@lang('Inert Link')"/>
                                 </div>
                             </div>
@@ -152,30 +129,7 @@
     <script>
         (function ($) {
             "use strict"
-            $(".three-sixty").on("click", function (e) {
-                e.stopPropagation();
-            });
-            $(".four-eighty").on("click", function (e) {
-                e.stopPropagation();
-            });
-            $(".seven-twenty").on("click", function (e) {
-                e.stopPropagation();
-            });
-            $(".thousand-eighty").on("click", function (e) {
-                e.stopPropagation();
-            });
-            $(".three-sixty-video").on("click", function (e) {
-                $('.three-sixty').trigger("click");
-            });
-            $(".four-eighty-video").on("click", function (e) {
-                $('.four-eighty').trigger("click");
-            });
-            $(".seven-twenty-video").on("click", function (e) {
-                $('.seven-twenty').trigger("click");
-            });
-            $(".thousand-eighty-video").on("click", function (e) {
-                $('.thousand-eighty').trigger("click");
-            });
+
             $("[name=video_type_three_sixty]").on('change', function () {
                 if ($(this).val() == '0') {
                     $("#three_sixty_link").show();
@@ -183,36 +137,6 @@
                 } else {
                     $("#three_sixty_link").hide();
                     $("#three_sixty_video").show();
-                }
-            }).change();
-
-            $("[name=video_type_four_eighty]").on('change', function () {
-                if ($(this).val() == '0') {
-                    $("#four_eighty_link").show();
-                    $("#four_eighty_video").hide();
-                } else {
-                    $("#four_eighty_link").hide();
-                    $("#four_eighty_video").show();
-                }
-            }).change();
-
-            $("[name=video_type_seven_twenty]").on('change', function () {
-                if ($(this).val() == '0') {
-                    $("#seven_twenty_link").show();
-                    $("#seven_twenty_video").hide();
-                } else {
-                    $("#seven_twenty_link").hide();
-                    $("#seven_twenty_video").show();
-                }
-            }).change();
-
-            $("[name=video_type_thousand_eighty]").on('change', function () {
-                if ($(this).val() == '0') {
-                    $("#thousand_eighty_link").show();
-                    $("#thousand_eighty_video").hide();
-                } else {
-                    $("#thousand_eighty_link").hide();
-                    $("#thousand_eighty_video").show();
                 }
             }).change();
 
