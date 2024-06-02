@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                             <input class="upload-video-file three-sixty" name="audio" type="file"
-                                   accept="mp3"/>
+                                   accept="audio/*"/>
                         </div>
                         <div class="form-group" id="three_sixty_link">
                             <label>@lang('Insert Link')</label>
@@ -191,7 +191,7 @@
                     error: function () {
                         isUploading = false;
                         $(window).off('beforeunload');
-                        alert('An error occurred while uploading the video.');
+                        alert('An error occurred while uploading the audio.');
                     }
                 });
             });
