@@ -31,7 +31,7 @@
                                     </div>
                                     <small class="text-facebook">@lang('Only')
                                         <strong>@lang('mp3')</strong> @lang('supported')</small>
-                                    <input type="file" class="upload-audio-file" name="audio" accept="audio/*"/>
+                                    <input type="file" class="upload seven-twenty-video" name="audio" accept="mp3"/>
                                 </div>
                                 <div class="form-group" id="link">
                                     <label>@lang('Insert Link')</label>
@@ -104,18 +104,6 @@
             font-family: Lato, sans-serif;
         }
 
-        .upload-video-file {
-            opacity: 0;
-            position: fixed;
-        }
-
-        .video-quality .nav-link {
-            border: 1px solid #0d6efd;
-        }
-
-        .video-quality {
-            gap: 10px !important;
-        }
     </style>
 @endpush
 @push('breadcrumb-plugins')
