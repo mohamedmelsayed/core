@@ -478,7 +478,6 @@ function getAudioFile($audio) {
     }
     if ($server == Status::CURRENT_SERVER) {
         $videoFile = asset($content);
-        dd($videoFile);
     } else if ($server == Status::FTP_SERVER) {
         $general   = gs();
         $videoFile = $general->ftp->domain . '/' . $content;
