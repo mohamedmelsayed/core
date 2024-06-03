@@ -185,7 +185,6 @@ class SiteController extends Controller
 
     public function watchVideo($slug, $episodeId = null)
     {
-        dd("p");
         $item = Item::active()->where('slug', $slug)->with('video.subtitles')->firstOrFail();
         $item->increment('view');
 
@@ -237,6 +236,69 @@ class SiteController extends Controller
 
         if (!$video) {
             $notify[] = ['error', 'There are no videos for this item'];
+            return back()->withNotify($notify);
+        }
+
+        $adsTime     = $video->getAds() ?? [];
+        $subtitles   = $video->subtitles;
+        $videos      = $this->videoList($video);
+        $seoContents = $this->getItemSeoContent($item);
+
+        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+    }
+    public function watchAudio($slug, $episodeId = null)
+    {
+        $item = Item::active()->where('slug', $slug)->firstOrFail();
+        $item->increment('view');
+
+
+
+        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
+
+        if ($item->item_type == Status::EPISODE_ITEM) {
+            $episodes     = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM);
+            $pageTitle    = 'Episode Details';
+
+            if ($episodes->isEmpty()) {
+                $notify[] = ['error', 'Oops! There is no audio'];
+                return back()->withNotify($notify);
+            }
+
+            $subscribedUser = auth()->check() && (auth()->user()->exp > now());
+            if ($episodeId) {
+                $episode       = Episode::hasVideo()->findOrFail($episodeId);
+                $firstVideo    = $episode->video;
+                $isPaidItem    = $episode->version ? Status::ENABLE : Status::DISABLE;
+                $activeEpisode = $episode;
+            } else {
+                $firstVideo    = $episodes[0]->video;
+                $activeEpisode = $episodes[0];
+                $isPaidItem    = $activeEpisode->version ? Status::ENABLE : Status::DISABLE;
+                $episodeId     = $activeEpisode->id;
+            }
+
+            $this->storeHistory(episodeId: $activeEpisode->id);
+            $this->storeVideoReport(episodeId: $activeEpisode->id);
+
+            $video              = $firstVideo;
+            $checkWatchEligable = $this->checkWatchEligableEpisode($activeEpisode, $userHasSubscribed);
+        } else {
+            $this->storeHistory($item->id);
+            $this->storeVideoReport($item->id);
+
+            $pageTitle          = 'Movie Details';
+            $relatedItems       = $this->relatedItems($item->id, Status::SINGLE_ITEM);
+            $episodes           = [];
+            $video              = $item->video;
+            $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+        }
+
+        $watchEligable     = $checkWatchEligable[0];
+        $hasSubscribedItem = $checkWatchEligable[1];
+
+        if (!$video) {
+            $notify[] = ['error', 'There are no audio for this item'];
             return back()->withNotify($notify);
         }
 

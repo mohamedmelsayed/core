@@ -20,6 +20,10 @@ class Item extends Model {
     public function video() {
         return $this->hasOne(Video::class);
     }
+
+    public function audio() {
+        return $this->hasOne(Audio::class);
+    }
     public function subtitles() {
         return $this->hasMany(Subtitle::class);
     }
@@ -65,6 +69,14 @@ class Item extends Model {
         return $query->where('status', Status::ENABLE)->where(function ($q) {
             $q->orWhereHas('video')->orWhereHas('episodes', function ($video) {
                 $video->where('status', Status::ENABLE)->whereHas('video');
+            });
+        });
+    }
+
+    public function scopeHasAudio($query) {
+        return $query->where('status', Status::ENABLE)->where(function ($q) {
+            $q->orWhereHas('audio')->orWhereHas('episodes', function ($audio) {
+                $audio->where('status', Status::ENABLE)->whereHas('audio');
             });
         });
     }

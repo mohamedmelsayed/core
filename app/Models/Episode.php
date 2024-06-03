@@ -19,6 +19,10 @@ class Episode extends Model {
         return $this->hasOne(Video::class);
     }
 
+    public function audio() {
+        return $this->hasOne(Audio::class);
+    }
+
     public function item() {
         return $this->belongsTo(Item::class);
     }
@@ -63,5 +67,9 @@ class Episode extends Model {
 
     public function scopeHasVideo() {
         return $this->where('status', 1)->whereHas('video');
+    }
+
+    public function scopeHasAudio() {
+        return $this->where('status', 1)->whereHas('audio');
     }
 }

@@ -38,6 +38,8 @@ Route::controller('SiteController')->group(function () {
 
     Route::get('/get/section', 'getSection')->name('get.section');
     Route::get('watch-video/{slug}/{episode_id?}', 'watchVideo')->name('watch');
+    Route::get('preview-audio/{slug}/{episode_id?}', 'watchAudio')->name('preview.audio');
+
 
     Route::get('category/{id}', 'category')->name('category');
     Route::get('sub-category/{id}', 'subCategory')->name('subCategory');
