@@ -560,7 +560,7 @@ class ItemController extends Controller
         $video->server_four_eighty = @$uploadFourEighty['server'] ?? 0;
         $video->server_seven_twenty = @$uploadSevenTwenty['server'] ?? 0;
         $video->server_thousand_eighty = @$uploadThousandEighty['server'] ?? 0;
-
+    dd($video);
         $video->save();
         return response()->json(['success' => 'Video uploaded successfully']);
     }
