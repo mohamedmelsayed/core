@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
+use App\Lib\AudioUploader;
 use App\Lib\CurlRequest;
 use App\Lib\MultiVideoUploader;
 use App\Lib\VideoUploader;
@@ -330,33 +331,47 @@ class ItemController extends Controller
         }
 
         ini_set('memory_limit', '-1');
-//        $validator = Validator::make($request->all(), [
-//            'audio_type' => 'required',
-//            'audio_link' => $audioLinkRule,
-//            'audio_file' => [$audioFileRule, new FileTypeValidate(['mp3', 'wav', 'aac'])],
-//        ], [
-//            'audio_type.required' => 'Audio file type is required',
-//            'audio.required_if:audio_type,1' => 'Audio link is required when audio type is link',
-//            'link.required_if:audio_type,0' => 'Audio file is required when audio type is file',
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json(['error' => $validator->errors()->all()]);
-//        }
+        $validator = Validator::make($request->all(), [
+            'audio_type' => 'required',
+            'link' => $audioLinkRule,
+            'audio' => [$audioFileRule, new FileTypeValidate(['mp3', 'wav', 'aac'])],
+        ], [
+            'audio_type.required' => 'Audio file type is required',
+            'audio.required_if:audio_type,1' => 'Audio link is required when audio type is link',
+            'link.required_if:audio_type,0' => 'Audio file is required when audio type is file',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
 
         if ($request->hasFile('audio')) {
-            $audioFilePath = $request->file('audio')->store('audio', 'public');
+            $audioUploader            = new AudioUploader();
+            $audioUploader->file      = $request->file('audio');
+            $audioUploader->oldFile   = $audio;
+            $audioUploader->oldServer = "server";
+            $audioUploader->upload();
+            $error = $audioUploader->error;
+
+            if ($error) {
+                return ['error' => true, 'message' => 'Could not upload the Video'];
+            }
+
+            $audio  = $audioUploader->fileName;
+            $server = $audioUploader->uploadedServer;
         } else {
-            $audioFilePath = $request->audio_link;
+            $removeFile          = new VideoUploader();
+            $removeFile->oldFile = $audio;
+            $removeFile->oldServer = "server";
+            $removeFile->removeOldFile();
+
+            $audio  = $request->link;
+            $server = Status::LINK;
         }
         if (!$audio) {
             $audio = new Audio();
             $audio->item_id = $item->id;
         }
-
-        $audio->audio_type = $request->audio_type;
-//        $audio->server = $request->link ;
-        $audio->content = $audioFilePath;
 
         $audio->save();
 
@@ -401,7 +416,6 @@ class ItemController extends Controller
 
     public function updateItemVideo(Request $request, $id)
     {
-        dd("here");
         ini_set('memory_limit', '-1');
         $validation_rule['video_type'] = 'required';
         $validation_rule['link'] = 'required_without:video';
@@ -560,7 +574,6 @@ class ItemController extends Controller
         $video->server_four_eighty = @$uploadFourEighty['server'] ?? 0;
         $video->server_seven_twenty = @$uploadSevenTwenty['server'] ?? 0;
         $video->server_thousand_eighty = @$uploadThousandEighty['server'] ?? 0;
-    dd($video);
         $video->save();
         return response()->json(['success' => 'Video uploaded successfully']);
     }
