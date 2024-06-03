@@ -401,6 +401,7 @@ class ItemController extends Controller
 
     public function updateItemVideo(Request $request, $id)
     {
+        dd("here");
         ini_set('memory_limit', '-1');
         $validation_rule['video_type'] = 'required';
         $validation_rule['link'] = 'required_without:video';
