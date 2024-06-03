@@ -439,7 +439,6 @@ class SiteController extends Controller
             $notify[] = ['error', 'There are no audio for this item'];
             return back()->withNotify($notify);
         }
-        dd($audio);
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
