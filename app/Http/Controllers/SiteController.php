@@ -428,7 +428,7 @@ class SiteController extends Controller
             $pageTitle = 'Movie Details';
             $relatedItems = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
             $episodes = [];
-            $video = $item->video;
+            $audio = $item->audio;
             $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         }
 
