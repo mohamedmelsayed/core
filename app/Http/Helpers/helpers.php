@@ -461,6 +461,73 @@ function getVideoFile($video, $quality="seven_twenty") {
     return $videoFile;
 }
 
+function getAudioFile($audio) {
+    if (!$audio) {
+        return false;
+    }
+    $serverName   = 'server_';
+    $AudioQuality = '_audio';
+
+    $content = $audio->$AudioQuality;
+    $server  = $audio->$serverName;
+    if (!$content) {
+        return false;
+    }
+    if($server==Status::LINK){
+        return $content;
+    }
+    // dd( 'assets/videos/' . $content);
+    if ($server == Status::CURRENT_SERVER) {
+        $videoFile = asset('assets/audios/' . $content);
+    } else if ($server == Status::FTP_SERVER) {
+        $general   = gs();
+        $videoFile = $general->ftp->domain . '/' . $content;
+    } else if ($server == Status::WASABI_SERVER) {
+        $general = gs();
+        $s3      = new S3Client([
+            'endpoint'    => $general->wasabi->endpoint,
+            'region'      => $general->wasabi->region,
+            'version'     => 'latest',
+            'credentials' => [
+                'key'    => $general->wasabi->key,
+                'secret' => $general->wasabi->secret,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => $general->wasabi->bucket,
+            'Key'    => $content,
+            'ACL'    => 'public-read',
+        ]);
+
+        $request   = $s3->createPresignedRequest($cmd, '+20 minutes');
+        $videoFile = (string) $request->getUri();
+    } else if ($server == Status::DIGITAL_OCEAN_SERVER) {
+        $general = gs();
+        $s3      = new S3Client([
+            'endpoint'    => $general->digital_ocean->endpoint,
+            'region'      => $general->digital_ocean->region,
+            'version'     => 'latest',
+            'credentials' => [
+                'key'    => $general->digital_ocean->key,
+                'secret' => $general->digital_ocean->secret,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => $general->digital_ocean->bucket,
+            'Key'    => $content,
+            'ACL'    => 'public-read',
+        ]);
+
+        $request   = $s3->createPresignedRequest($cmd, '+20 minutes');
+        $videoFile = (string) $request->getUri();
+    } else {
+        $videoFile = $content;
+    }
+    return $videoFile;
+}
+
 function numFormat($num) {
     if ($num > 1000) {
 

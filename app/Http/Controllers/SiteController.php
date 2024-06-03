@@ -32,25 +32,25 @@ class SiteController extends Controller
 {
     public function index()
     {
-        $pageTitle      = 'Home';
-        $sliders        = Slider::orderBy('id', 'desc')->where('status', 1)->with('item', 'item.category', 'item.video')->get();
+        $pageTitle = 'Home';
+        $sliders = Slider::orderBy('id', 'desc')->where('status', 1)->with('item', 'item.category', 'item.video')->get();
         $featuredMovies = Item::active()->hasVideo()->where('featured', 1)->orderBy('id', 'desc')->get();
-        $advertise      = Advertise::where('device', 1)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
+        $advertise = Advertise::where('device', 1)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
         return view($this->activeTemplate . 'home', compact('pageTitle', 'sliders', 'featuredMovies', 'advertise'));
     }
 
     public function contact()
     {
         $pageTitle = "Contact Us";
-        $user      = auth()->user();
+        $user = auth()->user();
         return view($this->activeTemplate . 'contact', compact('pageTitle', 'user'));
     }
 
     public function contactSubmit(Request $request)
     {
         $this->validate($request, [
-            'name'    => 'required',
-            'email'   => 'required',
+            'name' => 'required',
+            'email' => 'required',
             'subject' => 'required|string|max:255',
             'message' => 'required',
         ]);
@@ -64,27 +64,27 @@ class SiteController extends Controller
 
         $random = getNumber();
 
-        $ticket           = new SupportTicket();
-        $ticket->user_id  = auth()->id() ?? 0;
-        $ticket->name     = $request->name;
-        $ticket->email    = $request->email;
+        $ticket = new SupportTicket();
+        $ticket->user_id = auth()->id() ?? 0;
+        $ticket->name = $request->name;
+        $ticket->email = $request->email;
         $ticket->priority = Status::PRIORITY_MEDIUM;
 
-        $ticket->ticket     = $random;
-        $ticket->subject    = $request->subject;
+        $ticket->ticket = $random;
+        $ticket->subject = $request->subject;
         $ticket->last_reply = Carbon::now();
-        $ticket->status     = Status::TICKET_OPEN;
+        $ticket->status = Status::TICKET_OPEN;
         $ticket->save();
 
-        $adminNotification            = new AdminNotification();
-        $adminNotification->user_id   = auth()->user() ? auth()->user()->id : 0;
-        $adminNotification->title     = 'A new contact message has been submitted';
+        $adminNotification = new AdminNotification();
+        $adminNotification->user_id = auth()->user() ? auth()->user()->id : 0;
+        $adminNotification->title = 'A new contact message has been submitted';
         $adminNotification->click_url = urlPath('admin.ticket.view', $ticket->id);
         $adminNotification->save();
 
-        $message                    = new SupportMessage();
+        $message = new SupportMessage();
         $message->support_ticket_id = $ticket->id;
-        $message->message           = $request->message;
+        $message->message = $request->message;
         $message->save();
 
         $notify[] = ['success', 'Ticket created successfully!'];
@@ -112,17 +112,17 @@ class SiteController extends Controller
     public function cookiePolicy()
     {
         $pageTitle = 'Cookie Policy';
-        $cookie    = Frontend::where('data_keys', 'cookie.data')->first();
+        $cookie = Frontend::where('data_keys', 'cookie.data')->first();
         return view($this->activeTemplate . 'cookie', compact('pageTitle', 'cookie'));
     }
 
     public function placeholderImage($size = null)
     {
-        $imgWidth  = explode('x', $size)[0];
+        $imgWidth = explode('x', $size)[0];
         $imgHeight = explode('x', $size)[1];
-        $text      = $imgWidth . '×' . $imgHeight;
-        $fontFile  = realpath('assets/font/RobotoMono-Regular.ttf');
-        $fontSize  = round(($imgWidth - 50) / 8);
+        $text = $imgWidth . '×' . $imgHeight;
+        $fontFile = realpath('assets/font/RobotoMono-Regular.ttf');
+        $fontSize = round(($imgWidth - 50) / 8);
         if ($fontSize <= 9) {
             $fontSize = 9;
         }
@@ -130,15 +130,15 @@ class SiteController extends Controller
             $fontSize = 30;
         }
 
-        $image     = imagecreatetruecolor($imgWidth, $imgHeight);
+        $image = imagecreatetruecolor($imgWidth, $imgHeight);
         $colorFill = imagecolorallocate($image, 100, 100, 100);
-        $bgFill    = imagecolorallocate($image, 175, 175, 175);
+        $bgFill = imagecolorallocate($image, 175, 175, 175);
         imagefill($image, 0, 0, $bgFill);
-        $textBox    = imagettfbbox($fontSize, 0, $fontFile, $text);
-        $textWidth  = abs($textBox[4] - $textBox[0]);
+        $textBox = imagettfbbox($fontSize, 0, $fontFile, $text);
+        $textWidth = abs($textBox[4] - $textBox[0]);
         $textHeight = abs($textBox[5] - $textBox[1]);
-        $textX      = ($imgWidth - $textWidth) / 2;
-        $textY      = ($imgHeight + $textHeight) / 2;
+        $textX = ($imgWidth - $textWidth) / 2;
+        $textY = ($imgHeight + $textHeight) / 2;
         header('Content-Type: image/jpeg');
         imagettftext($image, $fontSize, 0, $textX, $textY, $colorFill, $fontFile, $text);
         imagejpeg($image);
@@ -175,8 +175,8 @@ class SiteController extends Controller
             $data['frees'] = (clone $items)->free()->orderBy('id', 'desc')->limit(12)->get();
         } else if ($request->sectionName == 'top') {
             $data['mostViewsTrailer'] = (clone $items)->where('item_type', Status::SINGLE_ITEM)->where('is_trailer', 1)->orderBy('view', 'desc')->first();
-            $data['topRateds']        = (clone $items)->orderBy('ratings', 'desc')->limit(4)->get();
-            $data['trendings']        = (clone $items)->orderBy('view', 'desc')->where('trending', 1)->limit(4)->get();
+            $data['topRateds'] = (clone $items)->orderBy('ratings', 'desc')->limit(4)->get();
+            $data['trendings'] = (clone $items)->orderBy('view', 'desc')->where('trending', 1)->limit(4)->get();
         } else if ($request->sectionName == 'single1' || $request->sectionName == 'single2' || $request->sectionName == 'single3') {
             $data['single'] = (clone $items)->orderBy('id', 'desc')->where('single', Status::YES)->with('category')->get();
         }
@@ -189,13 +189,12 @@ class SiteController extends Controller
         $item->increment('view');
 
 
-
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
         if ($item->item_type == Status::EPISODE_ITEM) {
-            $episodes     = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
+            $episodes = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
             $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM);
-            $pageTitle    = 'Episode Details';
+            $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
                 $notify[] = ['error', 'Oops! There is no video'];
@@ -204,34 +203,34 @@ class SiteController extends Controller
 
             $subscribedUser = auth()->check() && (auth()->user()->exp > now());
             if ($episodeId) {
-                $episode       = Episode::hasVideo()->findOrFail($episodeId);
-                $firstVideo    = $episode->video;
-                $isPaidItem    = $episode->version ? Status::ENABLE : Status::DISABLE;
+                $episode = Episode::hasVideo()->findOrFail($episodeId);
+                $firstVideo = $episode->video;
+                $isPaidItem = $episode->version ? Status::ENABLE : Status::DISABLE;
                 $activeEpisode = $episode;
             } else {
-                $firstVideo    = $episodes[0]->video;
+                $firstVideo = $episodes[0]->video;
                 $activeEpisode = $episodes[0];
-                $isPaidItem    = $activeEpisode->version ? Status::ENABLE : Status::DISABLE;
-                $episodeId     = $activeEpisode->id;
+                $isPaidItem = $activeEpisode->version ? Status::ENABLE : Status::DISABLE;
+                $episodeId = $activeEpisode->id;
             }
 
             $this->storeHistory(episodeId: $activeEpisode->id);
             $this->storeVideoReport(episodeId: $activeEpisode->id);
 
-            $video              = $firstVideo;
+            $video = $firstVideo;
             $checkWatchEligable = $this->checkWatchEligableEpisode($activeEpisode, $userHasSubscribed);
         } else {
             $this->storeHistory($item->id);
             $this->storeVideoReport($item->id);
 
-            $pageTitle          = 'Movie Details';
-            $relatedItems       = $this->relatedItems($item->id, Status::SINGLE_ITEM);
-            $episodes           = [];
-            $video              = $item->video;
+            $pageTitle = 'Movie Details';
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM);
+            $episodes = [];
+            $video = $item->video;
             $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         }
 
-        $watchEligable     = $checkWatchEligable[0];
+        $watchEligable = $checkWatchEligable[0];
         $hasSubscribedItem = $checkWatchEligable[1];
 
         if (!$video) {
@@ -239,75 +238,61 @@ class SiteController extends Controller
             return back()->withNotify($notify);
         }
 
-        $adsTime     = $video->getAds() ?? [];
-        $subtitles   = $video->subtitles;
-        $videos      = $this->videoList($video);
+        $adsTime = $video->getAds() ?? [];
+        $subtitles = $video->subtitles;
+        $videos = $this->videoList($video);
         $seoContents = $this->getItemSeoContent($item);
 
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
-    public function watchAudio($slug, $episodeId = null)
+
+    private function relatedItems($itemId, $itemType)
     {
-        $item = Item::active()->where('slug', $slug)->firstOrFail();
-        $item->increment('view');
+        return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
+    }
 
-
-
-        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-
-        if ($item->item_type == Status::EPISODE_ITEM) {
-            $episodes     = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM);
-            $pageTitle    = 'Episode Details';
-
-            if ($episodes->isEmpty()) {
-                $notify[] = ['error', 'Oops! There is no audio'];
-                return back()->withNotify($notify);
+    private function storeHistory($itemId = null, $episodeId = null)
+    {
+        if (auth()->check()) {
+            if ($itemId) {
+                $history = History::where('user_id', auth()->id())->orderBy('id', 'desc')->limit(1)->first();
+                if (!$history || ($history && $history->item_id != $itemId)) {
+                    $history = new History();
+                    $history->user_id = auth()->id();
+                    $history->item_id = $itemId;
+                    $history->save();
+                }
             }
-
-            $subscribedUser = auth()->check() && (auth()->user()->exp > now());
             if ($episodeId) {
-                $episode       = Episode::hasVideo()->findOrFail($episodeId);
-                $firstVideo    = $episode->video;
-                $isPaidItem    = $episode->version ? Status::ENABLE : Status::DISABLE;
-                $activeEpisode = $episode;
-            } else {
-                $firstVideo    = $episodes[0]->video;
-                $activeEpisode = $episodes[0];
-                $isPaidItem    = $activeEpisode->version ? Status::ENABLE : Status::DISABLE;
-                $episodeId     = $activeEpisode->id;
+                $history = History::where('user_id', auth()->id())->orderBy('id', 'desc')->limit(1)->first();
+                if (!$history || ($history && $history->episode_id != $episodeId)) {
+                    $history = new History();
+                    $history->user_id = auth()->id();
+                    $history->episode_id = $episodeId;
+                    $history->save();
+                }
             }
+        }
+    }
 
-            $this->storeHistory(episodeId: $activeEpisode->id);
-            $this->storeVideoReport(episodeId: $activeEpisode->id);
+    protected function storeVideoReport($itemId = null, $episodeId = null)
+    {
+        $deviceId = md5($_SERVER['HTTP_USER_AGENT']);
 
-            $video              = $firstVideo;
-            $checkWatchEligable = $this->checkWatchEligableEpisode($activeEpisode, $userHasSubscribed);
-        } else {
-            $this->storeHistory($item->id);
-            $this->storeVideoReport($item->id);
-
-            $pageTitle          = 'Movie Details';
-            $relatedItems       = $this->relatedItems($item->id, Status::SINGLE_ITEM);
-            $episodes           = [];
-            $video              = $item->video;
-            $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+        if ($itemId) {
+            $report = VideoReport::whereDate('created_at', now())->where('device_id', $deviceId)->where('item_id', $itemId)->exists();
         }
 
-        $watchEligable     = $checkWatchEligable[0];
-        $hasSubscribedItem = $checkWatchEligable[1];
-
-        if (!$video) {
-            $notify[] = ['error', 'There are no audio for this item'];
-            return back()->withNotify($notify);
+        if ($episodeId) {
+            $report = VideoReport::whereDate('created_at', now())->where('device_id', $deviceId)->where('episode_id', $episodeId)->exists();
         }
-
-        $adsTime     = $video->getAds() ?? [];
-        $subtitles   = $video->subtitles;
-        $videos      = $this->videoList($video);
-        $seoContents = $this->getItemSeoContent($item);
-
-        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        if (!$report) {
+            $videoReport = new VideoReport();
+            $videoReport->device_id = $deviceId;
+            $videoReport->item_id = $itemId ?? 0;
+            $videoReport->episode_id = $episodeId ?? 0;
+            $videoReport->save();
+        }
     }
 
     protected function checkWatchEligableEpisode($episode, $userHasSubscribed)
@@ -350,73 +335,29 @@ class SiteController extends Controller
         if ($video->three_sixty_video) {
             $videoFile[] = [
                 'content' => getVideoFile($video, 'three_sixty'),
-                'size'    => 360,
+                'size' => 360,
             ];
         }
         if ($video->four_eighty_video) {
             $videoFile[] = [
                 'content' => getVideoFile($video, 'four_eighty'),
-                'size'    => 480,
+                'size' => 480,
             ];
         }
         if ($video->seven_twenty_video) {
             $videoFile[] = [
                 'content' => getVideoFile($video, 'seven_twenty'),
-                'size'    => 720,
+                'size' => 720,
             ];
         }
         if ($video->thousand_eighty_video) {
             $videoFile[] = [
                 'content' => getVideoFile($video, 'thousand_eighty'),
-                'size'    => 1080,
+                'size' => 1080,
             ];
         }
 
         return json_decode(json_encode($videoFile, true));
-    }
-
-    private function storeHistory($itemId = null, $episodeId = null)
-    {
-        if (auth()->check()) {
-            if ($itemId) {
-                $history = History::where('user_id', auth()->id())->orderBy('id', 'desc')->limit(1)->first();
-                if (!$history || ($history && $history->item_id != $itemId)) {
-                    $history          = new History();
-                    $history->user_id = auth()->id();
-                    $history->item_id = $itemId;
-                    $history->save();
-                }
-            }
-            if ($episodeId) {
-                $history = History::where('user_id', auth()->id())->orderBy('id', 'desc')->limit(1)->first();
-                if (!$history || ($history && $history->episode_id != $episodeId)) {
-                    $history             = new History();
-                    $history->user_id    = auth()->id();
-                    $history->episode_id = $episodeId;
-                    $history->save();
-                }
-            }
-        }
-    }
-
-    protected function storeVideoReport($itemId = null, $episodeId = null)
-    {
-        $deviceId = md5($_SERVER['HTTP_USER_AGENT']);
-
-        if ($itemId) {
-            $report = VideoReport::whereDate('created_at', now())->where('device_id', $deviceId)->where('item_id', $itemId)->exists();
-        }
-
-        if ($episodeId) {
-            $report = VideoReport::whereDate('created_at', now())->where('device_id', $deviceId)->where('episode_id', $episodeId)->exists();
-        }
-        if (!$report) {
-            $videoReport             = new VideoReport();
-            $videoReport->device_id  = $deviceId;
-            $videoReport->item_id    = $itemId ?? 0;
-            $videoReport->episode_id = $episodeId ?? 0;
-            $videoReport->save();
-        }
     }
 
     private function getItemSeoContent($item)
@@ -429,30 +370,92 @@ class SiteController extends Controller
 
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
-            $seoContents['keywords']           = $translate->translated_keywords ?? [];
-            $seoContents['social_title']       = $translate->translated_title;
-            $seoContents['description']        = strLimit(strip_tags($translate->translated_description), 150);
+            $seoContents['keywords'] = $translate->translated_keywords ?? [];
+            $seoContents['social_title'] = $translate->translated_title;
+            $seoContents['description'] = strLimit(strip_tags($translate->translated_description), 150);
             $seoContents['social_description'] = strLimit(strip_tags($translate->translated_description), 150);
         } else {
-            $seoContents['keywords']           = $item->meta_keywords ?? [];
-            $seoContents['social_title']       = $item->title;
-            $seoContents['description']        = strLimit(strip_tags($item->description), 150);
+            $seoContents['keywords'] = $item->meta_keywords ?? [];
+            $seoContents['social_title'] = $item->title;
+            $seoContents['description'] = strLimit(strip_tags($item->description), 150);
             $seoContents['social_description'] = strLimit(strip_tags($item->description), 150);
         }
-        $seoContents['image']              = getImage(getFilePath('item_landscape') . '/' . $item->image->landscape);
-        $seoContents['image_size']         = '900x600';
+        $seoContents['image'] = getImage(getFilePath('item_landscape') . '/' . $item->image->landscape);
+        $seoContents['image_size'] = '900x600';
         return $seoContents;
     }
 
-    private function relatedItems($itemId, $itemType)
+    public function watchAudio($slug, $episodeId = null)
     {
-        return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
+        $item = Item::active()->where('slug', $slug)->firstOrFail();
+        $item->increment('view');
+
+
+        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
+
+        if ($item->item_type == Status::EPISODE_ITEM) {
+            $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
+            $relatedItems = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
+            $pageTitle = 'Episode Details';
+
+            if ($episodes->isEmpty()) {
+                $notify[] = ['error', 'Oops! There is no audio'];
+                return back()->withNotify($notify);
+            }
+
+            $subscribedUser = auth()->check() && (auth()->user()->exp > now());
+            if ($episodeId) {
+                $episode = Episode::hasAudio()->findOrFail($episodeId);
+                $firstAudio = $episode->audio;
+                $isPaidItem = $episode->version ? Status::ENABLE : Status::DISABLE;
+                $activeEpisode = $episode;
+            } else {
+                $firstAudio = $episodes[0]->audio;
+                $activeEpisode = $episodes[0];
+                $isPaidItem = $activeEpisode->version ? Status::ENABLE : Status::DISABLE;
+                $episodeId = $activeEpisode->id;
+            }
+
+            $this->storeHistory(episodeId: $activeEpisode->id);
+            $this->storeVideoReport(episodeId: $activeEpisode->id);
+
+            $audio = $firstAudio;
+            $checkWatchEligable = $this->checkWatchEligableEpisode($activeEpisode, $userHasSubscribed);
+        } else {
+            $this->storeHistory($item->id);
+            $this->storeVideoReport($item->id);
+
+            $pageTitle = 'Movie Details';
+            $relatedItems = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
+            $episodes = [];
+            $video = $item->video;
+            $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+        }
+
+        $watchEligable = $checkWatchEligable[0];
+        $hasSubscribedItem = $checkWatchEligable[1];
+
+        if (!$audio) {
+            $notify[] = ['error', 'There are no audio for this item'];
+            return back()->withNotify($notify);
+        }
+
+        $adsTime = $audio->getAds() ?? [];
+        $audios = $this->audioList($audio);
+        $seoContents = $this->getItemSeoContent($item);
+
+        return view($this->activeTemplate . 'previewAudio', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+    }
+
+    private function relatedAudios($itemId, $itemType)
+    {
+        return Item::hasAudio()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
     }
 
     public function category($id)
     {
-        $category  = Category::findOrFail($id);
-        $items     = Item::hasVideo()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
+        $category = Category::findOrFail($id);
+        $items = Item::hasVideo()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
         $pageTitle = $category->name;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category'));
     }
@@ -460,9 +463,31 @@ class SiteController extends Controller
     public function subCategory($id)
     {
         $subcategory = SubCategory::findOrFail($id);
-        $items       = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
-        $pageTitle   = $subcategory->name;
+        $items = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+        $pageTitle = $subcategory->name;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory'));
+    }
+
+    public function loadMore(Request $request)
+    {
+        if (isset($request->category_id)) {
+            $data['category'] = Category::find($request->category_id);
+            $data['items'] = Item::hasVideo()->where('category_id', $request->category_id)->orderBy('id', 'desc')->where('id', '<', $request->id)->take(6)->get();
+        } else if (isset($request->subcategory_id)) {
+            $data['sub_category'] = SubCategory::find($request->subcategory_id);
+            $data['items'] = Item::hasVideo()->where('sub_category_id', $request->subcategory_id)->orderBy('id', 'desc')->where('id', '<', $request->id)->take(6)->get();
+        } else if (isset($request->search)) {
+            $data['search'] = $request->search;
+            $data['items'] = Item::hasVideo()->search($request->search)->orderBy('id', 'desc')->where('id', '<', $request->id)->take(6)->get();
+        } else {
+            return response('end');
+        }
+
+        if ($data['items']->count() <= 0) {
+            return response('end');
+        }
+
+        return view($this->activeTemplate . 'item_ajax', $data);
     }
 
     public function search(Request $request)
@@ -479,38 +504,17 @@ class SiteController extends Controller
         $pageTitle = "Result Showing For " . $search;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'search'));
     }
-    public function loadMore(Request $request)
-    {
-        if (isset($request->category_id)) {
-            $data['category'] = Category::find($request->category_id);
-            $data['items']    = Item::hasVideo()->where('category_id', $request->category_id)->orderBy('id', 'desc')->where('id', '<', $request->id)->take(6)->get();
-        } else if (isset($request->subcategory_id)) {
-            $data['sub_category'] = SubCategory::find($request->subcategory_id);
-            $data['items']        = Item::hasVideo()->where('sub_category_id', $request->subcategory_id)->orderBy('id', 'desc')->where('id', '<', $request->id)->take(6)->get();
-        } else if (isset($request->search)) {
-            $data['search'] = $request->search;
-            $data['items']  = Item::hasVideo()->search($request->search)->orderBy('id', 'desc')->where('id', '<', $request->id)->take(6)->get();
-        } else {
-            return response('end');
-        }
-
-        if ($data['items']->count() <= 0) {
-            return response('end');
-        }
-
-        return view($this->activeTemplate . 'item_ajax', $data);
-    }
 
     public function policy($id, $slug)
     {
-        $item      = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
+        $item = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'item'));
     }
 
     public function links($id, $slug)
     {
-        $item      = Frontend::where('id', $id)->where('data_keys', 'short_links.element')->firstOrFail();
+        $item = Frontend::where('id', $id)->where('data_keys', 'short_links.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'item'));
     }
@@ -523,7 +527,7 @@ class SiteController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
-        $subscribe        = new Subscriber();
+        $subscribe = new Subscriber();
         $subscribe->email = $request->email;
         $subscribe->save();
         return response()->json(['success' => 'Subscribe successfully']);
@@ -532,15 +536,15 @@ class SiteController extends Controller
     public function liveTelevision($id = 0)
     {
         $pageTitle = 'Live TV list';
-        $tvs       = LiveTelevision::where('status', 1)->get();
+        $tvs = LiveTelevision::where('status', 1)->get();
         return view($this->activeTemplate . 'live_tvs', compact('pageTitle', 'tvs'));
     }
 
     public function watchTelevision($id)
     {
-        $tv        = LiveTelevision::active()->findOrFail($id);
+        $tv = LiveTelevision::active()->findOrFail($id);
         $pageTitle = $tv->title;
-        $otherTvs  = LiveTelevision::active()->where('id', '!=', $id)->get();
+        $otherTvs = LiveTelevision::active()->where('id', '!=', $id)->get();
         return view($this->activeTemplate . 'watch_tv', compact('pageTitle', 'tv', 'otherTvs'));
     }
 
@@ -548,7 +552,7 @@ class SiteController extends Controller
     {
         if (!auth()->check()) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'You must be login to add an item to wishlist',
             ]);
         }
@@ -558,28 +562,28 @@ class SiteController extends Controller
         if ($request->type == 'item') {
             $data = Item::where('id', $request->id)->first();
         } else {
-            $data              = Episode::where('id', $request->id)->first();
+            $data = Episode::where('id', $request->id)->first();
             $wishlist->item_id = $data->item_id;
         }
         if (!$data) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'Invalid request',
             ]);
         }
-        $column            = $request->type . '_id';
+        $column = $request->type . '_id';
         $wishlist->$column = $data->id;
-        $exits             = Wishlist::where($column, $data->id)->where('user_id', auth()->id())->first();
+        $exits = Wishlist::where($column, $data->id)->where('user_id', auth()->id())->first();
         if (!$exits) {
             $wishlist->user_id = auth()->id();
             $wishlist->save();
             return response()->json([
-                'status'  => 'success',
+                'status' => 'success',
                 'message' => 'Video added to wishlist successfully',
             ]);
         }
         return response()->json([
-            'status'  => 'error',
+            'status' => 'error',
             'message' => 'Already in wishlist',
         ]);
     }
@@ -588,22 +592,22 @@ class SiteController extends Controller
     {
         if (!auth()->check()) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'You must be login to add an item to wishlist',
             ]);
         }
 
-        $column   = $request->type . '_id';
+        $column = $request->type . '_id';
         $wishlist = Wishlist::where($column, $request->id)->where('user_id', auth()->id())->first();
         if (!$wishlist) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'Invalid Request',
             ]);
         }
         $wishlist->delete();
         return response()->json([
-            'status'  => 'success',
+            'status' => 'success',
             'message' => 'Video removed from wishlist successfully',
         ]);
     }
@@ -631,10 +635,10 @@ class SiteController extends Controller
             return ['success' => true, 'message' => 'Already exists'];
         }
 
-        $deviceToken          = new DeviceToken();
+        $deviceToken = new DeviceToken();
         $deviceToken->user_id = auth()->user()->id;
-        $deviceToken->token   = $request->token;
-        $deviceToken->is_app  = 0;
+        $deviceToken->token = $request->token;
+        $deviceToken->is_app = 0;
         $deviceToken->save();
 
         return ['success' => true, 'message' => 'Token save successfully'];
@@ -649,21 +653,31 @@ class SiteController extends Controller
 
     public function pusher($socketId, $channelName)
     {
-        $general      = gs();
+        $general = gs();
         $pusherSecret = $general->pusher_config->app_secret_key;
-        $str          = $socketId . ":" . $channelName;
-        $hash         = hash_hmac('sha256', $str, $pusherSecret);
+        $str = $socketId . ":" . $channelName;
+        $hash = hash_hmac('sha256', $str, $pusherSecret);
         return response()->json([
             'success' => true,
             'message' => "Pusher authentication successfully",
-            'auth'    => $general->pusher_config->app_key . ":" . $hash,
+            'auth' => $general->pusher_config->app_key . ":" . $hash,
         ]);
     }
 
     public function subscription()
     {
         $pageTitle = 'Subscribe';
-        $plans     = Plan::active()->paginate(getPaginate());
+        $plans = Plan::active()->paginate(getPaginate());
         return view($this->activeTemplate . 'subscription', compact('pageTitle', 'plans'));
+    }
+
+    private function audioList($audio)
+    {
+        $audioFile[] = [
+            'content' => getAudioFile($audio),
+            'size' => 360,
+        ];
+
+        return json_decode(json_encode($audioFile, true));
     }
 }
