@@ -6,14 +6,14 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
                         <div class="main-video">
-                            <video class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
+                            <audio class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($audios as $audio)
                                     <source src="{{ $audio->content }}" type="audio" />
                                 @endforeach
                                 @foreach ($subtitles ?? [] as $subtitle)
                                     <track kind="captions" label="{{ $subtitle->language }}" src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}" srclang="{{ $subtitle->code }}" />
                                 @endforeach
-                            </video>
+                            </audio>
                             @if ($item->version == Status::RENT_VERSION && !$watchEligable)
                                 <div class="main-video-lock">
                                     <div class="main-video-lock-content">
@@ -358,7 +358,7 @@
                     @foreach ($audios as $audio)
                 {
                     src: "{{ $audio->content }}",
-                    type: 'mp3',
+                    type: 'audio',
                 },
                 @endforeach
             ];
