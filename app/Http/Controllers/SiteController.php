@@ -443,7 +443,7 @@ class SiteController extends Controller
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
 
-        return view($this->activeTemplate . 'previewAudio', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'previewAudio', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
     private function relatedAudios($itemId, $itemType)
