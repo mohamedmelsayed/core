@@ -32,9 +32,9 @@
                         <div class="ad-video position-relative d-none">
                             <video class="ad-player" style="display: none" id="ad-video"></video>
                             <div class="ad-links d-none">
-                                @foreach ($adsTime ?? [] as $ads)
-                                    <source src="{{ $ads }}" type="video/mp4" />
-                                @endforeach
+{{--                                @foreach ($adsTime ?? [] as $ads)--}}
+{{--                                    <source src="{{ $ads }}" type="video/mp4" />--}}
+{{--                                @endforeach--}}
                             </div>
                             <div class="d-flex justify-content-between align-items-center flex-wrap  skip-video">
                                 <span class="advertise-text d-none">@lang('Advertisement') - <span class="remains-ads-time">00:52</span></span>
@@ -385,14 +385,14 @@
 
             const skipButton = $('#skip-button');
 
-            const adItems = [
-                    @foreach ($adsTime as $key => $ads)
-                {
-                    timing: "{{ $key }}",
-                    source: "{{ $ads }}"
-                },
-                @endforeach
-            ];
+            {{--const adItems = [--}}
+            {{--        @foreach ($adsTime as $key => $ads)--}}
+            {{--    {--}}
+            {{--        timing: "{{ $key }}",--}}
+            {{--        source: "{{ $ads }}"--}}
+            {{--    },--}}
+            {{--    @endforeach--}}
+            {{--];--}}
 
             const adPlayer = new Plyr('.ad-player', {
                 clickToPlay: false,
