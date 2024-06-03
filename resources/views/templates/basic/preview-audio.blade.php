@@ -6,8 +6,6 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
                         <div class="main-video">
-
-
                             <video class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($audios as $audio)
                                     <source src="{{ $audio->content }}" type="audio" />

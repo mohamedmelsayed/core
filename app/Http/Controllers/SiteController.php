@@ -442,7 +442,6 @@ class SiteController extends Controller
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
-        dd($audios, $seoContents);
         return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
