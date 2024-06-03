@@ -8,7 +8,7 @@
                         <div class="main-video">
                             <video class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($audios as $audio)
-                                    <source src="{{ $audio->content }}" type="audio/mp3" size="{{ $audio->size }}" />
+                                    <source src="{{ $audio->content }}" type="mp3" size="{{ $audio->size }}" />
                                 @endforeach
                                 @foreach ($subtitles ?? [] as $subtitle)
                                     <track kind="captions" label="{{ $subtitle->language }}" src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}" srclang="{{ $subtitle->code }}" />
@@ -358,7 +358,7 @@
                     @foreach ($audios as $audio)
                 {
                     src: "{{ $audio->content }}",
-                    type: 'audio',
+                    type: 'mp3',
                 },
                 @endforeach
             ];
