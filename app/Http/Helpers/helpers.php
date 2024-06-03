@@ -466,7 +466,7 @@ function getAudioFile($audio) {
         return false;
     }
     $serverName   = 1;
-    $AudioQuality = '$content';
+    $AudioQuality = 'content';
 
     $content = $audio->$AudioQuality;
     $server  = $audio->$serverName;
