@@ -6,14 +6,14 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
                         <div class="main-video">
-                            <audio class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
+                            <video class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($audios as $audio)
                                     <source src="{{ $audio->content }}" type="video/mp4" size="{{ $audio->size }}" />
                                 @endforeach
                                 @foreach ($subtitles ?? [] as $subtitle)
                                     <track kind="captions" label="{{ $subtitle->language }}" src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}" srclang="{{ $subtitle->code }}" />
                                 @endforeach
-                            </audio>
+                            </video>
                             @if ($item->version == Status::RENT_VERSION && !$watchEligable)
                                 <div class="main-video-lock">
                                     <div class="main-video-lock-content">
@@ -28,7 +28,7 @@
                             @endif
                         </div>
                         <div class="ad-video position-relative d-none">
-                            <audio class="ad-player" style="display: none" id="ad-video"></audio>
+                            <video class="ad-player" style="display: none" id="ad-video"></video>
                             <div class="ad-links d-none">
 {{--                                @foreach ($adsTime ?? [] as $ads)--}}
 {{--                                    <source src="{{ $ads }}" type="video/mp4" />--}}
@@ -398,12 +398,12 @@
             });
 
             let firstAd = false;
-            const result = adItems.filter((obj) => {
-                if (obj.timing == 0) {
-                    firstAd = true;
-                    return obj;
-                }
-            });
+            // const result = adItems.filter((obj) => {
+            //     if (obj.timing == 0) {
+            //         firstAd = true;
+            //         return obj;
+            //     }
+            // });
 
             if (firstAd) {
                 adPlayer.source = {
@@ -534,7 +534,7 @@
 
 
             function initData() {
-                const video = document.querySelector('audio');
+                const video = document.querySelector('video');
                 $.each(data, function() {
                     if (!Hls.isSupported()) {
                         video.src = this.src;
