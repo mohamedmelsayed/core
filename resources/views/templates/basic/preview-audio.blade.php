@@ -357,11 +357,10 @@
 
 
             var data = [
-                    @foreach ($videos as $video)
+                    @foreach ($audios as $audio)
                 {
-                    src: "{{ $video->content }}",
-                    type: 'video/mp4',
-                    size: "{{ $video->size }}",
+                    src: "{{ $audio->content }}",
+                    type: 'mp3',
                 },
                 @endforeach
             ];
