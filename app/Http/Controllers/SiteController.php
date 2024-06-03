@@ -241,7 +241,6 @@ class SiteController extends Controller
         $adsTime = $video->getAds() ?? [];
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
-        dd($videos);
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
@@ -442,6 +441,7 @@ class SiteController extends Controller
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
+        dd($audios, $seoContents);
         return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
