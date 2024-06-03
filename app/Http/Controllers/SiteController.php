@@ -185,6 +185,7 @@ class SiteController extends Controller
 
     public function watchVideo($slug, $episodeId = null)
     {
+        dd("p");
         $item = Item::active()->where('slug', $slug)->with('video.subtitles')->firstOrFail();
         $item->increment('view');
 
