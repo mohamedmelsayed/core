@@ -407,10 +407,10 @@
 
             if (firstAd) {
                 adPlayer.source = {
-                    type: 'video',
+                    type: 'audio',
                     sources: [{
                         src: $('.ad-links').children('source:first').attr('src'),
-                        type: 'video/mp4'
+                        type: 'audio/mp4'
                     }],
                 };
                 player.pause();
@@ -430,10 +430,10 @@
                     if (currentTime >= adItem.timing && !adItem.played) {
                         skipButton.addClass('d-none');
                         adPlayer.source = {
-                            type: 'video',
+                            type: 'audio',
                             sources: [{
                                 src: $('.ad-links').children('source').eq(i).attr('src'),
-                                type: 'video/mp4'
+                                type: 'audio/mp4'
                             }],
                             poster: "{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}",
                         };
