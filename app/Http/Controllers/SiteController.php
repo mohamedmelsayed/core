@@ -241,6 +241,7 @@ class SiteController extends Controller
         $adsTime = $video->getAds() ?? [];
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
+        dd($videos);
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
