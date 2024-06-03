@@ -476,9 +476,9 @@ function getAudioFile($audio) {
     if($server==Status::LINK){
         return $content;
     }
-     dd( 'assets/audio/' . $content);
     if ($server == Status::CURRENT_SERVER) {
-        $videoFile = asset('assets/audio/' . $content);
+        $videoFile = asset($content);
+        dd($videoFile);
     } else if ($server == Status::FTP_SERVER) {
         $general   = gs();
         $videoFile = $general->ftp->domain . '/' . $content;
