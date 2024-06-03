@@ -440,7 +440,6 @@ class SiteController extends Controller
             return back()->withNotify($notify);
         }
 
-        $adsTime = $audio->getAds() ?? [];
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
 
