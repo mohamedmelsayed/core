@@ -357,7 +357,7 @@ class ItemController extends Controller
                 return ['error' => true, 'message' => 'Could not upload the Video'];
             }
 
-            $audio  = $audioUploader->fileName;
+            $audioFilePath  = $audioUploader->fileName;
             $server = $audioUploader->uploadedServer;
         } else {
             $removeFile          = new VideoUploader();
@@ -372,7 +372,9 @@ class ItemController extends Controller
             $audio = new Audio();
             $audio->item_id = $item->id;
         }
-        dd($audio);
+        $audio->audio_type = $request->audio_type;
+//        $audio->server = $request->link ;
+        $audio->content = $audioFilePath;
         $audio->save();
 
         return response()->json(['success' => 'Audio uploaded successfully']);
