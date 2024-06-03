@@ -372,7 +372,7 @@ class ItemController extends Controller
             $audio = new Audio();
             $audio->item_id = $item->id;
         }
-
+        dd($audio);
         $audio->save();
 
         return response()->json(['success' => 'Audio uploaded successfully']);
@@ -408,7 +408,6 @@ class ItemController extends Controller
         $image = getImage(getFilePath('item_landscape') . @$item->image->landscape);
         $general = gs();
         $videoFile = getVideoFile($video);
-        // dd($videoFile);
 
         $prevUrl = route('admin.item.index');
         return view('admin.item.video.update', compact('item', 'pageTitle', 'video', 'videoFile', 'image', 'prevUrl'));
