@@ -425,7 +425,7 @@ class SiteController extends Controller
             $this->storeHistory($item->id);
             $this->storeVideoReport($item->id);
 
-            $pageTitle = 'Movie Details';
+            $pageTitle = 'Audio Details';
             $relatedItems = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
             $episodes = [];
             $audio = $item->audio;
@@ -439,6 +439,7 @@ class SiteController extends Controller
             $notify[] = ['error', 'There are no audio for this item'];
             return back()->withNotify($notify);
         }
+        dd($audio);
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
