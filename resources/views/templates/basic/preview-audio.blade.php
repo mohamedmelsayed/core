@@ -534,7 +534,7 @@
 
 
             function initData() {
-                const video = document.querySelector('video');
+                const video = document.querySelector('audio');
                 $.each(data, function() {
                     if (!Hls.isSupported()) {
                         video.src = this.src;
