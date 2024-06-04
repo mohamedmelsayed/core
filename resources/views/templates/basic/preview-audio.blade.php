@@ -236,7 +236,16 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            const players = Array.from(document.querySelectorAll('.audio-player')).map(p => new Plyr(p, playerOptions));
+            const players = Array.from(document.querySelectorAll('.audio-player')).map(p => {
+                const player = new Plyr(p, playerOptions);
+                player.on('ready', () => {
+                    const downloadButton = player.elements.controls.querySelector('.plyr__control--download');
+                    if (downloadButton) {
+                        downloadButton.style.display = 'none';
+                    }
+                });
+                return player;
+            });
         });
     </script>
     <style>
@@ -244,5 +253,6 @@
             display: none !important;
         }
     </style>
+
 @endpush
 
