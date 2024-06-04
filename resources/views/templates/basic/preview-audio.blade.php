@@ -211,8 +211,13 @@
         </div>
     </section>
 @endsection
-
+<style>
+    .plyr__controls__item[title="Download"] {
+        display: none !important;
+    }
+</style>
 @push('script')
+
     <script src="{{ asset($activeTemplateTrue . 'js/plyr.js') }}"></script>
     <script>
         const playerOptions = {
