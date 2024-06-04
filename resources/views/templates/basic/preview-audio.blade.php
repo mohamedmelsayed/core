@@ -215,44 +215,7 @@
 @push('script')
     <script src="{{ asset($activeTemplateTrue . 'js/plyr.js') }}"></script>
     <script>
-        const playerOptions = {
-            controls: [
-                'play-large', // The large play button in the center
-                'play', // Play/pause playback
-                'progress', // The progress bar and scrubber for playback and buffering
-                'current-time', // The current time of playback
-                'duration', // The full duration of the media
-                'mute', // Toggle mute
-                'volume', // Volume control
-                'settings', // Settings menu
-                'fullscreen' // Toggle fullscreen
-            ],
-            settings: ['captions', 'quality', 'speed'], // Custom settings menu options, excluding 'download'
-            disableContextMenu: true, // Disable the right-click context menu which includes download
-            tooltips: {
-                controls: true,
-                seek: true
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const players = Array.from(document.querySelectorAll('.audio-player')).map(p => {
-                const player = new Plyr(p, playerOptions);
-                player.on('ready', () => {
-                    const downloadButton = player.elements.controls.querySelector('.plyr__control--download');
-                    if (downloadButton) {
-                        downloadButton.style.display = 'none';
-                    }
-                });
-                return player;
-            });
-        });
+        const players = Array.from(document.querySelectorAll('.audio-player')).map(p => new Plyr(p));
     </script>
-    <style>
-        .plyr__control--download {
-            display: none !important;
-        }
-    </style>
-
 @endpush
 
