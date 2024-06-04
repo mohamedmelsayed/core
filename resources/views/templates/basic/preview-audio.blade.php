@@ -193,7 +193,9 @@
                 'volume', // Volume control
                 'settings', // Settings menu
                 'fullscreen' // Toggle fullscreen
-            ]
+            ],
+            settings: ['captions', 'quality', 'speed'], // Custom settings menu options
+            disableContextMenu: true // Disable the right-click context menu which includes download
         };
 
         const players = Array.from(document.querySelectorAll('.audio-player')).map(p => new Plyr(p, playerOptions));
