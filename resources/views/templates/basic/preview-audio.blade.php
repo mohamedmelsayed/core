@@ -164,7 +164,7 @@
                                 <img src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}" alt="audio">
                             </div>
                             <div class="audio-item__content">
-                                <h3 class="title"><a href="{{ route('watch', $relatedItem->id) }}">{{ __($relatedItem->title) }}</a></h3>
+                                <h3 class="title"><a href="{{ route('preview.audio', $relatedItem->id) }}">{{ __($relatedItem->title) }}</a></h3>
                                 <p>{{ strLimit(strip_tags($relatedItem->description), 150) }}</p>
                                 <div class="audio-widget-area d-flex align-items-center justify-content-between flex-wrap">
                                     <span class="audio-widget"><i class="lar la-star text--warning"></i> {{ getAmount($relatedItem->ratings) }}</span>
