@@ -211,13 +211,8 @@
         </div>
     </section>
 @endsection
-<style>
-    .plyr__controls__item[title="Download"] {
-        display: none !important;
-    }
-</style>
-@push('script')
 
+@push('script')
     <script src="{{ asset($activeTemplateTrue . 'js/plyr.js') }}"></script>
     <script>
         const playerOptions = {
@@ -244,5 +239,10 @@
             const players = Array.from(document.querySelectorAll('.audio-player')).map(p => new Plyr(p, playerOptions));
         });
     </script>
+    <style>
+        .plyr__control--download {
+            display: none !important;
+        }
+    </style>
 @endpush
 
