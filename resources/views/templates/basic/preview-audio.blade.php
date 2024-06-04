@@ -6,7 +6,7 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="audio-item">
                         <div class="main-audio">
-                            <audio class="audio-player plyr-audio" controls
+                            <audio class="audio-player plyr-audio" controls controlsList="nodownload"
                                    data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($audios as $audio)
                                     <source src="{{ $audio->content }}" type="audio/mp3"/>
