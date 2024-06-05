@@ -187,12 +187,12 @@
                 @foreach ($relatedItems as $relatedItem)
                     <div class="col-xl-3 col-lg-4 col-sm-6 mb-30">
                         <div class="audio-item">
-                            <div class="audio-item__img">
+                            <div class="movie-thumb">
                                 <img
                                     src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}"
                                     alt="audio">
                             </div>
-                            <div class="audio-item__content">
+                            <div class="movie-thumb-overlay">
                                 <h3 class="title"><a
                                         href="{{ route('preview.audio', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
                                 </h3>
