@@ -194,7 +194,7 @@
                             </div>
                             <div class="audio-item__content">
                                 <h3 class="title"><a
-                                        href="{{ route('preview.audio', $relatedItem->id) }}">{{ __($relatedItem->title) }}</a>
+                                        href="{{ route('preview.audio', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
                                 </h3>
                                 <p>{{ strLimit(strip_tags($relatedItem->description), 150) }}</p>
                                 <div
