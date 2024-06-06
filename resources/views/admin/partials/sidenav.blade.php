@@ -93,8 +93,8 @@
                     
                 </li>
 
-                <li class="sidebar-menu-item {{ menuActive('admin.item.defaults.form') }}">
-                    <a class="nav-link" href="{{ route('admin.item.defaults.form') }}">
+                <li class="sidebar-menu-item {{ menuActive('admin.defaults.item.defaults.form') }}">
+                    <a class="nav-link" href="{{ route('admin.defaults.item.defaults.form') }}">
                         <i class="menu-icon las la-cog"></i>
                         <span class="menu-title">@lang('Item Template')</span>
                     </a>
