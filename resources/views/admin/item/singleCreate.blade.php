@@ -156,17 +156,26 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label>@lang('Description')</label>
-                            <textarea class="form-control" name="description" rows="5" placeholder="@lang('Description')">{{ old('description') }}</textarea>
+                            <textarea class="form-control" name="description" rows="5" placeholder="@lang('Description')">{{ old('description', $defaults->description ?? '') }}</textarea>
+                       
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4  position-relative">
                             <label>@lang('Director')</label>
-                            <select class="form-control select2-auto-tokenize director-option" name="director[]" multiple="multiple" required></select>
+                            <select class="form-control select2-auto-tokenize director-option" name="director[]" multiple="multiple">
+                                @foreach (old('director', $defaults->directors ?? []) as $director)
+                                    <option value="{{ $director }}" selected>{{ $director }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-4  position-relative">
                             <label>@lang('Producer')</label>
-                            <select class="form-control select2-auto-tokenize producer-option" name="producer[]" multiple="multiple" required></select>
+                            <select class="form-control select2-auto-tokenize producer-option" name="producer[]" multiple="multiple">
+                                @foreach (old('producer', $defaults->producers ?? []) as $producer)
+                                    <option value="{{ $producer }}" selected>{{ $producer }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label>@lang('Ratings') <small class="text--primary">(@lang('maximum 10 star'))</small></label>
@@ -179,23 +188,39 @@
                     <div class="row">
                         <div class="form-group col-md-6  position-relative">
                             <label>@lang('Genres')</label>
-                            <select class="form-control select2-auto-tokenize genres-option" name="genres[]" multiple="multiple" required></select>
+                            <select class="form-control select2-auto-tokenize genres-option" name="genres[]" multiple="multiple">
+                                @foreach (old('genres', $defaults->genres ?? []) as $genre)
+                                    <option value="{{ $genre }}" selected>{{ $genre }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-6  position-relative">
                             <label>@lang('Languages')</label>
-                            <select class="form-control select2-auto-tokenize language-option" name="language[]" multiple="multiple" required></select>
+                            <select class="form-control select2-auto-tokenize language-option" name="language[]" multiple="multiple">
+                                @foreach (old('language', $defaults->languages ?? []) as $language)
+                                    <option value="{{ $language }}" selected>{{ $language }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6  position-relative">
                             <label class="form-control-label">@lang('Casts')</label>
                             <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
-                            <select class="form-control select2-auto-tokenize cast-option" name="casts[]" multiple="multiple" required></select>
+                            <select class="form-control select2-auto-tokenize cast-option" name="casts[]" multiple="multiple">
+                                @foreach (old('casts', $defaults->casts ?? []) as $cast)
+                                    <option value="{{ $cast }}" selected>{{ $cast }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-md-6 position-relative">
                             <label>@lang('Tags')</label>
                             <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
-                            <select class="form-control select2-auto-tokenize tag-option" name="tags[]" multiple="multiple" required></select>
+                            <select class="form-control select2-auto-tokenize tag-option" name="tags[]" multiple="multiple">
+                                @foreach (old('tags', $defaults->tags ?? []) as $tag)
+                                    <option value="{{ $tag }}" selected>{{ $tag }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
