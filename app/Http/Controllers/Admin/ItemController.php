@@ -11,6 +11,7 @@ use App\Lib\VideoUploader;
 use App\Models\Audio;
 use App\Models\Category;
 use App\Models\Episode;
+use App\Models\GeneralSetting;
 use App\Models\Item;
 use App\Models\Plan;
 use App\Models\SubCategory;
@@ -102,8 +103,10 @@ class ItemController extends Controller
                 $subcategory->where('status', 1);
             },
         ])->orderBy('id', 'desc')->get();
+        $generalSetting = GeneralSetting::where('key', 'item_template')->first();
+        $defaults = json_decode($generalSetting->value ?? '{}');
         $types = Plan::get();
-        return view('admin.item.singleCreate', compact('pageTitle', 'categories', 'types'));
+        return view('admin.item.singleCreate', compact('pageTitle', 'categories', 'types','defaults'));
     }
 
     public function store(Request $request)

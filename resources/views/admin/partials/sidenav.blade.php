@@ -93,6 +93,13 @@
                     
                 </li>
 
+                <li class="sidebar-menu-item {{ menuActive('admin.item.defaults.form') }}">
+                    <a class="nav-link" href="{{ route('admin.item.defaults.form') }}">
+                        <i class="menu-icon las la-cog"></i>
+                        <span class="menu-title">@lang('Item Template')</span>
+                    </a>
+                </li>
+
                 @if (gs('watch_party'))
                     <li class="sidebar-menu-item sidebar-dropdown">
                         <a class="{{ menuActive('admin.watch.party*', 3) }}" href="javascript:void(0)">

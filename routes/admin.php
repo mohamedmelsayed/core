@@ -95,6 +95,15 @@ Route::middleware('admin')->group(function () {
 
         Route::get('item/report/{id}/{videoId?}', 'report')->name('report');
 
+    
+
+    });
+
+    Route::controller('ItemDefaultsController')->name('defaults.')->group(function () {
+
+        Route::get('item', 'report')->name('item.defaults.form');
+        Route::post('item', 'store')->name('item.defaults.store');
+
     });
 
     //EpisodeController
