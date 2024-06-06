@@ -46,6 +46,6 @@ class ItemDefaultsController extends Controller
       $generalSetting->item_template= json_encode($defaults);
        $generalSetting->update();
 
-        return redirect()->route('admin.item.defaults.form')->with('success', 'Default values saved successfully.');
+        return redirect()->route('admin.defaults.item.defaults.form')->with('success', 'Default values saved successfully.');
     }
 }
