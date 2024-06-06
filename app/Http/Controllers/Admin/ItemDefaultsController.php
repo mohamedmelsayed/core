@@ -10,10 +10,12 @@ class ItemDefaultsController extends Controller
 {
     public function showForm()
     {
+        $pageTitle = "Item Defaults";
+
         $generalSetting = GeneralSetting::first();
         $defaults = json_decode($generalSetting->item_template ?? '{}');
 
-        return view('admin.item_defaults', compact('defaults'));
+        return view('admin.item_defaults', compact('defaults','pageTitle'));
     }
 
     public function store(Request $request)
