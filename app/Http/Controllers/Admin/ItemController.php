@@ -103,8 +103,9 @@ class ItemController extends Controller
                 $subcategory->where('status', 1);
             },
         ])->orderBy('id', 'desc')->get();
-        $generalSetting = GeneralSetting::where('key', 'item_template')->first();
-        $defaults = json_decode($generalSetting->value ?? '{}');
+        $generalSetting = GeneralSetting::first();
+
+        $defaults = json_decode($generalSetting->item_template ?? '{}');
         $types = Plan::get();
         return view('admin.item.singleCreate', compact('pageTitle', 'categories', 'types','defaults'));
     }

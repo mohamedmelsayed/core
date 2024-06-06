@@ -10,8 +10,8 @@ class ItemDefaultsController extends Controller
 {
     public function showForm()
     {
-        $generalSetting = GeneralSetting::where('key', 'item_template')->first();
-        $defaults = json_decode($generalSetting->value ?? '{}');
+        $generalSetting = GeneralSetting::first();
+        $defaults = json_decode($generalSetting->item_template ?? '{}');
 
         return view('admin.item_defaults', compact('defaults'));
     }
@@ -39,11 +39,10 @@ class ItemDefaultsController extends Controller
             'casts' => $request->default_casts,
             'tags' => $request->default_tags,
         ];
+        $generalSetting = GeneralSetting::first();
 
-        GeneralSetting::updateOrCreate(
-            ['key' => 'item_template'],
-            ['value' => json_encode($defaults)]
-        );
+      $generalSetting->item_template= json_encode($defaults);
+       $generalSetting->update();
 
         return redirect()->route('admin.item.defaults.form')->with('success', 'Default values saved successfully.');
     }
