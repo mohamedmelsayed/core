@@ -189,11 +189,13 @@
     #audio-player {
         width: 100%;
         margin: 0 auto;
-        position: relative; /* Position relative for absolute positioning of time indicator */
+        position: relative;
+        /* Position relative for absolute positioning of time indicator */
     }
 
     #waveform {
-        height: 300px; /* Adjust height as needed */
+        height: 150px;
+        /* Adjust height as needed */
         background-color: #f0f0f0;
     }
 
@@ -204,7 +206,8 @@
         width: 100%;
         text-align: center;
         padding: 5px 0;
-        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+        background-color: rgba(255, 255, 255, 0.8);
+        /* Semi-transparent background */
     }
 </style>
 
@@ -239,7 +242,11 @@
         });
         // Stop audio by double-clicking on waveform
         document.getElementById('waveform').addEventListener('dblclick', function() {
-            wavesurfer.stop();
+            if (wavesurfer.isPlaying()) {
+                wavesurfer.pause();
+            } else {
+                wavesurfer.play();
+            }
         });
 
         // Stop audio by pressing spacebar
@@ -254,8 +261,8 @@
             }
         });
 
-             // Helper function to format time (HH:MM:SS)
-             function formatTime(seconds) {
+        // Helper function to format time (HH:MM:SS)
+        function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
             return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
