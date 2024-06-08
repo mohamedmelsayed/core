@@ -188,13 +188,12 @@
 <style>
     #audio-player {
         width: 100%;
-        max-width: 500px; /* Adjust width as needed */
         margin: 0 auto;
         position: relative; /* Position relative for absolute positioning of time indicator */
     }
 
     #waveform {
-        height: 100px; /* Adjust height as needed */
+        height: 300px; /* Adjust height as needed */
         background-color: #f0f0f0;
     }
 
@@ -247,7 +246,11 @@
         document.addEventListener('keydown', function(event) {
             if (event.code === 'Space') {
                 event.preventDefault(); // Prevent default spacebar behavior (scrolling the page)
-                wavesurfer.stop();
+                if (wavesurfer.isPlaying()) {
+                    wavesurfer.pause();
+                } else {
+                    wavesurfer.play();
+                }
             }
         });
 
