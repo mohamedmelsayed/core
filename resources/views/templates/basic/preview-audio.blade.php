@@ -1,6 +1,6 @@
 @extends($activeTemplate . 'layouts.frontend')
 @section('content')
-<link rel="stylesheet" href="https://unpkg.com/wavesurfer.js/dist/wavesurfer.min.css">
+
 <section class="audio-details-section section--bg ptb-80">
     <div class="container">
         <div class="row @if (blank($episodes)) justify-content-center @endif mb-30-none">
@@ -184,8 +184,21 @@
 </section>
 @endsection
 
+<style>
+    #audio-player {
+        width: 100%;
+        max-width: 500px; /* Adjust width as needed */
+        margin: 0 auto;
+    }
+
+    #waveform {
+        height: 100px; /* Adjust height as needed */
+        background-color: #f0f0f0;
+    }
+</style>
+
 @push('script')
-<script src="{{ asset($activeTemplateTrue . 'js/plyr.js') }}"></script>
+<script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     const wavesurfer = WaveSurfer.create({
@@ -195,7 +208,7 @@
     });
 
     // Load the audio file
-    wavesurfer.load('{{ $audioFilePath }}');
+    wavesurfer.load('{{ $audios[0]->content }}');
 
     // When the audio is ready
     wavesurfer.on('ready', function () {
