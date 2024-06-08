@@ -213,7 +213,7 @@
     wavesurfer.on('ready', function () {
         // Analyze the audio to find loud points
         const peaks = wavesurfer.backend.getPeaks(1000); // Adjust the resolution as needed
-        const threshold = 0.8; // Adjust this value according to your needs
+        const threshold = 0.6; // Adjust this value according to your needs
 
         const loudPoints = [];
         for (let i = 0; i < peaks.length; i++) {
