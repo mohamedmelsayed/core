@@ -191,7 +191,8 @@
     }
 
     #waveform {
-        height: 100px; /* Adjust height as needed */
+        height: 100px;
+        /* Adjust height as needed */
         background-color: #f0f0f0;
     }
 </style>
@@ -199,31 +200,42 @@
 @push('script')
 <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    const wavesurfer = WaveSurfer.create({
+    document.addEventListener('DOMContentLoaded', function() {
+        const wavesurfer = WaveSurfer.create({
             container: '#waveform',
             waveColor: 'blue',
             progressColor: 'purple'
         });
 
-    // Load the audio file
-    wavesurfer.load('{{ $audios[0]->content }}');
-
-    // When the audio is ready
-    document.getElementById('waveform').addEventListener('click', function (event) {
+        // Load the audio file
+        wavesurfer.load('{{ $audios[0]->content }}');
+        wavesurfer.drawer.progress(0);
+        // When the audio is ready
+        document.getElementById('waveform').addEventListener('click', function(event) {
             const progress = event.offsetX / this.offsetWidth;
             wavesurfer.seekTo(progress);
             wavesurfer.play();
         });
 
         // Update the waveform display according to audio progress
-        wavesurfer.on('audioprocess', function (progress) {
+        wavesurfer.on('audioprocess', function(progress) {
             const currentTime = wavesurfer.getCurrentTime();
             const duration = wavesurfer.getDuration();
             const percentage = (currentTime / duration) * 100;
             wavesurfer.drawer.progress(percentage);
         });
-});
+        // Stop audio by double-clicking on waveform
+        document.getElementById('waveform').addEventListener('dblclick', function() {
+            wavesurfer.stop();
+        });
 
+        // Stop audio by pressing spacebar
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault(); // Prevent default spacebar behavior (scrolling the page)
+                wavesurfer.stop();
+            }
+        });
+    });
 </script>
 @endpush
