@@ -209,7 +209,7 @@
 
         // Load the audio file
         wavesurfer.load('{{ $audios[0]->content }}');
-        wavesurfer.drawer.progress(0);
+        wavesurfer.play();
         // When the audio is ready
         document.getElementById('waveform').addEventListener('click', function(event) {
             const progress = event.offsetX / this.offsetWidth;
