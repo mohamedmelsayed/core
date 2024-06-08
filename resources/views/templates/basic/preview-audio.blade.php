@@ -222,6 +222,12 @@
             }
         }
 
+        document.getElementById('waveform').addEventListener('click', function (event) {
+            const progress = event.offsetX / this.offsetWidth;
+            wavesurfer.seekTo(progress);
+            wavesurfer.play();
+        });
+
         // Display the loud points or use them for seeking
         loudPoints.forEach(point => {
             // Create a UI element to represent the loud point
