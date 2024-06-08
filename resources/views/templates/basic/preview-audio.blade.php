@@ -10,7 +10,7 @@
 
                         @foreach ($audios as $audio)
                         <div id="audio-player">
-                            <audio src="{{ $audio->content }}" controls></audio>
+                            <!-- <audio src="{{ $audio->content }}" controls></audio> -->
                             <div id="waveform"></div>
                         </div>
                         @endforeach
