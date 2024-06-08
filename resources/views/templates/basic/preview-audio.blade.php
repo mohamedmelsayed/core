@@ -187,7 +187,6 @@
 <style>
     #audio-player {
         width: 100%;
-        max-width: 500px; /* Adjust width as needed */
         margin: 0 auto;
     }
 
