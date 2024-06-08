@@ -199,45 +199,30 @@
 @push('script')
 <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
     const wavesurfer = WaveSurfer.create({
-        container: '#waveform',
-        waveColor: 'blue',
-        progressColor: 'purple'
-    });
+            container: '#waveform',
+            waveColor: 'blue',
+            progressColor: 'purple'
+        });
 
     // Load the audio file
     wavesurfer.load('{{ $audios[0]->content }}');
 
     // When the audio is ready
-    wavesurfer.on('ready', function () {
-        // Analyze the audio to find loud points
-        const peaks = wavesurfer.backend.getPeaks(1000); // Adjust the resolution as needed
-        const threshold = 0.6; // Adjust this value according to your needs
-
-        const loudPoints = [];
-        for (let i = 0; i < peaks.length; i++) {
-            if (peaks[i] > threshold) {
-                loudPoints.push(i / peaks.length * wavesurfer.getDuration());
-            }
-        }
-
-        document.getElementById('waveform').addEventListener('click', function (event) {
+    document.getElementById('waveform').addEventListener('click', function (event) {
             const progress = event.offsetX / this.offsetWidth;
             wavesurfer.seekTo(progress);
             wavesurfer.play();
         });
 
-    
-
-         // Update the waveform display according to audio progress
-         wavesurfer.on('audioprocess', function (progress) {
+        // Update the waveform display according to audio progress
+        wavesurfer.on('audioprocess', function (progress) {
             const currentTime = wavesurfer.getCurrentTime();
             const duration = wavesurfer.getDuration();
             const percentage = (currentTime / duration) * 100;
             wavesurfer.drawer.progress(percentage);
         });
-    });
 });
 
 </script>
