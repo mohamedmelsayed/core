@@ -241,6 +241,14 @@
                 wavesurfer.seekTo(point / wavesurfer.getDuration());
             });
         });
+
+         // Update the waveform display according to audio progress
+         wavesurfer.on('audioprocess', function (progress) {
+            const currentTime = wavesurfer.getCurrentTime();
+            const duration = wavesurfer.getDuration();
+            const percentage = (currentTime / duration) * 100;
+            wavesurfer.drawer.progress(percentage);
+        });
     });
 });
 
