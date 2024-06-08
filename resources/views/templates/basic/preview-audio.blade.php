@@ -228,19 +228,7 @@
             wavesurfer.play();
         });
 
-        // Display the loud points or use them for seeking
-        loudPoints.forEach(point => {
-            // Create a UI element to represent the loud point
-            const marker = document.createElement('div');
-            marker.classList.add('loud-point');
-            marker.style.left = (point / wavesurfer.getDuration() * 100) + '%';
-            document.querySelector('#waveform').appendChild(marker);
-
-            // When the marker is clicked, seek to the loud point
-            marker.addEventListener('click', function () {
-                wavesurfer.seekTo(point / wavesurfer.getDuration());
-            });
-        });
+    
 
          // Update the waveform display according to audio progress
          wavesurfer.on('audioprocess', function (progress) {
