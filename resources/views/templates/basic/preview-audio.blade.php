@@ -12,6 +12,7 @@
                         <div id="audio-player">
                             <!-- <audio src="{{ $audio->content }}" controls></audio> -->
                             <div id="waveform"></div>
+                            <div id="time-indicator"></div>
                         </div>
                         @endforeach
 
@@ -187,13 +188,24 @@
 <style>
     #audio-player {
         width: 100%;
+        max-width: 500px; /* Adjust width as needed */
         margin: 0 auto;
+        position: relative; /* Position relative for absolute positioning of time indicator */
     }
 
     #waveform {
-        height: 100px;
-        /* Adjust height as needed */
+        height: 100px; /* Adjust height as needed */
         background-color: #f0f0f0;
+    }
+
+    #time-indicator {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 5px 0;
+        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
     }
 </style>
 
@@ -220,9 +232,11 @@
         // Update the waveform display according to audio progress
         wavesurfer.on('audioprocess', function(progress) {
             const currentTime = wavesurfer.getCurrentTime();
+            const formattedTime = formatTime(currentTime);
             const duration = wavesurfer.getDuration();
             const percentage = (currentTime / duration) * 100;
             wavesurfer.drawer.progress(percentage);
+            document.getElementById('time-indicator').innerText = formattedTime;
         });
         // Stop audio by double-clicking on waveform
         document.getElementById('waveform').addEventListener('dblclick', function() {
@@ -236,6 +250,18 @@
                 wavesurfer.stop();
             }
         });
+
+             // Helper function to format time (HH:MM:SS)
+             function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+        }
+
+        // Helper function to add leading zero to single-digit numbers
+        function padZero(number) {
+            return number < 10 ? `0${number}` : number;
+        }
     });
 </script>
 @endpush
