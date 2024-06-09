@@ -10,9 +10,12 @@
 
                         @foreach ($audios as $audio)
                         <div id="audio-player">
-                            <audio id="audio" src="{{ $audio->content }}" controls></audio>
+                            <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
                             <div id="waveform"></div>
                             <div id="time-indicator"></div>
+                            <button id="play-pause">Play/Pause</button>
+                            <button id="volume-up">Volume Up</button>
+                            <button id="volume-down">Volume Down</button>
                         </div>
                         @endforeach
 
@@ -186,16 +189,16 @@
 @endsection
 
 <style>
-     #audio-player {
+    #audio-player {
         width: 100%;
-       /* max-width: 500px; /* Adjust width as needed */
+        max-width: 500px; /* Adjust width as needed */
         margin: 0 auto;
         position: relative; /* Position relative for absolute positioning of time indicator */
     }
 
     #waveform {
         height: 100px; /* Adjust height as needed */
-        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}") no-repeat center center; /* Set your transparent background image */
+        background: url('path/to/your/transparent-background.png') no-repeat center center; /* Set your transparent background image */
         background-size: cover; /* Adjust background size as needed */
     }
 
@@ -208,59 +211,96 @@
         padding: 5px 0;
         background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
     }
+
+    #play-pause, #volume-up, #volume-down {
+        margin-top: 10px;
+    }
 </style>
+
 
 @push('script')
 <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+     document.addEventListener('DOMContentLoaded', function () {
+        const audioElement = document.getElementById('audio');
+        const playPauseButton = document.getElementById('play-pause');
+        const volumeUpButton = document.getElementById('volume-up');
+        const volumeDownButton = document.getElementById('volume-down');
+
         const wavesurfer = WaveSurfer.create({
             container: '#waveform',
             waveColor: 'blue',
             progressColor: 'purple'
         });
-
         // Load the audio file
         wavesurfer.load('{{ $audios[0]->content }}');
         wavesurfer.play();
-        // When the audio is ready
-        document.getElementById('waveform').addEventListener('click', function(event) {
-            const progress = event.offsetX / this.offsetWidth;
-            wavesurfer.seekTo(progress);
+      
+            // Sync Wavesurfer with audio element
+            wavesurfer.on('ready', function () {
+            wavesurfer.setVolume(0); // Mute Wavesurfer as audio is played by the audio element
+            audioElement.currentTime = wavesurfer.getCurrentTime();
+        });
+
+        audioElement.addEventListener('play', function () {
             wavesurfer.play();
         });
 
-        // Update the waveform display according to audio progress
-        wavesurfer.on('audioprocess', function(progress) {
-            const currentTime = wavesurfer.getCurrentTime();
-            const formattedTime = formatTime(currentTime);
-            const duration = wavesurfer.getDuration();
-            const percentage = (currentTime / duration) * 100;
-            wavesurfer.drawer.progress(percentage);
-            document.getElementById('time-indicator').innerText = formattedTime;
+        audioElement.addEventListener('pause', function () {
+            wavesurfer.pause();
         });
-        // Stop audio by double-clicking on waveform
-        document.getElementById('waveform').addEventListener('dblclick', function() {
-            if (wavesurfer.isPlaying()) {
-                wavesurfer.pause();
-            } else {
-                wavesurfer.play();
+
+        audioElement.addEventListener('timeupdate', function () {
+            if (!wavesurfer.isPlaying()) {
+                wavesurfer.setCurrentTime(audioElement.currentTime);
             }
         });
 
-        // Stop audio by pressing spacebar
-        document.addEventListener('keydown', function(event) {
+        audioElement.addEventListener('seeked', function () {
+            wavesurfer.seekTo(audioElement.currentTime / audioElement.duration);
+        });
+
+        // Toggle play/pause on button click
+        playPauseButton.addEventListener('click', function () {
+            if (audioElement.paused) {
+                audioElement.play();
+            } else {
+                audioElement.pause();
+            }
+        });
+
+        // Toggle play/pause on spacebar press
+        document.addEventListener('keydown', function (event) {
             if (event.code === 'Space') {
                 event.preventDefault(); // Prevent default spacebar behavior (scrolling the page)
-                if (wavesurfer.isPlaying()) {
-                    wavesurfer.pause();
+                if (audioElement.paused) {
+                    audioElement.play();
                 } else {
-                    wavesurfer.play();
+                    audioElement.pause();
                 }
             }
         });
 
-        // Helper function to format time (HH:MM:SS)
+        // Update the time indicator according to audio progress
+        wavesurfer.on('audioprocess', function () {
+            const currentTime = wavesurfer.getCurrentTime();
+            const formattedTime = formatTime(currentTime);
+            document.getElementById('time-indicator').innerText = formattedTime;
+        });
+
+        // Volume up button
+        volumeUpButton.addEventListener('click', function () {
+            audioElement.volume = Math.min(audioElement.volume + 0.1, 1);
+            wavesurfer.setVolume(audioElement.volume);
+        });
+
+        // Volume down button
+        volumeDownButton.addEventListener('click', function () {
+            audioElement.volume = Math.max(audioElement.volume - 0.1, 0);
+            wavesurfer.setVolume(audioElement.volume);
+        });
+
+        // Helper function to format time (MM:SS)
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
