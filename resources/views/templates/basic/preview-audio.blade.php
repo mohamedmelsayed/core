@@ -10,7 +10,7 @@
 
                         @foreach ($audios as $audio)
                         <div id="audio-player">
-                            <!-- <audio src="{{ $audio->content }}" controls></audio> -->
+                            <audio id="audio" src="{{ $audio->content }}" controls></audio>
                             <div id="waveform"></div>
                             <div id="time-indicator"></div>
                         </div>
@@ -186,17 +186,17 @@
 @endsection
 
 <style>
-    #audio-player {
+     #audio-player {
         width: 100%;
+       /* max-width: 500px; /* Adjust width as needed */
         margin: 0 auto;
-        position: relative;
-        /* Position relative for absolute positioning of time indicator */
+        position: relative; /* Position relative for absolute positioning of time indicator */
     }
 
     #waveform {
-        height: 150px;
-        /* Adjust height as needed */
-        background-color: #f0f0f0;
+        height: 100px; /* Adjust height as needed */
+        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}") no-repeat center center; /* Set your transparent background image */
+        background-size: cover; /* Adjust background size as needed */
     }
 
     #time-indicator {
@@ -206,8 +206,7 @@
         width: 100%;
         text-align: center;
         padding: 5px 0;
-        background-color: rgba(255, 255, 255, 0.8);
-        /* Semi-transparent background */
+        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
     }
 </style>
 
