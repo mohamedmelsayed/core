@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label>@lang('Title')</label>
                                 <input class="form-control" name="title" type="text" value="{{ $item->title }}" placeholder="Title">
                             </div>
@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class="form-group col-md-6 version">
+                                <div class="form-group col-md-4 version">
                                     <label>@lang('Version')</label>
                                     <select class="form-control" name="version">
                                         <option value="0">@lang('Free')</option>
@@ -78,6 +78,14 @@
                                     </select>
                                 </div>
                             @endif
+                        </div>
+                        <div class="form-group col-md-4 is_audio">
+                            <label>@lang('Item Type')</label>
+                            <select class="form-control" name="is_audio">
+                                <option value="">@lang('Select One')</option>
+                                <option value="0">@lang('Video')</option>
+                                <option value="1">@lang('Audio')</option>
+                            </select>
                         </div>
 
                         <div class="row d-none" id="rentalArea">
