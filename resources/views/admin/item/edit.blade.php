@@ -55,7 +55,7 @@
                                 <input class="form-control" name="title" type="text" value="{{ $item->title }}" placeholder="Title">
                             </div>
                             @if ($item->item_type == Status::EPISODE_ITEM)
-                                <div class="form-group col-md-6 rent-option">
+                                <div class="form-group col-md-4 rent-option">
                                     <label>@lang('Do you want to add it as rent?')</label>
                                     <div class="d-flex gap-3 flex-wrap">
                                         <div class="form-check">
