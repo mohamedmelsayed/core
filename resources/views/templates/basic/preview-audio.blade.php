@@ -16,7 +16,7 @@
                                 <div id="time-indicator"></div>
 
                             </div>
-                            <div>
+                            <div id="audio-control">
                             <button id="play-pause"><i class="las la-play-circle"></i></button>
                             <button id="volume-up"><i class="las la-volume-up"></i></button>
                             <button id="volume-down"><i class="las la-volume-down"></i></button>
@@ -196,6 +196,14 @@
 
 <style>
     #audio-player {
+        width: 100%;
+        max-width: 500px;
+        /* Adjust width as needed */
+        margin: 0 auto;
+        position: relative;
+        /* Position relative for absolute positioning of time indicator */
+    }
+    #audio-control {
         width: 100%;
         max-width: 500px;
         /* Adjust width as needed */
