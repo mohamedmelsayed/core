@@ -9,16 +9,19 @@
                     <div class="main-audio">
 
                         @foreach ($audios as $audio)
-                        <div style="align-items: center";>
+                        <div>
                             <div id="audio-player">
                                 <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
                                 <div id="waveform"></div>
                                 <div id="time-indicator"></div>
 
                             </div>
+                            <div id="audio-player">
                             <button id="play-pause"><i class="las la-play-circle"></i></button>
                             <button id="volume-up"><i class="las la-volume-up"></i></button>
                             <button id="volume-down"><i class="las la-volume-down"></i></button>
+                            </div>
+                          
                         </div>
                         @endforeach
 
