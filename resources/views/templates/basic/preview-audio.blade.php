@@ -18,7 +18,7 @@
                             </div>
                             <button id="play-pause"><i class="las la-play-circle"></i></button>
                             <button id="volume-up"><i class="las la-volume-up"></i></button>
-                            <button id="volume-down"><i class="las la-volume-down"></button>
+                            <button id="volume-down"><i class="las la-volume-down"></i></button>
                         </div>
                         @endforeach
 
