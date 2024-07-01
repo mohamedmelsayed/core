@@ -15,9 +15,9 @@
                                 <div id="time-indicator"></div>
                             </div>
                             <div id="audio-controls">
-                                <button id="play-pause"><i class="las la-play-circle"></i></button>
-                                <button id="volume-up"><i class="las la-volume-up"></i></button>
-                                <button id="volume-down"><i class="las la-volume-down"></i></button>
+                                <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
+                                <button class="audio-control" id="volume-up"><i class="las la-volume-up"></i></button>
+                                <button class="audio-control" id="volume-down"><i class="las la-volume-down"></i></button>
                             </div>
                         </div>
                         @endforeach
@@ -210,9 +210,8 @@
     }
 
     #waveform {
-        height: 100px;
+        height: 500px;
         background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
-
         background-size: cover;
     }
 
@@ -232,7 +231,6 @@
         margin-top: 10px;
     }
 </style>
-
 @push('script')
 <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
 <script>
@@ -240,6 +238,7 @@
         const playPauseButton = document.getElementById('play-pause');
         const volumeUpButton = document.getElementById('volume-up');
         const volumeDownButton = document.getElementById('volume-down');
+        const audioControlButtons = document.querySelectorAll('.audio-control');
 
         const wavesurfer = WaveSurfer.create({
             container: '#waveform',
@@ -249,8 +248,9 @@
 
         wavesurfer.load('{{ $audios[0]->content }}');
         wavesurfer.play();
-        playPauseButton.addEventListener('click', function() {
-            event.stopPropagation(); // Prevent click event from propagating
+
+        playPauseButton.addEventListener('click', function(event) {
+            event.stopPropagation();
             if (wavesurfer.isPlaying()) {
                 wavesurfer.pause();
             } else {
@@ -269,16 +269,22 @@
             }
         });
 
-        volumeUpButton.addEventListener('click', function() {
-            event.stopPropagation(); // Prevent click event from propagating
+        volumeUpButton.addEventListener('click', function(event) {
+            event.stopPropagation();
             let currentVolume = wavesurfer.getVolume();
             wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
         });
 
-        volumeDownButton.addEventListener('click', function() {
-            event.stopPropagation(); // Prevent click event from propagating
+        volumeDownButton.addEventListener('click', function(event) {
+            event.stopPropagation();
             let currentVolume = wavesurfer.getVolume();
             wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
+        });
+
+        audioControlButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
         });
 
         wavesurfer.on('audioprocess', function() {
@@ -298,5 +304,4 @@
         }
     });
 </script>
-
 @endpush
