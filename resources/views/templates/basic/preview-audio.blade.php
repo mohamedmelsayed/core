@@ -11,7 +11,7 @@
                         @foreach ($audios as $audio)
                         <div>
                             <div id="audio-player">
-                                <!-- <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio> -->
+                                <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
                                 <div id="waveform"></div>
                                 <div id="time-indicator"></div>
 
