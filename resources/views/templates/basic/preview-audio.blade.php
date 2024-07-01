@@ -211,7 +211,7 @@
 
     #waveform {
         height: 100px;
-        background: url('path/to/your/transparent-background.png') no-repeat center center;
+        background: url("{getImage(getFilePath('item_portrait') . '/' . $item->image->portrait}") no-repeat center center;
         background-size: cover;
     }
 
@@ -256,23 +256,25 @@
             }
         });
 
-        document.addEventListener('keydown', function(event) {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                if (wavesurfer.isPlaying()) {
-                    wavesurfer.pause();
-                } else {
-                    wavesurfer.play();
-                }
-            }
-        });
+        // document.addEventListener('keydown', function(event) {
+        //     if (event.code === 'Space') {
+        //         event.preventDefault();
+        //         if (wavesurfer.isPlaying()) {
+        //             wavesurfer.pause();
+        //         } else {
+        //             wavesurfer.play();
+        //         }
+        //     }
+        // });
 
         volumeUpButton.addEventListener('click', function() {
-            wavesurfer.setVolume(Math.min(wavesurfer.getVolume() + 0.1, 1));
+            let currentVolume = wavesurfer.getVolume();
+            wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
         });
 
         volumeDownButton.addEventListener('click', function() {
-            wavesurfer.setVolume(Math.max(wavesurfer.getVolume() - 0.1, 0));
+            let currentVolume = wavesurfer.getVolume();
+            wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
         });
 
         wavesurfer.on('audioprocess', function() {
@@ -292,4 +294,5 @@
         }
     });
 </script>
+
 @endpush
