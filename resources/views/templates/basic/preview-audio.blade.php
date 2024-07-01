@@ -248,7 +248,7 @@
         });
 
         wavesurfer.load('{{ $audios[0]->content }}');
-
+        wavesurfer.play();
         playPauseButton.addEventListener('click', function() {
             event.stopPropagation(); // Prevent click event from propagating
             if (wavesurfer.isPlaying()) {
