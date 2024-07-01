@@ -250,6 +250,7 @@
         wavesurfer.load('{{ $audios[0]->content }}');
 
         playPauseButton.addEventListener('click', function() {
+            event.stopPropagation(); // Prevent click event from propagating
             if (wavesurfer.isPlaying()) {
                 wavesurfer.pause();
             } else {
@@ -257,23 +258,25 @@
             }
         });
 
-        // document.addEventListener('keydown', function(event) {
-        //     if (event.code === 'Space') {
-        //         event.preventDefault();
-        //         if (wavesurfer.isPlaying()) {
-        //             wavesurfer.pause();
-        //         } else {
-        //             wavesurfer.play();
-        //         }
-        //     }
-        // });
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                if (wavesurfer.isPlaying()) {
+                    wavesurfer.pause();
+                } else {
+                    wavesurfer.play();
+                }
+            }
+        });
 
         volumeUpButton.addEventListener('click', function() {
+            event.stopPropagation(); // Prevent click event from propagating
             let currentVolume = wavesurfer.getVolume();
             wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
         });
 
         volumeDownButton.addEventListener('click', function() {
+            event.stopPropagation(); // Prevent click event from propagating
             let currentVolume = wavesurfer.getVolume();
             wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
         });
