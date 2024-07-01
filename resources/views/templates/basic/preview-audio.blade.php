@@ -195,7 +195,6 @@
     #audio-player {
         width: 100%;
         max-width: 500px;
-        height: 500px;
         margin: 0 auto;
         position: relative;
     }
@@ -212,7 +211,7 @@
 
     #waveform {
         height: 100px;
-        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->landscape) }}") no-repeat center center;
+        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
 
         background-size: cover;
     }
@@ -251,7 +250,7 @@
         wavesurfer.load('{{ $audios[0]->content }}');
         wavesurfer.play();
         playPauseButton.addEventListener('click', function() {
-            event.stopImmediatePropagation(); // Prevent click event from propagating
+            event.stopPropagation(); // Prevent click event from propagating
             if (wavesurfer.isPlaying()) {
                 wavesurfer.pause();
             } else {
@@ -271,13 +270,13 @@
         });
 
         volumeUpButton.addEventListener('click', function() {
-            event.stopImmediatePropagation(); // Prevent click event from propagating
+            event.stopPropagation(); // Prevent click event from propagating
             let currentVolume = wavesurfer.getVolume();
             wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
         });
 
         volumeDownButton.addEventListener('click', function() {
-            event.stopImmediatePropagation(); // Prevent click event from propagating
+            event.stopPropagation(); // Prevent click event from propagating
             let currentVolume = wavesurfer.getVolume();
             wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
         });
