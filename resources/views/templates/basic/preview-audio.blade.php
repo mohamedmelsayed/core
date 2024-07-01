@@ -211,7 +211,7 @@
 
     #waveform {
         height: 100px;
-        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
+        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->landscape) }}") no-repeat center center;
 
         background-size: cover;
     }
