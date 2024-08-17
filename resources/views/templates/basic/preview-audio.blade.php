@@ -11,6 +11,7 @@
                         <div>
                             <div id="audio-player">
                                 <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
+                                <div id="audioBG"></div>
                                 <div id="waveform"></div>
                                 <div id="time-indicator"></div>
                             </div>
@@ -210,6 +211,10 @@
     }
 
     #waveform {
+        margin-bottom: 0px;
+
+    }
+    #audioBG{
         height: 500px;
         background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
         background-size: cover;
