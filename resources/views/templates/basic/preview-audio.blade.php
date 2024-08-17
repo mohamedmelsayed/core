@@ -213,29 +213,37 @@
     }
 
     #audioBG {
-    height: 500px;
-    background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
-    background-size: cover;
-    position: relative;
-}
+        height: 500px;
+        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
+        background-size: cover;
+        position: relative;
+    }
 
-#waveform {
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    height: 100px; /* Adjust height as needed */
-}
+    #waveform {
+        position: absolute;
+        bottom: 15px;
+        width: 100%;
+        height: 100px;
+        /* Adjust height as needed */
+        opacity: 0.9;
+        /* 90% transparent */
+    }
 
-#time-indicator {
-    position: absolute;
-    bottom: 100px; /* This should be equal to the height of the waveform */
-    left: 0;
-    width: 100%;
-    text-align: center;
-    padding: 5px 0;
-    background-color: rgba(255, 255, 255, 0.8);
-}
+    .waveform canvas {
+        opacity: 0.9;
+        /* Ensure the canvas itself is transparent */
+    }
 
+    #time-indicator {
+        position: absolute;
+        bottom: 100px;
+        /* This should be equal to the height of the waveform */
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 5px 0;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
 
     #play-pause,
     #volume-up,
@@ -251,11 +259,36 @@
         const volumeUpButton = document.getElementById('volume-up');
         const volumeDownButton = document.getElementById('volume-down');
         const audioControlButtons = document.querySelectorAll('.audio-control');
-
         const wavesurfer = WaveSurfer.create({
             container: '#waveform',
-            waveColor: 'blue',
-            progressColor: 'purple'
+            waveColor: 'rgba(255, 255, 255, 0.2)', // Base color (transparent white)
+            progressColor: 'rgba(255, 255, 255, 0.2)', // Progress color (transparent white)
+            barWidth: 2,
+            responsive: true,
+            normalize: true,
+            interact: true,
+            height: 100,
+            barGap: 3,
+            partialRender: true
+        });
+
+        wavesurfer.on('ready', function() {
+            const canvas = document.querySelector('#waveform wave canvas');
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+
+            // Define the rainbow colors
+            gradient.addColorStop(0, 'red');
+            gradient.addColorStop(0.17, 'orange');
+            gradient.addColorStop(0.34, 'yellow');
+            gradient.addColorStop(0.51, 'green');
+            gradient.addColorStop(0.68, 'blue');
+            gradient.addColorStop(0.85, 'indigo');
+            gradient.addColorStop(1, 'violet');
+
+            // Apply the gradient to the waveform
+            ctx.fillStyle = gradient;
+            ctx.fill();
         });
 
         wavesurfer.load('{{ $audios[0]->content }}');
