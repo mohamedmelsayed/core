@@ -11,8 +11,10 @@
                         <div>
                             <div id="audio-player">
                                 <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
-                                <div id="audioBG"></div>
+                                <div id="audioBG">
                                 <div id="waveform"></div>
+
+                                </div>
                                 <div id="time-indicator"></div>
                             </div>
                             <div id="audio-controls">
