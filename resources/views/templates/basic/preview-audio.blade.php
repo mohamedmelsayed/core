@@ -175,7 +175,9 @@
             <div class="col-xl-3 col-lg-4 col-sm-6 mb-30">
                 <div class="audio-item">
                     <div class="movie-thumb">
-                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}" alt="audio">
+                        <a href="{{ route('preview.audio', $relatedItem->slug) }}">
+                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}" alt="audio">
+                        </a>
                     </div>
                     <div class="movie-thumb-overlay">
                         <h3 class="title"><a href="{{ route('preview.audio', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
@@ -213,33 +215,37 @@
     }
 
     #audioBG {
-    height: 500px;
-    background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
-    background-size: cover;
-    position: relative;
-}
+        height: 500px;
+        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
+        background-size: cover;
+        position: relative;
+    }
 
-#waveform {
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    height: 100px; /* Adjust height as needed */
-    opacity: 0.9; /* 90% transparent */
-}
+    #waveform {
+        position: absolute;
+        bottom: 15px;
+        width: 100%;
+        height: 100px;
+        /* Adjust height as needed */
+        opacity: 0.9;
+        /* 90% transparent */
+    }
 
-.waveform canvas {
-    opacity: 0.9; /* Ensure the canvas itself is transparent */
-}
+    .waveform canvas {
+        opacity: 0.9;
+        /* Ensure the canvas itself is transparent */
+    }
 
-#time-indicator {
-    position: absolute;
-    bottom: 100px; /* This should be equal to the height of the waveform */
-    left: 0;
-    width: 100%;
-    text-align: center;
-    padding: 5px 0;
-    background-color: rgba(255, 255, 255, 0.8);
-}
+    #time-indicator {
+        position: absolute;
+        bottom: 100px;
+        /* This should be equal to the height of the waveform */
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 5px 0;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
 
     #play-pause,
     #volume-up,
