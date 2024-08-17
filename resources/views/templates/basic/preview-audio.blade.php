@@ -12,11 +12,11 @@
                             <div id="audio-player">
                                 <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
                                 <div id="audioBG">
-                                <div id="waveform"></div>
-
+                                    <div id="waveform"></div> <!-- Waveform is now at the bottom of audioBG -->
                                 </div>
                                 <div id="time-indicator"></div>
                             </div>
+
                             <div id="audio-controls">
                                 <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
                                 <button class="audio-control" id="volume-up"><i class="las la-volume-up"></i></button>
@@ -211,26 +211,31 @@
         justify-content: center;
         gap: 10px;
     }
+    
+    #audioBG {
+    height: 500px;
+    background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
+    background-size: cover;
+    position: relative;
+}
 
-    #waveform {
-        margin-bottom: 0px;
+#waveform {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px; /* Adjust height as needed */
+}
 
-    }
-    #audioBG{
-        height: 500px;
-        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
-        background-size: cover;
-    }
+#time-indicator {
+    position: absolute;
+    bottom: 100px; /* This should be equal to the height of the waveform */
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    background-color: rgba(255, 255, 255, 0.8);
+}
 
-    #time-indicator {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        padding: 5px 0;
-        background-color: rgba(255, 255, 255, 0.8);
-    }
 
     #play-pause,
     #volume-up,
