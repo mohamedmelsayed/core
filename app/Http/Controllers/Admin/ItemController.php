@@ -34,7 +34,8 @@ class ItemController extends Controller
     {
         $pageTitle = "Video Items";
         $items = $this->itemsDataVideo();
-        return view('admin.item.index', compact('pageTitle', 'items'));
+        $audioItems = $this->itemsDataAudio();
+        return view('admin.item.index', compact('pageTitle', 'items','audioItems'));
     }
 
     private function itemsDataVideo($scope = null)
