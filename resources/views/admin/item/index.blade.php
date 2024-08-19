@@ -91,6 +91,7 @@
                             @endforelse
                         </tbody>
                     </table>
+             
                 </div>
             </div>
             @if ($items->hasPages())
