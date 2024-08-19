@@ -453,8 +453,9 @@ class SiteController extends Controller
     {
         $category = Category::findOrFail($id);
         $items = Item::hasVideo()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
+        $audioItems = Item::hasAudio()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
         $pageTitle = $category->name;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items','audioItems', 'category'));
     }
 
     public function subCategory($id)

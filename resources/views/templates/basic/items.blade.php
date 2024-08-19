@@ -2,8 +2,35 @@
 @section('content')
     <section class="movie-section section--bg ptb-80">
         <div class="container">
+            <h2>__("videos")</h2>
             <div class="row justify-content-center mb-30-none ajaxLoad">
                 @forelse($items as $item)
+                    @if ($loop->last)
+                        <span class="data_id d-none" data-id="{{ $item->id }}"></span>
+                        <span class="category_id d-none" data-category_id="{{ @$category->id }}"></span>
+                        <span class="subcategory_id d-none" data-subcategory_id="{{ @$subcategory->id }}"></span>
+                        <span class="search d-none" data-search="{{ @$search }}"></span>
+                    @endif
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                        <div class="movie-item">
+                            <div class="movie-thumb">
+                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="movie">
+                                <span class="movie-badge">{{ $item->versionName }}</span>
+                                <div class="movie-thumb-overlay">
+                                    <a class="video-icon" href="{{ route('watch', $item->slug) }}"><i class="fas fa-play"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
+                        <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="">
+                    </div>
+                @endforelse
+            </div>
+            <h2>__("audios")</h2>
+            <div class="row justify-content-center mb-30-none ajaxLoad">
+                @forelse($audioItems as $item)
                     @if ($loop->last)
                         <span class="data_id d-none" data-id="{{ $item->id }}"></span>
                         <span class="category_id d-none" data-category_id="{{ @$category->id }}"></span>
