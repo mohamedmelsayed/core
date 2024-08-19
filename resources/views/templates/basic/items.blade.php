@@ -2,7 +2,7 @@
 @section('content')
     <section class="movie-section section--bg ptb-80">
         <div class="container">
-            <h2>__("videos")</h2>
+            <h2>{{__("videos")}}</h2>
             <div class="row justify-content-center mb-30-none ajaxLoad">
                 @forelse($items as $item)
                     @if ($loop->last)
@@ -28,7 +28,7 @@
                     </div>
                 @endforelse
             </div>
-            <h2>__("audios")</h2>
+            <h2>{{__("audios")}}</h2>
             <div class="row justify-content-center mb-30-none ajaxLoad">
                 @forelse($audioItems as $item)
                     @if ($loop->last)
