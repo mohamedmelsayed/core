@@ -453,17 +453,17 @@ class SiteController extends Controller
     {
         $category = Category::findOrFail($id);
         $items = Item::hasVideo()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
-        $audioItems = Item::hasAudio()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
         $pageTitle = $category->name;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items','audioItems', 'category'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category'));
     }
 
     public function subCategory($id)
     {
         $subcategory = SubCategory::findOrFail($id);
         $items = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+        $audioItems = Item::hasAudio()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
         $pageTitle = $subcategory->name;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items','audioItems', 'subcategory'));
     }
 
     public function loadMore(Request $request)
