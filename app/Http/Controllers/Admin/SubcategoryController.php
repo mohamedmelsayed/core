@@ -19,6 +19,8 @@ class SubcategoryController extends Controller {
         $request->validate([
             'name'        => 'required',
             'category_id' => 'required',
+            'name_en' => 'required',
+            'type' => 'required',
         ]);
 
         if ($id == 0) {
@@ -30,6 +32,8 @@ class SubcategoryController extends Controller {
         }
 
         $subcategory->name        = $request->name;
+        $subcategory->name_en        = $request->name_en;
+        $subcategory->type        = $request->type;
         $subcategory->category_id = $request->category_id;
         $subcategory->save();
         $notify[] = ['success', $notification];

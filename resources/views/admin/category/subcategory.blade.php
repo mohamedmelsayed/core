@@ -11,6 +11,7 @@
                                 <th>@lang('Name')</th>
                                 <th>@lang('English Name')</th>
                                 <th>@lang('Category')</th>
+                                <th>@lang('type')</th>
                                 <th>@lang('Status')</th>
                                 <th>@lang('Action')</th>
                             </tr>
@@ -21,6 +22,7 @@
                             <tr>
                                 <td data-label="@lang('Name')">{{ __($subcategory->name)}}</td>
                                 <td data-label="@lang('English Name')">{{ __($subcategory->name_en)}}</td>
+                                <td data-label="@lang('English Name')">{{ __($subcategory->type)}}</td>
                                 <td data-label="@lang('Category')">{{ __($subcategory->category->name) }}</td>
                                 <td data-label="@lang('Status')">
                                     @if($subcategory->status == 1)
@@ -80,6 +82,14 @@
                             @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ __($category->name) }}</option>
                             @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>@lang('Sub Category Type')</label>
+                        <select name="type" class="form-control">
+                            <option value="">-- @lang('Select One') --</option>
+                            <option value="vid">{{ __("video") }}</option>
+                            <option value="aud">{{ __("audio") }}</option>
                         </select>
                     </div>
                     <div class="form-group statusGroup">
