@@ -460,8 +460,14 @@ class SiteController extends Controller
     public function subCategory($id)
     {
         $subcategory = SubCategory::findOrFail($id);
-   
-        $items = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+        if($subcategory->type=="vid"){
+            $items = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+
+        }
+        if($subcategory->type=="aud"){
+            $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+
+        }
         $pageTitle = $subcategory->name;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory'));
     }

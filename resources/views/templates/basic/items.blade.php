@@ -16,7 +16,7 @@
                                 <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="movie">
                                 <span class="movie-badge">{{ $item->versionName }}</span>
                                 <div class="movie-thumb-overlay">
-                                    <a class="video-icon" href="{{ route('watch', $item->slug) }}"><i class="fas fa-play"></i></a>
+                                    <a class="video-icon" href="{{$item->is_audio?route('preview.audio', $item->slug) :route('watch', $item->slug) }}"><i class="fas fa-play"></i></a>
                                 </div>
                             </div>
                         </div>
