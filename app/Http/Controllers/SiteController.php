@@ -454,7 +454,7 @@ class SiteController extends Controller
 
             $pageTitle = 'Audio Details';
             $relatedItems = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
-            $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
+            $relatedAudios = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
 
             $episodes = [];
             $audio = $item->audio;
