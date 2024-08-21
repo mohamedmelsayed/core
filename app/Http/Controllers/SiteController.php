@@ -252,10 +252,10 @@ class SiteController extends Controller
       
         if($keyword!=null){
             $items=$this->getMatchingItems($keyword);
-            dd($items);
+            // dd($items);
         }
 
-        return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
+        return $items::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
     }
 
      private function getMatchingItems($userKeywords) {
