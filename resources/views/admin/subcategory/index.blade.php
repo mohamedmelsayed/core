@@ -10,7 +10,9 @@
                                 <tr>
                                     <th>@lang('S.N')</th>
                                     <th>@lang('Name')</th>
+                                    <th>@lang('English Name')</th>
                                     <th>@lang('Category')</th>
+                                    <th>@lang('Type')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -20,12 +22,15 @@
                                     <tr>
                                         <td>{{ $subcategories->firstItem() + $loop->index }}</td>
                                         <td>{{ __($subcategory->name) }}</td>
+                                        <td>{{ __($subcategory->name_en) }}</td>
                                         <td>{{ __($subcategory->category->name) }}</td>
                                         <td>
                                             @php
                                                 echo $subcategory->statusBadge;
                                             @endphp
                                         </td>
+                                        <td>{{ __($subcategory->type) }}</td>
+
                                         <td>
                                             <div class="button--group">
                                                 <button class="btn btn-sm btn-outline--primary editBtn" data-name="{{ $subcategory->name }}" data-id="{{ $subcategory->id }}" data-category_id="{{ $subcategory->category_id }}" data-status="{{ $subcategory->status }}"><i
@@ -82,6 +87,18 @@
                             <label>@lang('Name')</label>
                             <input class="form-control" name="name" type="text" required>
                         </div>
+                        <div class="form-group">
+                            <label>@lang('English Name')</label>
+                            <input class="form-control" name="name_en" type="text" required>
+                        </div>
+                        <div class="form-group">
+                        <label>@lang('Sub Category Type')</label>
+                        <select name="type" class="form-control">
+                            <option value="">-- @lang('Select One') --</option>
+                            <option value="vid">@lang('video')/option>
+                            <option value="aud">@lang('audio')</option>
+                        </select>
+                    </div>
                         <button class="btn btn--primary w-100 h-45" type="submit">@lang('Submit')</button>
                     </div>
                 </form>
