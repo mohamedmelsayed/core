@@ -33,7 +33,7 @@
 
                                         <td>
                                             <div class="button--group">
-                                                <button class="btn btn-sm btn-outline--primary editBtn" data-name="{{ $subcategory->name }}" data-id="{{ $subcategory->id }}" data-category_id="{{ $subcategory->category_id }}" data-status="{{ $subcategory->status }}"><i
+                                                <button class="btn btn-sm btn-outline--primary editBtn" data-name="{{ $subcategory->name }}" data-id="{{ $subcategory->id }}" data-type="{{ $subcategory->type }}" data-category_id="{{ $subcategory->category_id }}" data-status="{{ $subcategory->status }}"><i
                                                        class="la la-pencil"></i>@lang('Edit')</button>
                                                 @if ($subcategory->status == Status::ENABLE)
                                                     <button class="btn btn-sm btn-outline--danger confirmationBtn" data-question="@lang('Are you sure to remove this advertise?')" data-action="{{ route('admin.subcategory.status', $subcategory->id) }}"><i class="la la-eye-slash"></i>@lang('Disable')</button>
