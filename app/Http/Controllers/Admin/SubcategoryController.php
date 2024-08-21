@@ -11,7 +11,7 @@ class SubcategoryController extends Controller {
     public function index() {
         $pageTitle     = "All Subcategory";
         $categories    = Category::active()->orderBy('id', 'desc')->get();
-        $subcategories = SubCategory::orderBy('id', 'desc')->searchable(['name', 'category:name'])->with('category')->paginate(getPaginate());
+        $subcategories = SubCategory::orderBy('id', 'desc')->searchable(['name', 'category:name','name_en'])->with('category')->paginate(getPaginate());
         return view('admin.subcategory.index', compact('pageTitle', 'subcategories', 'categories'));
     }
 
