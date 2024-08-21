@@ -126,6 +126,7 @@
             });
             $('.editBtn').on('click', function() {
                 var data = $(this).data();
+                ///
                 console.log(json_encode(data));
                 modal.find('.modal-title').text(`@lang('Update Subcategory')`);
                 modal.find('form').attr('action', `{{ route('admin.subcategory.store', '') }}/${data.id}`);
