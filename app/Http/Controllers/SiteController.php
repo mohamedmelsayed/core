@@ -194,6 +194,7 @@ class SiteController extends Controller
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
             $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM);
+            $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -242,13 +243,14 @@ class SiteController extends Controller
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
     private function relatedItems($itemId, $itemType)
     {
         return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
     }
+
 
     private function storeHistory($itemId = null, $episodeId = null)
     {
@@ -394,7 +396,8 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM);
+            $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -441,7 +444,7 @@ class SiteController extends Controller
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
     private function relatedAudios($itemId, $itemType)

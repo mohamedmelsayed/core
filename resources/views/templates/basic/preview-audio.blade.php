@@ -175,12 +175,34 @@
             <div class="col-xl-3 col-lg-4 col-sm-6 mb-30">
                 <div class="audio-item">
                     <div class="movie-thumb">
-                        <a href="{{ route('preview.audio', $relatedItem->slug) }}">
+                        <a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">
                             <img src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}" alt="audio">
                         </a>
                     </div>
                     <div class="movie-thumb-overlay">
-                        <h3 class="title"><a href="{{ route('preview.audio', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
+                        <h3 class="title"><a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
+                        </h3>
+                        <p>{{ strLimit(strip_tags($relatedItem->description), 150) }}</p>
+                        <div class="audio-widget-area d-flex align-items-center justify-content-between flex-wrap">
+                            <span class="audio-widget"><i class="lar la-star text--warning"></i> {{ getAmount($relatedItem->ratings) }}</span>
+                            <span class="audio-widget"><i class="lar la-eye text--danger"></i> {{ getAmount($relatedItem->view) }} @lang('views')</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        <div class="row justify-content-center mb-30-none">
+            @foreach ($relatedAudios as $relatedItem)
+            <div class="col-xl-3 col-lg-4 col-sm-6 mb-30">
+                <div class="audio-item">
+                    <div class="movie-thumb">
+                        <a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">
+                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}" alt="audio">
+                        </a>
+                    </div>
+                    <div class="movie-thumb-overlay">
+                        <h3 class="title"><a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
                         </h3>
                         <p>{{ strLimit(strip_tags($relatedItem->description), 150) }}</p>
                         <div class="audio-widget-area d-flex align-items-center justify-content-between flex-wrap">

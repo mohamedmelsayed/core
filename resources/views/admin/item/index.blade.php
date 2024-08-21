@@ -91,10 +91,7 @@
                             @endforelse
                         </tbody>
                     </table>
-<<<<<<< HEAD
              
-=======
->>>>>>> 0c6d591244030533bbf66a7d79e2d1950686f55e
                 </div>
             </div>
             @if ($items->hasPages())
