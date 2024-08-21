@@ -54,56 +54,6 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="subCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('admin.subcategory.store') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <label>@lang('Sub Category Name')</label>
-                        <input type="text" name="name" class="form-control" placeholder="@lang('Sub Category Name')" required>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('Sub Category English Name')</label>
-                        <input type="text" name="name_en" class="form-control" placeholder="@lang('Sub Category English Name')" required>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('Parent Category Name')</label>
-                        <select name="category_id" class="form-control">
-                            <option value="">-- @lang('Select One') --</option>
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ __($category->name) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('Sub Category Type')</label>
-                        <select name="type" class="form-control">
-                            <option value="">-- @lang('Select One') --</option>
-                            <option value="vid">{{ __("video") }}</option>
-                            <option value="aud">{{ __("audio") }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group statusGroup">
-                        <label>@lang('Status')</label>
-                        <input type="checkbox" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%" name="status">
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn--primary w-100 h-45">@lang('Submit')</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 @endsection
 
