@@ -251,7 +251,7 @@ class SiteController extends Controller
     {
       
         if($keyword!=null){
-            $items=$this->getMatchingItems($keyword);
+            $items=$this->getMatchingItems($keyword,'video');
             // dd($items);
         return $items->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
 
