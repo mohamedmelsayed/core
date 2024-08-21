@@ -268,7 +268,7 @@ class SiteController extends Controller
         // Loop through each keyword and add a condition using FIND_IN_SET
         foreach ($keywordsArray as $keyword) {
             $keyword = trim($keyword); // Clean up any extra spaces
-            $query->orWhereRaw("FIND_IN_SET(?, keywords)", [$keyword]);
+            $query->orWhereRaw("FIND_IN_SET(?, tags)", [$keyword]);
         }
     
         // Execute the query and get the results, optionally order by matching count
