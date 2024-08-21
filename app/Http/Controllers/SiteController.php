@@ -246,29 +246,35 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
-
-    private function relatedItems($itemId, $itemType,$keyword=null)
+    private function relatedItems($itemId, $itemType, $keyword = null)
     {
-      
-        if($keyword!=null){
-            $items=$this->getMatchingItems($keyword,'video');
-            // dd($items);
-        return $items->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
-
+        if ($keyword != null) {
+            // Get matching items based on keywords and item type
+            $items = $this->getMatchingItems($keyword, $itemType);
+    
+            // Apply additional filters before executing the query
+            return $items->where('item_type', $itemType)
+                         ->where('id', '!=', $itemId)
+                         ->orderBy('id', 'desc')
+                         ->limit(8)
+                         ->get();
+        } else {
+            // Get items based on item type without keywords
+            return Item::orderBy('id', 'desc')
+                       ->where('item_type', $itemType)
+                       ->where('id', '!=', $itemId)
+                       ->limit(8)
+                       ->get();
         }
-        else{
-            return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
-
-        }
-
     }
-
-     private function getMatchingItems($userKeywords,$type) {
+    
+    private function getMatchingItems($userKeywords, $type)
+    {
         // Convert user keywords into an array
         $keywordsArray = explode(',', $userKeywords);
     
-        // Initialize the query
-        $query =$type==='audio'? Item::hasAudio():Item::hasVideo();
+        // Initialize the query based on item type
+        $query = $type === 'audio' ? Item::hasAudio() : Item::hasVideo();
     
         // Loop through each keyword and add a condition using FIND_IN_SET
         foreach ($keywordsArray as $keyword) {
@@ -276,11 +282,10 @@ class SiteController extends Controller
             $query->orWhereRaw("FIND_IN_SET(?, tags)", [$keyword]);
         }
     
-        // Execute the query and get the results, optionally order by matching count
-        $matchingItems = $query->get();
-    
-        return $matchingItems;
+        // Return the query builder (without executing the query yet)
+        return $query;
     }
+    
 
 
     private function storeHistory($itemId = null, $episodeId = null)
