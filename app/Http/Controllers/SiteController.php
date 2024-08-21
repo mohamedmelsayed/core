@@ -193,7 +193,7 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->keywords);
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags);
             $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
             $pageTitle = 'Episode Details';
 
@@ -226,7 +226,7 @@ class SiteController extends Controller
 
             $pageTitle = 'Movie Details';
             $relatedAudios = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->keywords);
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags);
             $episodes = [];
             $video = $item->video;
             $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
@@ -423,7 +423,7 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->keywords);
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags);
             $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
             $pageTitle = 'Episode Details';
 
@@ -456,7 +456,7 @@ class SiteController extends Controller
 
             $pageTitle = 'Audio Details';
             $relatedAudios = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->keywords);
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags);
 
             $episodes = [];
             $audio = $item->audio;
