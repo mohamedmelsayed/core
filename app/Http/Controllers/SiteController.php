@@ -256,8 +256,11 @@ class SiteController extends Controller
         return $items->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
 
         }
+        else{
+            return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
 
-        return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
+        }
+
     }
 
      private function getMatchingItems($userKeywords,$type) {
