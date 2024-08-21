@@ -95,8 +95,8 @@
                         <label>@lang('Sub Category Type')</label>
                         <select name="type" class="form-control">
                             <option value="">-- @lang('Select One') --</option>
-                            <option value="vid">@lang('video')</option>
-                            <option value="aud">@lang('audio')</option>
+                            <option value="vid" selected="type=='vid'">@lang('video')</option>
+                            <option value="aud" selected="type=='aud'">@lang('audio')</option>
                         </select>
                     </div>
                         <button class="btn btn--primary w-100 h-45" type="submit">@lang('Submit')</button>
