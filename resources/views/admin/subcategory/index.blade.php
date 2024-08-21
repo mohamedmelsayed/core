@@ -129,7 +129,7 @@
                 modal.find('.modal-title').text(`@lang('Update Subcategory')`);
                 modal.find('form').attr('action', `{{ route('admin.subcategory.store', '') }}/${data.id}`);
                 modal.find('input[name=name]').val(data.name);
-                modal.find('select[name=type]').val(data.type);
+                modal.find('select[name=type]').val(`${data.type}`);
                 modal.find('input[name=name_en]').val(data.name_en);
                 modal.find('select[name=category_id]').val(`${data.category_id}`);
                 modal.modal('show');
