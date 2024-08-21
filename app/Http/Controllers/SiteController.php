@@ -253,17 +253,19 @@ class SiteController extends Controller
         if($keyword!=null){
             $items=$this->getMatchingItems($keyword);
             // dd($items);
+        return $items->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
+
         }
 
-        return $items::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
+        return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
     }
 
-     private function getMatchingItems($userKeywords) {
+     private function getMatchingItems($userKeywords,$type) {
         // Convert user keywords into an array
         $keywordsArray = explode(',', $userKeywords);
     
         // Initialize the query
-        $query = Item::query();
+        $query =$type==='audio'? Item::hasAudio():Item::hasVideo();
     
         // Loop through each keyword and add a condition using FIND_IN_SET
         foreach ($keywordsArray as $keyword) {
