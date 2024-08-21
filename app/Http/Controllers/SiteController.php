@@ -247,8 +247,13 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
-    private function relatedItems($itemId, $itemType)
+    private function relatedItems($itemId, $itemType,$keyword=null)
     {
+        if($keyword!=null){
+            $items=getMatchingItems($keyword);
+            dd($items);
+        }
+
         return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
     }
 
@@ -416,7 +421,7 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM);
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->keywords);
             $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
             $pageTitle = 'Episode Details';
 
