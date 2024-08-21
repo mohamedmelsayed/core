@@ -225,6 +225,7 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Movie Details';
+            $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
             $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM);
             $episodes = [];
             $video = $item->video;
@@ -249,6 +250,25 @@ class SiteController extends Controller
     private function relatedItems($itemId, $itemType)
     {
         return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
+    }
+
+    function getMatchingItems($userKeywords) {
+        // Convert user keywords into an array
+        $keywordsArray = explode(',', $userKeywords);
+    
+        // Initialize the query
+        $query = Item::query();
+    
+        // Loop through each keyword and add a condition using FIND_IN_SET
+        foreach ($keywordsArray as $keyword) {
+            $keyword = trim($keyword); // Clean up any extra spaces
+            $query->orWhereRaw("FIND_IN_SET(?, keywords)", [$keyword]);
+        }
+    
+        // Execute the query and get the results, optionally order by matching count
+        $matchingItems = $query->get();
+    
+        return $matchingItems;
     }
 
 
