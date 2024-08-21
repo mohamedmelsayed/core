@@ -453,8 +453,8 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Audio Details';
-            $relatedItems = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
             $relatedAudios = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->keywords);
 
             $episodes = [];
             $audio = $item->audio;
