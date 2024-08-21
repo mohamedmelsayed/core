@@ -249,10 +249,9 @@ class SiteController extends Controller
 
     private function relatedItems($itemId, $itemType,$keyword=null)
     {
-        $items=$this->getMatchingItems($keyword);
-        dd($items);
+      
         if($keyword!=null){
-            $items=getMatchingItems($keyword);
+            $items=$this->getMatchingItems($keyword);
             dd($items);
         }
 
