@@ -249,7 +249,7 @@ class SiteController extends Controller
 
     private function relatedItems($itemId, $itemType,$keyword=null)
     {
-        $items=getMatchingItems($keyword);
+        $items=$this->getMatchingItems($keyword);
         dd($items);
         if($keyword!=null){
             $items=getMatchingItems($keyword);
@@ -259,7 +259,7 @@ class SiteController extends Controller
         return Item::hasVideo()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
     }
 
-    function getMatchingItems($userKeywords) {
+     private function getMatchingItems($userKeywords) {
         // Convert user keywords into an array
         $keywordsArray = explode(',', $userKeywords);
     
