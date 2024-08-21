@@ -22,8 +22,9 @@
                             <tr>
                                 <td data-label="@lang('Name')">{{ __($subcategory->name)}}</td>
                                 <td data-label="@lang('English Name')">{{ __($subcategory->name_en)}}</td>
-                                <td data-label="@lang('English Name')">{{ __($subcategory->type)}}</td>
                                 <td data-label="@lang('Category')">{{ __($subcategory->category->name) }}</td>
+                                <td data-label="@lang('Type')">{{ __($subcategory->type)}}</td>
+
                                 <td data-label="@lang('Status')">
                                     @if($subcategory->status == 1)
                                     <span class="badge badge--success font-weight-normal text--small">@lang('Enabled')</span>
@@ -88,8 +89,8 @@
                         <label>@lang('Sub Category Type')</label>
                         <select name="type" class="form-control">
                             <option value="">-- @lang('Select One') --</option>
-                            <option value="vid">{{ __("video") }}</option>
-                            <option value="aud">{{ __("audio") }}</option>
+                            <option value="vid">@lang('video')/option>
+                            <option value="aud">@lang('audio')</option>
                         </select>
                     </div>
                     <div class="form-group statusGroup">
