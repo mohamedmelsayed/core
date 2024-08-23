@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     @endforeach
-
+                </div>
                     @if ($item->version == Status::RENT_VERSION && !$watchEligable)
                     <div class="main-audio-lock">
                         <div class="main-audio-lock-content">
