@@ -260,7 +260,11 @@ class SiteController extends Controller
                          ->get();
         } else {
             // Get items based on item type without keywords
-            return Item::orderBy('id', 'desc')
+            return $type==="video"?Item::hasVideo()->orderBy('id', 'desc')
+                       ->where('item_type', $itemType)
+                       ->where('id', '!=', $itemId)
+                       ->limit(8)
+                       ->get():Item::hasAudio()->orderBy('id', 'desc')
                        ->where('item_type', $itemType)
                        ->where('id', '!=', $itemId)
                        ->limit(8)
