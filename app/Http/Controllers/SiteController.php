@@ -193,8 +193,8 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags);
-            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,'audio');
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"video");
+            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"audio");
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -225,8 +225,8 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Movie Details';
-            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,'audio');
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags);
+            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"audio");
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"video");
             $episodes = [];
             $video = $item->video;
             $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
@@ -246,7 +246,7 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
-    private function relatedItems($itemId, $itemType, $keyword,$type="video")
+    private function relatedItems($itemId, $itemType, $keyword,$type)
     {
         if ($keyword != null) {
             // Get matching items based on keywords and item type
@@ -435,8 +435,8 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags);
-            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,'audio');
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"video");
+            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"audio");
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -467,8 +467,8 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Audio Details';
-            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,'audio');
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags);
+            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"audio");
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"video");
 
             $episodes = [];
             $audio = $item->audio;
