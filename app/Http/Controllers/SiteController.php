@@ -285,7 +285,6 @@ class SiteController extends Controller
             $keyword = trim($keyword); // Clean up any extra spaces
             $query->orWhereRaw("FIND_IN_SET(?, tags)", [$keyword]);
         }
-        dd($query);
         // Return the query builder (without executing the query yet)
         return $query;
     }
