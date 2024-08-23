@@ -198,6 +198,16 @@
                     </div>
                 @endforeach
             </div>
+        
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-header">
+                        <h2 class="section-title">@lang('Related Audio')</h2>
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-center mb-30-none">
                 @foreach ($relatedAudios as $related)
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
@@ -213,6 +223,7 @@
                     </div>
                 @endforeach
             </div>
+        
         </div>
     </section>
 
