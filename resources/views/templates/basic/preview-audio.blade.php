@@ -237,64 +237,74 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        background-color: #f5f5f5;
+        /* Light background color for the player */
         width: 100%;
         height: 250px;
-        background-color: #f5f5f5;
         padding: 10px;
         box-sizing: border-box;
         position: relative;
     }
 
     #audio-controls-container {
-        flex: 1;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
+        flex: 1;
+        max-width: calc(100% - 220px);
+        /* Adjust to account for thumbnail */
+        margin-right: 10px;
+        /* Space between controls and thumbnail */
+        background-color: #007bff;
+        /* Background color for controls area */
+        padding: 10px;
+        border-radius: 10px;
+        /* Optional: Rounded corners for the controls area */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* Optional: Shadow for better visibility */
     }
 
     #file-title {
-        font-size: 18px;
-        margin-bottom: 10px;
         text-align: center;
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
     }
 
     #audio-controls {
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 10px;
         width: 100%;
     }
 
-    .audio-control {
-        background-color: #007bff;
-        color: white;
+    #audio-controls button {
+        background-color: white;
         border: none;
         padding: 10px;
-        border-radius: 50%;
+        border-radius: 5px;
         cursor: pointer;
     }
 
-    #audio-controls #waveform {
+    #waveform {
         flex: 1;
         height: 100px;
-        background: #e9ecef;
+        margin-right: 10px;
+        /* Space between waveform and time indicator */
     }
 
-    #audio-controls #time-indicator {
-        margin-left: 10px;
+    #time-indicator {
+        width: 60px;
+        text-align: center;
     }
 
     #thumbnail {
         width: 200px;
         height: 200px;
-        border-radius: 10px;
-        object-fit: cover;
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
+        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
+        background-size: cover;
+        border-radius: 50%;
+        margin-left: 10px;
     }
 </style>
 <!-- 
