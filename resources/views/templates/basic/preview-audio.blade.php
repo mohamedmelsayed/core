@@ -238,13 +238,13 @@
         align-items: center;
         justify-content: space-between;
         background-color: cadetblue;
-        /* Light background color for the player */
         width: 100%;
-        border-radius: 20%;
+        border-radius: 20px;
         height: 250px;
         padding: 10px;
         box-sizing: border-box;
         position: relative;
+        overflow: hidden; /* Ensure content doesn't overflow */
     }
 
     #audio-controls-container {
@@ -252,16 +252,12 @@
         align-items: center;
         flex: 1;
         max-width: calc(100% - 220px);
-        /* Adjust to account for thumbnail */
         margin-right: 10px;
-        /* Space between controls and thumbnail */
-        background-color:gold;
-        /* Background color for controls area */
+        background-color: gold;
         padding: 10px;
         border-radius: 10px;
-        /* Optional: Rounded corners for the controls area */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        /* Optional: Shadow for better visibility */
+        overflow: hidden; /* Ensure content doesn't overflow */
     }
 
     #file-title {
@@ -291,7 +287,6 @@
         flex: 1;
         height: 100px;
         margin-right: 10px;
-        /* Space between waveform and time indicator */
     }
 
     #time-indicator {
@@ -307,7 +302,69 @@
         border-radius: 20%;
         margin-left: 10px;
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+        #audio-controls-container {
+            max-width: calc(100% - 180px); /* Adjust for smaller screens */
+        }
+
+        #waveform {
+            height: 80px; /* Slightly smaller height */
+        }
+        
+        #thumbnail {
+            width: 150px;
+            height: 150px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        #audio-player {
+            flex-direction: column;
+            height: auto; /* Allow height to adjust based on content */
+        }
+
+        #audio-controls-container {
+            max-width: 100%; /* Full width */
+            margin-right: 0;
+            margin-bottom: 10px; /* Space between controls and thumbnail */
+        }
+
+        #thumbnail {
+            width: 150px;
+            height: 150px;
+            margin-left: 0; /* Remove margin */
+            margin-top: 10px; /* Space above thumbnail */
+        }
+    }
+
+    @media (max-width: 768px) {
+        #file-title {
+            font-size: 16px;
+        }
+
+        #audio-controls {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        #waveform {
+            height: 60px; /* Smaller height for very small screens */
+        }
+
+        #time-indicator {
+            width: 50px;
+        }
+
+        #thumbnail {
+            width: 120px;
+            height: 120px;
+            margin-top: 10px;
+        }
+    }
 </style>
+
 <!-- 
 <style>
     #audio-player {
