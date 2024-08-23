@@ -237,9 +237,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: #f5f5f5;
+        background-color: cadetblue;
         /* Light background color for the player */
         width: 100%;
+        border-radius: 20%;
         height: 250px;
         padding: 10px;
         box-sizing: border-box;
@@ -254,7 +255,7 @@
         /* Adjust to account for thumbnail */
         margin-right: 10px;
         /* Space between controls and thumbnail */
-        background-color: #007bff;
+        background-color:gold;
         /* Background color for controls area */
         padding: 10px;
         border-radius: 10px;
@@ -303,7 +304,7 @@
         height: 200px;
         background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
         background-size: cover;
-        border-radius: 50%;
+        border-radius: 20%;
         margin-left: 10px;
     }
 </style>
