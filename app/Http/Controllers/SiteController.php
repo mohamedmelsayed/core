@@ -194,7 +194,7 @@ class SiteController extends Controller
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
             $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags);
-            $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
+            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,'audio');
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -225,7 +225,7 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Movie Details';
-            $relatedAudios = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
+            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,'audio');
             $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags);
             $episodes = [];
             $video = $item->video;
@@ -246,11 +246,11 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
-    private function relatedItems($itemId, $itemType, $keyword = null)
+    private function relatedItems($itemId, $itemType, $keyword = null,$type="video")
     {
         if ($keyword != null) {
             // Get matching items based on keywords and item type
-            $items = $this->getMatchingItems($keyword, $itemType);
+            $items = $this->getMatchingItems($keyword, $type);
     
             // Apply additional filters before executing the query
             return $items->where('item_type', $itemType)
@@ -433,7 +433,7 @@ class SiteController extends Controller
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
             $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags);
-            $relatedAudios = $this->relatedAudios($item->id, Status::EPISODE_ITEM);
+            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,'audio');
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -464,7 +464,7 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Audio Details';
-            $relatedAudios = $this->relatedAudios($item->id, Status::SINGLE_ITEM);
+            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,'audio');
             $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags);
 
             $episodes = [];
@@ -485,10 +485,7 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
-    private function relatedAudios($itemId, $itemType)
-    {
-        return Item::hasAudio()->orderBy('id', 'desc')->where('item_type', $itemType)->where('id', '!=', $itemId)->limit(8)->get();
-    }
+
 
     public function category($id)
     {
