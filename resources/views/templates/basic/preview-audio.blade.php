@@ -10,21 +10,20 @@
                         @foreach ($audios as $audio)
                         <div>
                             <div id="audio-player">
-                                <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
-
-                                <div id="audio-content">
+                                <div class="audio-controls-container">
                                     <div id="audio-controls">
                                         <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
                                         <button class="audio-control" id="volume-up"><i class="las la-volume-up"></i></button>
                                         <button class="audio-control" id="volume-down"><i class="las la-volume-down"></i></button>
-                                        <div id="waveform"></div>
-                                        <div id="time-indicator"></div>
                                     </div>
-                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="Thumbnail" id="thumbnail" />
+                                    <div id="waveform"></div>
+                                    <div id="time-indicator"></div>
+                                    <div class="file-title">File Title</div>
+                                </div>
+                                <div class="thumbnail">
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="Thumbnail" />
                                 </div>
                             </div>
-
-
 
                         </div>
                         @endforeach
@@ -234,65 +233,87 @@
 @endsection
 <style>
     #audio-player {
+        display: flex;
         width: 100%;
         height: 400px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background-color: #f5f5f5;
+        /* Background color for the entire audio player */
+        border-radius: 10px;
+        /* Rounded corners for the container */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        /* Optional shadow for a 3D effect */
+        overflow: hidden;
+        /* Ensures the thumbnail and other elements stay within the container */
         position: relative;
     }
 
-    #audio-content {
+    .audio-controls-container {
         display: flex;
-        width: 100%;
-        height: 100%;
-        max-width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        padding: 10px;
+        background-color: #ffffff;
+        /* Background color for the controls and waveform section */
     }
 
     #audio-controls {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex-grow: 1;
-        padding: 20px;
-        box-sizing: border-box;
+        justify-content: flex-start;
+        gap: 10px;
     }
 
-    #play-pause,
-    #volume-up,
-    #volume-down {
-        margin: 10px;
-        background: #fff;
+    #audio-controls .audio-control {
+        background-color: #007bff;
+        /* Button color */
+        color: white;
         border: none;
+        border-radius: 50%;
+        padding: 10px;
         cursor: pointer;
-        font-size: 24px;
-        transition: background 0.3s;
-    }
-
-    #play-pause:hover,
-    #volume-up:hover,
-    #volume-down:hover {
-        background: #e0e0e0;
+        font-size: 1.2em;
     }
 
     #waveform {
-        width: 100%;
+        flex: 1;
         height: 100px;
-        background: #f0f0f0;
-        margin: 20px 0;
+        background-color: #e0e0e0;
+        /* Light gray for waveform background */
+        margin: 10px 0;
+        border-radius: 5px;
     }
 
     #time-indicator {
-        font-size: 16px;
+        text-align: center;
+        font-size: 1em;
+        color: #333;
+    }
+
+    .file-title {
+        text-align: center;
+        font-size: 1.2em;
+        color: #333;
         margin-top: 10px;
     }
 
-    #thumbnail {
+    .thumbnail {
         width: 200px;
         height: 200px;
+        background-color: #fff;
+        /* Background color for the thumbnail container */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        /* Rounded corners for the thumbnail */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        /* Optional shadow for the thumbnail */
+    }
+
+    .thumbnail img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        margin-left: 20px;
     }
 </style>
 <!-- 
