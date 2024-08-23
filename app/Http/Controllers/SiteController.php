@@ -246,7 +246,7 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
-    private function relatedItems($itemId, $itemType, $keyword,$type)
+    private function relatedItems($itemId, $itemType, $keyword, $type)
     {
         if ($keyword != null) {
             // Get matching items based on keywords and item type
@@ -260,11 +260,11 @@ class SiteController extends Controller
                          ->get();
         } else {
             // Get items based on item type without keywords
-            return $type==="video"?Item::hasVideo()->orderBy('id', 'desc')
+            return $type === "video" ? Item::hasVideo()->orderBy('id', 'desc')
                        ->where('item_type', $itemType)
                        ->where('id', '!=', $itemId)
                        ->limit(8)
-                       ->get():Item::hasAudio()->orderBy('id', 'desc')
+                       ->get() : Item::hasAudio()->orderBy('id', 'desc')
                        ->where('item_type', $itemType)
                        ->where('id', '!=', $itemId)
                        ->limit(8)
@@ -280,14 +280,34 @@ class SiteController extends Controller
         // Initialize the query based on item type
         $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
     
+        // Track the number of matches
+        $matchCount = 0;
+    
         // Loop through each keyword and add a condition using FIND_IN_SET
         foreach ($keywordsArray as $keyword) {
             $keyword = trim($keyword); // Clean up any extra spaces
             $query->orWhereRaw("FIND_IN_SET(?, tags)", [$keyword]);
+            
+            // Increment match count if a match is found
+            if ($query->exists()) {
+                $matchCount++;
+            }
+    
+            // Break the loop if two matches are found
+            if ($matchCount >= 2) {
+                break;
+            }
         }
-        // Return the query builder (without executing the query yet)
-        return  $type === "video" ? $query->where("is_audio",0):$query->where("is_audio",1);
+    
+        // Return the query only if two or more matches are found
+        if ($matchCount >= 2) {
+            return $type === "video" ? $query->where("is_audio", 0) : $query->where("is_audio", 1);
+        }
+    
+        // Return an empty result if less than two matches are found
+        return $query->where('id', 0); // Returning a query that results in no matches
     }
+    
     
 
 
