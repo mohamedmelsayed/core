@@ -306,7 +306,7 @@
     /* Responsive adjustments */
     @media (max-width: 1200px) {
         #audio-controls-container {
-            max-width: calc(100% - 180px); /* Adjust for smaller screens */
+            max-width: calc(100% - 220px); /* Adjust to account for thumbnail */
         }
 
         #waveform {
@@ -357,10 +357,9 @@
             width: 50px;
         }
 
+        /* Hide thumbnail on mobile */
         #thumbnail {
-            width: 120px;
-            height: 120px;
-            margin-top: 10px;
+            display: none;
         }
     }
 </style>
