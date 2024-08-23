@@ -12,17 +12,16 @@
                             <div id="audio-player">
                                 <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
 
-                                <div id="audio-controls">
-
-
-                                    <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
-                                    <button class="audio-control" id="volume-up"><i class="las la-volume-up"></i></button>
-                                    <button class="audio-control" id="volume-down"><i class="las la-volume-down"></i></button>
-                                    <div id="waveform"></div> <!-- Waveform is now at the bottom of audioBG -->
-                                    <div id="time-indicator"></div>
-
+                                <div id="audio-content">
+                                    <div id="audio-controls">
+                                        <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
+                                        <button class="audio-control" id="volume-up"><i class="las la-volume-up"></i></button>
+                                        <button class="audio-control" id="volume-down"><i class="las la-volume-down"></i></button>
+                                        <div id="waveform"></div>
+                                        <div id="time-indicator"></div>
+                                    </div>
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="Thumbnail" id="thumbnail" />
                                 </div>
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" />
                             </div>
 
 
@@ -235,63 +234,66 @@
 @endsection
 <style>
     #audio-player {
-    position: relative;
-    width: 100%;
-    max-width: 600px;
-    margin: 20px auto;
-    background-color: #f5f5f5;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
+        width: 100%;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
 
-#audio-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px;
-    background-color: #ffffff;
-    border-top: 1px solid #ddd;
-}
+    #audio-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+    }
 
-.audio-control {
-    background-color: #ffffff;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
+    #audio-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
-.audio-control:hover {
-    color: #007bff;
-}
+    #play-pause,
+    #volume-up,
+    #volume-down {
+        margin: 10px;
+        background: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        transition: background 0.3s;
+    }
 
-#audio-controls #play-pause i,
-#audio-controls #volume-up i,
-#audio-controls #volume-down i {
-    color: #555;
-}
+    #play-pause:hover,
+    #volume-up:hover,
+    #volume-down:hover {
+        background: #e0e0e0;
+    }
 
-#waveform {
-    flex-grow: 1;
-    margin: 0 15px;
-    height: 60px;
-    background-color: #e9ecef;
-    border-radius: 5px;
-    overflow: hidden;
-}
+    #waveform {
+        width: 100%;
+        height: 100px;
+        background: #f0f0f0;
+        margin: 20px 0;
+    }
 
-#time-indicator {
-    font-size: 14px;
-    color: #666;
-    margin-left: 10px;
-}
+    #time-indicator {
+        font-size: 16px;
+        margin-top: 10px;
+    }
 
-#audio-player img {
-    width: 100%;
-    border-radius: 0 0 15px 15px;
-}
-
+    #thumbnail {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        margin-left: 20px;
+    }
 </style>
 <!-- 
 <style>
