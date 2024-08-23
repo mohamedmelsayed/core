@@ -13,7 +13,7 @@
                                 <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
 
                                 <div id="audio-controls-container">
-                                    <div id="file-title">{{ $audio->title }}</div>
+                                    <div id="file-title">{{ $seoContents["social_title"]}}</div>
                                     <div id="audio-controls">
                                         <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
                                         <button class="audio-control" id="volume-up"><i class="las la-volume-up"></i></button>
