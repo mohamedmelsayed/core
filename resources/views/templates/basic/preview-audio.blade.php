@@ -9,9 +9,7 @@
                     @foreach ($audios as $audio)
 
                     <div id="main-audio" class="audio-container">
-                        <!-- Background and Audio Player -->
-                        <div id="audioBG" class="audio-background">
-
+                      
                             <div id="audio-player" class="audio-player">
                                 <!-- Waveform Display -->
                                 <div id="waveform"></div>
@@ -28,7 +26,10 @@
                                     </button>
                                 </div>
                             </div>
+                              <!-- Background and Audio Player -->
+                        <div id="audioBG" class="audio-background">
                         </div>
+
                     </div>
                     @endforeach
                 </div>
