@@ -246,7 +246,7 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
-    private function relatedItems($itemId, $itemType, $keyword = null,$type="video")
+    private function relatedItems($itemId, $itemType, $keyword,$type="video")
     {
         if ($keyword != null) {
             // Get matching items based on keywords and item type
