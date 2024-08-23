@@ -163,10 +163,9 @@
 <section class="audio-section ptb-80">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-xl-12">
                 <div class="section-header">
-                    <h2 class="section-title">{{ __(@$sections->video_title) }}</h2>
-                    <p>{{ __(@$sections->video_subtitle) }}</p>
+                    <h2 class="section-title">@lang('Related Videos')</h2>
                 </div>
             </div>
         </div>
@@ -192,15 +191,14 @@
             </div>
             @endforeach
         </div>
-        
+
     </div>
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-xl-12">
                 <div class="section-header">
-                    <h2 class="section-title">{{ __(@$sections->audio_title) }}</h2>
-                    <p>{{ __(@$sections->audio_subtitle) }}</p>
+                    <h2 class="section-title">@lang('Related Audio')</h2>
                 </div>
             </div>
         </div>
@@ -226,7 +224,7 @@
             </div>
             @endforeach
         </div>
-        
+
     </div>
 </section>
 @endsection
