@@ -278,7 +278,7 @@ class SiteController extends Controller
         $keywordsArray = explode(',', $userKeywords);
     
         // Initialize the query based on item type
-        $query = $type === "video" ? Item::hasVideo()->where("is_audio",0) : Item::hasAudio()->where("is_audio",1);
+        $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
     
         // Loop through each keyword and add a condition using FIND_IN_SET
         foreach ($keywordsArray as $keyword) {
@@ -286,7 +286,7 @@ class SiteController extends Controller
             $query->orWhereRaw("FIND_IN_SET(?, tags)", [$keyword]);
         }
         // Return the query builder (without executing the query yet)
-        return $query;
+        return  $type === "video" ? $query->where("is_audio",0):$query->where("is_audio",1);
     }
     
 
