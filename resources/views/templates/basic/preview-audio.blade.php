@@ -239,7 +239,7 @@
         justify-content: space-between;
         background-color: cadetblue;
         width: 100%;
-        border-radius: 20px;
+        border-radius: 8px;
         height: 250px;
         padding: 10px;
         box-sizing: border-box;
