@@ -165,8 +165,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-header">
-                    <h2 class="section-title">{{ __(@$sections->audio_title) }}</h2>
-                    <p>{{ __(@$sections->audio_subtitle) }}</p>
+                    <h2 class="section-title">{{ __(@$sections->video_title) }}</h2>
+                    <p>{{ __(@$sections->video_subtitle) }}</p>
                 </div>
             </div>
         </div>
@@ -192,6 +192,18 @@
             </div>
             @endforeach
         </div>
+        
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-header">
+                    <h2 class="section-title">{{ __(@$sections->audio_title) }}</h2>
+                    <p>{{ __(@$sections->audio_subtitle) }}</p>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center mb-30-none">
             @foreach ($relatedAudios as $relatedItem)
             <div class="col-xl-3 col-lg-4 col-sm-6 mb-30">
@@ -214,6 +226,7 @@
             </div>
             @endforeach
         </div>
+        
     </div>
 </section>
 @endsection
