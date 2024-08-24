@@ -30,12 +30,12 @@
                                 @foreach ($categories as $category)
                                     @if ($category->subcategories->count())
                                         <li><a class="nav-link category-nav"
-                                               href="{{ route('category', $category->id) }}">{{ $currentLang==='en'? $category->name:$category->name_en}}</a>
+                                               href="{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
                                             <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
                                             <ul class="sub-menu">
                                                 @forelse($category->subcategories as $subcategory)
                                                     <li>
-                                                        <a href="{{ route('subCategory', $subcategory->id) }}">{{$currentLang==='en'? $subcategory->name:$subcategory->name_en }}</a>
+                                                        <a href="{{ route('subCategory', $subcategory->id) }}">{{app()->getLocale() === 'ar' ? $subcategory->name:$subcategory->name_en }}</a>
                                                     </li>
                                                 @empty
                                                 @endforelse
