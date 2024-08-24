@@ -238,13 +238,13 @@
         align-items: center;
         justify-content: space-between;
         background-color: cadetblue;
+        /* Light background color for the player */
         width: 100%;
-        border-radius: 8px;
+        border-radius: 10%;
         height: 250px;
         padding: 10px;
         box-sizing: border-box;
         position: relative;
-        overflow: hidden; /* Ensure content doesn't overflow */
     }
 
     #audio-controls-container {
@@ -252,12 +252,16 @@
         align-items: center;
         flex: 1;
         max-width: calc(100% - 220px);
+        /* Adjust to account for thumbnail */
         margin-right: 10px;
+        /* Space between controls and thumbnail */
         background-color: gold;
+        /* Background color for controls area */
         padding: 10px;
         border-radius: 10px;
+        /* Optional: Rounded corners for the controls area */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden; /* Ensure content doesn't overflow */
+        /* Optional: Shadow for better visibility */
     }
 
     #file-title {
@@ -287,6 +291,7 @@
         flex: 1;
         height: 100px;
         margin-right: 10px;
+        /* Space between waveform and time indicator */
     }
 
     #time-indicator {
@@ -303,125 +308,66 @@
         margin-left: 10px;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 1200px) {
-        #audio-controls-container {
-            max-width: calc(100% - 220px); /* Adjust to account for thumbnail */
-        }
-
-        #waveform {
-            height: 80px; /* Slightly smaller height */
-        }
-        
-        #thumbnail {
-            width: 150px;
-            height: 150px;
-        }
-    }
-
-    @media (max-width: 992px) {
-        #audio-player {
-            flex-direction: column;
-            height: auto; /* Allow height to adjust based on content */
-        }
-
-        #audio-controls-container {
-            max-width: 100%; /* Full width */
-            margin-right: 0;
-            margin-bottom: 10px; /* Space between controls and thumbnail */
-        }
-
-        #thumbnail {
-            width: 150px;
-            height: 150px;
-            margin-left: 0; /* Remove margin */
-            margin-top: 10px; /* Space above thumbnail */
-        }
-    }
-
+    /* Responsive styling */
     @media (max-width: 768px) {
+        #audio-player {
+            height: 200px;
+        }
+
+        #audio-controls-container {
+            max-width: 100%;
+            margin-right: 0;
+        }
+
+        #thumbnail {
+            display: none;
+        }
+
         #file-title {
             font-size: 16px;
         }
 
-        #audio-controls {
+        #waveform {
+            height: 80px;
+        }
+
+        #audio-controls button {
+            padding: 8px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #audio-player {
             flex-direction: column;
-            gap: 5px;
+            align-items: flex-start;
+            height: auto;
+        }
+
+        #audio-controls-container {
+            width: 100%;
+            margin: 0;
+            padding: 5px;
+        }
+
+        #file-title {
+            font-size: 14px;
         }
 
         #waveform {
-            height: 60px; /* Smaller height for very small screens */
+            height: 60px;
+        }
+
+        #audio-controls button {
+            padding: 6px;
+            font-size: 14px;
         }
 
         #time-indicator {
             width: 50px;
         }
-
-        /* Hide thumbnail on mobile */
-        #thumbnail {
-            display: none;
-        }
     }
 </style>
 
-<!-- 
-<style>
-    #audio-player {
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-        position: relative;
-    }
-
-    #audio-controls {
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    #audioBG {
-        height: 500px;
-        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
-        background-size: cover;
-        position: relative;
-    }
-
-    #waveform {
-        position: absolute;
-        bottom: 15px;
-        width: 100%;
-        height: 100px;
-        /* Adjust height as needed */
-        opacity: 0.9;
-        /* 90% transparent */
-    }
-
-    .waveform canvas {
-        opacity: 0.9;
-        /* Ensure the canvas itself is transparent */
-    }
-
-    #time-indicator {
-        position: absolute;
-        bottom: 100px;
-        /* This should be equal to the height of the waveform */
-        left: 0;
-        width: 100%;
-        text-align: center;
-        padding: 5px 0;
-        background-color: rgba(255, 255, 255, 0.8);
-    }
-
-    #play-pause,
-    #volume-up,
-    #volume-down {
-        margin-top: 10px;
-    }
-</style> -->
 @push('script')
 <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
 <script>
