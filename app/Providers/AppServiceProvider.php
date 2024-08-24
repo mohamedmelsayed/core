@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider {
             'subcategories' => function ($subcategory) {
                 $subcategory->where('status', Status::ENABLE);
             },
-        ])->get(['name', 'id']);
+        ])->get(['name','name_en', 'id']);
 
         view()->share($viewShare);
 
