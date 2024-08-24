@@ -240,7 +240,7 @@
         background-color: cadetblue;
         /* Light background color for the player */
         width: 100%;
-        border-radius: 10%;
+        border-radius: 7%;
         height: 250px;
         padding: 10px;
         box-sizing: border-box;
