@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller {
     public function index() {
         $pageTitle  = "All Category";
-        $categories = Category::latest()->searchable(['name','name_en'])->paginate(getPaginate());
+        $categories = Category::latest()->searchable(['name'])->paginate(getPaginate());
         return view('admin.category.index', compact('pageTitle', 'categories'));
     }
 
