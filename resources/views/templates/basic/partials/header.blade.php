@@ -43,7 +43,7 @@
                                         </li>
                                     @else
                                         <li>
-                                            <a href="{{ route('category', $category->id) }}">{{ __($category->name) }}</a>
+                                            <a href="{{ route('category', $category->id) }}">{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
                                         </li>
                                     @endif
                                 @endforeach
