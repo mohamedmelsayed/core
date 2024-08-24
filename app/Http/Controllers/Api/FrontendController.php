@@ -220,15 +220,13 @@ class FrontendController extends Controller {
     public function categories() {
         $notify[]   = 'All Categories';
         $categories = Category::where('status', Status::ENABLE)->apiQuery();
-        $currentLang = session()->get('lang', 'ar');
-
+        
         return response()->json([
             'remark'  => 'all-categories',
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
                 'categories' => $categories,
-                'currentLang'=>$currentLang
             ],
         ]);
     }
