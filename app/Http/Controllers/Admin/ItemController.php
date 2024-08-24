@@ -45,7 +45,6 @@ class ItemController extends Controller
 
         $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
 
-        return $items;
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
