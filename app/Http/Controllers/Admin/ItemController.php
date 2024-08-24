@@ -37,6 +37,18 @@ class ItemController extends Controller
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 
+    public function rentItems()
+    {
+        $pageTitle = "Rent Items";
+        $items = Item::rentItems()->with('category', 'sub_category', 'video');
+
+
+        $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
+
+        return $items;
+        return view('admin.item.index', compact('pageTitle', 'items'));
+    }
+
     private function itemsDataVideo($scope = null)
     {
 
