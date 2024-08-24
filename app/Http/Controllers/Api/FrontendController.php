@@ -220,7 +220,6 @@ class FrontendController extends Controller {
     public function categories() {
         $notify[]   = 'All Categories';
         $categories = Category::where('status', Status::ENABLE)->apiQuery();
-        dd($categories);
         return response()->json([
             'remark'  => 'all-categories',
             'status'  => 'success',
