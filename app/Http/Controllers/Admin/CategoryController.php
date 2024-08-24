@@ -9,13 +9,14 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller {
     public function index() {
         $pageTitle  = "All Category";
-        $categories = Category::latest()->searchable(['name'])->paginate(getPaginate());
+        $categories = Category::latest()->searchable(['name','name_en'])->paginate(getPaginate());
         return view('admin.category.index', compact('pageTitle', 'categories'));
     }
 
     public function store(Request $request, $id = 0) {
         $request->validate([
             'name' => 'required',
+            'name_en' => 'required',
         ]);
 
         if ($id == 0) {
@@ -27,6 +28,7 @@ class CategoryController extends Controller {
         }
 
         $category->name = $request->name;
+        $category->name_en = $request->name_en;
         $category->save();
 
         $notify[] = ['success', $notification];
