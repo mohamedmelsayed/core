@@ -46,7 +46,9 @@
                                         <a class="btn btn-sm btn-outline--danger deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
                                             <i class="las la-recycle"></i> @lang('Delete')
                                         </a>
-
+                                        <a class="dropdown-item threshold" href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
+                                                <i class="las la-language"></i> @lang('Translate Content')
+                                            </a>
                                         <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item threshold" href="{{ route('preview.audio', $item->slug) }}" target="_blank"> <i class="las la-eye"></i> @lang('Preview') </a>
