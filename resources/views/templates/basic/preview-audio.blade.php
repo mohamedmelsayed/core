@@ -46,9 +46,9 @@
                         <div class="audio-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                             <div class="audio-content-left">
                                 <h3 class="title">{{ __($seoContents["social_title"]) }}</h3>
-                                <span class="sub-title">@lang('Category') : <span class="cat">{{ @$item->category->name }}</span>
+                                <span class="sub-title">@lang('Category') : <span class="cat">{{app()->getLocale() === 'ar'? $item->category->name :$item->category->name_en}}</span>
                                     @if ($item->sub_category)
-                                    @lang('Sub Category'): {{ @$item->sub_category->name }}
+                                    @lang('Sub Category'): {{ app()->getLocale() === 'ar'? $item->sub_category->name :$item->sub_category->name_en }}
                                     @endif
                                 </span>
                             </div>
