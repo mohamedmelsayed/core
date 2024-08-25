@@ -37,7 +37,7 @@ class SiteController extends Controller
         $sliders = Slider::orderBy('id', 'desc')->where('status', 1)->with('item', 'item.category', 'item.video')->get();
         $featuredMovies = Item::active()->hasVideo()->where('featured', 1)->orderBy('id', 'desc')->get();
         $advertise = Advertise::where('device', 1)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
-        return view($this->activeTemplate . 'home', compact('pageTitle', 'sliders', 'featuredMovies', 'advertise','currentLang'));
+        return view($this->activeTemplate . 'home', compact('pageTitle', 'sliders', 'featuredMovies', 'advertise', 'currentLang'));
     }
 
     public function contact()
@@ -194,8 +194,8 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"video");
-            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"audio");
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "video");
+            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "audio");
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -226,8 +226,8 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Movie Details';
-            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"audio");
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"video");
+            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
             $episodes = [];
             $video = $item->video;
             $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
@@ -245,51 +245,70 @@ class SiteController extends Controller
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
-    private function relatedItems($itemId, $itemType, $keyword,$type)
+    private function relatedItems($itemId, $itemType, $keyword, $type)
     {
+        $lang = app()->getLocale();
+
+
         if ($keyword != null) {
             // Get matching items based on keywords and item type
             $items = $this->getMatchingItems($keyword, $type);
-    
             // Apply additional filters before executing the query
-            return $items->where('item_type', $itemType)
-                         ->where('id', '!=', $itemId)
-                         ->orderBy('id', 'desc')
-                         ->limit(8)
-                         ->get();
+            $itemstoreturn = $items->where('item_type', $itemType)
+                ->where('id', '!=', $itemId)
+                ->orderBy('id', 'desc')
+                ->limit(8)
+                ->get();
+            foreach ($itemstoreturn as $item) {
+                # code...
+                $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
+
+                $item->title = $translate != null ? $translate->translated_title : $item->title;
+                $item->description = $translate != null ? $translate->translated_description : $item->title;
+            }
+            return $itemstoreturn;
         } else {
             // Get items based on item type without keywords
-            return $type==="video"?Item::hasVideo()->orderBy('id', 'desc')
-                       ->where('item_type', $itemType)
-                       ->where('id', '!=', $itemId)
-                       ->limit(8)
-                       ->get():Item::hasAudio()->orderBy('id', 'desc')
-                       ->where('item_type', $itemType)
-                       ->where('id', '!=', $itemId)
-                       ->limit(8)
-                       ->get();
+
+            $items = $type === "video" ? Item::hasVideo()->orderBy('id', 'desc')
+                ->where('item_type', $itemType)
+                ->where('id', '!=', $itemId)
+                ->limit(8)
+                ->get() : Item::hasAudio()->orderBy('id', 'desc')
+                ->where('item_type', $itemType)
+                ->where('id', '!=', $itemId)
+                ->limit(8)
+                ->get();
+            foreach ($items as $item) {
+                # code...
+                $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
+
+                $item->title = $translate != null ? $translate->translated_title : $item->title;
+                $item->description = $translate != null ? $translate->translated_description : $item->title;
+            }
+            return $items;
         }
     }
-    
+
     private function getMatchingItems($userKeywords, $type)
     {
         // Convert user keywords into an array
         $keywordsArray = explode(',', $userKeywords);
-    
+
         // Initialize the query based on item type
         $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
-    
+
         // Loop through each keyword and add a condition using FIND_IN_SET
         foreach ($keywordsArray as $keyword) {
             $keyword = trim($keyword); // Clean up any extra spaces
             $query->orWhereRaw("FIND_IN_SET(?, tags)", [$keyword]);
         }
         // Return the query builder (without executing the query yet)
-        return  $type === "video" ? $query->where("is_audio",0):$query->where("is_audio",1);
+        return  $type === "video" ? $query->where("is_audio", 0) : $query->where("is_audio", 1);
     }
-    
+
 
 
     private function storeHistory($itemId = null, $episodeId = null)
@@ -404,7 +423,7 @@ class SiteController extends Controller
     private function getItemSeoContent($item)
     {
         $lang = app()->getLocale();
-      
+
 
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
@@ -433,8 +452,8 @@ class SiteController extends Controller
 
         if ($item->item_type == Status::EPISODE_ITEM) {
             $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"video");
-            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM,$item->tags,"audio");
+            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "video");
+            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "audio");
             $pageTitle = 'Episode Details';
 
             if ($episodes->isEmpty()) {
@@ -465,8 +484,8 @@ class SiteController extends Controller
             $this->storeVideoReport($item->id);
 
             $pageTitle = 'Audio Details';
-            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"audio");
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM,$item->tags,"video");
+            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
 
             $episodes = [];
             $audio = $item->audio;
@@ -483,7 +502,7 @@ class SiteController extends Controller
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item','relatedAudios', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
 
@@ -499,13 +518,11 @@ class SiteController extends Controller
     public function subCategory($id)
     {
         $subcategory = SubCategory::findOrFail($id);
-        if($subcategory->type==="vid"){
+        if ($subcategory->type === "vid") {
             $items = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
-
         }
-        if($subcategory->type==="aud"){
+        if ($subcategory->type === "aud") {
             $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
-
         }
         $pageTitle = $subcategory->name;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory'));
