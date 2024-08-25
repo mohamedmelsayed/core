@@ -262,11 +262,14 @@ class SiteController extends Controller
                 ->limit(8)
                 ->get();
             foreach ($itemstoreturn as $item) {
-                # code...
-                $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
+                if ($lang !== 'ar') {
+                    $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
 
-                $item->title = $translate != null ? $translate->translated_title : $item->title;
-                $item->description = $translate != null ? $translate->translated_description : $item->title;
+                    $item->title = $translate != null ? $translate->translated_title : $item->title;
+                    $item->description = $translate != null ? $translate->translated_description : $item->title;
+                }
+                # code...
+
             }
             return $itemstoreturn;
         } else {
@@ -282,11 +285,13 @@ class SiteController extends Controller
                 ->limit(8)
                 ->get();
             foreach ($items as $item) {
-                # code...
-                $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
+                if ($lang !== 'ar') {
+                    # code...
+                    $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
 
-                $item->title = $translate != null ? $translate->translated_title : $item->title;
-                $item->description = $translate != null ? $translate->translated_description : $item->title;
+                    $item->title = $translate != null ? $translate->translated_title : $item->title;
+                    $item->description = $translate != null ? $translate->translated_description : $item->title;
+                }
             }
             return $items;
         }
