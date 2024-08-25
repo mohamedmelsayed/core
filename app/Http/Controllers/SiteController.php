@@ -403,11 +403,8 @@ class SiteController extends Controller
 
     private function getItemSeoContent($item)
     {
-        $lang = "ar";
-        $user = auth()->user();
-        if ($user != null) {
-            $lang = $user->lang;
-        }
+        $lang = app()->getLocale();
+      
 
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
