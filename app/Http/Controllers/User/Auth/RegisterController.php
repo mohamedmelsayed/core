@@ -158,4 +158,20 @@ class RegisterController extends Controller {
         return to_route('user.home');
     }
 
+    public function verifyUser($token) {
+        $user = User::where('verification_token', $token)->first();
+    
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['message' => 'Invalid verification token.']);
+        }
+    
+        $user->status = 1;  // Mark the user as verified
+        $user->verification_token = null;  // Remove the token
+        $user->save();
+    
+        auth()->login($user);
+    
+        return redirect()->route('user.home')->with('success', 'Your account has been verified and you are now logged in.');
+    }
+
 }
