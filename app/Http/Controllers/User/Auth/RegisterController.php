@@ -169,6 +169,7 @@ class RegisterController extends Controller {
         }
     
         $user->status = 1;  // Mark the user as verified
+        $user->ev = 1;  // Mark the user as verified
         $user->verification_token = null;  // Remove the token
         $user->verification_token_expires_at = null;  // Clear the expiration timestamp
         $user->save();
