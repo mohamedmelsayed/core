@@ -122,7 +122,7 @@ class RegisterController extends Controller {
         $user->save();
     
         // Send verification email
-        Mail::send('emails.verify', ['token' => $user->verification_token], function($message) use ($user) {
+        Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
             $message->to($user->email);
             $message->subject('Account Verification');
         });
