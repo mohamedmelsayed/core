@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\User\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('pusher/auth/{socketId}/{channelName}', 'SiteController@pusher')->name('pusher');
@@ -70,3 +71,4 @@ Route::controller('SiteController')->group(function () {
 });
 
 
+Route::get('verify/{token}', [RegisterController::class, 'verifyUser'])->name('user.verify');

@@ -19,7 +19,6 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
         Route::get('register', 'showRegistrationForm')->name('register');
         Route::post('register', 'register')->middleware('registration.status');
         Route::post('check-mail', 'checkUser')->name('checkUser');
-        Route::get('/verify/{token}', 'verifyUser')->name('user.verify');
 
     });
 
