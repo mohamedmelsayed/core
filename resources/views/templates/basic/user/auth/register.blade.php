@@ -54,7 +54,7 @@
                                     <label>@lang('E-Mail Address')*</label>
                                     <input class="form-control form--control checkUser" id="email" name="email" type="email" value="{{ old('email') }}" required>
                                 </div>
-                                <div class="col-lg-6 form-group">
+                                <!-- <div class="col-lg-6 form-group">
                                     <label>@lang('Country')*</label>
                                     <div class="input-group">
                                         <select class="form-control form--control" id="country" name="country">
@@ -75,7 +75,7 @@
                                         <input class="form-control form--control checkUser" id="mobile" name="mobile" type="number" value="{{ old('mobile') }}">
                                     </div>
                                     <small class="text-danger mobileExist"></small>
-                                </div>
+                                </div> -->
 
                                 <div class="col-lg-6 form-group">
                                     <label>@lang('Password')*</label>
