@@ -9,6 +9,7 @@ use App\Models\DeviceToken;
 use App\Models\User;
 use App\Models\UserLogin;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
