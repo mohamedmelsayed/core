@@ -40,7 +40,7 @@ class RegisterController extends Controller {
         $info       = json_decode(json_encode(getIpInfo()), true);
         $mobileCode = @implode(',', $info['code']);
         $countries  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-        return view($this->activeTemplate . 'user.add.mobile', compact('pageTitle', 'mobileCode', 'countries'));
+        return view($this->activeTemplate . 'user.auth.mobile_verification', compact('pageTitle', 'mobileCode', 'countries'));
     }
 
 
