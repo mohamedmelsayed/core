@@ -8,6 +8,8 @@ use App\Models\UserDevice;
 use App\Models\UserLogin;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller {
@@ -48,6 +50,7 @@ class LoginController extends Controller {
         }
 
         if ($this->attemptLogin($request)) {
+            $user = $request->user();
             if (!$user->ev) {
                 // Regenerate the activation token
                 $user->activation_token = Str::random(60);
