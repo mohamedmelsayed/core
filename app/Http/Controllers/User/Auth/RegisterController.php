@@ -35,6 +35,15 @@ class RegisterController extends Controller {
         return view($this->activeTemplate . 'user.auth.register', compact('pageTitle', 'mobileCode', 'countries'));
     }
 
+    public function showAddMobileForm() {
+        $pageTitle  = "Add Mobile Number";
+        $info       = json_decode(json_encode(getIpInfo()), true);
+        $mobileCode = @implode(',', $info['code']);
+        $countries  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+        return view($this->activeTemplate . 'user.add.mobile', compact('pageTitle', 'mobileCode', 'countries'));
+    }
+
+
     protected function validator(array $data) {
         $general            = gs();
         $passwordValidation = Password::min(6);
