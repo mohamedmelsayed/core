@@ -42,8 +42,78 @@ class LoginController extends Controller {
         parent::__construct();
         $this->username = $this->findUsername();
     }
-
     public function login(Request $request) {
+        $validator = $this->validateLogin($request);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'remark'  => 'validation_error',
+                'status'  => 'error',
+                'message' => ['error' => $validator->errors()->all()],
+            ]);
+        }
+    
+        $credentials = request([$this->username, 'password']);
+        if (!Auth::attempt($credentials)) {
+            $response[] = 'Unauthorized user';
+            return response()->json([
+                'remark'  => 'validation_error',
+                'status'  => 'error',
+                'message' => ['error' => $response],
+            ]);
+        }
+    
+        $user = $request->user();
+    
+        // Check if user is not verified
+        if (!$user->ev) {
+            // Regenerate the activation token
+            $user->activation_token = Str::random(60);
+            $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
+
+            $user->save();
+    
+            // Send verification email with the new activation token
+            Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
+                $message->to($user->email);
+                $message->subject('Account Verification');
+            });
+    
+            // Optional: Send verification code via SMS
+            if ($user->mobile && env('SEND_SMS')) {
+                $user->ver_code = verificationCode(6);
+                $user->ver_code_send_at = Carbon::now();
+                $user->save();
+                sendSms($user->mobile, $user->ver_code);
+            }
+    
+            Auth::logout();
+            $response[] = 'Account not verified. A new verification email has been sent.';
+            return response()->json([
+                'remark'  => 'not_verified',
+                'status'  => 'error',
+                'message' => ['error' => $response],
+            ]);
+        }
+    
+        $tokenResult = $user->createToken('auth_token')->plainTextToken;
+    
+        $this->authenticated($request, $user);
+        $response[] = 'Login Successful';
+        return response()->json([
+            'remark'  => 'login_success',
+            'status'  => 'success',
+            'message' => ['success' => $response],
+            'data'    => [
+                'user'         => auth()->user(),
+                'access_token' => $tokenResult,
+                'token_type'   => 'Bearer',
+            ],
+        ]);
+    }
+    
+
+    public function loginOld(Request $request) {
         $validator = $this->validateLogin($request);
 
         if ($validator->fails()) {
