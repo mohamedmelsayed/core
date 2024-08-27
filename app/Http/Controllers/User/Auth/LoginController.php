@@ -48,6 +48,31 @@ class LoginController extends Controller {
         }
 
         if ($this->attemptLogin($request)) {
+            if (!$user->ev) {
+                // Regenerate the activation token
+                $user->activation_token = Str::random(60);
+                $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
+    
+                $user->save();
+        
+                // Send verification email with the new activation token
+                Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
+                    $message->to($user->email);
+                    $message->subject('Account Verification');
+                });
+        
+                // Optional: Send verification code via SMS
+                if ($user->mobile && env('SEND_SMS')) {
+                    $user->ver_code = verificationCode(6);
+                    $user->ver_code_send_at = Carbon::now();
+                    $user->save();
+                    sendSms($user->mobile, $user->ver_code);
+                }
+        
+                Auth::logout();
+                $notify[] = 'A verification link has been sent to your email. Please verify your account.';
+                return back()->withNotify($notify);
+            }
             return $this->sendLoginResponse($request);
         }
 
