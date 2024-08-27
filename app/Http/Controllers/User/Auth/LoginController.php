@@ -30,65 +30,63 @@ class LoginController extends Controller {
     }
 
     public function login(Request $request) {
-
         $this->validateLogin($request);
-
+    
         $request->session()->regenerateToken();
-
+    
         if (!verifyCaptcha()) {
             $notify[] = ['error', 'Invalid captcha provided'];
             return back()->withNotify($notify);
         }
-
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
+    
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
-
             return $this->sendLockoutResponse($request);
         }
-
+    
         if ($this->attemptLogin($request)) {
             $user = $request->user();
-            if (!$user->ev) {
-                // Regenerate the activation token
-                $user->status = 0;  // Initially set the status to 0 (not verified)
-                $user->verification_token = Str::random(60);  // Generate verification token
-                $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
-                $user->save();
     
-                $user->save();
-        
-                // Send verification email with the new activation token
-                Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
-                    $message->to($user->email);
-                    $message->subject('Account Verification');
-                });
-        
-                // Optional: Send verification code via SMS
-                if ($user->mobile && env('SEND_SMS')) {
-                    $user->ver_code = verificationCode(6);
-                    $user->ver_code_send_at = Carbon::now();
+            if (!$user->ev) {
+                if ($user->verification_token_expires_at && $user->verification_token_expires_at->isFuture()) {
+                    // If the verification token is still valid, just notify the user
+                    Auth::logout();
+                    $notify[] = 'A verification link has already been sent to your email. Please verify your account.';
+                    return back()->withNotify($notify);
+                } else {
+                    // Regenerate the activation token if the previous one has expired
+                    $user->status = 0;  // Set the status to 0 (not verified)
+                    $user->verification_token = Str::random(60);  // Generate a new verification token
+                    $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
                     $user->save();
-                    sendSms($user->mobile, $user->ver_code);
+    
+                    // Send the new verification email
+                    Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
+                        $message->to($user->email);
+                        $message->subject('Account Verification');
+                    });
+    
+                    // Optional: Send verification code via SMS if enabled
+                    if ($user->mobile && env('SEND_SMS')) {
+                        $user->ver_code = verificationCode(6);
+                        $user->ver_code_send_at = Carbon::now();
+                        $user->save();
+                        sendSms($user->mobile, $user->ver_code);
+                    }
+    
+                    Auth::logout();
+                    $notify[] = 'A new verification link has been sent to your email. Please verify your account.';
+                    return back()->withNotify($notify);
                 }
-        
-                Auth::logout();
-                $notify[] = 'A verification link has been sent to your email. Please verify your account.';
-                return back()->withNotify($notify);
             }
+    
             return $this->sendLoginResponse($request);
         }
-
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to login and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
+    
         $this->incrementLoginAttempts($request);
-
         return $this->sendFailedLoginResponse($request);
     }
-
+    
     public function findUsername() {
         $login = request()->input('username');
 
