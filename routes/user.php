@@ -16,7 +16,7 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
         Route::get('logout', 'logout')->middleware('auth')->name('logout');
     });
     Route::controller('RegisterController')->group(function () {
-        Route::get('add-mobile', 'showAddMobileForm')->name('add.mobile.form');
+        Route::get('mobile-form', 'showAddMobileForm')->name('addmobile.form');
         Route::post('add-mobile', 'addMobile')->name('add.mobile');
         Route::get('register', 'showRegistrationForm')->name('register');
         Route::post('register', 'register')->middleware('registration.status');
