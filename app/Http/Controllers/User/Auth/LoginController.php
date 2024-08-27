@@ -53,8 +53,10 @@ class LoginController extends Controller {
             $user = $request->user();
             if (!$user->ev) {
                 // Regenerate the activation token
-                $user->activation_token = Str::random(60);
+                $user->status = 0;  // Initially set the status to 0 (not verified)
+                $user->verification_token = Str::random(60);  // Generate verification token
                 $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
+                $user->save();
     
                 $user->save();
         
