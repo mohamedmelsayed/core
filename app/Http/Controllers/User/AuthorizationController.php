@@ -37,7 +37,7 @@ class AuthorizationController extends Controller {
         elseif (!$user->mobile) {
             // Redirect to mobile verification page or allow skip
             $pageTitle = 'Verify Mobile Number';
-            to_route('user.add.mobile.form');
+            return  to_route('user.add.mobile.form');
            // return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'pageTitle'));
         } 
         // Check if the mobile number is verified
