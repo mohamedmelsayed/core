@@ -63,6 +63,23 @@ class RegisterController extends Controller {
         return $validate;
     }
     
+    public function addMobile(Request $request)
+    {
+        $request->validate([
+            'country' => 'required|string',
+            'mobile' => 'required|numeric|unique:users,mobile',
+            'mobile_code' => 'required|string',
+            'country_code' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        $user->mobile = $request->input('mobile');
+        $user->country_code = $request->input('country_code');
+        $user->save();
+        $notify[] = ['success', 'Mobile number added successfully. Please verify it.'];
+
+        return to_route('authorization')->withNotify($notify);
+    }
 
     public function register(Request $request) {
         $this->validator($request->all())->validate();

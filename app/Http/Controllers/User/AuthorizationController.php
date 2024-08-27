@@ -21,21 +21,35 @@ class AuthorizationController extends Controller {
 
     public function authorizeForm() {
         $user = auth()->user();
+        
+        // Check if the user is banned
         if (!$user->status) {
             $pageTitle = 'Banned';
             $type      = 'ban';
-        } elseif (!$user->ev) {
+        } 
+        // Check if the email is not verified
+        elseif (!$user->ev) {
             $type           = 'email';
             $pageTitle      = 'Verify Email';
             $notifyTemplate = 'EVER_CODE';
-        } elseif (!$user->sv) {
+        } 
+        // Check if the user has a registered mobile number
+        elseif (!$user->mobile) {
+            // Redirect to mobile verification page or allow skip
+            $pageTitle = 'Verify Mobile Number';
+            return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'pageTitle'));
+        } 
+        // Check if the mobile number is verified
+        elseif (!$user->sv) {
             $type           = 'sms';
             $pageTitle      = 'Verify Mobile Number';
             $notifyTemplate = 'SVER_CODE';
-        } else {
+        } 
+        else {
             return to_route('user.home');
         }
-
+    
+        // Generate a verification code if not banned and the verification is required
         if (!$this->checkCodeValidity($user) && ($type != 'ban')) {
             $user->ver_code         = verificationCode(6);
             $user->ver_code_send_at = Carbon::now();
@@ -44,10 +58,10 @@ class AuthorizationController extends Controller {
                 'code' => $user->ver_code,
             ], [$type]);
         }
+        
         return view($this->activeTemplate . 'user.auth.authorization.' . $type, compact('user', 'pageTitle'));
-
     }
-
+    
     public function sendVerifyCode($type) {
         $user = auth()->user();
 

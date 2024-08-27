@@ -78,7 +78,7 @@ class UserController extends Controller {
         $pageTitle = 'User Data';
         return view($this->activeTemplate . 'user.user_data', compact('pageTitle', 'user'));
     }
-
+   
     public function userDataSubmit(Request $request) {
         $user = auth()->user();
         if ($user->profile_complete == Status::YES) {

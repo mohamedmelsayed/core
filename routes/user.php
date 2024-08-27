@@ -16,6 +16,8 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
         Route::get('logout', 'logout')->middleware('auth')->name('logout');
     });
     Route::controller('RegisterController')->group(function () {
+        Route::post('/user/add-mobile', 'addMobile')->name('user.add.mobile');
+
         Route::get('register', 'showRegistrationForm')->name('register');
         Route::post('register', 'register')->middleware('registration.status');
         Route::post('check-mail', 'checkUser')->name('checkUser');
