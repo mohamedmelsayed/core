@@ -165,6 +165,8 @@ class RegisterController extends Controller {
                     ->first();
     
         if (!$user) {
+            $notify[] = ['success', 'Invalid or expired verification token.'];
+            return to_route('user.login')->withNotify($notify);
             return redirect()->route('login')->withErrors(['message' => 'Invalid or expired verification token.']);
         }
     
