@@ -18,10 +18,27 @@ class AuthorizationController extends Controller {
         }
         return true;
     }
+    public function addMobile(Request $request)
+    {
+
+        $request->validate([
+            'country' => 'required|string',
+            'mobile' => 'required|numeric|unique:users,mobile',
+            'mobile_code' => 'required|string',
+            'country_code' => 'required|string',
+        ]);
+
+        $user = auth()->user();
+        $user->mobile = $request->mobile;
+        $user->country_code = $request->country_code;
+        $user->save();
+        $notify[] = ['success', 'Mobile number added successfully. Please verify it.'];
+
+        return to_route('user.home')->withNotify($notify);
+    }
 
     public function authorizeForm() {
         $user = auth()->user();
-        
         // Check if the user is banned
         if (!$user->status) {
             $pageTitle = 'Banned';
@@ -35,10 +52,14 @@ class AuthorizationController extends Controller {
         } 
         // Check if the user has a registered mobile number
         elseif (!$user->mobile) {
+       
+
             // Redirect to mobile verification page or allow skip
-            $pageTitle = 'Verify Mobile Number';
-            return  to_route('user.addmobile.form');
-           // return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'pageTitle'));
+            $pageTitle  = "Add Mobile Number";
+            $info       = json_decode(json_encode(getIpInfo()), true);
+            $mobileCode = @implode(',', $info['code']);
+            $countries  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+           return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'mobileCode', 'countries','pageTitle'));
         } 
         // Check if the mobile number is verified
         elseif (!$user->sv) {

@@ -16,8 +16,6 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
         Route::get('logout', 'logout')->middleware('auth')->name('logout');
     });
     Route::controller('RegisterController')->group(function () {
-        Route::get('mobile-form', 'showAddMobileForm')->name('addmobile.form');
-        Route::post('add-mobile', 'addMobile')->name('add.mobile');
         Route::get('register', 'showRegistrationForm')->name('register');
         Route::post('register', 'register')->middleware('registration.status');
         Route::post('check-mail', 'checkUser')->name('checkUser');
@@ -42,6 +40,9 @@ Route::middleware('auth')->name('user.')->group(function () {
         Route::get('resend-verify/{type}', 'sendVerifyCode')->name('send.verify.code');
         Route::post('verify-email', 'emailVerification')->name('verify.email');
         Route::post('verify-mobile', 'mobileVerification')->name('verify.mobile');
+        Route::post('add-mobile', 'addMobile')->name('add.mobile');
+
+        
     });
     Route::middleware(['check.status'])->group(function () {
         Route::get('user-data', 'User\UserController@userData')->name('data');
