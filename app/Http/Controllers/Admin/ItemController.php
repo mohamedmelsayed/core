@@ -410,7 +410,7 @@ class ItemController extends Controller
 
         $pageTitle = "Upload video to: " . $item->title;
         $prevUrl = route('admin.item.index');
-        return view('admin.item.stream', compact('item', 'pageTitle', 'video', 'prevUrl'));
+        return view('admin.item.stream', compact('item', 'pageTitle', 'prevUrl'));
     }
 
 
