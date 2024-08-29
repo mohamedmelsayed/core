@@ -90,8 +90,8 @@
                             <label>@lang('Stream Item')</label>
                             <select class="form-control" name="is_stream">
                                 <option value="">@lang('Select One')</option>
-                                <option value="0" @selected($item->is_stream == Status::NO)>>@lang('Normal')</option>
-                                <option value="1" @selected($item->is_stream == Status::YES)>>@lang('Live Stream')</option>
+                                <option value="0" @selected($item->is_stream == Status::NO)>@lang('Normal')</option>
+                                <option value="1" @selected($item->is_stream == Status::YES)>@lang('Live Stream')</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6 rent-option d-none">
