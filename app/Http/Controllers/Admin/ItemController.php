@@ -440,9 +440,10 @@ class ItemController extends Controller
          
         }
 
-        $pageTitle = "Configure Strean: " . $item->title;
         $notify[] = ['message', 'Saved Successfully'];
-        return back()->withNotify($notify);
+        $pageTitle = "Video Items";
+        $items = $this->itemsDataVideo();
+        return view('admin.item.index', compact('pageTitle', 'items'));
 
     }
 
