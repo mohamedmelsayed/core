@@ -6,7 +6,7 @@
         <h2>Stream Configuration for Item  {{$item->title}}</h2>
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('admin.item.configStream') }}" method="POST">
+                <form action="{{ route('admin.item.configStream', $item->id) }}" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="embed_code">@lang('Embed Code')</label>
