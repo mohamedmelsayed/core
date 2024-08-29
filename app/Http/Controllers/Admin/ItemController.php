@@ -442,8 +442,9 @@ class ItemController extends Controller
 
         $pageTitle = "Configure Strean: " . $item->title;
         $notify[] = ['message', 'Saved Successfully'];
+        $prevUrl = route('admin.item.stream',$item->id);
 
-        return view('admin.item.index', compact('item', 'pageTitle'))->withNotify($notify);
+        return view('admin.item.index', compact('item', 'pageTitle', 'prevUrl'))->withNotify($notify);
     }
 
 
