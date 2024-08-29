@@ -402,15 +402,15 @@ class ItemController extends Controller
     {
         $item = Item::findOrFail($id);
         $stream = $item->stream;
-
+        $pageTitle = "Upload video to: " . $item->title;
+        $prevUrl = route('admin.item.index');
         if ($stream) {
             $notify[] = ['error', 'Already stream exist'];
         return view('admin.item.stream', compact('item', 'pageTitle', 'prevUrl','stream'))->withNotify($notify);
 
         }
 
-        $pageTitle = "Upload video to: " . $item->title;
-        $prevUrl = route('admin.item.index');
+    
         return view('admin.item.stream', compact('item', 'pageTitle', 'prevUrl','stream'));
     }
 
