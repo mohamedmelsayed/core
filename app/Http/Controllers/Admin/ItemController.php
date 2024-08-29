@@ -405,12 +405,13 @@ class ItemController extends Controller
 
         if ($stream) {
             $notify[] = ['error', 'Already stream exist'];
-            return back()->withNotify($notify);
+        return view('admin.item.stream', compact('item', 'pageTitle', 'prevUrl','stream'))->withNotify($notify);
+
         }
 
         $pageTitle = "Upload video to: " . $item->title;
         $prevUrl = route('admin.item.index');
-        return view('admin.item.stream', compact('item', 'pageTitle', 'prevUrl'));
+        return view('admin.item.stream', compact('item', 'pageTitle', 'prevUrl','stream'));
     }
 
 
