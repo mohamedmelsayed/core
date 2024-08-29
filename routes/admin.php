@@ -72,6 +72,8 @@ Route::middleware('admin')->group(function () {
         Route::post('video-item-update/{id}', 'update')->name('update');
 
         Route::get('video-item-upload-video/{id}', 'uploadVideo')->name('uploadVideo');
+        Route::get('live-item-set-embeded/{id}', 'streamForm')->name('setStream');
+        Route::post('live-item-set-embeded/{id}', 'postStreamConfig')->name('configStream');
         Route::post('video-item-upload-video/{id}', 'upload')->name('upload.video');
         Route::get('audio-item-upload-audio/{id}', 'uploadAudio')->name('uploadAudio');
         Route::post('audio-item-upload-audio/{id}', 'uploadAudioFile')->name('upload.audio.file');

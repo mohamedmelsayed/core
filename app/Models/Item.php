@@ -20,6 +20,9 @@ class Item extends Model {
     public function video() {
         return $this->hasOne(Video::class);
     }
+    public function stream() {
+        return $this->hasOne(Stream::class);
+    }
 
     public function audio() {
         return $this->hasOne(Audio::class);

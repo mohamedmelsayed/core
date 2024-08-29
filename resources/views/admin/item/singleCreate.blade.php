@@ -65,11 +65,11 @@
                     <input name="portrait_url" type="hidden" value="">
                     <input name="landscape_url" type="hidden" value="">
                     <div class="row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label>@lang('Title')</label>
                             <input class="form-control" name="title" type="text" value="{{ old('title') }}" placeholder="@lang('Title')">
                         </div>
-                        <div class="form-group col-md-4 version">
+                        <div class="form-group col-md-3 version">
                             <label>@lang('Version')</label>
                             <select class="form-control" name="version">
                                 <option value="">@lang('Select One')</option>
@@ -78,7 +78,7 @@
                                 <option value="2">@lang('Rent')</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-4 is_audio">
+                        <div class="form-group col-md-3 is_audio">
                             <label>@lang('Item Type')</label>
                             <select class="form-control" name="is_audio">
                                 <option value="">@lang('Select One')</option>
@@ -86,6 +86,14 @@
                                 <option value="1">@lang('Audio')</option>
                             </select>
                         </div>
+                        <div class="form-group col-md-3 is_audio">
+                                <label>@lang('Item Type')</label>
+                                <select class="form-control" name="is_stream">
+                                    <option value="">@lang('Select One')</option>
+                                    <option value="0">@lang('Normal')</option>
+                                    <option value="1">@lang('Live Stream')</option>
+                                </select>
+                            </div>
                         <div class="form-group col-md-6 rent-option d-none">
                             <label>@lang('Do you want to add it as rent?')</label>
                             <div class="d-flex gap-3 flex-wrap">

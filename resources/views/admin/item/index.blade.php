@@ -50,6 +50,12 @@
                                         <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item threshold" href="{{ route('watch', $item->slug) }}" target="_blank"> <i class="las la-eye"></i> @lang('Preview') </a>
+                                            @if ($item->is_stream == 1)
+
+                                            <a class="dropdown-item threshold" href="{{ route('admin.item.setStream', $item->id) }}">
+                                                <i class="las la-cloud-upload-alt"></i> @lang('Configure Stream')
+                                            </a>
+                                            @endif
 
                                             @if ($item->item_type == 2)
                                             <a class="dropdown-item threshold" href="{{ route('admin.item.episodes', $item->id) }}">
@@ -73,9 +79,12 @@
                                                 <i class="las la-chart-area"></i> @lang('Report')
                                             </a>
                                             @else
+                                            @if ($item->is_stream == 0)
+
                                             <a class="dropdown-item threshold" href="{{ route('admin.item.uploadVideo', $item->id) }}">
                                                 <i class="las la-cloud-upload-alt"></i> @lang('Upload Video')
                                             </a>
+                                            @endif
                                             @endif
                                             @endif
                                             <a class="dropdown-item threshold confirmationBtn" data-action="{{ route('admin.item.send.notification', $item->id) }}" data-question="@lang('Are you sure to send notifications to all users?')" href="javascript:void(0)"> <i class="las la-bell"></i> @lang('Send Notification') </a>

@@ -14,6 +14,7 @@ use App\Models\Episode;
 use App\Models\GeneralSetting;
 use App\Models\Item;
 use App\Models\Plan;
+use App\Models\Stream;
 use App\Models\SubCategory;
 use App\Models\Subtitle;
 use App\Models\User;
@@ -169,6 +170,7 @@ class ItemController extends Controller
             'tags' => 'required',
             'item_type' => "$validation|in:1,2",
             'is_audio' => "$validation|in:0,1",
+            'is_stream' => "$validation|in:0,1",
             'version' => "nullable|required_if:item_type,==,1|in:$versions",
             'ratings' => 'required|numeric',
             'rent_price' => 'required_if:version,==,2|nullable|numeric|gte:0',
@@ -258,6 +260,7 @@ class ItemController extends Controller
         $item->tags = implode(',', $request->tags);
         $item->image = $image;
         $item->is_audio = $request->is_audio;
+        $item->is_stream = $request->is_stream;
         $item->version = $version;
         $item->ratings = $request->ratings;
         $item->save();
@@ -393,6 +396,53 @@ class ItemController extends Controller
         $audio->save();
 
         return response()->json(['success' => 'Audio uploaded successfully']);
+    }
+
+    public function streamForm($id)
+    {
+        $item = Item::findOrFail($id);
+        $stream = $item->stream;
+
+        if ($stream) {
+            $notify[] = ['error', 'Already stream exist'];
+            return back()->withNotify($notify);
+        }
+
+        $pageTitle = "Upload video to: " . $item->title;
+        $prevUrl = route('admin.item.index');
+        return view('admin.item.stream', compact('item', 'pageTitle', 'video', 'prevUrl'));
+    }
+
+
+    public function postStreamConfig(Request $request, $id)
+    {
+        $validation_rule['embed_code'] = 'required';
+
+        $item = Item::findOrFail($id);
+        if($item==null){
+        $notify[] = ['error', 'item does not exists'];
+        return back()->withNotify($notify);
+
+        }
+        $stream = $item->stream;
+
+        if ($stream) {
+            $stream->embed_code=$request->embed_code;
+            $stream->save();
+        
+        }
+        else{
+             $stream=new Stream;
+             $stream->embed_code=$request->embed_code;
+             $stream->item_id=$id;
+             $stream->save();
+         
+        }
+
+        $pageTitle = "Configure Strean: " . $item->title;
+        $notify[] = ['message', 'Saved Successfully'];
+
+        return view('admin.item.index', compact('item', 'pageTitle', 'video', 'prevUrl'))->withNotify($notify);
     }
 
 

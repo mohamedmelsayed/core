@@ -87,7 +87,14 @@
                                 <option value="1">@lang('Audio')</option>
                             </select>
                         </div>
-
+                        <div class="form-group col-md-3 is_audio">
+                                <label>@lang('Item Type')</label>
+                                <select class="form-control" name="is_stream">
+                                    <option value="">@lang('Select One')</option>
+                                    <option value="0">@lang('Normal')</option>
+                                    <option value="1">@lang('Live Stream')</option>
+                                </select>
+                            </div>
                         <div class="row d-none" id="rentalArea">
                             <div class="col-md-4">
                                 <div class="form-group">
