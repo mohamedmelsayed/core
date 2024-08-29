@@ -10,7 +10,7 @@
                     @csrf
                     <div class="form-group">
                         <label for="embed_code">@lang('Embed Code')</label>
-                        <textarea id="embed_code" name="embed_code" class="form-control" rows="5" value="{{$stream !=null?$stream->embed_code :old('embed_code') }}" >{{ old('embed_code', $item->embed_code) }}</textarea>
+                        <textarea id="embed_code" name="embed_code" class="form-control" rows="5" value="{{$item->stream !==null?$item->stream->embed_code :old('embed_code') }}" >{{ old('embed_code', $item->embed_code) }}</textarea>
                     </div>
 
                     <div class="form-group">
