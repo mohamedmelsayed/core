@@ -82,8 +82,8 @@
                             <label>@lang('Item Type')</label>
                             <select class="form-control" name="is_audio">
                                 <option value="">@lang('Select One')</option>
-                                <option value="0" @selected($item->is_audio == 0)>>@lang('Video')</option>
-                                <option value="1" @selected($item->is_audio == 1)>>@lang('Audio')</option>
+                                <option value="0" @selected($item->is_audio == 0)>@lang('Video')</option>
+                                <option value="1" @selected($item->is_audio == 1)>@lang('Audio')</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3 is_audio">

@@ -247,6 +247,37 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
+
+    public function watchLive($slug, $episodeId = null)
+    {
+        $item = Item::active()->where('slug', $slug)->firstOrFail();
+        $item->increment('view');
+
+
+        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
+
+        $this->storeHistory($item->id);
+        $this->storeVideoReport($item->id);
+
+        $pageTitle = 'Live Details';
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+        $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $episodes = [];
+        $stream = $item->stream;
+        $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+
+        $watchEligable = $checkWatchEligable[0];
+        $hasSubscribedItem = $checkWatchEligable[1];
+
+        if (!$stream) {
+            $notify[] = ['error', 'There are no stream for this item'];
+            return back()->withNotify($notify);
+        }
+
+        $adsTime = $stream->getAds() ?? [];
+        $seoContents = $this->getItemSeoContent($item);
+        return view($this->activeTemplate . 'live_stream', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+    }
     private function relatedItems($itemId, $itemType, $keyword, $type)
     {
         $lang = app()->getLocale();
