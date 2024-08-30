@@ -251,7 +251,7 @@ class SiteController extends Controller
     public function watchLive($slug, $episodeId = null)
     {
 
-
+        
         $item = Item::active()->where('slug', $slug)->firstOrFail();
         $item->increment('view');
 
@@ -277,8 +277,7 @@ class SiteController extends Controller
         }
         $adsTime = $stream->getAds() ?? [];
         $seoContents = $this->getItemSeoContent($item);
-        dd($item);
-        return view($this->activeTemplate . 'watch.live', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'live_stream', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
     private function relatedItems($itemId, $itemType, $keyword, $type)
     {
