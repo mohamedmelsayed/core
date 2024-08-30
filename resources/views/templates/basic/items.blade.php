@@ -93,34 +93,33 @@
             }
             $('.custom_loading').addClass('loader-area');
             setTimeout(function() {
-                if (send == 0) {
-                    send = 1;
-                    var url = '{{ route('
-                    loadmore.load_data ') }}';
-                    var id = $('.data_id').last().data('id');
-                    var category_id = $('.category_id').last().data('category_id');
-                    var subcategory_id = $('.subcategory_id').last().data('subcategory_id');
-                    var search = $('.search').last().data('search');
-                    var data = {
-                        id: id,
-                        category_id: category_id,
-                        subcategory_id: subcategory_id,
-                        search: search
-                    };
-                    $.get(url, data, function(response) {
-                        if (response == 'end') {
+                    if (send == 0) {
+                        send = 1;
+                        var url = "{{ route('loadmore.load_data') }}";
+                        var id = $('.data_id').last().data('id');
+                        var category_id = $('.category_id').last().data('category_id');
+                        var subcategory_id = $('.subcategory_id').last().data('subcategory_id');
+                        var search = $('.search').last().data('search');
+                        var data = {
+                            id: id,
+                            category_id: category_id,
+                            subcategory_id: subcategory_id,
+                            search: search
+                        };
+                        $.get(url, data, function(response) {
+                            if (response == 'end') {
+                                $('.custom_loading').removeClass('loader-area');
+                                $('.footer').removeClass('d-none');
+                                $('.ajaxLoad').addClass('loaded');
+                                return false;
+                            }
                             $('.custom_loading').removeClass('loader-area');
-                            $('.footer').removeClass('d-none');
-                            $('.ajaxLoad').addClass('loaded');
-                            return false;
-                        }
-                        $('.custom_loading').removeClass('loader-area');
-                        $('.sections').append(response);
-                        $('.ajaxLoad').append(response);
-                        send = 0;
-                    });
-                }
-            }, 1000);
+                            $('.sections').append(response);
+                            $('.ajaxLoad').append(response);
+                            send = 0;
+                        });
+                    }
+                }, 1000);
         }
     });
 </script>
