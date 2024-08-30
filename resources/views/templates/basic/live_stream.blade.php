@@ -215,6 +215,7 @@
 @endsection
 
 
+
 @push('style-lib')
 <link rel="stylesheet" href="{{ asset('assets/global/css/plyr.min.css') }}">
 @endpush

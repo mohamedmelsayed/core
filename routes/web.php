@@ -34,7 +34,7 @@ Route::controller('SiteController')->name('wishlist.')->prefix('wishlist')->grou
 Route::controller('SiteController')->group(function () {
     Route::get('cron', 'cron')->name('cron');
 
-    Route::get('live-stream', 'watchLive')->name('live_stream');
+    Route::get('live-stream', 'watchLive')->name('watch.live');
     Route::get('live-tv', 'liveTelevision')->name('live.tv');
     Route::get('live-tv/{id?}', 'watchTelevision')->name('watch.tv');
 
