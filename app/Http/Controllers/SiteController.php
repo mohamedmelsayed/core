@@ -273,7 +273,7 @@ class SiteController extends Controller
             $notify[] = ['error', 'There are no stream for this item'];
             return back()->withNotify($notify);
         }
-
+        dd($item);
         $adsTime = $stream->getAds() ?? [];
         $seoContents = $this->getItemSeoContent($item);
         return view($this->activeTemplate . 'live_stream', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
