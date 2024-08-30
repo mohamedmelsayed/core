@@ -2,13 +2,13 @@
 @section('content')
 <section class="movie-details-section section--bg ptb-80">
     <div class="container">
-        <div class="row @if (blank($episodes)) justify-content-center @endif mb-30-none">
+        <div class="row justify-content-center  mb-30-none">
             <div class="col-xl-8 col-lg-8 mb-30">
                 <div class="movie-item">
                     <div class="main-video">
 
 
-                        {{$item->stream->embed_code}}
+                        {!! $item->stream->embed_code !!}
                         @if ($item->version == Status::RENT_VERSION && !$watchEligable)
                         <div class="main-video-lock">
                             <div class="main-video-lock-content">
@@ -336,14 +336,7 @@
         });
 
 
-        var data = [
-            @foreach($videos as $video) {
-                src: "{{ $video->content }}",
-                type: 'video/mp4',
-                size: "{{ $video->size }}",
-            },
-            @endforeach
-        ];
+      
 
 
         player.on('qualitychange', event => {
