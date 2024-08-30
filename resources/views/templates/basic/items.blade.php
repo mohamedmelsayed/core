@@ -11,7 +11,7 @@
         </div>
         <div class="row justify-content-center mb-30-none ajaxLoad">
             @forelse($items as $item)
-            @if($item->is_video && $item->is_stream)
+            @if( $item->is_stream)
             @if ($loop->last)
             <span class="data_id d-none" data-id="{{ $item->id }}"></span>
             <span class="category_id d-none" data-category_id="{{ @$category->id }}"></span>
@@ -49,7 +49,7 @@
         </div>
         <div class="row justify-content-center mb-30-none ajaxLoad">
             @forelse($items as $item)
-            @if($item->is_video && !$item->is_stream)
+            @if( !$item->is_stream)
             @if ($loop->last)
             <span class="data_id d-none" data-id="{{ $item->id }}"></span>
             <span class="category_id d-none" data-category_id="{{ @$category->id }}"></span>
