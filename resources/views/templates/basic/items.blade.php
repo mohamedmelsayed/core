@@ -29,11 +29,12 @@
                     </div>
                 </div>
             </div>
+            @endif
+
             @empty
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
                 <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="">
             </div>
-            @endif
             @endforelse
         </div>
 
@@ -66,11 +67,12 @@
                     </div>
                 </div>
             </div>
+            @endif
+
             @empty
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
                 <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="">
             </div>
-            @endif
             @endforelse
         </div>
 
