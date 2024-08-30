@@ -112,7 +112,7 @@
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel" aria-labelledby="product-tab-desc">
                                 <div class="product-desc-content">
-                                    {{ __($item->description) }}
+                                    {{ __($seoContents["social_description"])}}
                                 </div>
                             </div>
                             <div class="tab-pane fade fade" id="product-team-content" role="tabpanel" aria-labelledby="product-tab-team">
