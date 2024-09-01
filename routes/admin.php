@@ -252,6 +252,7 @@ Route::middleware('admin')->group(function () {
     Route::controller('LanguageController')->prefix('language')->name('language.')->group(function () {
         Route::get('/content/{type}/{id}',  'showTranslationForm')->name('translate2.show');
         Route::post('/store',  'storeTranslation')->name('translate2.store');
+        Route::delete('/delete/{id}',  'delete')->name('translate2.delete');
 
         Route::get('/', 'langManage')->name('manage');
         Route::post('/', 'langStore')->name('manage.store');

@@ -69,6 +69,20 @@ class LanguageController extends Controller
         return redirect()->back()->with('success', 'Translation saved successfully!')->with('existingTranslations', $existingTranslations );
     }
 
+    public function delete($id){
+        $toDelete=ContentTranslation::where('id', $id)->first();
+        if($toDelete==null){
+        return redirect()->back()->with('error', 'item does not exist!');
+
+        }
+        $item_id= $toDelete->item_id;
+        $toDelete->delete();
+        $existingTranslations  = ContentTranslation::where('item_id', $item_id)->get();
+
+
+        // Redirect back with the saved data
+        return redirect()->back()->with('success', 'deleted successfully!')->with('existingTranslations', $existingTranslations );
+    }
 
 
     public function langManage($lang = false)

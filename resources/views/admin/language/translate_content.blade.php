@@ -56,13 +56,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="translated_keywords" class="col-md-4 col-form-label text-md-right">@lang('Translated Keywords'):</label>
-                            <div class="col-md-6">
-                                <select id="translated_keywords" name="translated_keywords[]" class="form-control select2-tags" multiple="multiple"></select>
-                            </div>
-                        </div>
-
                         <!-- Submit button -->
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
@@ -74,35 +67,46 @@
             </div>
         </div>
     </div>
+
     <!-- Existing Translations Table -->
     <div class="card mt-4">
-        <div class="card-header">@lang('Existing Translations')</div>
-        <div class="card-body">
-            <table class="table">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>@lang('Existing Translations')</span>
+        <span class="badge badge-primary">{{ count($existingTranslations) }} @lang('Translations')</span>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>@lang('Actions')</th> <!-- Actions header moved to the first column -->
                         <th>@lang('Language')</th>
                         <th>@lang('Translated Title')</th>
                         <th>@lang('Translated Description')</th>
                         <th>@lang('Translated Tags')</th>
-                        <th>@lang('Translated Keywords')</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($existingTranslations as $translation)
                     <tr>
+                        <td> <!-- Actions cell moved to the first column -->
+                            <form action="{{ route('admin.language.translate2.delete', $translation->id) }}" method="post" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('@lang('Are you sure you want to delete this translation?')');">@lang('Delete')</button>
+                            </form>
+                        </td>
                         <td>{{ $translation->language }}</td>
                         <td>{{ $translation->translated_title }}</td>
                         <td>{{ $translation->translated_description }}</td>
-                        <td>{{ $translation->translated_tags }}</td>
-                        <td>{{ $translation->translated_keywords }}</td>
-                     
+                        <td>{{ is_array($translation->translated_tags) ? implode(', ', $translation->translated_tags) : $translation->translated_tags }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
+</div>
 
 </div>
 @endsection
