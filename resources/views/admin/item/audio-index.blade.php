@@ -46,13 +46,13 @@
                                         <a class="btn btn-sm btn-outline--danger deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
                                             <i class="las la-recycle"></i> @lang('Delete')
                                         </a>
-                                        <a class="dropdown-item threshold" href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
-                                                <i class="las la-language"></i> @lang('Translate Content')
-                                            </a>
+                                     
                                         <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item threshold" href="{{ route('preview.audio', $item->slug) }}" target="_blank"> <i class="las la-eye"></i> @lang('Preview') </a>
-
+                                            <a class="dropdown-item threshold" href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
+                                                <i class="las la-language"></i> @lang('Translate Content')
+                                            </a>
                                             @if ($item->item_type == 2)
                                             <a class="dropdown-item threshold" href="{{ route('admin.item.episodes', $item->id) }}">
                                                 <i class="las la-list"></i> @lang('Episodes')
@@ -62,6 +62,7 @@
                                             <a class="dropdown-item threshold" href="{{ route('admin.item.updateVideo', $item->id) }}">
                                                 <i class="las la-cloud-upload-alt"></i> @lang('Update Video')
                                             </a>
+                                            
                                             <a class="dropdown-item threshold" href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
                                                 <i class="las la-language"></i> @lang('Translate Content')
                                             </a>
