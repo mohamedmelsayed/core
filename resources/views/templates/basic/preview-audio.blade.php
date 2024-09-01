@@ -164,73 +164,58 @@
         </div>
     </div>
 </section>
-<section class="audio-section ptb-80">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="section-header">
-                    <h2 class="section-title">@lang('Related Videos')</h2>
+<section class="movie-section ptb-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-header">
+                        <h2 class="section-title">@lang('Related Items')</h2>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row justify-content-center mb-30-none">
-            @foreach ($relatedItems as $relatedItem)
-            <div class="col-xl-3 col-lg-4 col-sm-6 mb-30">
-                <div class="audio-item">
-                    <div class="movie-thumb">
-                        <a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">
-                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}" alt="audio">
-                        </a>
-                    </div>
-                    <div class="movie-thumb-overlay">
-                        <h3 class="title"><a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
-                        </h3>
-                        <p>{{ strLimit(strip_tags($relatedItem->description), 150) }}</p>
-                        <div class="audio-widget-area d-flex align-items-center justify-content-between flex-wrap">
-                            <span class="audio-widget"><i class="lar la-star text--warning"></i> {{ getAmount($relatedItem->ratings) }}</span>
-                            <span class="audio-widget"><i class="lar la-eye text--danger"></i> {{ getAmount($relatedItem->view) }} @lang('views')</span>
+            <div class="row justify-content-center mb-30-none">
+                @foreach ($relatedItems as $related)
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                        <div class="movie-item">
+                            <div class="movie-thumb">
+                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}" alt="movie">
+                                <span class="movie-badge">{{ __($related->versionName) }}</span>
+                                <div class="movie-thumb-overlay">
+                                    <a class="video-icon" href="{{$related->is_audio?route('preview.audio', $related->slug) :route('watch', $related->slug) }}"><i class="fas fa-play"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
+        
         </div>
-
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="section-header">
-                    <h2 class="section-title">@lang('Related Audio')</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center mb-30-none">
-            @foreach ($relatedAudios as $relatedItem)
-            <div class="col-xl-3 col-lg-4 col-sm-6 mb-30">
-                <div class="audio-item">
-                    <div class="movie-thumb">
-                        <a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">
-                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $relatedItem->image->portrait) }}" alt="audio">
-                        </a>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-header">
+                        <h2 class="section-title">@lang('Related Audio')</h2>
                     </div>
-                    <div class="movie-thumb-overlay">
-                        <h3 class="title"><a href="{{$relatedItem->is_audio?route('preview.audio', $relatedItem->slug) :route('watch', $relatedItem->slug) }}">{{ __($relatedItem->title) }}</a>
-                        </h3>
-                        <p>{{ strLimit(strip_tags($relatedItem->description), 150) }}</p>
-                        <div class="audio-widget-area d-flex align-items-center justify-content-between flex-wrap">
-                            <span class="audio-widget"><i class="lar la-star text--warning"></i> {{ getAmount($relatedItem->ratings) }}</span>
-                            <span class="audio-widget"><i class="lar la-eye text--danger"></i> {{ getAmount($relatedItem->view) }} @lang('views')</span>
+                </div>
+            </div>
+            <div class="row justify-content-center mb-30-none">
+                @foreach ($relatedAudios as $related)
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                        <div class="movie-item">
+                            <div class="movie-thumb">
+                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}" alt="movie">
+                                <span class="movie-badge">{{ __($related->versionName) }}</span>
+                                <div class="movie-thumb-overlay">
+                                    <a class="video-icon" href="{{$related->is_audio?route('preview.audio', $related->slug) :route('watch', $related->slug) }}"><i class="fas fa-play"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
+        
         </div>
-
-    </div>
-</section>
+    </section>
 @endsection
 <style>
     #audio-player {

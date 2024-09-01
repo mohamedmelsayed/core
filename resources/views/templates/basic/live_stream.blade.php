@@ -89,7 +89,7 @@
                         </div>
                         <div class="movie-widget-area">
                         </div>
-                        <p class="movie-widget__desc">{{ __($seoContents["social_description"]) }}</p>
+                        <p class="movie-widget__desc">{{ $seoContents["social_description"] }}</p>
                     </div>
                 </div>
 
@@ -105,7 +105,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel" aria-labelledby="product-tab-desc">
                             <div class="product-desc-content">
-                                {{ __($item->description) }}
+                                {{ $seoContents["social_description"] }}
                             </div>
                         </div>
                         <div class="tab-pane fade fade" id="product-team-content" role="tabpanel" aria-labelledby="product-tab-team">
