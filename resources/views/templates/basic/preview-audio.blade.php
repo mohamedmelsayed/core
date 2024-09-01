@@ -88,7 +88,7 @@
                             </div>
                         </div>
                         <div class="audio-widget-area"></div>
-                        <p class="audio-widget__desc">{{ __($seoContents["social_description"]) }}</p>
+                        <!-- <p class="audio-widget__desc">{{ __($seoContents["social_description"]) }}</p> -->
                     </div>
                 </div>
                 <div class="product-tab mt-40">
@@ -169,12 +169,13 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section-header">
-                        <h2 class="section-title">@lang('Related Items')</h2>
+                    <h2 class="section-title">@lang(!$item->is_audio?'Related Video':'Related Audio')</h2>
+
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center mb-30-none">
-                @foreach ($relatedItems as $related)
+                @foreach  ($item->is_audio? $relatedAudios:$relatedItems as $related)
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                         <div class="movie-item">
                             <div class="movie-thumb">
@@ -194,12 +195,12 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section-header">
-                        <h2 class="section-title">@lang('Related Audio')</h2>
+                        <h2 class="section-title">@lang($item->is_audio?'Related Video':'Related Audio')</h2>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center mb-30-none">
-                @foreach ($relatedAudios as $related)
+                @foreach (!$item->is_audio? $relatedAudios:$relatedItems as $related)
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                         <div class="movie-item">
                             <div class="movie-thumb">
