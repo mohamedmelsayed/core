@@ -1,6 +1,7 @@
 @extends($activeTemplate . 'layouts.frontend')
 @section('content')
 <section class="movie-section section--bg ptb-80">
+    @if($hasStream)
     <div class="container">
         <div class="row">
             <div class="col-xl-12">
@@ -39,11 +40,12 @@
         </div>
 
     </div>
+    @endif
     <div class="container">
         <div class="row">
             <div class="col-xl-12">
                 <div class="section-header">
-                    <h2 class="section-title">@lang('Shows and Videos')</h2>
+                    <h2 class="section-title">@lang('Category Items')</h2>
                 </div>
             </div>
         </div>

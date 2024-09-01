@@ -561,8 +561,16 @@ class SiteController extends Controller
         if ($subcategory->type === "aud") {
             $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
+        $hasStream=false;
+        foreach ($items as  $value) {
+            if($value->is_stream){
+        $hasStream=true;
+        break;
+
+            }
+        }
         $pageTitle = $subcategory->name;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory','hasStream'));
     }
 
     public function loadMore(Request $request)
