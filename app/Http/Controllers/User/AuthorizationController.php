@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -40,7 +41,7 @@ class AuthorizationController extends Controller {
     public function authorizeForm() {
         $user = auth()->user();
         // Check if the user is banned
-        if (!$user->status) {
+        if (!$user->status&&$user->ev) {
             $pageTitle = 'Banned';
             $type      = 'ban';
         } 
@@ -48,19 +49,31 @@ class AuthorizationController extends Controller {
         elseif (!$user->ev) {
             $type           = 'email';
             $pageTitle      = 'Verify Email';
-            $notifyTemplate = 'EVER_CODE';
+            $notifyTemplate = 'EVER_LINK';
+            if (!($user->verification_token_expires_at && $user->verification_token_expires_at>now())) {
+                $user->verification_token = Str::random(60);  // Generate a new verification token
+                $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
+                $user->save();  
+            }
+            
+            $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+            // dd($verificationUrl);
+            notify($user, $notifyTemplate, [
+                'link' => $verificationUrl,
+            ], [$type]);
+            $type='verify_email';
         } 
         // Check if the user has a registered mobile number
-        elseif (!$user->mobile) {
+        // elseif (!$user->mobile) {
        
 
-            // Redirect to mobile verification page or allow skip
-            $pageTitle  = "Add Mobile Number";
-            $info       = json_decode(json_encode(getIpInfo()), true);
-            $mobileCode = @implode(',', $info['code']);
-            $countries  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-           return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'mobileCode', 'countries','pageTitle'));
-        } 
+        //     // Redirect to mobile verification page or allow skip
+        //     $pageTitle  = "Add Mobile Number";
+        //     $info       = json_decode(json_encode(getIpInfo()), true);
+        //     $mobileCode = @implode(',', $info['code']);
+        //     $countries  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+        //    return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'mobileCode', 'countries','pageTitle'));
+        // } 
         // Check if the mobile number is verified
         elseif (!$user->sv) {
             $type           = 'sms';
@@ -68,11 +81,13 @@ class AuthorizationController extends Controller {
             $notifyTemplate = 'SVER_CODE';
         } 
         else {
-            return to_route('user.home');
+            
+            return redirect()->route('user.home');
+
         }
     
         // Generate a verification code if not banned and the verification is required
-        if (!$this->checkCodeValidity($user) && ($type != 'ban')) {
+        if (!$this->checkCodeValidity($user) && ($type != 'ban')&&$user->mobile) {
             $user->ver_code         = verificationCode(6);
             $user->ver_code_send_at = Carbon::now();
             $user->save();

@@ -163,27 +163,7 @@ class RegisterController extends Controller {
         return to_route('user.home');
     }
 
-    public function verifyUser($token) {
-        $user = User::where('verification_token', $token)
-                    ->where('verification_token_expires_at', '>', now())  // Check if the token is not expired
-                    ->first();
-    
-        if (!$user) {
-            $notify[] = ['success', 'Invalid or expired verification token.'];
-            return to_route('user.login')->withNotify($notify);
-            return redirect()->route('login')->withErrors(['message' => 'Invalid or expired verification token.']);
-        }
-    
-        $user->status = 1;  // Mark the user as verified
-        $user->ev = 1;  // Mark the user as verified
-        $user->verification_token = null;  // Remove the token
-        $user->verification_token_expires_at = null;  // Clear the expiration timestamp
-        $user->save();
-    
-        auth()->login($user);
-    
-        return redirect()->route('user.home')->with('success', 'Your account has been verified and you are now logged in.');
-    }
+  
     
 
 }

@@ -48,17 +48,21 @@ class LoginController extends Controller {
             $user = $request->user();
     
             if (!$user->ev) {
-                if ($user->verification_token_expires_at && $user->verification_token_expires_at->isFuture()) {
+                if ($user->verification_token_expires_at && $user->verification_token_expires_at>now()) {
                     // If the verification token is still valid, just notify the user
                     Auth::logout();
                     $notify[] = 'A verification link has already been sent to your email. Please verify your account.';
                     return back()->withNotify($notify);
                 } else {
                     // Regenerate the activation token if the previous one has expired
-                    $user->status = 0;  // Set the status to 0 (not verified)
+                    $user->status = 1;  // Set the status to 0 (not verified)
                     $user->verification_token = Str::random(60);  // Generate a new verification token
                     $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
                     $user->save();
+
+                    notify($user, 'EVER_LINK', [
+                        'link' => $user->verification_token,
+                    ], [$type]);
     
                     // Send the new verification email
                     Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {

@@ -71,5 +71,3 @@ Route::controller('SiteController')->group(function () {
     Route::get('/', 'index')->name('home');
 });
 
-
-Route::get('verify/{token}', [RegisterController::class, 'verifyUser'])->name('user.verify');

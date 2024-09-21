@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\User\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
+Route::get('verify-email/{token}', [VerificationController::class, 'verifyUserX'])->name('verify.mail');
 
 Route::namespace('User\Auth')->name('user.')->group(function () {
 
@@ -16,6 +18,7 @@ Route::namespace('User\Auth')->name('user.')->group(function () {
         Route::get('logout', 'logout')->middleware('auth')->name('logout');
     });
     Route::controller('RegisterController')->group(function () {
+
         Route::get('register', 'showRegistrationForm')->name('register');
         Route::post('register', 'register')->middleware('registration.status');
         Route::post('check-mail', 'checkUser')->name('checkUser');
