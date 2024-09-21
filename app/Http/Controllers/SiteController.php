@@ -547,9 +547,20 @@ class SiteController extends Controller
     public function category($id)
     {
         $category = Category::findOrFail($id);
-        $items = Item::hasVideo()->where('category_id', $id)->where('status', 1)->orderBy('id', 'desc')->limit(12)->get();
+        
+            $items = Item::hasVideo()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+        
+       
+        $hasStream=false;
+        foreach ($items as  $value) {
+            if($value->is_stream){
+        $hasStream=true;
+        break;
+
+            }
+        }
         $pageTitle = $category->name;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category','hasStream'));
     }
 
     public function subCategory($id)

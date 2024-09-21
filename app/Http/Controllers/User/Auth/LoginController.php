@@ -30,6 +30,8 @@ class LoginController extends Controller {
     }
 
     public function login(Request $request) {
+        $notifyTemplate = 'EVER_LINK';
+
         $this->validateLogin($request);
     
         $request->session()->regenerateToken();
@@ -48,11 +50,17 @@ class LoginController extends Controller {
             $user = $request->user();
     
             if (!$user->ev) {
+
                 if ($user->verification_token_expires_at && $user->verification_token_expires_at>now()) {
-                    // If the verification token is still valid, just notify the user
+                    $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+                    // dd($verificationUrl);
+                    notify($user, $notifyTemplate, [
+                        'link' => $verificationUrl,
+                    ], ['email']);
+    
                     Auth::logout();
-                    $notify[] = 'A verification link has already been sent to your email. Please verify your account.';
-                    return back()->withNotify($notify);
+                    $pageTitle="Must verify Email";
+                    return view($this->activeTemplate . 'user.auth.authorization.verify_email' , compact('user', 'pageTitle'));
                 } else {
                     // Regenerate the activation token if the previous one has expired
                     $user->status = 1;  // Set the status to 0 (not verified)
@@ -60,16 +68,16 @@ class LoginController extends Controller {
                     $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
                     $user->save();
 
-                    notify($user, 'EVER_LINK', [
-                        'link' => $user->verification_token,
-                    ], [$type]);
+                    $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+                    // dd($verificationUrl);
+                    notify($user, $notifyTemplate, [
+                        'link' => $verificationUrl,
+                    ], ['email']);
     
-                    // Send the new verification email
-                    Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
-                        $message->to($user->email);
-                        $message->subject('Account Verification');
-                    });
-    
+                    Auth::logout();
+                    $pageTitle="Must verify Email";
+                    return view($this->activeTemplate . 'user.auth.authorization.verify_email' , compact('user', 'pageTitle'));
+
                     // Optional: Send verification code via SMS if enabled
                     if ($user->mobile && env('SEND_SMS')) {
                         $user->ver_code = verificationCode(6);

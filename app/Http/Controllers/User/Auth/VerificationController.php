@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller {
 
-    use VerifiesEmails;
 
      /**
      * Get the post-verification redirect path.
