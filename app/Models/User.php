@@ -92,8 +92,8 @@ class User extends Authenticatable {
 
     public function hasVerifiedEmail()
     {
-        return true;
-       // return $this->ev;
+       // return true;
+       return $this->ev;
     }
 
 }

@@ -62,18 +62,20 @@ class AuthorizationController extends Controller {
                 'link' => $verificationUrl,
             ], [$type]);
             $type='verify_email';
+        return view($this->activeTemplate . 'user.auth.authorization.' . $type, compact('user', 'pageTitle'));
+
         } 
-        // Check if the user has a registered mobile number
-        // elseif (!$user->mobile) {
+  //      Check if the user has a registered mobile number
+        elseif (!$user->mobile) {
        
 
-        //     // Redirect to mobile verification page or allow skip
-        //     $pageTitle  = "Add Mobile Number";
-        //     $info       = json_decode(json_encode(getIpInfo()), true);
-        //     $mobileCode = @implode(',', $info['code']);
-        //     $countries  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
-        //    return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'mobileCode', 'countries','pageTitle'));
-        // } 
+            // Redirect to mobile verification page or allow skip
+            $pageTitle  = "Add Mobile Number";
+            $info       = json_decode(json_encode(getIpInfo()), true);
+            $mobileCode = @implode(',', $info['code']);
+            $countries  = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+           return view($this->activeTemplate . 'user.auth.mobile_verification', compact('user', 'mobileCode', 'countries','pageTitle'));
+        } 
         // Check if the mobile number is verified
         elseif (!$user->sv) {
             $type           = 'sms';
@@ -86,8 +88,8 @@ class AuthorizationController extends Controller {
 
         }
     
-        // Generate a verification code if not banned and the verification is required
-        if (!$this->checkCodeValidity($user) && ($type != 'ban')&&$user->mobile) {
+        // Generate a verification code if not banned and the verification is required  
+        if (!($this->checkCodeValidity($user) && ($type != 'ban')&&$user->mobile!=null)) {
             $user->ver_code         = verificationCode(6);
             $user->ver_code_send_at = Carbon::now();
             $user->save();
