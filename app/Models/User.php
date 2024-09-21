@@ -89,4 +89,11 @@ class User extends Authenticatable {
         return $query->where('ads_free', Status::ENABLE)->where('ads_free_expired', '>', now());
     }
 
+
+    public function hasVerifiedEmail()
+    {
+        return true;
+       // return $this->ev;
+    }
+
 }

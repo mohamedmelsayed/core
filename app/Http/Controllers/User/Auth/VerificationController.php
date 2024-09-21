@@ -14,6 +14,43 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 
 class VerificationController extends Controller {
+
+    use VerifiesEmails;
+
+     /**
+     * Get the post-verification redirect path.
+     *
+     * @return string
+     */
+    protected function redirectTo()
+    {
+
+        
+        $user = auth()->user();
+        // Redirect to different routes based on user roles or other conditions
+        if ($user->is_admin) {
+            return '/admin/dashboard';
+        }
+
+        if (!($user->verification_token_expires_at && $user->verification_token_expires_at>now())) {
+            $user->verification_token = Str::random(60);  // Generate a new verification token
+            $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
+            $user->save();  
+        }
+        
+        $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+        // dd($verificationUrl);
+        notify($user, $notifyTemplate, [
+            'link' => $verificationUrl,
+        ], [$type]);
+                    $pageTitle      = 'Verify Email';
+
+        return view($this->activeTemplate . 'user.auth.authorization.verify_email', compact('user', 'pageTitle'));
+
+
+    }
+
+
     public function verifyUserX($token) {
         // dd($token);
          $user = User::where('verification_token', $token)

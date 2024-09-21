@@ -19,7 +19,8 @@ class Kernel extends HttpKernel {
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\TrimStrings::class,
+        \App\Http\Middleware\TrimStrings::class, 
+   //      \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
@@ -40,6 +41,7 @@ class Kernel extends HttpKernel {
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\LanguageMiddleware::class,
             \App\Http\Middleware\ActiveTemplateMiddleware::class,
+        //    \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ],
 
         'api' => [
