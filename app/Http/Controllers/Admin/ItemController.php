@@ -64,6 +64,21 @@ class ItemController extends Controller
         return $items;
     }
 
+    private function itemsData($scope = null)
+    {
+
+
+        if ($scope) {
+            $items = Item::$scope()->with('category', 'sub_category', 'video');
+        } else {
+            $items = Item::with('category', 'sub_category', 'video');
+        }
+
+        $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
+
+        return $items;
+    }
+
     public function audioItems()
     {
         $pageTitle = "Audio Items";
@@ -95,7 +110,7 @@ class ItemController extends Controller
     public function episodeItems()
     {
         $pageTitle = "Episode Video Items";
-        $items = $this->itemsDataVideo('episodeItems');
+        $items = $this->itemsData('episodeItems');
         return view('admin.item.index', compact('pageTitle', 'items'));
     }
 

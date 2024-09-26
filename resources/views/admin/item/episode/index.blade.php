@@ -36,9 +36,13 @@
                                                 @if ($episode->video)
                                                     <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
                                                     <div class="dropdown-menu">
+                                                    
+
                                                         <a class="dropdown-item threshold" href="{{ route('admin.item.episode.updateVideo', $episode->id) }}">
                                                             <i class="la la-cloud-upload-alt"></i> @lang('Update Video')
                                                         </a>
+                                                       
+                                                      
                                                         <a class="dropdown-item threshold" href="{{ route('admin.item.ads.duration', [$episode->item_id, $episode->id]) }}">
                                                             <i class="lab la-buysellads"></i> @lang('Update Ads')
                                                         </a>
@@ -50,9 +54,12 @@
                                                         </a>
                                                     </div>
                                                 @else
-                                                    <a class="btn btn-sm btn-outline--warning" href="{{ route('admin.item.episode.addVideo', $episode->id) }}">
-                                                        <i class="la la-cloud-upload-alt"></i>@lang('Upload Video')
-                                                    </a>
+                                                <div class="button--group">
+                                                <a class="dropdown-item threshold" href="{{ route('admin.item.uploadAudio', $episode->item_id) }}">
+                                                <i class="las la-cloud-upload-alt"></i> @lang('Upload Audio')
+                                            </a>
+</div>
+
                                                 @endif
                                             </div>
                                         </td>
