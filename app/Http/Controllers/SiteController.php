@@ -331,20 +331,30 @@ class SiteController extends Controller
 
     private function getMatchingItems($userKeywords, $type)
     {
-        // Convert user keywords into an array
-        $keywordsArray = explode(',', $userKeywords);
-
+        // Convert user keywords into an array, trim whitespace, and remove empty elements
+        $keywordsArray = array_filter(array_map('trim', explode(',', $userKeywords)));
+    
+        // Return early if no keywords are provided
+        if (empty($keywordsArray)) {
+            return collect(); // Return an empty collection if you want to avoid unnecessary DB queries
+        }
+    
         // Initialize the query based on item type
         $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
-
+    
         // Loop through each keyword and add a condition using FIND_IN_SET
-        foreach ($keywordsArray as $keyword) {
-            $keyword = trim($keyword); // Clean up any extra spaces
-            $query->orWhereRaw("FIND_IN_SET(?, tags)", [$keyword]);
-        }
-        // Return the query builder (without executing the query yet)
-        return  $type === "video" ? $query->where("is_audio", 0) : $query->where("is_audio", 1);
+        $query->where(function ($subQuery) use ($keywordsArray) {
+            foreach ($keywordsArray as $keyword) {
+                $subQuery->orWhereRaw("LOWER(FIND_IN_SET(?, LOWER(tags)))", [$keyword]);
+            }
+        });
+    
+        // Filter by type
+        return $type === "video" 
+            ? $query->where("is_audio", 0) 
+            : $query->where("is_audio", 1);
     }
+    
 
 
 
