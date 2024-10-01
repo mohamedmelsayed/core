@@ -8,7 +8,8 @@ use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
 
 class VideoUploader
 {
@@ -39,8 +40,6 @@ class VideoUploader
                     break;
                 case Status::WASABI_SERVER:
                     $this->uploadedServer = Status::WASABI_SERVER;
-                    //       $server=GeneralSetting::first()->wasabi;
-
                     $this->configureDisk('wasabi');
                     $this->uploadToServer('wasabi', 'videos');
                     break;
@@ -48,177 +47,187 @@ class VideoUploader
                     $this->uploadedServer = Status::DIGITAL_OCEAN_SERVER;
                     $this->uploadToServer('digital_ocean', 'videos');
                     break;
-                case Status::AWS_CDN: // New case for AWS CDN
+                case Status::AWS_CDN:
                     $this->uploadedServer = Status::AWS_CDN;
-                    $this->uploadToAWSCDN(); // Call the new method to upload to AWS CDN
+                    $this->uploadToAWSCDN();
                     break;
                 default:
                     throw new \Exception("Invalid upload disk: $uploadDisk");
             }
         } catch (\Exception $e) {
             $this->error = true;
+            Log::error('Error during upload process: ' . $e->getMessage());
         }
     }
 
     private function uploadToCurrentServer()
     {
-        $date = date('Y/m/d');
-        $file = $this->file;
-        $path = "assets/videos/$date";
-
-        $this->fileName = $date . '/' . fileUploader($file, $path, null);
+        try {
+            $date = date('Y/m/d');
+            $file = $this->file;
+            $path = "assets/videos/$date";
+            $this->fileName = $date . '/' . fileUploader($file, $path, null);
+        } catch (\Exception $e) {
+            $this->error = true;
+            Log::error('Error uploading to current server: ' . $e->getMessage());
+        }
     }
 
     private function uploadToServer($server, $param)
     {
-
         $date = date('Y/m/d');
         $file = $this->file;
         $path = "$param/$date";
+        $fileExtension = $file->getClientOriginalExtension();
         $video = uniqid() . time() . '.' . $fileExtension;
+
         try {
-            $fileExtension = $file->getClientOriginalExtension();
             $fileContents = file_get_contents($file);
             $disk = Storage::disk($server);
-
             $this->makeDirectory($path, $disk);
-
-
             $disk->put("$path/$video", $fileContents);
             $this->fileName = "$path/$video";
         } catch (Exception $ex) {
-            dd("exception " . $ex->getMessage());
+            $this->error = true;
+            Log::error("Error uploading to server $server: " . $ex->getMessage());
         }
     }
 
     private function makeDirectory($path, $disk)
     {
-        if (!$disk->exists($path)) {
-            $disk->makeDirectory($path);
+        try {
+            if (!$disk->exists($path)) {
+                $disk->makeDirectory($path);
+            }
+        } catch (Exception $e) {
+            Log::error('Error creating directory: ' . $e->getMessage());
         }
     }
+
     public function configureFTP()
     {
-        $general = $this->general;
-        //ftp
         try {
-            Config::set('filesystems.disks.custom-ftp.driver', 'ftp');
-            Config::set('filesystems.disks.custom-ftp.host', $general->ftp->host);
-            Config::set('filesystems.disks.custom-ftp.username', $general->ftp->username);
-            Config::set('filesystems.disks.custom-ftp.password', $general->ftp->password);
-            Config::set('filesystems.disks.custom-ftp.port', 21);
-            Config::set('filesystems.disks.custom-ftp.root', $general->ftp->root);
+            Config::set('filesystems.disks.custom-ftp', [
+                'driver' => 'ftp',
+                'host' => $this->general->ftp->host,
+                'username' => $this->general->ftp->username,
+                'password' => $this->general->ftp->password,
+                'port' => 21,
+                'root' => $this->general->ftp->root,
+            ]);
         } catch (\Exception $e) {
-            // Handle the error (e.g., log or display an error message)
-            // You can log the exception message for debugging purposes
-            Log::error('Error setting filesystem configuration: ' . $e->getMessage());
+            $this->error = true;
+            Log::error('Error configuring FTP: ' . $e->getMessage());
         }
     }
+
     public function configureDisk($server)
     {
-        $general = $this->general;
         try {
-            Config::set('filesystems.disks.' . $server . '.visibility', 'public');
-            Config::set('filesystems.disks.' . $server . '.driver', $general->$server->driver);
-            Config::set('filesystems.disks.' . $server . '.key', $general->$server->key);
-            Config::set('filesystems.disks.' . $server . '.secret', $general->$server->secret);
-            Config::set('filesystems.disks.' . $server . '.region', $general->$server->region);
-            Config::set('filesystems.disks.' . $server . '.bucket', $general->$server->bucket);
-            Config::set('filesystems.disks.' . $server . '.endpoint', $general->$server->endpoint);
+            Config::set("filesystems.disks.$server", [
+                'visibility' => 'public',
+                'driver' => $this->general->$server->driver,
+                'key' => $this->general->$server->key,
+                'secret' => $this->general->$server->secret,
+                'region' => $this->general->$server->region,
+                'bucket' => $this->general->$server->bucket,
+                'endpoint' => $this->general->$server->endpoint,
+            ]);
         } catch (\Exception $e) {
-            // Handle the error (e.g., log or display an error message)
-            // You can log the exception message for debugging purposes
-            dd($e->getMessage());
-            Log::error('Error setting filesystem configuration: ' . $e->getMessage());
+            $this->error = true;
+            Log::error('Error configuring disk: ' . $e->getMessage());
         }
     }
 
     public function removeFtpVideo()
     {
-        $oldFile = $this->oldFile;
-        $storage = Storage::disk('custom-ftp');
+        try {
+            $oldFile = $this->oldFile;
+            $storage = Storage::disk('custom-ftp');
 
-        if ($storage->exists($oldFile)) {
-            $storage->delete($oldFile);
+            if ($storage->exists($oldFile)) {
+                $storage->delete($oldFile);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error removing FTP video: ' . $e->getMessage());
         }
     }
 
     public function removeOldFile()
     {
-
-        if ($this->oldServer == Status::AWS_CDN) {
-            $this->removeFromAWSCDN($this->oldFile); // Call the new method to remove from AWS CDN
-        } else if ($this->oldServer == Status::CURRENT_SERVER) {
-            $location = "assets/videos/{$this->oldFile}";
-            fileManager()->removeFile($location);
-        } else if (in_array($this->oldServer, [Status::FTP_SERVER, Status::WASABI_SERVER, Status::DIGITAL_OCEAN_SERVER])) {
-            try {
-                if ($this->oldServer == Status::WASABI_SERVER) {
-                    $server = 'wasabi';
-                } else if ($this->oldServer == Status::DIGITAL_OCEAN_SERVER) {
-                    $server = 'digital_ocean';
-                } else if ($this->oldServer == Status::FTP_SERVER) {
-                    $server = 'custom-ftp';
-                }
-
+        try {
+            if ($this->oldServer == Status::AWS_CDN) {
+                $this->removeFromAWSCDN($this->oldFile);
+            } else if ($this->oldServer == Status::CURRENT_SERVER) {
+                $location = "assets/videos/{$this->oldFile}";
+                fileManager()->removeFile($location);
+            } else if (in_array($this->oldServer, [Status::FTP_SERVER, Status::WASABI_SERVER, Status::DIGITAL_OCEAN_SERVER])) {
+                $server = $this->getServerName($this->oldServer);
                 $this->configureDisk($server);
                 $disk = Storage::disk($server);
-                $disk->delete($this->oldFile);
-            } catch (\Exception $e) {
+                if ($disk->exists($this->oldFile)) {
+                    $disk->delete($this->oldFile);
+                }
             }
+        } catch (\Exception $e) {
+            Log::error('Error removing old file: ' . $e->getMessage());
         }
     }
 
+    private function getServerName($serverStatus)
+    {
+        return match ($serverStatus) {
+            Status::FTP_SERVER => 'custom-ftp',
+            Status::WASABI_SERVER => 'wasabi',
+            Status::DIGITAL_OCEAN_SERVER => 'digital_ocean',
+            default => throw new \Exception("Unknown server status: $serverStatus"),
+        };
+    }
 
     private function uploadToAWSCDN()
     {
         $date = date('Y/m/d');
         $file = $this->file;
         $path = "videos/$date";
-
-        $fileExtension = $file->getClientOriginalExtension();
-        $fileContents = file_get_contents($file);
-
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region'  => $this->general->aws->region,
-            'credentials' => [
-                'key'    => $this->general->aws->key,
-                'secret' => $this->general->aws->secret,
-            ],
-        ]);
+        $fileName = $file->getClientOriginalName();
 
         try {
+            $s3 = $this->initializeS3Client();
             $s3->putObject([
                 'Bucket' => $this->general->aws->bucket,
-                'Key'    => "$path/{$file->getClientOriginalName()}",
-                'Body'   => $fileContents,
-                'ACL'    => 'public-read',
+                'Key' => "$path/$fileName",
+                'Body' => file_get_contents($file),
+                'ACL' => 'public-read',
             ]);
-
-            $this->fileName = "$path/{$file->getClientOriginalName()}";
+            $this->fileName = "$path/$fileName";
         } catch (S3Exception $e) {
             $this->error = true;
+            Log::error('AWS S3 upload error: ' . $e->getMessage());
         }
     }
+
     private function removeFromAWSCDN($oldFile)
     {
-        $s3 = new S3Client([
+        try {
+            $s3 = $this->initializeS3Client();
+            $s3->deleteObject([
+                'Bucket' => $this->general->aws->bucket,
+                'Key' => $oldFile,
+            ]);
+        } catch (S3Exception $e) {
+            Log::error('AWS S3 delete error: ' . $e->getMessage());
+        }
+    }
+
+    private function initializeS3Client()
+    {
+        return new S3Client([
             'version' => 'latest',
-            'region'  => $this->general->aws->region,
+            'region' => $this->general->aws->region,
             'credentials' => [
-                'key'    => $this->general->aws->key,
+                'key' => $this->general->aws->key,
                 'secret' => $this->general->aws->secret,
             ],
         ]);
-
-        try {
-            $s3->deleteObject([
-                'Bucket' => $this->general->aws->bucket,
-                'Key'    => $oldFile,
-            ]);
-        } catch (S3Exception $e) {
-            // Handle deletion error
-        }
     }
 }
