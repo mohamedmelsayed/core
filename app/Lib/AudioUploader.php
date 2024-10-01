@@ -4,15 +4,15 @@ namespace App\Lib;
 
 use App\Constants\Status;
 use App\Models\GeneralSetting;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class AudioUploader
 {
     private $general;
-
+    private $date;
     public $path;
     public $file;
     public $oldFile;
@@ -24,113 +24,120 @@ class AudioUploader
     public function __construct()
     {
         $this->general = GeneralSetting::first();
-        $date = date('Y').'/'.date('m').'/'.date('d');
-        $this->date = $date;
+        $this->date = date('Y/m/d'); // Simplified date creation
     }
 
     public function upload()
     {
-        $general = $this->general;
-
-        $uploadDisk = $general->server;
-        if($this->oldFile){
+        if ($this->oldFile) {
             $this->removeOldFile();
         }
 
-        if ($uploadDisk == Status::CURRENT_SERVER) {
-            $this->uploadedServer = 0;
-            return $this->uploadToCurrentServer();
+        $uploadDisk = $this->general->server;
+
+        switch ($uploadDisk) {
+            case Status::CURRENT_SERVER:
+                $this->uploadedServer = Status::CURRENT_SERVER;
+                $this->uploadToCurrentServer();
+                break;
+            case Status::FTP_SERVER:
+                $this->uploadedServer = Status::FTP_SERVER;
+                $this->uploadToFtpServer();
+                break;
+            default:
+                $this->error = true;
+                Log::error("Unsupported upload server: $uploadDisk");
         }
-        if ($uploadDisk == Status::FTP_SERVER) {
-            $this->uploadedServer = 1;
-            $this->uploadToFtpServer();
-        }
-        
     }
 
-    public function uploadToCurrentServer()
+    private function uploadToCurrentServer()
     {
-        $file = $this->file;
-        $location = 'assets/audios/';
-        $path = $location.$this->date;
-
-        try{
-            $video = $this->date.'/'.fileUploader($file,$path,null);
-            $this->fileName = $video;
-        }catch (\Exception $exp) {
+        try {
+            $location = 'assets/audios/';
+            $path = $location . $this->date;
+            $this->fileName = $this->date . '/' . fileUploader($this->file, $path, null);
+        } catch (\Exception $exp) {
             $this->error = true;
+            Log::error('Error uploading to the current server: ' . $exp->getMessage());
         }
     }
 
-    public function uploadToFtpServer()
+    private function uploadToFtpServer()
     {
-        $file = $this->file;
-        $location = 'audios/';
-        $path = $location.$this->date;
-
-        try{
-            $fileExtension = $file->getClientOriginalExtension();
+        try {
             $this->configureDisk();
-
-            $file = File::get($file);
+            $fileExtension = $this->file->getClientOriginalExtension();
             $disk = Storage::disk('custom-ftp');
-     
-            $this->ftpMakeDirectory($path,$disk);
+            $location = 'audios/';
+            $path = $location . $this->date;
 
-            $video = uniqid().time().'.'.$fileExtension;
-            $disk->put($path.'/'.$video, $file);
-            $this->fileName = $path.'/'.$video;
-            
-        }catch(\Exception $e){
+            $this->makeDirectoryIfNotExists($path, $disk);
+
+            $uniqueFileName = uniqid() . time() . '.' . $fileExtension;
+            $disk->put($path . '/' . $uniqueFileName, File::get($this->file));
+            $this->fileName = $path . '/' . $uniqueFileName;
+        } catch (\Exception $e) {
             $this->error = true;
+            Log::error('Error uploading to FTP server: ' . $e->getMessage());
         }
     }
 
-    private function ftpMakeDirectory($path,$disk){
-        if ($disk->exists($path)) {
-            return true;
+    private function makeDirectoryIfNotExists($path, $disk)
+    {
+        try {
+            if (!$disk->exists($path)) {
+                $disk->makeDirectory($path);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error creating directory on FTP server: ' . $e->getMessage());
         }
-        $disk->makeDirectory($path);
     }
 
     public function configureDisk()
     {
-        $general = $this->general;
-        //ftp
-
-        Config::set('filesystems.disks.custom-ftp.driver','ftp');
-        Config::set('filesystems.disks.custom-ftp.host',$general->ftp->host);
-        Config::set('filesystems.disks.custom-ftp.username',$general->ftp->username);
-        Config::set('filesystems.disks.custom-ftp.password',$general->ftp->password);
-        Config::set('filesystems.disks.custom-ftp.port',21);
-        Config::set('filesystems.disks.custom-ftp.root',$general->ftp->root);
-
+        try {
+            $ftpConfig = [
+                'driver' => 'ftp',
+                'host' => $this->general->ftp->host,
+                'username' => $this->general->ftp->username,
+                'password' => $this->general->ftp->password,
+                'port' => 21,
+                'root' => $this->general->ftp->root,
+            ];
+            Config::set('filesystems.disks.custom-ftp', $ftpConfig);
+        } catch (\Exception $e) {
+            $this->error = true;
+            Log::error('Error configuring FTP disk: ' . $e->getMessage());
+        }
     }
 
     public function removeFtpVideo()
     {
-        $oldFile = $this->oldFile;
-        $storage = Storage::disk('custom-ftp');
-        if($storage->exists($oldFile)){
-            $storage->delete($oldFile);
+        try {
+            $storage = Storage::disk('custom-ftp');
+            if ($storage->exists($this->oldFile)) {
+                $storage->delete($this->oldFile);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error removing FTP video: ' . $e->getMessage());
         }
-        
     }
 
-    public function removeOldFile(){
-        if($this->oldServer == 0){
-            $location = 'assets/audios/'.$this->oldFile;
-            fileManager()->removeFile($location);
-        }elseif($this->oldServer == 1){
-            try{
+    public function removeOldFile()
+    {
+        try {
+            if ($this->oldServer == Status::CURRENT_SERVER) {
+                $location = 'assets/audios/' . $this->oldFile;
+                fileManager()->removeFile($location);
+            } elseif ($this->oldServer == Status::FTP_SERVER) {
                 $this->configureDisk();
                 $disk = Storage::disk('custom-ftp');
-                $disk->delete($this->oldFile);
-            }catch(\Exception $e){
-
+                if ($disk->exists($this->oldFile)) {
+                    $disk->delete($this->oldFile);
+                }
             }
+        } catch (\Exception $e) {
+            Log::error('Error removing old file: ' . $e->getMessage());
         }
     }
-
-
 }
