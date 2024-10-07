@@ -31,25 +31,25 @@ class VideoUploader
         $this->uploadedServer = $this->general->server;
         try {
             switch ($this->uploadedServer) {
-                case Status::CURRENT_SERVER:
-                    $this->uploadedServer = "current";
+                case 'current':
+                    $this->uploadedServer = Status::CURRENT_SERVER;
                     $this->uploadToServer('local','videos');
                     break;
-                case Status::FTP_SERVER:
+                case 'custom-ftp':
                     $this->uploadedServer = Status::FTP_SERVER;
                     $this->configureFTP();
                     $this->uploadToServer('custom-ftp', 'videos');
                     break;
-                case Status::WASABI_SERVER:
+                case 'wasabi':
                     $this->uploadedServer = Status::WASABI_SERVER;
                     $this->configureDisk('wasabi');
                     $this->uploadToServer('wasabi', 'videos');
                     break;
-                case Status::DIGITAL_OCEAN_SERVER:
+                case 'digital_ocean':
                     $this->uploadedServer = Status::DIGITAL_OCEAN_SERVER;
                     $this->uploadToServer('digital_ocean', 'videos');
                     break;
-                case Status::AWS_CDN:
+                case 'aws':
                     $this->uploadedServer = Status::AWS_CDN;
                     $this->uploadToAWSCDN();
                     break;
