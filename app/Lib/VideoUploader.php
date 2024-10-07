@@ -16,6 +16,7 @@ class VideoUploader
     private $general;
     public $oldServer;
     public $oldFile;
+    public $file;
     public $fileName;
     public $uploadedServer;
     public $error;
