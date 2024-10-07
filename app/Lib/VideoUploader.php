@@ -33,7 +33,7 @@ class VideoUploader
             switch ($this->uploadedServer) {
                 case 'current':
                     $this->uploadedServer = Status::CURRENT_SERVER;
-                    $this->uploadToServer('local','videos');
+                    $this->uploadToCurrentServer();
                     break;
                 case 'custom-ftp':
                     $this->uploadedServer = Status::FTP_SERVER;
