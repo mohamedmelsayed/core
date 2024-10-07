@@ -425,7 +425,7 @@ class ItemController extends Controller
 
         }
 
-    
+
         return view('admin.item.stream', compact('item', 'pageTitle', 'prevUrl','stream'));
     }
 
@@ -445,14 +445,14 @@ class ItemController extends Controller
         if ($stream) {
             $stream->embed_code=$request->embed_code;
             $stream->save();
-        
+
         }
         else{
              $stream=new Stream;
              $stream->embed_code=$request->embed_code;
              $stream->item_id=$id;
              $stream->save();
-         
+
         }
 
         $notify[] = ['message', 'Saved Successfully'];
@@ -540,6 +540,7 @@ class ItemController extends Controller
             if ($error) {
                 return response()->json(['errors' => 'Could not upload the Video']);
             }
+            $videoUploader->removeOldFile();
 
             $content = $videoUploader->fileName;
             $server = $videoUploader->uploadedServer;
