@@ -28,12 +28,12 @@ class VideoUploader
 
     public function upload()
     {
-        $uploadDisk = $this->general->server;
+        $this->uploadedServer = $this->general->server;
         try {
             switch ($uploadDisk) {
                 case Status::CURRENT_SERVER:
                     $this->uploadedServer = Status::CURRENT_SERVER;
-                    $this->uploadedServer('local','videos');
+                    $this->uploadToServer('local','videos');
                     break;
                 case Status::FTP_SERVER:
                     $this->uploadedServer = Status::FTP_SERVER;
@@ -54,7 +54,7 @@ class VideoUploader
                     $this->uploadToAWSCDN();
                     break;
                 default:
-                    throw new \Exception("Invalid upload disk: $uploadDisk");
+                    throw new \Exception("Invalid upload disk: $this->uploadedServer");
             }
         } catch (\Exception $e) {
             $this->error = true;
