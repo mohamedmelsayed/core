@@ -350,8 +350,8 @@ class SiteController extends Controller
             }
         });
 
-        // Fetch items that match any of the keywords
-        $items = $query->get();
+        // Apply the orderBy before calling get()
+        $items = $query->orderBy('id', 'desc')->get();
 
         // Filter items to return only those that have at least 2 matching keywords
         $filteredItems = $items->filter(function ($item) use ($keywordsArray) {
@@ -376,6 +376,7 @@ class SiteController extends Controller
 
         return $filteredItems;
     }
+
 
 
 
