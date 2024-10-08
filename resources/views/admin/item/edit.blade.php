@@ -160,7 +160,7 @@
                             <div class="form-group col-md-4  position-relative">
                                 <label>@lang('Director')</label>
                                 <select class="form-control select2-auto-tokenize director-option" name="director[]" multiple="multiple">
-                                    @foreach (explode(',', $item->team->directors) as $director)
+                                    @foreach (explode(',', $item->team->director) as $director)
                                         <option value="{{ $director }}" selected>{{ $director }}</option>
                                     @endforeach
                                 </select>
@@ -168,7 +168,7 @@
                             <div class="form-group col-md-4  position-relative">
                                 <label>@lang('Producer')</label>
                                 <select class="form-control select2-auto-tokenize producer-option" name="producer[]" multiple="multiple">
-                                    @foreach (explode(',', $item->team->producers ) as $producer)
+                                    @foreach (explode(',', $item->team->producer ) as $producer)
                                         <option value="{{ $producer }}" selected>{{ $producer }}</option>
                                     @endforeach
                                 </select>
