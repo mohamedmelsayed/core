@@ -24,7 +24,7 @@
          <i class="fas fa-volume-mute"></i>
        </span>
 
-       
+
      </div>
    </div>
 
@@ -46,7 +46,7 @@
                                         @php
                                             $wishlist = $activeEpisode->wishlists->where('user_id', auth()->id())->count();
                                         @endphp
-                            
+
                                         <span class="movie-widget addWishlist {{ $wishlist ? 'd-none' : '' }}"><i class="las la-plus-circle"></i></span>
                                         <span class="movie-widget removeWishlist {{ $wishlist ? '' : 'd-none' }}"><i class="las la-minus-circle"></i></span>
 
@@ -84,7 +84,7 @@
                                     <ul class="team-list">
                                         <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
                                         <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
-                                        <li><span>@lang('Cast'):</span> {{ __($item->team->casts) }}</li>
+                                        {{-- <li><span>@lang('Cast'):</span> {{ __($item->team->casts) }}</li> --}}
                                     </ul>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                     data-img="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}">
                                    <div class="widget-item__content d-flex flex-wrap align-items-center movie-small">
                                         <div class="widget-thumb">
-                                            
+
                                             <a href="{{ route('watch', [$item->id, $episode->id]) }}">
                                                 <img src="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}" alt="movie">
                                                 @if ($episode->version == 0)
@@ -123,7 +123,7 @@
                                         </div>
                                    </div>
                                    <div class="widget-item__lock">
-                                    <span class="widget-item__lock-icon"> 
+                                    <span class="widget-item__lock-icon">
                                         @if($episode->version == 0 || (auth()->check() && auth()->user()->exp > now()))
                                         <i class="fas fa-unlock"></i>
                                         @else
@@ -202,7 +202,7 @@
                 content: "\f023";
             }
 
-            
+
         </style>
     @else
             <style>

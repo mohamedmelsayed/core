@@ -21,7 +21,7 @@
                             {!! $item->stream->embed_code !!}
                         @endif
                     </div>
-                    
+
                     <div class="ad-video position-relative d-none">
                         <video class="ad-player" style="display: none" id="ad-video"></video>
                         <div class="ad-links d-none">
@@ -39,7 +39,7 @@
                         <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                             <div class="movie-content-left">
                                 <h3 class="title">{{ __($seoContents["social_title"]) }}</h3>
-                                <span class="sub-title">@lang('Category') : 
+                                <span class="sub-title">@lang('Category') :
                                     <span class="cat">{{app()->getLocale() === 'ar' ? $item->category->name : $item->category->name_en }}</span>
                                     @if ($item->sub_category)
                                         @lang('Sub Category'): {{ app()->getLocale() === 'ar' ? $item->sub_category->name : $item->sub_category->name_en }}
@@ -109,8 +109,8 @@
                                 <ul class="team-list">
                                     <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
                                     <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
-                                    <li><span>@lang('Cast'):</span> {{ __($item->team->casts) }}</li>
-                                    <li><span>@lang('Genres'):</span> {{ __(@$item->team->genres) }}</li>
+                                    {{-- <li><span>@lang('Cast'):</span> {{ __($item->team->casts) }}</li> --}}
+                                    {{-- <li><span>@lang('Genres'):</span> {{ __(@$item->team->genres) }}</li> --}}
                                     <li><span>@lang('Language'):</span> {{ __(@$item->team->language) }}</li>
                                 </ul>
                             </div>
