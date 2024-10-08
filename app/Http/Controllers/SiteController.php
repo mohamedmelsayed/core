@@ -340,7 +340,7 @@ class SiteController extends Controller
         }
 
         // Initialize the query based on item type
-        $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
+        $query = $type === "video" ? Item::hasVideo()->where('is_audio',0) : Item::hasAudio()->where('is_audio',1) ;
 
         // Add a condition to match items with any of the keywords
         $query->where(function ($subQuery) use ($keywordsArray) {
