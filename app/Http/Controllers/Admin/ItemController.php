@@ -301,8 +301,8 @@ class ItemController extends Controller
         $team = [
             'director' => implode(',', $request->director),
             'producer' => implode(',', $request->producer),
-            'casts' => implode(',', $request->casts),
-            'genres' => implode(',', $request->genres),
+            // 'casts' => implode(',', $request->casts),
+            // 'genres' => implode(',', $request->genres),
             'language' => implode(',', $request->language),
         ];
 
