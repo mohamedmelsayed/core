@@ -286,7 +286,7 @@ class SiteController extends Controller
 
         if ($keyword != null) {
             // Get matching items based on keywords and item type
-            $items = $this->getMatchingItems($keyword, $type);
+            $items = $this->getMatchingItems($keyword, $type,$itemType,$itemId);
             // Apply additional filters before executing the query
             // $itemstoreturn = $items->where('item_type', $itemType)
             //     ->where('id', '!=', $itemId)
@@ -329,7 +329,7 @@ class SiteController extends Controller
         }
     }
 
-    private function getMatchingItems($userKeywords, $type)
+    private function getMatchingItems($userKeywords, $type,$itemType,$itemId)
     {
         // Convert user keywords into an array, trim whitespace, and remove empty elements
         $keywordsArray = array_filter(array_map('trim', explode(',', $userKeywords)));
@@ -351,7 +351,8 @@ class SiteController extends Controller
         });
 
         // Apply the orderBy before calling get()
-        $items = $query->get();
+        $items = $query->where('item_type', $itemType)
+        ->where('id', '!=', $itemId)->grt();
 
         // Filter items to return only those that have at least 2 matching keywords
         $filteredItems = $items->filter(function ($item) use ($keywordsArray) {
