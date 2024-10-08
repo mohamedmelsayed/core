@@ -157,18 +157,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-4  position-relative">
                                 <label>@lang('Director')</label>
-                                <select class="form-control select2-auto-tokenize director-option" name="director[]" multiple="multiple" required>
-                                    @foreach (explode(',', $item->team->director) as $director)
+                                <select class="form-control select2-auto-tokenize director-option" name="director[]" multiple="multiple">
+                                    @foreach (explode(',', $item->team->directors ?? []) as $director)
                                         <option value="{{ $director }}" selected>{{ $director }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-4  position-relative">
                                 <label>@lang('Producer')</label>
-                                <select class="form-control select2-auto-tokenize director-option" name="producer[]" multiple="multiple" required>
-                                    @foreach (explode(',', $item->team->producer) as $producer)
+                                <select class="form-control select2-auto-tokenize producer-option" name="producer[]" multiple="multiple">
+                                    @foreach (explode(',', $item->team->producers ?? []) as $producer)
                                         <option value="{{ $producer }}" selected>{{ $producer }}</option>
                                     @endforeach
                                 </select>
@@ -199,11 +199,11 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6 position-relative">
                                 <label>@lang('Tags')</label>
                                 <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
-                                <select class="form-control select2-auto-tokenize" name="tags[]" placeholder="Add short words which better describe your site" multiple="multiple" required>
-                                    @foreach (explode(',', $item->tags) as $tag)
+                                <select class="form-control select2-auto-tokenize tag-option" name="tags[]" multiple="multiple">
+                                    @foreach (explode(',', $item->tags ?? []) as $tag)
                                         <option value="{{ $tag }}" selected>{{ $tag }}</option>
                                     @endforeach
                                 </select>
