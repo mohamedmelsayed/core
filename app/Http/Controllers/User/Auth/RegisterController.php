@@ -35,7 +35,7 @@ class RegisterController extends Controller {
         return view($this->activeTemplate . 'user.auth.register', compact('pageTitle', 'mobileCode', 'countries'));
     }
 
-   
+
 
 
     protected function validator(array $data) {
@@ -65,8 +65,8 @@ class RegisterController extends Controller {
         ]);
         return $validate;
     }
-    
-   
+
+
 
     public function register(Request $request) {
         $this->validator($request->all())->validate();
@@ -106,7 +106,7 @@ class RegisterController extends Controller {
      */
     protected function create(array $data) {
         $general = gs();
-    
+
         // User Create
         $user               = new User();
         $user->email        = strtolower($data['email']);
@@ -125,16 +125,23 @@ class RegisterController extends Controller {
         $user->verification_token = Str::random(60);  // Generate verification token
         $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
         $user->save();
-    
+
         // Send verification email
-        Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
-            $message->to($user->email);
-            $message->subject('Account Verification');
-        });
-    
+        // Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
+        //     $message->to($user->email);
+        //     $message->subject('Account Verification');
+        // });
+        $notifyTemplate = 'EVER_LINK';
+
+        $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+        // dd($verificationUrl);
+        notify($user, $notifyTemplate, [
+            'link' => $verificationUrl,
+        ], ['email']);
+
         return $user;
     }
-    
+
     public function checkUser(Request $request) {
         $exist['data'] = false;
         $exist['type'] = null;
@@ -148,7 +155,7 @@ class RegisterController extends Controller {
         }
         return response($exist);
     }
-    
+
     public function registered() {
         if (session()->has('device_token')) {
             $deviceToken = session()->get('device_token');
@@ -163,7 +170,7 @@ class RegisterController extends Controller {
         return to_route('user.home');
     }
 
-  
-    
+
+
 
 }
