@@ -191,11 +191,11 @@
                                     @endforeach
                                 </select>
                             </div> --}}
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-6  position-relative">
                                 <label>@lang('Languages')</label>
-                                <select class="form-control select2-auto-tokenize language-option" name="language[]" multiple="multiple" required>
-                                    @foreach (explode(',', @$item->team->language) as $lang)
-                                        <option value="{{ $lang }}" selected>{{ $lang }}</option>
+                                <select class="form-control select2-auto-tokenize language-option" name="language[]" multiple="multiple">
+                                    @foreach (explode(',', $item->languages ) as $language)
+                                        <option value="{{ $language }}" selected>{{ $language }}</option>
                                     @endforeach
                                 </select>
                             </div>
