@@ -160,7 +160,7 @@
                             <div class="form-group col-md-4  position-relative">
                                 <label>@lang('Director')</label>
                                 <select class="form-control select2-auto-tokenize director-option" name="director[]" multiple="multiple">
-                                    @foreach (explode(',', $item->team->directors ?? []) as $director)
+                                    @foreach (explode(',', $item->team->directors) as $director)
                                         <option value="{{ $director }}" selected>{{ $director }}</option>
                                     @endforeach
                                 </select>
@@ -168,7 +168,7 @@
                             <div class="form-group col-md-4  position-relative">
                                 <label>@lang('Producer')</label>
                                 <select class="form-control select2-auto-tokenize producer-option" name="producer[]" multiple="multiple">
-                                    @foreach (explode(',', $item->team->producers ?? []) as $producer)
+                                    @foreach (explode(',', $item->team->producers ) as $producer)
                                         <option value="{{ $producer }}" selected>{{ $producer }}</option>
                                     @endforeach
                                 </select>
@@ -203,7 +203,7 @@
                                 <label>@lang('Tags')</label>
                                 <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
                                 <select class="form-control select2-auto-tokenize tag-option" name="tags[]" multiple="multiple">
-                                    @foreach (explode(',', $item->tags ?? []) as $tag)
+                                    @foreach (explode(',', $item->tags ) as $tag)
                                         <option value="{{ $tag }}" selected>{{ $tag }}</option>
                                     @endforeach
                                 </select>
