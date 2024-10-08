@@ -123,7 +123,7 @@
         <div class="row">
             <div class="col-xl-12">
                 <div class="section-header">
-                    <h2 class="section-title">@lang('Related Videos')</h2>
+                    <h2 class="section-title">@lang('Related Video')</h2>
                 </div>
             </div>
         </div>
