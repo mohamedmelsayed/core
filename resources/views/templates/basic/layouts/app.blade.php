@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="{{ config('app.locale') }}" itemscope itemtype="http://schema.org/WebPage" dir="{{ app()->getLocale() == 'ar'? 'rtl' : 'ltr' }}">
+<html lang="{{ config('app.locale') }}" itemscope itemtype="http://schema.org/WebPage"
+    dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="utf-8">
@@ -11,7 +12,9 @@
 
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <link href="{{ asset($activeTemplateTrue . 'css/fontawesome-all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/global/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/global/css/all.min.css') }}" rel="stylesheet">
@@ -24,8 +27,28 @@
 
     @stack('style-lib')
     @stack('style')
+    <style>
+        html[dir="rtl"] .item {
+            padding-left: 0;
+            /* Remove left padding for RTL */
+            padding-right: 15px;
+            /* Add right padding for RTL */
+        }
 
-    <link href="{{ asset($activeTemplateTrue . 'css/color.php') }}?color={{ $general->base_color }}&secondColor={{ $general->secondary_color }}" rel="stylesheet">
+        /* For padding between items */
+        .item {
+            padding-inline-start: 15px;
+            /* Works for both LTR and RTL */
+            padding-inline-end: 15px;
+            /* Works for both LTR and RTL */
+            margin-bottom: 20px;
+            /* Controls margin at the bottom of each item */
+        }
+    </style>
+
+    <link
+        href="{{ asset($activeTemplateTrue . 'css/color.php') }}?color={{ $general->base_color }}&secondColor={{ $general->secondary_color }}"
+        rel="stylesheet">
 </head>
 
 <body @stack('context')>
@@ -46,7 +69,8 @@
     @yield('app')
 
     @if (@$type != 'app')
-        <div class="modal alert-modal fade" id="notifyModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal alert-modal fade" id="notifyModal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -113,7 +137,8 @@
                 let heading = table.querySelectorAll('thead tr th');
                 Array.from(table.querySelectorAll('tbody tr')).forEach((row) => {
                     Array.from(row.querySelectorAll('td')).forEach((column, i) => {
-                        (column.colSpan == 100) || column.setAttribute('data-label', heading[i].innerText)
+                        (column.colSpan == 100) || column.setAttribute('data-label', heading[i]
+                            .innerText)
                     });
                 });
             });

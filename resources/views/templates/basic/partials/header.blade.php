@@ -29,7 +29,7 @@
 
                                 @foreach ($categories as $category)
                                     @if ($category->subcategories->count())
-                                        <li><a class="nav-link category-nav"
+                                        <li><a class="nav-link category-nav item"
                                                href="{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
                                             <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
                                             <ul class="sub-menu">
