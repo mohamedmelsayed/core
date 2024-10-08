@@ -1,12 +1,8 @@
 @php
-    $breadcrumb = getContent('breadcrumb.content', true);
-    $isRtl = app()->getLocale() == 'ar';  // Determine if the language is Arabic (RTL)
+    $breadcrumb = getContent('breadcrumb.content',true);
 @endphp
 
-<section class="inner-banner-section banner-section bg-overlay-black bg_img"
-    data-background="{{ getImage('assets/images/frontend/breadcrumb/'.@$breadcrumb->data_values->background_image, '1778x755') }}"
-    dir="{{ $isRtl ? 'rtl' : 'ltr' }}"> <!-- Dynamically set direction based on the language -->
-
+<section class="inner-banner-section banner-section bg-overlay-black bg_img" data-background="{{ getImage('assets/images/frontend/breadcrumb/'.@$breadcrumb->data_values->background_image, '1778x755') }}">
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-xl-12 text-center">

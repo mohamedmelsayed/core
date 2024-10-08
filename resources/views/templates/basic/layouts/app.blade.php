@@ -33,7 +33,7 @@
         rel="stylesheet">
 </head>
 
-<body @stack('context')>
+<body lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}" @stack('context')>
 
     @if (@$type != 'app')
         @stack('fbComment')
