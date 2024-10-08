@@ -18,7 +18,7 @@ class AuthorizationController extends Controller {
         return true;
     }
 
-    public function authorizationOldwthsms() {
+    public function authorization() {
         $user = auth()->user();
         if (!$user->status) {
             $type = 'ban';
@@ -55,39 +55,39 @@ class AuthorizationController extends Controller {
 
     }
 
-    public function authorization() {
-        $user = auth()->user();
-    
-        // Check if the user is already verified
-        if ($user->ev) {
-            return response()->json([
-                'remark'  => 'already_verified',
-                'status'  => 'error',
-                'message' => ['error' => ['You are already verified.']],
-            ]);
-        }
-    
-        // Check if the verification code is valid
-        if ($this->checkCodeValidity($user)) {
-            $notify = ['Verification code is still valid.'];
-        } else {
-            // Generate and send a new verification code
-            $user->ver_code = verificationCode(6);
-            $user->ver_code_send_at = Carbon::now();
-            $user->save();
-            notify($user, 'EVER_CODE', [
-                'code' => $user->ver_code,
-            ], ['email']);
-            $notify = ['Verify your email.'];
-        }
-    
-        return response()->json([
-            'remark'  => 'code_sent',
-            'status'  => 'success',
-            'message' => ['success' => $notify],
-        ]);
-    }
-    
+    // public function authorization() {
+    //     $user = auth()->user();
+
+    //     // Check if the user is already verified
+    //     if ($user->ev) {
+    //         return response()->json([
+    //             'remark'  => 'already_verified',
+    //             'status'  => 'error',
+    //             'message' => ['error' => ['You are already verified.']],
+    //         ]);
+    //     }
+
+    //     // Check if the verification code is valid
+    //     if ($this->checkCodeValidity($user)) {
+    //         $notify = ['Verification code is still valid.'];
+    //     } else {
+    //         // Generate and send a new verification code
+    //         $user->ver_code = verificationCode(6);
+    //         $user->ver_code_send_at = Carbon::now();
+    //         $user->save();
+    //         notify($user, 'EVER_CODE', [
+    //             'code' => $user->ver_code,
+    //         ], ['email']);
+    //         $notify = ['Verify your email.'];
+    //     }
+
+    //     return response()->json([
+    //         'remark'  => 'code_sent',
+    //         'status'  => 'success',
+    //         'message' => ['success' => $notify],
+    //     ]);
+    // }
+
     public function sendVerifyCode($type) {
         $user = auth()->user();
 

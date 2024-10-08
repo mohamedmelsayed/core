@@ -14,9 +14,11 @@ class CheckStatus {
      * @return mixed
      */
     public function handle($request, Closure $next) {
+        $general            = gs();
+
         if (Auth::check()) {
             $user = auth()->user();
-            if ($user->status && $user->ev && $user->sv) {
+            if ($user->status && $user->ev && ($user->sv&&$general->sv )) {
                 return $next($request);
             } else {
                 if ($request->is('api/*')) {
