@@ -9,7 +9,6 @@
                     <img src="{{ getImage(getFilePath('item_landscape').'/'.$item->image->landscape) }}" alt="movie">
 
 
-                    <div class="audio"></div>
 
                     <div class="buttons">
                         <span class="play-btn btn">
@@ -216,19 +215,14 @@
         overflow: hidden;
     }
 
-    .audio-container .audio {
-        background: #222;
-        width: 100%;
-        height: 130px;
-    }
+
 
     .audio-container .track-name {
         top: 8px;
         left: 8px;
         color: white;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(248, 193, 85, 0.7);
         padding: 8px 32px;
-        border-radius: 10px;
         font-size: 13px;
     }
 
