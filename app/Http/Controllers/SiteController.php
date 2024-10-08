@@ -330,35 +330,37 @@ class SiteController extends Controller
     }
 
     private function getMatchingItems($userKeywords, $type)
-    {
-        // Convert user keywords into an array, trim whitespace, and remove empty elements
-        $keywordsArray = array_filter(array_map('trim', explode(',', $userKeywords)));
+{
+    // Convert user keywords into an array, trim whitespace, and remove empty elements
+    $keywordsArray = array_filter(array_map('trim', explode(',', $userKeywords)));
 
-        // Return early if no keywords are provided
-        if (empty($keywordsArray)) {
-            return collect(); // Return an empty collection if no keywords are provided
-        }
-
-        // Initialize the query based on item type
-        $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
-
-        // Add a condition to match items with at least 2 matching keywords
-        $query->where(function ($subQuery) use ($keywordsArray) {
-            // Loop through each keyword and count the number of matches using FIND_IN_SET
-            $matchConditions = [];
-            foreach ($keywordsArray as $keyword) {
-                $matchConditions[] = "LOWER(FIND_IN_SET(?, LOWER(tags))) > 0";
-            }
-
-            // Use HAVING clause to ensure at least 2 matches
-            $subQuery->whereRaw("(" . implode(' + ', $matchConditions) . ") >= 2", $keywordsArray);
-        });
-
-        // Filter by type
-        return $type === "video"
-            ? $query->where("is_audio", 0)
-            : $query->where("is_audio", 1);
+    // Return early if no keywords are provided
+    if (empty($keywordsArray)) {
+        return collect(); // Return an empty collection if no keywords are provided
     }
+
+    // Initialize the query based on item type
+    $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
+
+    // Add a condition to match items with at least 2 matching keywords
+    $query->where(function ($subQuery) use ($keywordsArray) {
+        $keywordMatches = 0;
+        foreach ($keywordsArray as $keyword) {
+            // Check each keyword using FIND_IN_SET and count matches
+            $subQuery->orWhereRaw("FIND_IN_SET(?, tags) > 0", [$keyword]);
+        }
+    });
+
+    // Having clause to ensure at least 2 keywords match
+    $query->selectRaw('*, (SELECT COUNT(*) FROM tags WHERE FIND_IN_SET(tags, ?) >= 2) as keyword_matches')
+          ->having('keyword_matches', '>=', 2);
+
+    // Filter by type
+    return $type === "video"
+        ? $query->where("is_audio", 0)->get()
+        : $query->where("is_audio", 1)->get();
+}
+
 
 
 
