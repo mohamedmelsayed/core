@@ -185,26 +185,27 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-6  position-relative">
+                        {{-- <div class="form-group col-md-6  position-relative">
                             <label>@lang('Genres')</label>
                             <select class="form-control select2-auto-tokenize genres-option" name="genres[]" multiple="multiple" required></select>
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6  position-relative">
                             <label>@lang('Languages')</label>
                             <select class="form-control select2-auto-tokenize language-option" name="language[]" multiple="multiple" required></select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6  position-relative">
-                            <label class="form-control-label">@lang('Casts')</label>
-                            <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
-                            <select class="form-control select2-auto-tokenize cast-option" name="casts[]" multiple="multiple" required></select>
                         </div>
                         <div class="form-group col-md-6 position-relative">
                             <label>@lang('Tags')</label>
                             <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
                             <select class="form-control select2-auto-tokenize tag-option" name="tags[]" multiple="multiple" required></select>
                         </div>
+                    </div>
+                    <div class="row">
+                        {{-- <div class="form-group col-md-6  position-relative">
+                            <label class="form-control-label">@lang('Casts')</label>
+                            <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
+                            <select class="form-control select2-auto-tokenize cast-option" name="casts[]" multiple="multiple" required></select>
+                        </div> --}}
+
                     </div>
                 </div>
                 <div class="card-footer">

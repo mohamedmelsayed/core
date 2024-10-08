@@ -183,31 +183,19 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            {{-- <div class="form-group col-md-6">
                                 <label>@lang('Genres')</label>
                                 <select class="form-control select2-auto-tokenize genres-option" name="genres[]" multiple="multiple" required>
                                     @foreach (explode(',', @$item->team->genres) as $genre)
                                         <option value="{{ $genre }}" selected>{{ $genre }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="form-group col-md-6">
                                 <label>@lang('Languages')</label>
                                 <select class="form-control select2-auto-tokenize language-option" name="language[]" multiple="multiple" required>
                                     @foreach (explode(',', @$item->team->language) as $lang)
                                         <option value="{{ $lang }}" selected>{{ $lang }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class="form-control-label">@lang('Casts')</label>
-                                <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
-
-                                <select class="form-control select2-auto-tokenize" name="casts[]" placeholder="Add short words which better describe your site" multiple="multiple" required>
-                                    @foreach (explode(',', $item->team->casts) as $cast)
-                                        <option value="{{ $cast }}" selected>{{ $cast }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -220,6 +208,19 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="row">
+                            {{-- <div class="form-group col-md-6">
+                                <label class="form-control-label">@lang('Casts')</label>
+                                <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
+
+                                <select class="form-control select2-auto-tokenize" name="casts[]" placeholder="Add short words which better describe your site" multiple="multiple" required>
+                                    @foreach (explode(',', $item->team->casts) as $cast)
+                                        <option value="{{ $cast }}" selected>{{ $cast }}</option>
+                                    @endforeach
+                                </select>
+                            </div> --}}
+
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">

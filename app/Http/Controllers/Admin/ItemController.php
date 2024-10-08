@@ -143,8 +143,8 @@ class ItemController extends Controller
         $team = [
             'director' => implode(',', $request->director),
             'producer' => implode(',', $request->producer),
-            'casts' => implode(',', $request->casts),
-            'genres' => implode(',', $request->genres),
+            // 'casts' => implode(',', $request->casts),
+            // 'genres' => implode(',', $request->genres),
             'language' => implode(',', $request->language),
         ];
 
@@ -181,7 +181,7 @@ class ItemController extends Controller
             'description' => 'required|string',
             'director' => 'required',
             'producer' => 'required',
-            'casts' => 'required',
+            // 'casts' => 'required',
             'tags' => 'required',
             'item_type' => "$validation|in:1,2",
             'is_audio' => "$validation|in:0,1",

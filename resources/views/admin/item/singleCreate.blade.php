@@ -78,7 +78,7 @@
                                 <option value="2">@lang('Rent')</option>
                             </select>
                         </div>
-                      
+
                             <div class="form-group col-md-3 is_audio">
                             <label>@lang('Item Type')</label>
                             <select class="form-control" name="is_audio">
@@ -166,7 +166,7 @@
                         <div class="form-group col-md-6">
                             <label>@lang('Description')</label>
                             <textarea class="form-control" name="description" rows="5" placeholder="@lang('Description')">{{ old('description', $defaults->description ?? '') }}</textarea>
-                       
+
                         </div>
                     </div>
                     <div class="row">
@@ -195,30 +195,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-6  position-relative">
+                        {{-- <div class="form-group col-md-6  position-relative">
                             <label>@lang('Genres')</label>
                             <select class="form-control select2-auto-tokenize genres-option" name="genres[]" multiple="multiple">
                                 @foreach (old('genres', $defaults->genres ?? []) as $genre)
                                     <option value="{{ $genre }}" selected>{{ $genre }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6  position-relative">
                             <label>@lang('Languages')</label>
                             <select class="form-control select2-auto-tokenize language-option" name="language[]" multiple="multiple">
                                 @foreach (old('language', $defaults->languages ?? []) as $language)
                                     <option value="{{ $language }}" selected>{{ $language }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6  position-relative">
-                            <label class="form-control-label">@lang('Casts')</label>
-                            <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
-                            <select class="form-control select2-auto-tokenize cast-option" name="casts[]" multiple="multiple">
-                                @foreach (old('casts', $defaults->casts ?? []) as $cast)
-                                    <option value="{{ $cast }}" selected>{{ $cast }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -232,6 +221,18 @@
                             </select>
                         </div>
                     </div>
+                    {{-- <div class="row">
+                        <div class="form-group col-md-6  position-relative">
+                            <label class="form-control-label">@lang('Casts')</label>
+                            <small class="text-facebook ml-2 mt-2">@lang('Separate multiple by') <code>,</code>(@lang('comma')) @lang('or') <code>@lang('enter')</code> @lang('key')</small>
+                            <select class="form-control select2-auto-tokenize cast-option" name="casts[]" multiple="multiple">
+                                @foreach (old('casts', $defaults->casts ?? []) as $cast)
+                                    <option value="{{ $cast }}" selected>{{ $cast }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div> --}}
                 </div>
                 <div class="card-footer">
                     <button class="btn btn--primary h-45 w-100" type="submit">@lang('Submit')</button>
