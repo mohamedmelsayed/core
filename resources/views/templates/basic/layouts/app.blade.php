@@ -27,9 +27,6 @@
 
     @stack('style-lib')
     @stack('style')
-    <style>
-
-    </style>
 
     <link
         href="{{ asset($activeTemplateTrue . 'css/color.php') }}?color={{ $general->base_color }}&secondColor={{ $general->secondary_color }}"
