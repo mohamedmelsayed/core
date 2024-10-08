@@ -28,22 +28,7 @@
     @stack('style-lib')
     @stack('style')
     <style>
-        html[dir="rtl"] .item {
-            padding-left: 0;
-            /* Remove left padding for RTL */
-            padding-right: 15px;
-            /* Add right padding for RTL */
-        }
 
-        /* For padding between items */
-        .item {
-            padding-inline-start: 15px;
-            /* Works for both LTR and RTL */
-            padding-inline-end: 15px;
-            /* Works for both LTR and RTL */
-            margin-bottom: 20px;
-            /* Controls margin at the bottom of each item */
-        }
     </style>
 
     <link
