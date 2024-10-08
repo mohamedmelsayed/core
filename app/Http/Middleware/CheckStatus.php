@@ -18,7 +18,7 @@ class CheckStatus {
 
         if (Auth::check()) {
             $user = auth()->user();
-            if ($user->status && $user->ev && ($user->sv&&$general->sv )) {
+            if ($user->status && $user->ev && ($user->sv||!$general->sv )) {
                 return $next($request);
             } else {
                 if ($request->is('api/*')) {
