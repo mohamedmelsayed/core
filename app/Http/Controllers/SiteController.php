@@ -288,12 +288,12 @@ class SiteController extends Controller
             // Get matching items based on keywords and item type
             $items = $this->getMatchingItems($keyword, $type);
             // Apply additional filters before executing the query
-            $itemstoreturn = $items->where('item_type', $itemType)
-                ->where('id', '!=', $itemId)
-                ->orderBy('id', 'desc')
-                ->limit(8)
-                ->get();
-            foreach ($itemstoreturn as $item) {
+            // $itemstoreturn = $items->where('item_type', $itemType)
+            //     ->where('id', '!=', $itemId)
+            //     ->orderBy('id', 'desc')
+            //     ->limit(8)
+            //     ->get();
+            foreach ($items as $item) {
                 if ($lang !== 'ar') {
                     $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
 
@@ -303,19 +303,19 @@ class SiteController extends Controller
                 # code...
 
             }
-            return $itemstoreturn;
+            return $items;
         } else {
             // Get items based on item type without keywords
 
-            $items = $type === "video" ? Item::hasVideo()->orderBy('id', 'desc')
-                ->where('item_type', $itemType)
-                ->where('id', '!=', $itemId)
-                ->limit(8)
-                ->get() : Item::hasAudio()->orderBy('id', 'desc')
-                ->where('item_type', $itemType)
-                ->where('id', '!=', $itemId)
-                ->limit(8)
-                ->get();
+            // $items = $type === "video" ? Item::hasVideo()->orderBy('id', 'desc')
+            //     ->where('item_type', $itemType)
+            //     ->where('id', '!=', $itemId)
+            //     ->limit(8)
+            //     ->get() : Item::hasAudio()->orderBy('id', 'desc')
+            //     ->where('item_type', $itemType)
+            //     ->where('id', '!=', $itemId)
+            //     ->limit(8)
+            //     ->get();
             foreach ($items as $item) {
                 if ($lang !== 'ar') {
                     # code...
@@ -336,23 +336,45 @@ class SiteController extends Controller
 
         // Return early if no keywords are provided
         if (empty($keywordsArray)) {
-            return collect(); // Return an empty collection if you want to avoid unnecessary DB queries
+            return collect(); // Return an empty collection if no keywords are provided
         }
 
         // Initialize the query based on item type
         $query = $type === "video" ? Item::hasVideo() : Item::hasAudio();
 
-        // Loop through each keyword and add a condition using FIND_IN_SET
+        // Add a condition to match items with any of the keywords
         $query->where(function ($subQuery) use ($keywordsArray) {
             foreach ($keywordsArray as $keyword) {
-                $subQuery->orWhereRaw("LOWER(FIND_IN_SET(?, LOWER(tags)))", [$keyword]);
+                // Check each keyword using FIND_IN_SET
+                $subQuery->orWhereRaw("FIND_IN_SET(?, tags) > 0", [$keyword]);
             }
         });
 
-        // Filter by type
-        return $type === "video"
-            ? $query->where("is_audio", 0)
-            : $query->where("is_audio", 1);
+        // Apply the orderBy before calling get()
+        $items = $query->get();
+
+        // Filter items to return only those that have at least 2 matching keywords
+        $filteredItems = $items->filter(function ($item) use ($keywordsArray) {
+            $tagArray = explode(',', $item->tags);
+            $matchCount = 0;
+
+            // Count how many keywords match the tags
+            foreach ($keywordsArray as $keyword) {
+                if (in_array($keyword, $tagArray)) {
+                    $matchCount++;
+                }
+
+                // If two or more keywords match, return true
+                if ($matchCount >= 2) {
+                    return true;
+                }
+            }
+
+            // If less than two keywords match, return false
+            return false;
+        });
+
+        return $filteredItems;
     }
 
 
