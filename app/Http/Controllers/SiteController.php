@@ -352,7 +352,7 @@ class SiteController extends Controller
 
         // Apply the orderBy before calling get()
         $items = $query->where('item_type', $itemType)
-        ->where('id', '!=', $itemId)->grt();
+        ->where('id', '!=', $itemId)->get();
 
         // Filter items to return only those that have at least 2 matching keywords
         $filteredItems = $items->filter(function ($item) use ($keywordsArray) {
