@@ -85,8 +85,7 @@
                         </div>
                         <div class="form-group statusGroup">
                             <label>@lang('Status')</label>
-                            <input type="checkbox" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle"
-                                data-on="@lang('Enable')" data-off="@lang('Disable')" data-width="100%" name="status">
+                            <input type="checkbox" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%" name="status">
                         </div>
                     </div>
                     <div class="modal-footer">
