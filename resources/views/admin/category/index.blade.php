@@ -127,7 +127,7 @@
                 modal.find('input[name=name_en]').val(category.name_en);
                 modal.find('input[name=name]').val(category.name);
 
-                modal.find('form').attr('action', `{{ route('admin.category.update', '') }}/${category.id}`);
+                modal.find('form').attr('action', `{{ route('admin.category.store', '') }}/${category.id}`);
                 modal.find('.statusGroup').show();
 
                 if (category.status == 1) {
