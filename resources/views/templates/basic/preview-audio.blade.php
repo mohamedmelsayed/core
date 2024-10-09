@@ -328,7 +328,7 @@
         /* Adjust to account for thumbnail */
         margin-right: 10px;
         /* Space between controls and thumbnail */
-        background-color: rgba(241, 195, 88, 0.836);
+        background-color: rgba(146, 129, 89, 0.705);
         /* Background color for controls area */
         padding: 10px;
         /* Optional: Rounded corners for the controls area */
