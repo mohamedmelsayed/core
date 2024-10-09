@@ -336,10 +336,7 @@ class ItemController extends Controller
 
         $audio = $item->audio;
 
-        if ($audio) {
-            $notify[] = ['error', 'Already Audio exist'];
-            return back()->withNotify($notify);
-        }
+
 
         $pageTitle = "Upload audio to: " . $item->title;
         $prevUrl = route('admin.item.index');

@@ -85,8 +85,7 @@
                         </div>
                         <div class="form-group statusGroup">
                             <label>@lang('Status')</label>
-                            <input type="hidden" name="status" value="0">
-                            <input type="checkbox" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%" name="status" value="1">
+                            <input type="checkbox" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%" name="status" >
 
                         </div>
                     </div>
