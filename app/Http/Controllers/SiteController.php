@@ -645,16 +645,16 @@ class SiteController extends Controller
         if (!$search) {
             return redirect()->route('home');
         }
-        $items = Item::search($search)->where('status', 1)->where('is_audio', 0)->where(function ($query) {
+        $items = Item::search($search)->where('status', 1)->where(function ($query) {
             $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
-                $video->where('status', 1)->whereHas('video');
+                $video->where('status', 1)->whereHas('video')->orWhereHas('audio');
             });
         })->orderBy('id', 'desc')->limit(12)->get();
-        $audioItem = Item::search($search)->where('status', 1)->where('is_audio', 1)->where(function ($query) {
-            $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
-                $video->where('status', 1)->whereHas('audio');
-            });
-        })->orderBy('id', 'desc')->limit(12)->get();
+        // $audioItem = Item::search($search)->where('status', 1)->where('is_audio', 1)->where(function ($query) {
+        //     $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
+        //         $video->where('status', 1)->whereHas('audio');
+        //     });
+        // })->orderBy('id', 'desc')->limit(12)->get();
 
         $hasStream=false;
         foreach ($items as  $value) {

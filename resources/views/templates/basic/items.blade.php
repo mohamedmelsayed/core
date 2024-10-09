@@ -23,13 +23,43 @@
                 <div class="movie-item">
                     <div class="movie-thumb">
                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="movie">
+
+                        <!-- Display "Paid" if the item is not free with a yellow badge -->
+                        @if ($item->version != 0)
+                        <span class="movie-badge" style="background-color: yellow; color: black;">@lang('Paid')</span>
+                        @else
+                        <span class="movie-badge">@lang('Free')</span>
+                        @endif
+
+                        <!-- Display Font Awesome icon based on is_audio -->
+                        <span class="media-type" style="background-color: #000; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                            @if($item->is_audio)
+                                <i class="fas fa-headphones"></i> <!-- Audio Icon -->
+                            @else
+                                <i class="fas fa-video"></i> <!-- Video Icon -->
+                            @endif
+                        </span>
+
+                        <div class="movie-thumb-overlay">
+                            <a class="video-icon" href="{{route('watch.live', $item->slug) }}">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                <div class="movie-item">
+                    <div class="movie-thumb">
+                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="movie">
                         <span class="movie-badge">{{ $item->versionName }}</span>
                         <div class="movie-thumb-overlay">
                             <a class="video-icon" href="{{route('watch.live', $item->slug) }}"><i class="fas fa-play"></i></a>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             @endif
 
             @empty
