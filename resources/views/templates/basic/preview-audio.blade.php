@@ -265,7 +265,6 @@
         background-color: rgb(110, 118, 118);
         /* Light         background color for the player */
         width: 100%;
-        border-radius: 7%;
         height: 250px;
         padding: 10px;
         box-sizing: border-box;
@@ -432,9 +431,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const playPauseButton = document.getElementById('play-pause');
             const volumeSlider = document.getElementById('v-slider');
-            const volumeUpButton = document.getElementById('volume-up');
-            const volumeDownButton = document.getElementById('volume-down');
-            const audioControlButtons = document.querySelectorAll('.audio-control');
+            // const volumeUpButton = document.getElementById('volume-up');
+            // const volumeDownButton = document.getElementById('volume-down');
+          //  const audioControlButtons = document.querySelectorAll('.audio-control');
 
             const wavesurfer = WaveSurfer.create({
                 container: '#waveform',
@@ -472,27 +471,26 @@
                 }
             });
 
-            volumeUpButton.addEventListener('click', function(event) {
-                event.stopPropagation();
-                let currentVolume = wavesurfer.getVolume();
-                wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
-            });
+            // volumeUpButton.addEventListener('click', function(event) {
+            //     event.stopPropagation();
+            //     let currentVolume = wavesurfer.getVolume();
+            //     wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
+            // });
 
-            volumeDownButton.addEventListener('click', function(event) {
-                event.stopPropagation();
-                let currentVolume = wavesurfer.getVolume();
-                wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
-            });
+            // volumeDownButton.addEventListener('click', function(event) {
+            //     event.stopPropagation();
+            //     let currentVolume = wavesurfer.getVolume();
+            //     wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
+            // });
 
-            audioControlButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.stopPropagation();
-                });
-            });
+            // audioControlButtons.forEach(button => {
+            //     button.addEventListener('click', function(event) {
+            //         event.stopPropagation();
+            //     });
+            // });
 
             // Volume Slider Control
             volumeSlider.addEventListener("input", (event) => {
-                alert('hi');
                 event.stopPropagation();
                 const volume = event.target.value;
                 wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
