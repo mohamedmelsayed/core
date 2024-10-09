@@ -89,7 +89,7 @@
                         <label>@lang('Sub Category Type')</label>
                         <select name="type" class="form-control">
                             <option value="">-- @lang('Select One') --</option>
-                            <option value="vid">@lang('video')/option>
+                            <option value="vid">@lang('video')</option>
                             <option value="aud">@lang('audio')</option>
                         </select>
                     </div>
