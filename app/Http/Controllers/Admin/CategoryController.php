@@ -31,7 +31,7 @@ class CategoryController extends Controller {
         $category->type  = $request->type;
 
         $category->name = $request->name;
-        $category->status = $request->status;
+        $category->status = $request->status=='on'?1:0;
         $category->name_en = $request->name_en;
         $category->save();
 
