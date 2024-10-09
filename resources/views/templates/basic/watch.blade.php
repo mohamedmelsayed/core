@@ -8,12 +8,15 @@
                         <div class="main-video">
 
 
-                            <video class="video-player plyr-video" playsinline controls data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
+                            <video class="video-player plyr-video" playsinline controls
+                                data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
                                 @foreach ($videos as $video)
                                     <source src="{{ $video->content }}" type="video/mp4" size="{{ $video->size }}" />
                                 @endforeach
                                 @foreach ($subtitles ?? [] as $subtitle)
-                                    <track kind="captions" label="{{ $subtitle->language }}" src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}" srclang="{{ $subtitle->code }}" />
+                                    <track kind="captions" label="{{ $subtitle->language }}"
+                                        src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}"
+                                        srclang="{{ $subtitle->code }}" />
                                 @endforeach
                             </video>
                             @if ($item->version == Status::RENT_VERSION && !$watchEligable)
@@ -22,8 +25,10 @@
                                         <span class="icon"><i class="las la-lock"></i></span>
                                         <p class="title">@lang('Purchase Now')</p>
                                         <p class="price">
-                                            <span class="price-amount">{{ $general->cur_sym }}{{ showAmount($item->rent_price) }}</span>
-                                            <span class="small-text ms-3">@lang('For') {{ $item->rental_period }} @lang('Days')</span>
+                                            <span
+                                                class="price-amount">{{ $general->cur_sym }}{{ showAmount($item->rent_price) }}</span>
+                                            <span class="small-text ms-3">@lang('For') {{ $item->rental_period }}
+                                                @lang('Days')</span>
                                         </p>
                                     </div>
                                 </div>
@@ -37,18 +42,22 @@
                                 @endforeach
                             </div>
                             <div class="d-flex justify-content-between align-items-center flex-wrap  skip-video">
-                                <span class="advertise-text d-none">@lang('Advertisement') - <span class="remains-ads-time">00:52</span></span>
-                                <button class="skipButton d-none" id="skip-button" data-skip-time="0">@lang('Skip Ad')</button>
+                                <span class="advertise-text d-none">@lang('Advertisement') - <span
+                                        class="remains-ads-time">00:52</span></span>
+                                <button class="skipButton d-none" id="skip-button"
+                                    data-skip-time="0">@lang('Skip Ad')</button>
                             </div>
                         </div>
 
                         <div class="movie-content">
                             <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                                 <div class="movie-content-left">
-                                    <h3 class="title">{{ __($seoContents["social_title"]) }}</h3>
-                                    <span class="sub-title">@lang('Category') : <span class="cat">{{app()->getLocale() === 'ar'? $item->category->name :$item->category->name_en }}</span>
+                                    <h3 class="title">{{ __($seoContents['social_title']) }}</h3>
+                                    <span class="sub-title">@lang('Category') : <span
+                                            class="cat">{{ app()->getLocale() === 'ar' ? $item->category->name : $item->category->name_en }}</span>
                                         @if ($item->sub_category)
-                                            @lang('Sub Category'): {{ app()->getLocale() === 'ar'? $item->sub_category->name :$item->sub_category->name_en }}
+                                            @lang('Sub Category'):
+                                            {{ app()->getLocale() === 'ar' ? $item->sub_category->name : $item->sub_category->name_en }}
                                         @endif
                                     </span>
                                 </div>
@@ -64,31 +73,45 @@
                                             @endif
                                         @endauth
 
-                                        <span class="movie-widget"><i class="lar la-star text--warning"></i> {{ getAmount($item->ratings) }}</span>
-                                        <span class="movie-widget"><i class="lar la-eye text--danger"></i> {{ getAmount($item->view) }} @lang('views')</span>
+                                        <span class="movie-widget"><i class="lar la-star text--warning"></i>
+                                            {{ getAmount($item->ratings) }}</span>
+                                        <span class="movie-widget"><i class="lar la-eye text--danger"></i>
+                                            {{ getAmount($item->view) }} @lang('views')</span>
 
                                         @php
                                             $wishlist = $item->wishlists->where('user_id', auth()->id())->count();
                                         @endphp
 
-                                        <span class="movie-widget addWishlist {{ $wishlist ? 'd-none' : '' }}" data-id="{{ $item->id }}" data-type="item"><i class="las la-plus-circle"></i></span>
-                                        <span class="movie-widget removeWishlist {{ $wishlist ? '' : 'd-none' }}" data-id="{{ $item->id }}" data-type="item"><i class="las la-minus-circle"></i></span>
+                                        <span class="movie-widget addWishlist {{ $wishlist ? 'd-none' : '' }}"
+                                            data-id="{{ $item->id }}" data-type="item"><i
+                                                class="las la-plus-circle"></i></span>
+                                        <span class="movie-widget removeWishlist {{ $wishlist ? '' : 'd-none' }}"
+                                            data-id="{{ $item->id }}" data-type="item"><i
+                                                class="las la-minus-circle"></i></span>
                                     </div>
 
                                     <ul class="post-share d-flex align-items-center justify-content-sm-end mt-2 flex-wrap">
                                         <li class="caption">@lang('Share') : </li>
 
                                         <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Facebook')">
-                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"><i class="lab la-facebook-f"></i></a>
+                                            <a
+                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"><i
+                                                    class="lab la-facebook-f"></i></a>
                                         </li>
                                         <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Linkedin')">
-                                            <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode(url()->current()) }}&amp;title={{ __(@$item->title) }}&amp;summary=@php echo strLimit(strip_tags($item->description), 130); @endphp"><i class="lab la-linkedin-in"></i></a>
+                                            <a
+                                                href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode(url()->current()) }}&amp;title={{ __(@$item->title) }}&amp;summary=@php echo strLimit(strip_tags($item->description), 130); @endphp"><i
+                                                    class="lab la-linkedin-in"></i></a>
                                         </li>
                                         <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Twitter')">
-                                            <a href="https://twitter.com/intent/tweet?text={{ __(@$item->title) }}%0A{{ url()->current() }}"><i class="lab la-twitter"></i></a>
+                                            <a
+                                                href="https://twitter.com/intent/tweet?text={{ __(@$item->title) }}%0A{{ url()->current() }}"><i
+                                                    class="lab la-twitter"></i></a>
                                         </li>
                                         <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Pinterest')">
-                                            <a href="http://pinterest.com/pin/create/button/?url={{ urlencode(url()->current()) }}&description={{ __(@$item->title) }}&media={{ getImage(getFilePath('item_landscape') . '/' . @$item->image->landscape) }}"><i class="lab la-pinterest"></i></a>
+                                            <a
+                                                href="http://pinterest.com/pin/create/button/?url={{ urlencode(url()->current()) }}&description={{ __(@$item->title) }}&media={{ getImage(getFilePath('item_landscape') . '/' . @$item->image->landscape) }}"><i
+                                                    class="lab la-pinterest"></i></a>
                                         </li>
                                     </ul>
 
@@ -96,26 +119,32 @@
                             </div>
                             <div class="movie-widget-area">
                             </div>
-                            <!-- <p class="movie-widget__desc">{{ __($seoContents["social_description"]) }}</p> -->
+                            <!-- <p class="movie-widget__desc">{{ __($seoContents['social_description']) }}</p> -->
                         </div>
                     </div>
 
                     <div class="product-tab mt-40">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="product-tab-desc" data-bs-toggle="tab" href="#product-desc-content" role="tab" aria-controls="product-desc-content" aria-selected="true">@lang('Description')</a>
+                                <a class="nav-link active" id="product-tab-desc" data-bs-toggle="tab"
+                                    href="#product-desc-content" role="tab" aria-controls="product-desc-content"
+                                    aria-selected="true">@lang('Description')</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content" role="tab" aria-controls="product-team-content" aria-selected="false">@lang('Team')</a>
+                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
+                                    role="tab" aria-controls="product-team-content"
+                                    aria-selected="false">@lang('Team')</a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel" aria-labelledby="product-tab-desc">
+                            <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
+                                aria-labelledby="product-tab-desc">
                                 <div class="product-desc-content">
-                                    {{ __($seoContents["social_description"])}}
+                                    {{ __($seoContents['social_description']) }}
                                 </div>
                             </div>
-                            <div class="tab-pane fade fade" id="product-team-content" role="tabpanel" aria-labelledby="product-tab-team">
+                            <div class="tab-pane fade fade" id="product-team-content" role="tabpanel"
+                                aria-labelledby="product-tab-team">
                                 <div class="product-desc-content">
                                     <ul class="team-list">
                                         <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
@@ -138,20 +167,24 @@
                                     @php
                                         $status = checkLockStatus($episode, $userHasSubscribed, $hasSubscribedItem);
                                     @endphp
-                                    <div class="widget-item widget-item__overlay d-flex align-items-center justify-content-between" data-img="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}">
+                                    <div class="widget-item widget-item__overlay d-flex align-items-center justify-content-between"
+                                        data-img="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}">
                                         <div class="widget-item__content d-flex align-items-center movie-small flex-wrap">
                                             <div class="widget-thumb">
                                                 <a href="{{ route('watch', [$item->slug, $episode->id]) }}">
-                                                    <img src="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}" alt="movie">
+                                                    <img src="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}"
+                                                        alt="movie">
                                                 </a>
                                             </div>
                                             <div class="widget-content">
                                                 <h4 class="title">{{ __($episode->title) }}</h4>
                                                 <div class="widget-btn">
                                                     @if ($status)
-                                                        <a class="custom-btn" href="{{ route('watch', [$item->slug, $episode->id]) }}">@lang('Play Now')</a>
+                                                        <a class="custom-btn"
+                                                            href="{{ route('watch', [$item->slug, $episode->id]) }}">@lang('Play Now')</a>
                                                     @else
-                                                        <a class="custom-btn" href="{{ route('user.login') }}">@lang('Subscribe to watch')</a>
+                                                        <a class="custom-btn"
+                                                            href="{{ route('user.login') }}">@lang('Subscribe to watch')</a>
                                                     @endif
                                                 </div>
                                             </div>
@@ -179,21 +212,33 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section-header">
-                    <h2 class="section-title">@lang(!$item->is_audio?'Related Video':'Related Audio')</h2>
+                        <h2 class="section-title">@lang(!$item->is_audio ? 'Related Video' : 'Related Audio')</h2>
 
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center mb-30-none">
-                @foreach  ($item->is_audio? $relatedAudios:$relatedItems as $related)
+                @foreach ($item->is_audio ? $relatedAudios : $relatedItems as $related)
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                         <div class="movie-item">
                             <div class="movie-thumb">
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}" alt="movie">
+                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
+                                    alt="movie">
                                 <span class="movie-badge">{{ __($related->versionName) }}</span>
                                 <div class="movie-thumb-overlay">
-                                    <a class="video-icon" href="{{$related->is_audio?route('preview.audio', $related->slug) :route('watch', $related->slug) }}"><i class="fas fa-play"></i></a>
+                                    <a class="video-icon"
+                                        href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
+                                            class="fas fa-play"></i></a>
                                 </div>
+                                <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                                <span class="media-type"
+                                    style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                    @if ($related->is_audio)
+                                        <i class="fas fa-headphones"></i> <!-- Audio Icon -->
+                                    @else
+                                        <i class="fas fa-video"></i> <!-- Video Icon -->
+                                    @endif
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -205,19 +250,22 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section-header">
-                        <h2 class="section-title">@lang($item->is_audio?'Related Video':'Related Audio')</h2>
+                        <h2 class="section-title">@lang($item->is_audio ? 'Related Video' : 'Related Audio')</h2>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center mb-30-none">
-                @foreach (!$item->is_audio? $relatedAudios:$relatedItems as $related)
+                @foreach (!$item->is_audio ? $relatedAudios : $relatedItems as $related)
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                         <div class="movie-item">
                             <div class="movie-thumb">
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}" alt="movie">
+                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
+                                    alt="movie">
                                 <span class="movie-badge">{{ __($related->versionName) }}</span>
                                 <div class="movie-thumb-overlay">
-                                    <a class="video-icon" href="{{$related->is_audio?route('preview.audio', $related->slug) :route('watch', $related->slug) }}"><i class="fas fa-play"></i></a>
+                                    <a class="video-icon"
+                                        href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
+                                            class="fas fa-play"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -230,19 +278,23 @@
 
 
 
-    <div class="watch-party-modal modal fade" id="watchPartyModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="watch-party-modal modal fade" id="watchPartyModal" data-bs-backdrop="static" tabindex="-1"
+        role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="las la-times"></i></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="las la-times"></i></button>
                 <h3 class="title">@lang('Watch Party')</h3>
                 <h6 class="tagline">@lang('Watch movies together with your friends and families.')</h6>
-                <button class="btn btn--base startPartyBtn">@lang('Now Start Your Party') <i class="las la-long-arrow-alt-right"></i></button>
+                <button class="btn btn--base startPartyBtn">@lang('Now Start Your Party') <i
+                        class="las la-long-arrow-alt-right"></i></button>
             </div>
         </div>
     </div>
 
 
-    <div class="modal alert-modal" id="rentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal alert-modal" id="rentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <form action="{{ route('user.subscribe.video', $item->id) }}" method="POST">
@@ -253,7 +305,8 @@
                         <p class="modal--text">@lang('Please purchase to this rent item for') {{ $item->rental_period }} @lang('days')</p>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn--cancel btn-sm" data-bs-dismiss="modal" type="button">@lang('Cancel')</button>
+                        <button class="btn btn--cancel btn-sm" data-bs-dismiss="modal"
+                            type="button">@lang('Cancel')</button>
                         <button class="btn btn--submit btn-sm" type="submit">@lang('Purchase Now')</button>
                     </div>
                 </form>
@@ -532,7 +585,8 @@
             });
 
             $('.startPartyBtn').on('click', function(e) {
-                let processBtn = `<span class="processing">@lang('Processing') <i class="las la-spinner"></i> </span>`;
+                let processBtn =
+                    `<span class="processing">@lang('Processing') <i class="las la-spinner"></i> </span>`;
                 let startBtn = `@lang('Now Start Your Party') <i class="las la-long-arrow-alt-right"></i>`;
                 $.ajax({
                     type: "POST",
