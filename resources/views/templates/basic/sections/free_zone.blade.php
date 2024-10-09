@@ -11,18 +11,22 @@
             @foreach ($frees as $free)
             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                 <div class="movie-item">
-                    <div class="movie-thumb">
+                    <div class="movie-thumb" style="position: relative;">
                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $free->image->portrait) }}" alt="movie">
 
                         <!-- Display "Paid" if the item is not free with a yellow badge -->
                         @if ($free->version != 0)
-                        <span class="movie-badge" style="background-color: yellow; color: black;">@lang('Paid')</span>
+                        <span class="movie-badge" style="background-color: yellow; color: black; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
+                            @lang('Paid')
+                        </span>
                         @else
-                        <span class="movie-badge">@lang('Free')</span>
+                        <span class="movie-badge" style="position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
+                            @lang('Free')
+                        </span>
                         @endif
 
-                        <!-- Display Font Awesome icon based on is_audio -->
-                        <span class="media-type" style="background-color: #000; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                        <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                        <span class="media-type" style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
                             @if($free->is_audio)
                                 <i class="fas fa-headphones"></i> <!-- Audio Icon -->
                             @else
@@ -38,6 +42,7 @@
                     </div>
                 </div>
             </div>
+
 
 
             @endforeach
