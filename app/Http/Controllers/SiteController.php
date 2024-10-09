@@ -250,7 +250,7 @@ class SiteController extends Controller
 
     public function watchLive($slug)
     {
-// dd($slug);
+        // dd($slug);
 
         $item = Item::active()->where('slug', $slug)->firstOrFail();
         $item->increment('view');
@@ -286,7 +286,7 @@ class SiteController extends Controller
 
         if ($keyword != null) {
             // Get matching items based on keywords and item type
-            $items = $this->getMatchingItems($keyword, $type,$itemType,$itemId);
+            $items = $this->getMatchingItems($keyword, $type, $itemType, $itemId);
             // Apply additional filters before executing the query
             // $itemstoreturn = $items->where('item_type', $itemType)
             //     ->where('id', '!=', $itemId)
@@ -329,7 +329,7 @@ class SiteController extends Controller
         }
     }
 
-    private function getMatchingItems($userKeywords, $type,$itemType,$itemId)
+    private function getMatchingItems($userKeywords, $type, $itemType, $itemId)
     {
         // Convert user keywords into an array, trim whitespace, and remove empty elements
         $keywordsArray = array_filter(array_map('trim', explode(',', $userKeywords)));
@@ -340,7 +340,7 @@ class SiteController extends Controller
         }
 
         // Initialize the query based on item type
-        $query = $type === "video" ? Item::hasVideo()->where('is_audio',0) : Item::hasAudio()->where('is_audio',1) ;
+        $query = $type === "video" ? Item::hasVideo()->where('is_audio', 0) : Item::hasAudio()->where('is_audio', 1);
 
         // Add a condition to match items with any of the keywords
         $query->where(function ($subQuery) use ($keywordsArray) {
@@ -352,7 +352,7 @@ class SiteController extends Controller
 
         // Apply the orderBy before calling get()
         $items = $query->where('item_type', $itemType)
-        ->where('id', '!=', $itemId)->get();
+            ->where('id', '!=', $itemId)->get();
 
         // Filter items to return only those that have at least 2 matching keywords
         $filteredItems = $items->filter(function ($item) use ($keywordsArray) {
@@ -581,19 +581,22 @@ class SiteController extends Controller
     {
         $category = Category::findOrFail($id);
 
+        if ($subcategory->type === "vid") {
             $items = Item::hasVideo()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+        }
+        if ($subcategory->type === "aud") {
+            $items = Item::hasAudio()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+        }
 
-
-        $hasStream=false;
+        $hasStream = false;
         foreach ($items as  $value) {
-            if($value->is_stream){
-        $hasStream=true;
-        break;
-
+            if ($value->is_stream) {
+                $hasStream = true;
+                break;
             }
         }
-        $pageTitle = app()->getLocale()=='ar'? $category->name:$category->name_en;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category','hasStream'));
+        $pageTitle = app()->getLocale() == 'ar' ? $category->name : $category->name_en;
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category', 'hasStream'));
     }
 
     public function subCategory($id)
@@ -605,17 +608,16 @@ class SiteController extends Controller
         if ($subcategory->type === "aud") {
             $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
-        $hasStream=false;
+        $hasStream = false;
         foreach ($items as  $value) {
-            if($value->is_stream){
-        $hasStream=true;
-        break;
-
+            if ($value->is_stream) {
+                $hasStream = true;
+                break;
             }
         }
-        $pageTitle = app()->getLocale()=='ar'? $subcategory->name:$subcategory->name_en;
+        $pageTitle = app()->getLocale() == 'ar' ? $subcategory->name : $subcategory->name_en;
 
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory','hasStream'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory', 'hasStream'));
     }
 
     public function loadMore(Request $request)
@@ -662,17 +664,15 @@ class SiteController extends Controller
         //     });
         // })->orderBy('id', 'desc')->limit(12)->get();
 
-        $hasStream=false;
+        $hasStream = false;
         foreach ($items as  $value) {
-            if($value->is_stream){
-        $hasStream=true;
-        break;
-
+            if ($value->is_stream) {
+                $hasStream = true;
+                break;
             }
         }
         $pageTitle = "Result Showing For " . $search;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items','hasStream','search'));
-
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'hasStream', 'search'));
     }
 
     public function policy($id, $slug)

@@ -16,6 +16,7 @@ class CategoryController extends Controller {
     public function store(Request $request, $id = 0) {
         $request->validate([
             'name' => 'required',
+            'type' => 'required',
             'name_en' => 'required',
         ]);
 
@@ -26,6 +27,7 @@ class CategoryController extends Controller {
             $category     = Category::findOrFail($id);
             $notification = 'Category updated successfully';
         }
+        $category->type  = $request->type;
 
         $category->name = $request->name;
         $category->name_en = $request->name_en;
