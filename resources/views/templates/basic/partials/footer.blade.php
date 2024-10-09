@@ -32,7 +32,8 @@
                         <h3 class="widget-title">@lang('Categories')</h3>
                         <ul class="footer-links">
                             @foreach ($categories as $category)
-                                <li><a href="{{ route('category', $category->id) }}">{{ __(app()->getLocale()=='en'?$categorey->name_ar:$category->name) }}</a></li>
+
+                                <li><a href="{{ route('category', $category->id) }}">{{ __(app()->getLocale()=='en'?$category->name_ar:$category->name) }}</a></li>
                             @endforeach
                         </ul>
                     </div>
