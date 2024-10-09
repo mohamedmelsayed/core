@@ -514,8 +514,19 @@
                 wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
             });
 
+            // Toggle repeat functionality
+            repeatButton.addEventListener('click', function() {
+                isRepeat = !isRepeat; // Toggle repeat mode
+                if (isRepeat) {
+                    repeatButton.classList.add('active'); // Highlight the button
+                } else {
+                    repeatButton.classList.remove('active');
+                }
+            });
+
             // When the audio finishes, check if repeat mode is active
             wavesurfer.on('finish', function() {
+
                 if (isRepeat) {
                     wavesurfer.play(); // Repeat the audio
                 }
