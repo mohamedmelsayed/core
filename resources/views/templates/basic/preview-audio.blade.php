@@ -295,7 +295,7 @@
     }
 
     .volume-slider {
-        width: 20%;
+        width: 100%;
         height: 4px;
         background: #f3f5f1;
         border-radius: 5px;
@@ -451,7 +451,8 @@
             // const volumeUpButton = document.getElementById('volume-up');
             // const volumeDownButton = document.getElementById('volume-down');
             //  const audioControlButtons = document.querySelectorAll('.audio-control');
-
+            const repeatButton = document.getElementById('repeat-btn');
+            let isRepeat = false; // To track the repeat mode
             const wavesurfer = WaveSurfer.create({
                 container: '#waveform',
                 waveColor: 'blue',
