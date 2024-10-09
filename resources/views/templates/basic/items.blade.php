@@ -33,9 +33,9 @@
                                             <span class="movie-badge">@lang('Free')</span>
                                         @endif
 
-                                        <!-- Display Font Awesome icon based on is_audio -->
+                                        <!-- Display Font Awesome icon based on is_audio inside the thumb -->
                                         <span class="media-type"
-                                            style="background-color: #000; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                                            style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
                                             @if ($item->is_audio)
                                                 <i class="fas fa-headphones"></i> <!-- Audio Icon -->
                                             @else
@@ -108,7 +108,7 @@
                                     <!-- Display Font Awesome icon based on is_audio inside the thumb -->
                                     <span class="media-type"
                                         style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                        @if ($free->is_audio)
+                                        @if ($item->is_audio)
                                             <i class="fas fa-headphones"></i> <!-- Audio Icon -->
                                         @else
                                             <i class="fas fa-video"></i> <!-- Video Icon -->
