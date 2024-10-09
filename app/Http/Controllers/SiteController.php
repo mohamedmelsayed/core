@@ -592,7 +592,7 @@ class SiteController extends Controller
 
             }
         }
-        $pageTitle = $category->name;
+        $pageTitle = app()->getLocale()=='ar'? $category->name:$category->name_en;
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category','hasStream'));
     }
 
@@ -613,7 +613,8 @@ class SiteController extends Controller
 
             }
         }
-        $pageTitle = $subcategory->name;
+        $pageTitle = app()->getLocale()=='ar'? $subcategory->name:$subcategory->name_en;
+
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory','hasStream'));
     }
 
