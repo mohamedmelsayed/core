@@ -120,11 +120,14 @@
             $('.editBtn').on('click', function() {
                 var category = $(this).data('category');
                 modal.find('.modal-title').text(`@lang('Update Category')`);
-                modal.find('input[name=type]').val(data.type);
+
+                // Correct the field name for 'type'
+                modal.find('select[name=type]').val(category.type);
 
                 modal.find('input[name=name_en]').val(category.name_en);
                 modal.find('input[name=name]').val(category.name);
-                modal.find('form').attr('action', `{{ route('admin.category.store', '') }}/${category.id}`);
+
+                modal.find('form').attr('action', `{{ route('admin.category.update', '') }}/${category.id}`);
                 modal.find('.statusGroup').show();
 
                 if (category.status == 1) {
@@ -135,6 +138,7 @@
 
                 modal.modal('show');
             });
+
 
             $('.removeBtn').on('click', function() {
                 let modal = $('#removeModal');
