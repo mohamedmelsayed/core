@@ -281,7 +281,7 @@
     .volume-slider {
         width: 100%;
         height: 4px;
-        background: #1e9ff2;
+        background: #f3f5f1;
         border-radius: 5px;
         outline: none;
         transition: opacity 0.2s;
@@ -290,7 +290,7 @@
     .volume-slider::-webkit-slider-thumb {
         width: 16px;
         height: 16px;
-        background: #cd81ce;
+        background: rgba(241, 195, 88, 0.836);
         border-radius: 50%;
         cursor: pointer;
         -webkit-appearance: none;
@@ -492,6 +492,7 @@
 
             // Volume Slider Control
             volumeSlider.addEventListener("input", (event) => {
+                event.stopPropagation();
                 const volume = event.target.value;
                 audioTrack.setVolume(volume); // Set the volume in the WaveSurfer instance
             });
