@@ -492,6 +492,7 @@
 
             // Volume Slider Control
             volumeSlider.addEventListener("input", (event) => {
+                alert('hi');
                 event.stopPropagation();
                 const volume = event.target.value;
                 wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
