@@ -665,7 +665,7 @@ class SiteController extends Controller
             }
         }
         $pageTitle = "Result Showing For " . $search;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category','hasStream','search'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items','hasStream','search'));
 
     }
 
