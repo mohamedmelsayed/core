@@ -8,7 +8,7 @@ use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class ContentTranslation extends Model {
-    use GlobalStatus, Searchable, ApiQuery;
+    use Searchable, GlobalStatus, Searchable, ApiQuery;
 
     protected $fillable = [
         'translated_tags','translated_description','translated_title','translated_keywords','type '

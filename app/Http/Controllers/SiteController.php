@@ -645,11 +645,31 @@ class SiteController extends Controller
         if (!$search) {
             return redirect()->route('home');
         }
-        $items = Item::search($search)->where('status', 1)->where(function ($query) {
-            $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
-                $video->where('status', 1)->whereHas('video')->orWhereHas('audio');
+       $items= $query->where(function ($q) use ($search) {
+                $q->orWhere('title', 'LIKE', "%$search%")
+                    ->orWhereHas('category', function ($category) use ($search) {
+                        $category->where('status', Status::ENABLE)
+                            ->where('name', 'LIKE', "%$search%");
+                    })
+                    ->orWhereHas('sub_category', function ($sub_category) use ($search) {
+                        $sub_category->where('status', Status::ENABLE)
+                            ->where('name', 'LIKE', "%$search%");
+                    })
+                    ->orWhereHas('episodes', function ($episodes) use ($search) {
+                        $episodes->where('status', Status::ENABLE)
+                            ->where('title', 'LIKE', "%$search%");
+                    })
+
+                    // Add the translations search condition
+                    ->orWhereHas('translations', function ($translation) use ($search) {
+                        $translation->where('translated_title', 'LIKE', "%$search%")
+                                    ->orWhere('translated_description', 'LIKE', "%$search%")
+                                    ->orWhere('translated_tags', 'LIKE', "%$search%")
+                                    ->orWhere('translated_keywords', 'LIKE', "%$search%");
+                    });
             });
-        })->orderBy('id', 'desc')->limit(12)->get();
+        }
+
         // $audioItem = Item::search($search)->where('status', 1)->where('is_audio', 1)->where(function ($query) {
         //     $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
         //         $video->where('status', 1)->whereHas('audio');
