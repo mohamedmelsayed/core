@@ -30,36 +30,58 @@
                                         </td>
                                         <td>
                                             <div class="button--group">
-                                                <button class="btn btn-sm btn-outline--primary editBtn" data-title="{{ $episode->title }}" data-version="{{ $episode->version }}" data-image="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}" data-episode_id="{{ $episode->id }}" data-status="{{ $episode->status }}" data-toggle="tooltip" data-original-title="Edit" title="">
+                                                <button class="btn btn-sm btn-outline--primary editBtn"
+                                                    data-title="{{ $episode->title }}"
+                                                    data-version="{{ $episode->version }}"
+                                                    data-image="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}"
+                                                    data-episode_id="{{ $episode->id }}"
+                                                    data-status="{{ $episode->status }}" data-toggle="tooltip"
+                                                    data-original-title="Edit" title="">
                                                     <i class="la la-pencil"></i>@lang('Edit')
                                                 </button>
                                                 @if ($episode->video)
-                                                    <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
+                                                    <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown"
+                                                        type="button" aria-expanded="false"><i
+                                                            class="las la-ellipsis-v"></i>@lang('More')</button>
                                                     <div class="dropdown-menu">
 
 
-                                                        <a class="dropdown-item threshold" href="{{ route('admin.item.episode.updateVideo', $episode->id) }}">
+                                                        <a class="dropdown-item threshold"
+                                                            href="{{ route('admin.item.episode.updateVideo', $episode->id) }}">
                                                             <i class="la la-cloud-upload-alt"></i> @lang('Update Video')
                                                         </a>
 
 
-                                                        <a class="dropdown-item threshold" href="{{ route('admin.item.ads.duration', [$episode->item_id, $episode->id]) }}">
+                                                        <a class="dropdown-item threshold"
+                                                            href="{{ route('admin.item.ads.duration', [$episode->item_id, $episode->id]) }}">
                                                             <i class="lab la-buysellads"></i> @lang('Update Ads')
                                                         </a>
-                                                        <a class="dropdown-item threshold" href="{{ route('admin.item.subtitle.list', [$episode->id, $episode->video->id]) }}">
+                                                        <a class="dropdown-item threshold"
+                                                            href="{{ route('admin.item.subtitle.list', [$episode->id, $episode->video->id]) }}">
                                                             <i class="las la-file-audio"></i> @lang('Subtitles')
                                                         </a>
-                                                        <a class="dropdown-item threshold" href="{{ route('admin.item.report', [$episode->item_id, $episode->id]) }}">
+                                                        <a class="dropdown-item threshold"
+                                                            href="{{ route('admin.item.report', [$episode->item_id, $episode->id]) }}">
                                                             <i class="las la-chart-area"></i> @lang('Report')
                                                         </a>
                                                     </div>
                                                 @else
-                                                <div class="button--group">
-                                                <a class="dropdown-item threshold" href="{{ route('admin.item.uploadAudio', $episode->item_id) }}">
-                                                <i class="las la-cloud-upload-alt"></i> @lang('Upload Audio')
-                                            </a>
-</div>
+                                                @if ($episode->item->is_audio)
 
+                                                    <div class="button--group">
+                                                        <a class="dropdown-item threshold"
+                                                            href="{{ route('admin.item.uploadAudio', $episode->item_id) }}">
+                                                            <i class="las la-cloud-upload-alt"></i> @lang('Upload Audio')
+                                                        </a>
+                                                    </div>
+
+                                                    @else
+                                                    <div class="button--group">
+                                                        <a class="dropdown-item threshold"
+                                                            href="{{ route('admin.item.upload', $episode->item_id) }}">
+                                                            <i class="las la-cloud-upload-alt"></i> @lang('Upload Video')
+                                                        </a>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </td>
@@ -83,7 +105,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="episodeModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
+    <div class="modal fade" id="episodeModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        tabindex="-1">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -92,12 +115,14 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.item.addEpisode', $item->id) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('admin.item.addEpisode', $item->id) }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label>@lang('Thumbnail Image')</label>
-                            <x-image-uploader image="{{ getImage('') }}" class="w-100" type="episode" :required=false size="" />
+                            <x-image-uploader image="{{ getImage('') }}" class="w-100" type="episode" :required=false
+                                size="" />
                         </div>
                         <div class="form-group">
                             <label>@lang('Video Title')</label>
@@ -116,7 +141,9 @@
                         </div>
                         <div class="form-group statusGroup">
                             <label>@lang('Status')</label>
-                            <input name="status" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%" type="checkbox">
+                            <input name="status" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle"
+                                data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%"
+                                type="checkbox">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -160,7 +187,8 @@
                 } else {
                     modal.find('input[name=status]').bootstrapToggle('off');
                 }
-                modal.find('form').attr('action', `{{ route('admin.item.updateEpisode', '') }}/${data.episode_id}`);
+                modal.find('form').attr('action',
+                    `{{ route('admin.item.updateEpisode', '') }}/${data.episode_id}`);
                 modal.modal('show');
             });
 
