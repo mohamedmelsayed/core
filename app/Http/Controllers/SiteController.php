@@ -581,10 +581,10 @@ class SiteController extends Controller
     {
         $category = Category::findOrFail($id);
 
-        if ($subcategory->type === "vid") {
+        if ($category->type === "vid") {
             $items = Item::hasVideo()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
-        if ($subcategory->type === "aud") {
+        if ($category->type === "aud") {
             $items = Item::hasAudio()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
 
