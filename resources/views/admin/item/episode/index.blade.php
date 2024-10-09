@@ -33,16 +33,16 @@
                                                 <button class="btn btn-sm btn-outline--primary editBtn" data-title="{{ $episode->title }}" data-version="{{ $episode->version }}" data-image="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}" data-episode_id="{{ $episode->id }}" data-status="{{ $episode->status }}" data-toggle="tooltip" data-original-title="Edit" title="">
                                                     <i class="la la-pencil"></i>@lang('Edit')
                                                 </button>
-                                                @if ($episode->video)
+                                                @if (!$episode->item->is_audio)
                                                     <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
                                                     <div class="dropdown-menu">
-                                                    
+
 
                                                         <a class="dropdown-item threshold" href="{{ route('admin.item.episode.updateVideo', $episode->id) }}">
                                                             <i class="la la-cloud-upload-alt"></i> @lang('Update Video')
                                                         </a>
-                                                       
-                                                      
+
+
                                                         <a class="dropdown-item threshold" href="{{ route('admin.item.ads.duration', [$episode->item_id, $episode->id]) }}">
                                                             <i class="lab la-buysellads"></i> @lang('Update Ads')
                                                         </a>
