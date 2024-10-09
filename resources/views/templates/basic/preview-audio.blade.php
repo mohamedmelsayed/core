@@ -19,9 +19,13 @@
                                                 <button class="audio-control" id="play-pause"><i
                                                         class="las la-play-circle"></i></button>
                                                 <div class="volume-control">
-                                                    <input type="range" class="volume-slider" id="v-slider" min="0"
-                                                        max="1" step="0.1" value="0.5">
+                                                    <input type="range" class="volume-slider" id="v-slider"
+                                                        min="0" max="1" step="0.1" value="0.5">
                                                 </div>
+                                                <!-- New Repeat Button -->
+                                                <button class="audio-control" id="repeat-btn">
+                                                    <i class="las la-redo-alt"></i>
+                                                </button>
                                                 <div id="waveform"></div>
                                                 <div id="time-indicator"></div>
                                             </div>
@@ -122,8 +126,8 @@
                                     aria-selected="true">@lang('Description')</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
-                                    role="tab" aria-controls="product-team-content"
+                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab"
+                                    href="#product-team-content" role="tab" aria-controls="product-team-content"
                                     aria-selected="false">@lang('Team')</a>
                             </li>
                         </ul>
@@ -258,6 +262,19 @@
     </section>
 @endsection
 <style>
+    #audio-controls button {
+        background-color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #audio-controls #repeat-btn.active {
+        color: gold;
+        /* Changes color when repeat is active */
+    }
+
     #audio-player {
         display: flex;
         align-items: center;
@@ -278,7 +295,7 @@
     }
 
     .volume-slider {
-        width: 100%;
+        width: 20%;
         height: 4px;
         background: #f3f5f1;
         border-radius: 5px;
@@ -433,7 +450,7 @@
             const volumeSlider = document.getElementById('v-slider');
             // const volumeUpButton = document.getElementById('volume-up');
             // const volumeDownButton = document.getElementById('volume-down');
-          //  const audioControlButtons = document.querySelectorAll('.audio-control');
+            //  const audioControlButtons = document.querySelectorAll('.audio-control');
 
             const wavesurfer = WaveSurfer.create({
                 container: '#waveform',
@@ -496,10 +513,17 @@
                 wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
             });
 
+            // When the audio finishes, check if repeat mode is active
+            wavesurfer.on('finish', function() {
+                if (isRepeat) {
+                    wavesurfer.play(); // Repeat the audio
+                }
+            });
+
+            // Update time indicator
             wavesurfer.on('audioprocess', function() {
                 const currentTime = wavesurfer.getCurrentTime();
-                const formattedTime = formatTime(currentTime);
-                document.getElementById('time-indicator').innerText = formattedTime;
+                document.getElementById('time-indicator').innerText = formatTime(currentTime);
             });
 
             function formatTime(seconds) {
