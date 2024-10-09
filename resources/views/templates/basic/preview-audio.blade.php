@@ -277,7 +277,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: rgb(110, 118, 118);
+        background-color: rgb(220, 231, 231);
         /* Light         background color for the player */
         width: 100%;
         height: 250px;
