@@ -328,7 +328,7 @@
         /* Adjust to account for thumbnail */
         margin-right: 10px;
         /* Space between controls and thumbnail */
-        background-color: rgba(146, 129, 89, 0.705);
+        background-color: rgba(128, 108, 61, 0.705);
         /* Background color for controls area */
         padding: 10px;
         /* Optional: Rounded corners for the controls area */
@@ -339,7 +339,7 @@
     #file-title {
         text-align: center;
         margin-bottom: 10px;
-        color: #333;
+        color: #f7ecec;
         font-size: 18px;
         font-weight: bold;
     }
