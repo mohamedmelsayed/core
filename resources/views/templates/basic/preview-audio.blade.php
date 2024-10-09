@@ -19,7 +19,7 @@
                                                 <button class="audio-control" id="play-pause"><i
                                                         class="las la-play-circle"></i></button>
                                                 <div class="volume-control">
-                                                    <input type="range" class="volume-slider" min="0"
+                                                    <input type="range" class="volume-slider" id="v-slider" min="0"
                                                         max="1" step="0.1" value="0.5">
                                                 </div>
                                                 <div id="waveform"></div>
@@ -317,7 +317,6 @@
         background-color: rgba(241, 195, 88, 0.836);
         /* Background color for controls area */
         padding: 10px;
-        border-radius: 0.5;
         /* Optional: Rounded corners for the controls area */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         /* Optional: Shadow for better visibility */
@@ -432,6 +431,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const playPauseButton = document.getElementById('play-pause');
+            const volumeSlider = document.getElementById('v-slider');
             const volumeUpButton = document.getElementById('volume-up');
             const volumeDownButton = document.getElementById('volume-down');
             const audioControlButtons = document.querySelectorAll('.audio-control');
