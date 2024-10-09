@@ -5,15 +5,18 @@
     @endphp
 
     @if ($advertise && !auth()->id())
-        <div class="modal" id="adModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"">
+        <div class="modal" id="adModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true"">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-body position-relative p-0">
                         <div class="ads-close-btn position-absolute">
-                            <button class="btn-close btn-close-white" data-bs-dismiss="modal" type="button" aria-label="Close"></button>
+                            <button class="btn-close btn-close-white" data-bs-dismiss="modal" type="button"
+                                aria-label="Close"></button>
                         </div>
                         <a href="{{ $advertise->content->link }}" target="_blank">
-                            <img src="{{ getImage(getFilePath('ads') . '/' . @$advertise->content->image) }}" alt="@lang('image')">
+                            <img src="{{ getImage(getFilePath('ads') . '/' . @$advertise->content->image) }}"
+                                alt="@lang('image')">
                         </a>
                     </div>
                 </div>
@@ -21,7 +24,8 @@
         </div>
     @endif
 
-    <section class="banner-section bg-overlay-black bg_img" data-background="{{ getImage('assets/images/frontend/banner/' . @$bannerContent->data_values->background_image, '1778x755') }}">
+    <section class="banner-section bg-overlay-black bg_img"
+        data-background="{{ getImage('assets/images/frontend/banner/' . @$bannerContent->data_values->background_image, '1778x755') }}">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-xl-6 col-lg-6">
@@ -30,8 +34,10 @@
                         <h1 class="title text-white">{{ __(@$bannerContent->data_values->sub_heading) }}</h1>
                         @guest
                             <div class="banner-btn">
-                                <a class="btn--base" href="{{ @$bannerContent->data_values->button_1_link }}">{{ __(@$bannerContent->data_values->button_1) }}</a>
-                                <a class="btn--base active" href="{{ @$bannerContent->data_values->button_2_link }}"><i class="las la-plus"></i> {{ __(@$bannerContent->data_values->button_2) }}</a>
+                                <a class="btn--base"
+                                    href="{{ @$bannerContent->data_values->button_1_link }}">{{ __(@$bannerContent->data_values->button_1) }}</a>
+                                <a class="btn--base active" href="{{ @$bannerContent->data_values->button_2_link }}"><i
+                                        class="las la-plus"></i> {{ __(@$bannerContent->data_values->button_2) }}</a>
                             </div>
                         @endguest
                     </div>
@@ -43,9 +49,12 @@
                                 <div class="swiper-slide">
                                     <div class="movie-item">
                                         <div class="movie-thumb">
-                                            <img class="lazy-loading-img" data-src="{{ getImage(getFilePath('item_portrait') . '/' . @$slider->item->image->portrait) }}" src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
+                                            <img class="lazy-loading-img"
+                                                data-src="{{ getImage(getFilePath('item_portrait') . '/' . @$slider->item->image->portrait) }}"
+                                                src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
                                             <div class="movie-thumb-overlay">
-                                                <a class="video-icon" href="{{ route('watch', @$slider->item->slug) }}"><i class="fas fa-play"></i></a>
+                                                <a class="video-icon" href="{{ route('watch', @$slider->item->slug) }}"><i
+                                                        class="fas fa-play"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -85,15 +94,29 @@
                                 <div class="swiper-slide">
                                     <div class="movie-item">
                                         <div class="movie-thumb">
-                                            <img class="lazy-loading-img" data-src="{{ getImage(getFilePath('item_portrait') . $featured->image->portrait) }}" src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
+                                            <img class="lazy-loading-img"
+                                                data-src="{{ getImage(getFilePath('item_portrait') . $featured->image->portrait) }}"
+                                                src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
                                             @if ($featured->item_type == 1 && $featured->version == 0)
                                                 <span class="movie-badge">@lang('Free')</span>
                                             @elseif($featured->item_type == 3)
                                                 <span class="movie-badge">@lang('Trailer')</span>
                                             @endif
                                             <div class="movie-thumb-overlay">
-                                                <a class="video-icon" href="{{ route('watch', $featured->slug) }}"><i class="fas fa-play"></i></a>
+                                                <a class="video-icon" href="{{ route('watch', $featured->slug) }}"><i
+                                                        class="fas fa-play"></i></a>
                                             </div>
+
+                                            <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                                            <span class="media-type"
+                                                style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                                @if ($featured->is_audio)
+                                                    <i class="fas fa-headphones"></i> <!-- Audio Icon -->
+                                                @else
+                                                    <i class="fas fa-video"></i> <!-- Video Icon -->
+                                                @endif
+                                            </span>
+
                                         </div>
                                     </div>
                                 </div>
