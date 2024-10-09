@@ -62,13 +62,28 @@
                 <div class="movie-item">
                     <div class="movie-thumb">
                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="movie">
-                        <span class="movie-badge">{{ $item->versionName }}</span>
+
+                        <!-- Display "Paid" if the item is not free with a yellow badge -->
+                        @if ($item->version != 0)
+                        <span class="movie-badge" style="background-color: yellow; color: black;">@lang('Paid')</span>
+                        @else
+                        <span class="movie-badge">@lang('Free')</span>
+                        @endif
+
+                        <!-- Display "Audio" or "Video" based on is_audio -->
+                        <span class="media-type" style="background-color: #000; color: #fff;">
+                            {{ $item->is_audio ? __('Audio') : __('Video') }}
+                        </span>
+
                         <div class="movie-thumb-overlay">
-                            <a class="video-icon" href="{{$item->is_audio?route('preview.audio', $item->slug) :route('watch', $item->slug) }}"><i class="fas fa-play"></i></a>
+                            <a class="video-icon" href="{{ $item->is_audio ? route('preview.audio', $item->slug) : route('watch', $item->slug) }}">
+                                <i class="fas fa-play"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+
             @endif
 
             @empty
