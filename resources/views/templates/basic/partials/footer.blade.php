@@ -33,7 +33,7 @@
                         <ul class="footer-links">
                             @foreach ($categories as $category)
 
-                                <li><a href="{{ route('category', $category->id) }}">{{ __(app()->getLocale()=='en'?$category->name_ar:$category->name) }}</a></li>
+                                <li><a href="{{ route('category', $category->id) }}">{{ __(app()->getLocale()=='en'?$category->name_en:$category->name) }}</a></li>
                             @endforeach
                         </ul>
                     </div>
