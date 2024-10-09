@@ -17,6 +17,7 @@ class CategoryController extends Controller {
         $request->validate([
             'name' => 'required',
             'type' => 'required',
+            'status' => 'required',
             'name_en' => 'required',
         ]);
 
@@ -30,6 +31,7 @@ class CategoryController extends Controller {
         $category->type  = $request->type;
 
         $category->name = $request->name;
+        $category->status = $request->status;
         $category->name_en = $request->name_en;
         $category->save();
 
