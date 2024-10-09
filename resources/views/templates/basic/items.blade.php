@@ -70,9 +70,13 @@
                         <span class="movie-badge">@lang('Free')</span>
                         @endif
 
-                        <!-- Display "Audio" or "Video" based on is_audio -->
-                        <span class="media-type" style="background-color: #000; color: #fff;">
-                            {{ $item->is_audio ? __('Audio') : __('Video') }}
+                        <!-- Display Font Awesome icon based on is_audio -->
+                        <span class="media-type" style="background-color: #000; color: #fff; padding: 3px 5px; border-radius: 3px;">
+                            @if($item->is_audio)
+                                <i class="fas fa-headphones"></i> <!-- Audio Icon -->
+                            @else
+                                <i class="fas fa-video"></i> <!-- Video Icon -->
+                            @endif
                         </span>
 
                         <div class="movie-thumb-overlay">
@@ -83,6 +87,7 @@
                     </div>
                 </div>
             </div>
+
 
             @endif
 
