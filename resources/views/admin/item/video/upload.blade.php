@@ -74,7 +74,7 @@
                             </div>
                             <div class="tab-pane fade show active" id="pills-720p" role="tabpanel"
                                  aria-labelledby="pills-720p-tab" tabindex="0">
-                                <h5 class="my-4">@lang('Video File 720P')</h5>
+                                {{-- <h5 class="my-4">@lang('Video File 720P')</h5> --}}
                                 <div class="form-group">
                                     <label>@lang('Video Type')</label>
                                     <select class="form-control" name="video_type_seven_twenty" required>
