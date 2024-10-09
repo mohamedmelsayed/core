@@ -33,7 +33,7 @@
                                                 <button class="btn btn-sm btn-outline--primary editBtn" data-title="{{ $episode->title }}" data-version="{{ $episode->version }}" data-image="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}" data-episode_id="{{ $episode->id }}" data-status="{{ $episode->status }}" data-toggle="tooltip" data-original-title="Edit" title="">
                                                     <i class="la la-pencil"></i>@lang('Edit')
                                                 </button>
-                                                @if (!$episode->item->is_audio)
+                                                @if ($episode->video)
                                                     <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
                                                     <div class="dropdown-menu">
 
