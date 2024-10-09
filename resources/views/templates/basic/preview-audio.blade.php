@@ -494,7 +494,7 @@
             volumeSlider.addEventListener("input", (event) => {
                 event.stopPropagation();
                 const volume = event.target.value;
-                audioTrack.setVolume(volume); // Set the volume in the WaveSurfer instance
+                wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
             });
 
             wavesurfer.on('audioprocess', function() {
