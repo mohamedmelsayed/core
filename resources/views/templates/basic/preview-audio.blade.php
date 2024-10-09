@@ -144,8 +144,6 @@
                                     <ul class="team-list">
                                         <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
                                         <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
-                                        {{-- <li><span>@lang('Cast'):</span> {{ __($item->team->casts) }}</li>
-                                        <li><span>@lang('Genres'):</span> {{ __(@$item->team->genres) }}</li> --}}
                                         <li><span>@lang('Language'):</span> {{ __(@$item->team->language) }}</li>
                                     </ul>
                                 </div>
