@@ -24,6 +24,15 @@
                                 <i class="fas fa-play"></i>
                             </a>
                         </div>
+                       <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                       <span class="media-type"
+                       style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
+                       @if (@$single[0]->is_audio)
+                           <i class="fas fa-headphones"></i> <!-- Audio Icon -->
+                       @else
+                           <i class="fas fa-video"></i> <!-- Video Icon -->
+                       @endif
+                   </span>
                     </div>
                 </div>
             </div>
