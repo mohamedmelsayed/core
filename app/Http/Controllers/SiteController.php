@@ -497,7 +497,7 @@ class SiteController extends Controller
 
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
-            $seoContents['keywords'] = $translate->translated_keywords ?? [];
+            $seoContents['keywords'] = $translate->translated_tags ?? $item->tags;
             $seoContents['social_title'] = $translate->translated_title;
             $seoContents['description'] = strLimit(strip_tags($translate->translated_description), 150);
             $seoContents['social_description'] = strLimit(strip_tags($translate->translated_description), 150);
@@ -645,13 +645,28 @@ class SiteController extends Controller
         if (!$search) {
             return redirect()->route('home');
         }
-        $items = Item::search($search)->where('status', 1)->where(function ($query) {
+        $items = Item::search($search)->where('status', 1)->where('is_audio', 0)->where(function ($query) {
             $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
                 $video->where('status', 1)->whereHas('video');
             });
         })->orderBy('id', 'desc')->limit(12)->get();
+        $audioItem = Item::search($search)->where('status', 1)->where('is_audio', 1)->where(function ($query) {
+            $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
+                $video->where('status', 1)->whereHas('audio');
+            });
+        })->orderBy('id', 'desc')->limit(12)->get();
+
+        $hasStream=false;
+        foreach ($items as  $value) {
+            if($value->is_stream){
+        $hasStream=true;
+        break;
+
+            }
+        }
         $pageTitle = "Result Showing For " . $search;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'search'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category','hasStream','search'));
+
     }
 
     public function policy($id, $slug)
