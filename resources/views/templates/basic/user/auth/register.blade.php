@@ -21,11 +21,11 @@
                             @if (@$credentials->google->status == Status::ENABLE || @$credentials->facebook->status == Status::ENABLE || @$credentials->linkedin->status == Status::ENABLE)
                                 <h3 class="title mb-3">@lang('Register with')</h3>
                                 <ul class="login-social">
-                                    @if (@$credentials->facebook->status == Status::ENABLE)
+                                    {{-- @if (@$credentials->facebook->status == Status::ENABLE)
                                         <li>
                                             <a class="facebook" href="{{ route('user.social.login', 'facebook') }}"><i class="lab la-facebook-f"></i></a>
                                         </li>
-                                    @endif
+                                    @endif --}}
                                     @if (@$credentials->google->status == Status::ENABLE)
                                         <li>
                                             <a class="google" href="{{ route('user.social.login', 'google') }}"><i class="lab la-google"></i></a>
