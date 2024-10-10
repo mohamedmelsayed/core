@@ -7,7 +7,7 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="audio-item">
                         <div id="audio-player" class="audio-player-container">
-                            <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
+                            <audio id="audio" src="{{ $audio[0]->content }}" controls style="display:none;"></audio>
 
                             <div id="audio-controls-container" class="audio-controls-container">
                                 <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
