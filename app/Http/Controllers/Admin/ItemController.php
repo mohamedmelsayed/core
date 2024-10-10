@@ -433,7 +433,7 @@ class ItemController extends Controller
     {
         $validated = Validator::make($request->all(), [
             'embed_code' => 'required',
-            'start_at' => 'required,date',
+            'start_at' => 'required|date',
         ]);
         if ($validated->fails()) {
             return response()->json(['error' => $validator->errors()->all()]);
