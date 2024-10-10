@@ -109,7 +109,7 @@
 
                                             <!-- Display Font Awesome icon based on is_audio inside the thumb -->
                                             <span class="media-type"
-                                                style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                                style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 3px 3px; border-radius: 5px;">
                                                 @if ($featured->is_audio)
                                                     <i class="fas fa-headphones"></i> <!-- Audio Icon -->
                                                 @else
