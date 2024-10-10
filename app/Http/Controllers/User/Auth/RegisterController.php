@@ -131,13 +131,13 @@ class RegisterController extends Controller {
         //     $message->to($user->email);
         //     $message->subject('Account Verification');
         // });
-        $notifyTemplate = 'EVER_LINK';
+        // $notifyTemplate = 'EVER_LINK';
 
-        $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
-        // dd($verificationUrl);
-        notify($user, $notifyTemplate, [
-            'link' => $verificationUrl,
-        ], ['email']);
+        // $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+        // // dd($verificationUrl);
+        // notify($user, $notifyTemplate, [
+        //     'link' => $verificationUrl,
+        // ], ['email']);
 
         return $user;
     }
