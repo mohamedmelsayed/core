@@ -431,7 +431,7 @@ class ItemController extends Controller
 
     public function postStreamConfig(Request $request, $id)
     {
-        $validated = Validator::make($request->all(), [
+        $validated =$request->validate([
             'embed_code' => 'required',
             'start_at' => 'required|date',
         ]);
