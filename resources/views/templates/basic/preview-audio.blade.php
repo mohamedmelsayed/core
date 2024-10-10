@@ -6,42 +6,60 @@
             <div class="row @if (blank($episodes)) justify-content-center @endif mb-30-none">
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="audio-item">
-                        <div id="audio-player" class="audio-player-container">
-                            <audio id="audio" src="{{ $audio[0]->content }}" controls style="display:none;"></audio>
+                        <div class="main-audio">
+                            @foreach ($audios as $audio)
+                                <div id="audio-player" class="audio-player-container">
+                                    <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
 
-                            <div id="audio-controls-container" class="audio-controls-container">
-                                <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
-                                <div id="audio-controls" class="audio-controls">
-                                    <button class="audio-control play-btn" id="play-pause">
-                                        <i class="las la-play-circle"></i>
-                                    </button>
+                                    <div id="audio-controls-container" class="audio-controls-container">
+                                        <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}
+                                        </div>
+                                        <div id="audio-controls" class="audio-controls">
+                                            <button class="audio-control play-btn" id="play-pause">
+                                                <i class="las la-play-circle"></i>
+                                            </button>
 
-                                    <!-- Vertical Volume Slider -->
-                                    <div class="vlc-volume-container">
-                                        <div class="vlc-volume">
-                                            <input type="range" class="volume-slider" id="v-slider" min="0"
-                                                max="1" step="0.1" value="0.5">
+                                            <div class="vlc-volume-container">
+                                                <div class="vlc-volume">
+                                                    <input type="range" class="volume-slider" id="v-slider"
+                                                        min="0" max="1" step="0.1" value="0.5">
+                                                </div>
+                                            </div>
+
+                                            <!-- Repeat Button -->
+                                            <button class="audio-control repeat-btn" id="repeat-btn">
+                                                <i class="las la-redo-alt"></i>
+                                            </button>
+
+                                            <!-- Waveform display -->
+                                            <div id="waveform" class="waveform"></div>
+
+                                            <!-- Time Indicator -->
+                                            <div id="time-indicator" class="time-indicator"></div>
                                         </div>
                                     </div>
 
-                                    <!-- Repeat Button -->
-                                    <button class="audio-control repeat-btn" id="repeat-btn">
-                                        <i class="las la-redo-alt"></i>
-                                    </button>
-
-                                    <!-- Waveform display -->
-                                    <div id="waveform" class="waveform"></div>
-
-                                    <!-- Time Indicator -->
-                                    <div id="time-indicator" class="time-indicator"></div>
+                                    <!-- Thumbnail image -->
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
+                                        id="thumbnail" class="audio-thumbnail" />
                                 </div>
-                            </div>
+                            @endforeach
 
-                            <!-- Thumbnail image -->
-                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                                id="thumbnail" class="audio-thumbnail" />
+                            @if ($item->version == Status::RENT_VERSION && !$watchEligable)
+                                <div class="main-audio-lock">
+                                    <div class="main-audio-lock-content">
+                                        <span class="icon"><i class="las la-lock"></i></span>
+                                        <p class="title">@lang('Purchase Now')</p>
+                                        <p class="price">
+                                            <span
+                                                class="price-amount">{{ $general->cur_sym }}{{ showAmount($item->rent_price) }}</span>
+                                            <span class="small-text ms-3">@lang('For') {{ $item->rental_period }}
+                                                @lang('Days')</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
-
                         <div class="audio-content">
                             <div class="audio-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                                 <div class="audio-content-left">
@@ -333,14 +351,12 @@
     }
 
     .vlc-volume {
-
-        top: -110px;
         /* Adjust to position the slider */
         width: 35px;
         height: 100px;
         background: transparent;
         transform: scaleY(0);
-
+        /* Initially hidden */
     }
 
     .vlc-volume-container:hover .vlc-volume {
