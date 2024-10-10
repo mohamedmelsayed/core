@@ -16,7 +16,7 @@
                                     <div class="audio-player">
                                         <div class="audio-info">
                                             <div class="audio-title">{{ __($seoContents['social_title']) }}</div>
-                                            <div class="audio-artist">{{ __($seoContents['artist_name']) }}</div>
+                                            {{-- <div class="audio-artist">{{ __($seoContents['artist_name']) }}</div> --}}
                                         </div>
 
                                         <div class="audio-controls">
