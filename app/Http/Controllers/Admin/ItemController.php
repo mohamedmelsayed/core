@@ -390,7 +390,7 @@ class ItemController extends Controller
             $audioFilePath  = $audioUploader->fileName;
             $server = $audioUploader->uploadedServer;
         } else {
-            $removeFile          = new VideoUploader();
+            $removeFile          = new AudioUploader();
             $removeFile->oldFile = $audio;
             $removeFile->oldServer = "server";
             $removeFile->removeOldFile();

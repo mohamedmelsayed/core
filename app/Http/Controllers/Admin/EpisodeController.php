@@ -134,15 +134,19 @@ class EpisodeController extends Controller {
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
+
+
         $sizeValidation = MultiVideoUploader::checkSizeValidation();
         if ($sizeValidation['error']) {
             return response()->json(['error' => $sizeValidation['message']]);
         }
 
         if (!$video) {
+            dd('hi');
             $video             = new Video();
             $video->episode_id = $episode->id;
         }
+
 
 
 
