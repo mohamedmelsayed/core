@@ -92,44 +92,50 @@
                         <div class="swiper-wrapper">
                             @foreach ($featuredMovies as $featured)
                                 <div class="swiper-slide">
-                                    <div class="movie-item">
-                                        <div class="movie-thumb" style="position: relative;">
-                                            <img class="lazy-loading-img"
-                                                data-src="{{ getImage(getFilePath('item_portrait') . '/' . $featured->image->portrait) }}"
-                                                src="{{ asset('assets/global/images/lazy.png') }}" alt="movie" style="width: 100%; height: auto;">
+                                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                                        <div class="movie-item">
+                                            <div class="movie-thumb" style="position: relative; overflow: hidden; border-radius: 10px; width: 100%; height: 250px;">
+                                                <img class="lazy-loading-img"
+                                                    data-src="{{ getImage(getFilePath('item_portrait') . '/' . $featured->image->portrait) }}"
+                                                    src="{{ asset('assets/global/images/lazy.png') }}"
+                                                    alt="movie"
+                                                    style="width: 100%; height: 100%; object-fit: cover;"> <!-- Ensure the images are unified -->
 
-                                            <!-- Movie Badge (Paid/Free/Trailer) -->
-                                            @if ($featured->version == 0)
-                                                <span class="movie-badge" style="background-color: green; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
-                                                    @lang('Free')
-                                                </span>
-                                            @elseif ($featured->version == 1)
-                                                <span class="movie-badge" style="background-color: yellow; color: black; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
-                                                    @lang('Paid')
-                                                </span>
-                                            @elseif ($featured->item_type == 3)
-                                                <span class="movie-badge" style="background-color: red; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
-                                                    @lang('Trailer')
-                                                </span>
-                                            @endif
-
-                                            <!-- Overlay Play Button -->
-                                            <div class="movie-thumb-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;">
-                                                <a class="video-icon" href="{{ route('watch', $featured->slug) }}">
-                                                    <img src="{{ asset('path/to/zoom.png') }}" alt="Play Icon" style="width: 24px; height: 24px;">
-                                                </a>
-                                            </div>
-
-                                            <!-- Custom Icons for Audio/Video -->
-                                            <span class="media-type" style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                                @if ($featured->is_audio)
-                                                    <img src="{{ asset('path/to/sound-wave.png') }}" alt="Audio Icon" style="width: 20px; height: 20px;"> <!-- Audio Icon -->
-                                                @else
-                                                    <img src="{{ asset('path/to/zoom.png') }}" alt="Video Icon" style="width: 20px; height: 20px;"> <!-- Video Icon -->
+                                                <!-- Movie Badge (Paid/Free/Trailer) -->
+                                                @if ($featured->version == 0)
+                                                    <span class="movie-badge" style="background-color: green; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
+                                                        @lang('Free')
+                                                    </span>
+                                                @elseif ($featured->version == 1)
+                                                    <span class="movie-badge" style="background-color: yellow; color: black; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
+                                                        @lang('Paid')
+                                                    </span>
+                                                @elseif ($featured->item_type == 3)
+                                                    <span class="movie-badge" style="background-color: red; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
+                                                        @lang('Trailer')
+                                                    </span>
                                                 @endif
-                                            </span>
+
+                                                <!-- Overlay Play Button -->
+                                                <div class="movie-thumb-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;">
+                                                    <a class="video-icon" href="{{ route('watch', $featured->slug) }}">
+                                                        <img src="{{ asset('assets/icons/zoom.png') }}" alt="Play Icon" style="width: 30px; height: 30px;">
+                                                    </a>
+                                                </div>
+
+                                                <!-- Custom Icons for Audio/Video -->
+                                                <span class="media-type"
+                                                      style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                                    @if ($featured->is_audio)
+                                                        <img src="{{ asset('assets/icons/sound-wave.png') }}" alt="Audio Icon" style="width: 20px; height: 20px;"> <!-- Audio Icon -->
+                                                    @else
+                                                        <img src="{{ asset('assets/icons/zoom.png') }}" alt="Video Icon" style="width: 20px; height: 20px;"> <!-- Video Icon -->
+                                                    @endif
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
+
 
 
                                 </div>
