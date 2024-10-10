@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Lib\MultiVideoUploader;
+use App\Lib\VideoUploader;
 use App\Models\Episode;
 use App\Models\Item;
 use App\Models\Subtitle;
@@ -104,63 +105,64 @@ class EpisodeController extends Controller {
     }
 
     public function storeEpisodeVideo(Request $request, $id) {
-        $episode = Episode::findOrFail($id);
-        //ini_set('memory_limit', '-1');
 
-        $video = $episode->video;
-        if ($video) {
-            $sevenTwentyLink  = 'nullable';
-            $sevenTwentyVideo = 'nullable';
-        } else {
-            $sevenTwentyLink  = 'required_if:video_type,0';
-            $sevenTwentyVideo = 'required_if:video_type,1';
+        $validation_rule['video_type'] = 'required';
+        $validation_rule['link'] = 'required_without:video';
+
+        if ($request->video_type == 1) {
+            $validation_rule['video'] = ['required_without:link', new FileTypeValidate(['mp4', 'mkv', '3gp'])];
         }
 
-        //ini_set('memory_limit', '-1');
-        $validator = Validator::make($request->all(), [
-
-            'video_type'    => 'required',
-            'seven_twenty_link'          => "$sevenTwentyLink",
-            'video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
-
-
-        ], [
-
-            'seven_twenty_link'          => 'Video file 720P link is required',
-            'video'         => 'Video file 720P video is required',
-
-        ]);
+        $validator = Validator::make($request->all(), $validation_rule);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()]);
         }
 
+        $episode = Episode::findOrFail($id);
+        //ini_set('memory_limit', '-1');
 
-        $sizeValidation = MultiVideoUploader::checkSizeValidation();
-        if ($sizeValidation['error']) {
-            return response()->json(['error' => $sizeValidation['message']]);
-        }
-
+        $video = $episode->video;
         if (!$video) {
-            $video             = new Video();
-            $video->episode_id = $episode->id;
+            return response()->json(['errors' => 'Video not found']);
         }
 
-        dd('here');
+        $videoUploader = new VideoUploader();
+        $videoUploader->oldFile = $video->seven_twenty_video;
+        $videoUploader->oldServer = $video->server_seven_twenty;
 
+        if ($request->hasFile('video')) {
+            $file = $request->file('video');
+            $videoSize = $file->getSize();
 
-        if ($request->hasFile('seven_twenty_video') || $request->seven_twenty_link) {
-            $uploadSevenTwenty = MultiVideoUploader::multiQualityVideoUpload($video, 'seven_twenty');
-            if ($uploadSevenTwenty['error']) {
-                return response()->json(['error' => $sizeValidation['message']]);
+            if ($videoSize > 4194304000) {
+                return response()->json(['errors' => 'File size must be lower then 4 gb']);
             }
-            $video->video_type_seven_twenty = @$request->video_type_seven_twenty;
-            $video->seven_twenty_video      = @$uploadSevenTwenty['seven_twenty_video'];
-            $video->server_seven_twenty     = @$uploadSevenTwenty['server'] ?? 0;
+
+            $videoUploader->file = $file;
+            $videoUploader->upload();
+
+            $error = $videoUploader->error;
+
+            if ($error) {
+                return response()->json(['errors' => 'Could not upload the Video']);
+            }
+            $videoUploader->removeOldFile();
+
+            $content = $videoUploader->fileName;
+            $server = $videoUploader->uploadedServer;
+        } else {
+            $videoUploader->removeOldFile();
+
+            $content = $request->link;
+            $server = Status::LINK;
         }
 
-
+        $video->episode_id = $episode->id;
+        $video->seven_twenty_video = $content;
+        $video->server_seven_twenty = $server;
         $video->save();
+
         return response()->json('success');
     }
 
