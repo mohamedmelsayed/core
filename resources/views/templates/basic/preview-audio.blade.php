@@ -392,6 +392,7 @@
     .vlc-volume-container {
         position: relative;
         display: inline-block;
+        margin-left: 10px;
     }
 
     .vlc-volume {
@@ -441,16 +442,11 @@
         cursor: pointer;
     }
 
-    /* Ensure the slider appears larger on mobile for easier touch */
+    /* Hide the volume slider on mobile screens */
     @media (max-width: 768px) {
-        .vlc-volume {
-            height: 80px;
-            /* Adjust for mobile */
-        }
-
-        .volume-slider {
-            height: 80px;
-            /* Ensure it's easily touchable */
+        .vlc-volume-container {
+            display: none;
+            /* Hides the volume control on mobile */
         }
     }
 
