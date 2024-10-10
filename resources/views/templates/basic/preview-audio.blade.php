@@ -25,6 +25,8 @@
 
                                             <!-- VLC-like Volume Control -->
                                             <div class="vlc-volume-container">
+                                                <button class="audio-control" id="volume-btn"><i
+                                                        class="las la-volume-up"></i></button>
                                                 <div class="vlc-volume">
                                                     <input type="range" class="volume-slider" id="v-slider"
                                                         min="0" max="1" step="0.1" value="0.5"
@@ -35,6 +37,7 @@
                                             <button class="audio-control repeat-button" id="repeat-btn"><i
                                                     class="las la-redo-alt"></i></button>
                                         </div>
+
 
                                         <div class="waveform-container">
                                             <div id="waveform"></div>
@@ -389,32 +392,31 @@
     .vlc-volume-container {
         position: relative;
         display: inline-block;
-        height: 20px;
     }
 
     .vlc-volume {
         position: absolute;
-        top: -120px;
-        /* Push the slider upwards */
-        left: -10px;
-        width: 50px;
+        top: -110px;
+        /* Adjusted to push the slider upwards */
+        left: -5px;
+        width: 35px;
         height: 100px;
-        background: white;
+        background: transparent;
         transform: scaleY(0);
-        /* Hide the slider initially */
+        /* Initially hidden */
         transform-origin: bottom;
         transition: transform 0.2s ease-in-out;
     }
 
     .vlc-volume-container:hover .vlc-volume {
         transform: scaleY(1);
-        /* Show the slider when hovering */
+        /* Shows the slider when hovered */
     }
 
     .volume-slider {
         -webkit-appearance: none;
         width: 5px;
-        height: 100%;
+        height: 100px;
         background: #ddd;
         border-radius: 5px;
         outline: none;
@@ -437,6 +439,10 @@
         border-radius: 50%;
         background: #58BFE1;
         cursor: pointer;
+    }
+
+    .volume-slider-container {
+        position: relative;
     }
 
     /* Waveform */
