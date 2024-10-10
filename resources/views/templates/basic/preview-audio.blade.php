@@ -8,7 +8,7 @@
                     <div class="audio-item">
                         <div class="main-audio">
                             @foreach ($audios as $audio)
-                                <div>
+
                                     <div class="audio-card">
                                         <div class="audio-thumbnail-container">
                                             <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" id="thumbnail" alt="Thumbnail" />
@@ -36,7 +36,7 @@
 
 
 
-                                </div>
+
                             @endforeach
 
                             @if ($item->version == Status::RENT_VERSION && !$watchEligable)
