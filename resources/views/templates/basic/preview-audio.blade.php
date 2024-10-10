@@ -6,7 +6,7 @@
             <div class="row @if (blank($episodes)) justify-content-center @endif mb-30-none">
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div id="audio-player" class="audio-player-container">
-                        <audio id="audio" src="{{ $audio[0]->content }}" controls style="display:none;"></audio>
+                        <audio id="audio" src="{{ $audios[0]->content }}" controls style="display:none;"></audio>
 
                         <div id="audio-controls-container" class="audio-controls-container">
                             <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
