@@ -208,7 +208,7 @@
         </div>
     </section>
     <section class="movie-section ptb-80">
-        @if (($item->is_audio && $relatedAudios->isNotEmpty())  )
+        @if ((!$item->is_audio && $relatedItems->isNotEmpty())  )
 
         <div class="container">
             <div class="row">
@@ -249,7 +249,7 @@
 
         </div>
         @endif
-        @if(!$item->is_audio && $relatedItems->isNotEmpty())
+        @if(!$item->is_audio && $relatedAudios->isNotEmpty())
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">

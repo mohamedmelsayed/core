@@ -122,6 +122,8 @@
         </div>
     </section>
     <section class="movie-section ptb-80">
+        @if (($item->is_audio && $relatedAudios->isNotEmpty())  )
+
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
@@ -161,6 +163,9 @@
             </div>
 
         </div>
+        @endif
+        @if (($item->is_audio && $relatedItems->isNotEmpty())  )
+
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
@@ -198,6 +203,7 @@
             </div>
 
         </div>
+        @endif
     </section>
 @endsection
 <style>
