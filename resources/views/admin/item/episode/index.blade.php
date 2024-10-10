@@ -66,12 +66,22 @@
                                                         </a>
                                                     </div>
                                                 @else
+                                                    @if (!$episode->item->is_audio)
+                                                        <div class="button--group">
+                                                            <a class="dropdown-item threshold"
+                                                                href="{{ route('admin.item.uploadVideo', $episode->item_id) }}">
+                                                                <i class="las la-cloud-upload-alt"></i> @lang('Upload Video')
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                    @if ($episode->item->is_audio)
                                                     <div class="button--group">
                                                         <a class="dropdown-item threshold"
-                                                            href="{{ route('admin.item.uploadVideo', $episode->item_id) }}">
-                                                            <i class="las la-cloud-upload-alt"></i> @lang('Upload Video')
+                                                            href="{{ route('admin.item.uploadAudio', $episode->item_id) }}">
+                                                            <i class="las la-cloud-upload-alt"></i> @lang('Upload Audio')
                                                         </a>
                                                     </div>
+                                                @endif
                                                 @endif
                                             </div>
                                         </td>
