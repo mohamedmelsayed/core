@@ -12,20 +12,23 @@
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                     <div class="movie-item">
                         <div class="movie-thumb">
-                            <img class="lazy-loading-img" data-src="{{ getImage(getFilePath('item_portrait') . '/' . $latest->image->portrait) }}" src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
+                            <img class="lazy-loading-img"
+                                data-src="{{ getImage(getFilePath('item_portrait') . '/' . $latest->image->portrait) }}"
+                                src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
                             <span class="movie-badge">{{ $latest->versionName }}</span>
                             <div class="movie-thumb-overlay">
-                                <a class="video-icon" href="{{ route('watch', $latest->slug) }}"><i class="fas fa-play"></i></a>
+                                <a class="video-icon" href="{{ route('watch', $latest->slug) }}"><i
+                                        class="fas fa-play"></i></a>
                             </div>
                             <!-- Display Font Awesome icon based on is_audio inside the thumb -->
                             <span class="media-type"
-                            style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
-                            @if ($latest->is_audio)
-                                <i class="fas fa-headphones"></i> <!-- Audio Icon -->
-                            @else
-                                <i class="fas fa-video"></i> <!-- Video Icon -->
-                            @endif
-                        </span>
+                                style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                @if ($latestSeries->is_audio)
+                                    <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                @else
+                                    <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                @endif
+                            </span>
                         </div>
                     </div>
                 </div>
