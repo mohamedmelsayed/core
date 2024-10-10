@@ -147,7 +147,7 @@
                             <select class="form-control" name="category" required>
                                 <option value="">@lang('Select One')</option>
                                 @foreach ($categories as $category)
-                                <option data-subcategories="{{ $category->subcategories }}" value="{{ $category->id }}">{{ __($category->name) }}</option>
+                                <option data-subcategories="{{ $category->subcategories }}" value="{{ $category->id }}">{{ __($category->name) }} - {{$category->type=='vid'?__('video'):__('audio')}}</option>
                                 @endforeach
                             </select>
                         </div>
