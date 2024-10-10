@@ -8,43 +8,41 @@
                     <div class="audio-item">
                         <div class="main-audio">
                             @foreach ($audios as $audio)
-                                <div class="audio-card">
-                                    <img class="audio-thumbnail"
-                                        src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                                        alt="Audio Thumbnail">
+                                <div id="audio-player" class="audio-player-container">
+                                    <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
 
-                                    <div class="audio-player">
-                                        <div class="audio-info">
-                                            <div class="audio-title">{{ __($seoContents['social_title']) }}</div>
-                                            {{-- <div class="audio-artist">{{ __($seoContents['artist_name']) }}</div> --}}
+                                    <div id="audio-controls-container" class="audio-controls-container">
+                                        <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}
                                         </div>
+                                        <div id="audio-controls" class="audio-controls">
+                                            <button class="audio-control play-btn" id="play-pause">
+                                                <i class="las la-play-circle"></i>
+                                            </button>
 
-                                        <div class="audio-controls">
-                                            <button class="audio-control play-button" id="play-pause"><i
-                                                    class="las la-play-circle"></i></button>
-
-                                            <!-- VLC-like Volume Control -->
                                             <div class="vlc-volume-container">
-                                                <button class="audio-control" id="volume-btn"><i
-                                                        class="las la-volume-up"></i></button>
                                                 <div class="vlc-volume">
                                                     <input type="range" class="volume-slider" id="v-slider"
-                                                        min="0" max="1" step="0.1" value="0.5"
-                                                        orient="vertical">
+                                                        min="0" max="1" step="0.1" value="0.5">
                                                 </div>
+                                                <i class="las la-volume-up"></i>
                                             </div>
 
-                                            <button class="audio-control repeat-button" id="repeat-btn"><i
-                                                    class="las la-redo-alt"></i></button>
+                                            <!-- Repeat Button -->
+                                            <button class="audio-control repeat-btn" id="repeat-btn">
+                                                <i class="las la-redo-alt"></i>
+                                            </button>
+
+                                            <!-- Waveform display -->
+                                            <div id="waveform" class="waveform"></div>
+
+                                            <!-- Time Indicator -->
+                                            <div id="time-indicator" class="time-indicator"></div>
                                         </div>
-
-
-                                        <div class="waveform-container">
-                                            <div id="waveform"></div>
-                                        </div>
-
-                                        <div class="time-indicator" id="time-indicator">00:00</div>
                                     </div>
+
+                                    <!-- Thumbnail image -->
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
+                                        id="thumbnail" class="audio-thumbnail" />
                                 </div>
                             @endforeach
 
@@ -289,139 +287,95 @@
     </section>
 @endsection
 <style>
-    /* Main Audio Card */
-    .audio-card {
-        display: flex;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
+    /* Container for the audio player */
+    .audio-player-container {
+        width: 100%;
+        max-width: 800px;
+        /* Adjust to the desired width */
+        margin: 20px auto;
+        background: linear-gradient(to right, #1e3c72, #2a5298);
         border-radius: 15px;
         padding: 20px;
-        max-width: 700px;
-        /* Wider width for larger screens */
-        align-items: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         position: relative;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(10px);
-        gap: 20px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
     }
 
-    .audio-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Wider width for big screens */
-    @media (min-width: 1024px) {
-        .audio-card {
-            max-width: 1000px;
-        }
-    }
-
-    /* Thumbnail */
-    .audio-thumbnail {
-        width: 100px;
-        height: 100px;
-        border-radius: 15px;
-        object-fit: cover;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Player Info */
-    .audio-info {
-        color: #fff;
-        text-align: left;
-        flex: 1;
-    }
-
+    /* Title styling */
     .audio-title {
-        font-size: 20px;
-        font-weight: bold;
-        color: #58BFE1;
+        color: #fff;
+        font-size: 24px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
     }
 
-    .audio-artist {
-        font-size: 14px;
-        color: #FFA500;
-        opacity: 0.8;
-        margin-bottom: 10px;
+    /* Audio controls container */
+    .audio-controls-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    /* Controls */
+    /* Controls area */
     .audio-controls {
         display: flex;
-        gap: 15px;
         align-items: center;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        padding: 10px 0;
     }
 
-    /* Play Button */
-    .play-button {
-        background-color: rgba(88, 191, 225, 0.8);
+    /* Buttons (Play, Repeat, etc.) */
+    .audio-control {
+        background-color: rgba(255, 255, 255, 0.1);
         border: none;
+        color: #fff;
         padding: 15px;
         border-radius: 50%;
+        font-size: 24px;
         cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
+        transition: background 0.3s ease;
     }
 
-    .play-button:hover {
-        background-color: rgba(88, 191, 225, 1);
-        transform: scale(1.1);
+    .audio-control:hover {
+        background-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* Repeat Button */
-    .repeat-button {
-        background-color: rgba(255, 165, 0, 0.8);
-        border: none;
-        padding: 12px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .repeat-button:hover {
-        background-color: rgba(255, 165, 0, 1);
-        transform: scale(1.1);
-    }
-
-    .repeat-button.active {
-        background-color: #FFD700;
-        /* Gold color when active */
-    }
-
-    /* VLC-like Volume Control */
+    /* Volume control */
     .vlc-volume-container {
         position: relative;
-        display: inline-block;
-        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
     }
 
     .vlc-volume {
         position: absolute;
         top: -110px;
-        /* Adjust as necessary */
-        left: -5px;
+        /* Adjust to position the slider */
         width: 35px;
         height: 100px;
         background: transparent;
         transform: scaleY(0);
-        /* Hidden by default */
+        /* Initially hidden */
         transform-origin: bottom;
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.3s ease-in-out;
     }
 
     .vlc-volume-container:hover .vlc-volume {
         transform: scaleY(1);
-        /* Shows the slider when hovered */
+        /* Show the slider on hover */
     }
 
     .volume-slider {
         -webkit-appearance: none;
         width: 5px;
         height: 100px;
-        background: #ddd;
+        background: #fff;
         border-radius: 5px;
         outline: none;
-        transition: background 0.3s ease;
     }
 
     .volume-slider::-webkit-slider-thumb {
@@ -430,7 +384,7 @@
         width: 15px;
         height: 15px;
         border-radius: 50%;
-        background: #58BFE1;
+        background: #ffb400;
         cursor: pointer;
     }
 
@@ -438,50 +392,52 @@
         width: 15px;
         height: 15px;
         border-radius: 50%;
-        background: #58BFE1;
+        background: #ffb400;
         cursor: pointer;
     }
 
-    /* Hide the volume slider on mobile screens */
+    /* Waveform styling */
+    .waveform {
+        width: 100%;
+        height: 80px;
+        background-color: transparent;
+    }
+
+    /* Time indicator */
+    .time-indicator {
+        color: #fff;
+        font-size: 16px;
+        margin-left: 10px;
+    }
+
+    /* Thumbnail styling */
+    .audio-thumbnail {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10%;
+    }
+
+    /* Responsive styling */
     @media (max-width: 768px) {
+        .audio-player-container {
+            padding: 15px;
+            max-width: 90%;
+        }
+
+        .audio-thumbnail {
+            width: 100px;
+            height: 100px;
+            top: 10px;
+            right: 10px;
+        }
+
         .vlc-volume-container {
             display: none;
-            /* Hides the volume control on mobile */
-        }
-    }
-
-    /* Waveform */
-    .waveform-container {
-        width: 100%;
-        height: 70px;
-        margin-top: 10px;
-    }
-
-    #waveform {
-        height: 100%;
-    }
-
-    /* Time Indicator */
-    .time-indicator {
-        font-size: 14px;
-        color: #ddd;
-        text-align: right;
-        margin-top: 5px;
-    }
-
-    @media (max-width: 768px) {
-        .audio-thumbnail {
-            display: none;
-        }
-
-        .audio-card {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .audio-controls {
-            width: 100%;
-            justify-content: space-between;
+            /* Hide the volume control on mobile */
         }
     }
 </style>
@@ -493,12 +449,12 @@
             const playPauseButton = document.getElementById('play-pause');
             const volumeSlider = document.getElementById('v-slider');
             const repeatButton = document.getElementById('repeat-btn');
-            let isRepeat = false; // To track the repeat mode
+            let isRepeat = false; // Track repeat mode
 
             const wavesurfer = WaveSurfer.create({
                 container: '#waveform',
-                waveColor: 'white',
-                progressColor: '#58BFE1',
+                waveColor: 'blue',
+                progressColor: 'purple',
                 barWidth: 2,
                 responsive: true,
                 normalize: true,
@@ -508,7 +464,7 @@
                 partialRender: true
             });
 
-            wavesurfer.load('{{ $audios[0]->content }}');
+            wavesurfer.load('{{ $audio->content }}');
             wavesurfer.play();
 
             playPauseButton.addEventListener('click', function(event) {
@@ -520,39 +476,17 @@
                 }
             });
 
-            document.addEventListener('keydown', function(event) {
-                if (event.code === 'Space') {
-                    event.preventDefault();
-                    if (wavesurfer.isPlaying()) {
-                        wavesurfer.pause();
-                    } else {
-                        wavesurfer.play();
-                    }
-                }
-            });
-
-            // Volume Slider Control for mouse input
+            // Volume slider control
             volumeSlider.addEventListener("input", (event) => {
                 event.stopPropagation();
                 const volume = event.target.value;
                 wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
             });
 
-            // Volume Slider Control for touch input
-            volumeSlider.addEventListener("touchmove", (event) => {
-                event.stopPropagation();
-                const volume = event.target.value;
-                wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance for touch devices
-            });
-
             // Toggle repeat functionality
             repeatButton.addEventListener('click', function() {
                 isRepeat = !isRepeat; // Toggle repeat mode
-                if (isRepeat) {
-                    repeatButton.classList.add('active'); // Highlight the button
-                } else {
-                    repeatButton.classList.remove('active');
-                }
+                repeatButton.classList.toggle('active', isRepeat);
             });
 
             // When the audio finishes, check if repeat mode is active
