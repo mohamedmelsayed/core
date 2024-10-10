@@ -16,21 +16,18 @@
                                         <div id="audio-controls-container">
                                             <div id="file-title">{{ __($seoContents['social_title']) }}</div>
                                             <div id="audio-controls">
-
-                                                <div id="time-indicator"></div>
-
-
-                                                <div id="waveform"></div>
+                                                <button class="audio-control" id="play-pause"><i
+                                                        class="las la-play-circle"></i></button>
+                                                <div class="volume-control">
+                                                    <input type="range" class="volume-slider" id="v-slider"
+                                                        min="0" max="1" step="0.1" value="0.5">
+                                                </div>
                                                 <!-- New Repeat Button -->
                                                 <button class="audio-control" id="repeat-btn">
                                                     <i class="las la-redo-alt"></i>
                                                 </button>
-                                                <input type="range" class="volume-slider" id="v-slider" min="0"
-                                                    max="1" step="0.1" value="0.5">
-                                            </div>
-                                            <button class="audio-control" id="play-pause"><i
-                                                    class="las la-play-circle"></i></button>
-                                            <div class="volume-control">
+                                                <div id="waveform"></div>
+                                                <div id="time-indicator"></div>
                                             </div>
                                         </div>
                                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
