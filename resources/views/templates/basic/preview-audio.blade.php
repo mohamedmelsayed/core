@@ -17,111 +17,109 @@
                                 </button>
 
                                 <!-- Volume Control -->
-                                <div class="vlc-volume-container">
-                                    <div class="vlc-volume">
-                                        <input type="range" class="volume-slider" id="v-slider" min="0"
-                                            max="1" step="0.1" value="0.5">
-                                    </div>
-                                    <i class="las la-volume-up volume-icon"></i>
-                                </div>
 
-                                <!-- Repeat Button -->
-                                <button class="audio-control repeat-btn" id="repeat-btn">
-                                    <i class="las la-redo-alt"></i>
-                                </button>
+                                <input type="range" class="volume-slider" id="v-slider" min="0" max="1"
+                                    step="0.1" value="0.5">
 
-                                <!-- Waveform display -->
-                                <div id="waveform" class="waveform"></div>
-
-                                <!-- Time Indicator -->
-                                <div id="time-indicator" class="time-indicator"></div>
                             </div>
-                        </div>
 
-                        <!-- Thumbnail image (occupying 20% width) -->
-                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                            id="thumbnail" class="audio-thumbnail" />
+                            <!-- Repeat Button -->
+                            <button class="audio-control repeat-btn" id="repeat-btn">
+                                <i class="las la-redo-alt"></i>
+                            </button>
+
+                            <!-- Waveform display -->
+                            <div id="waveform" class="waveform"></div>
+
+                            <!-- Time Indicator -->
+                            <div id="time-indicator" class="time-indicator"></div>
+                        </div>
                     </div>
 
-                    <div class="product-tab mt-40">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="product-tab-desc" data-bs-toggle="tab"
-                                    href="#product-desc-content" role="tab" aria-controls="product-desc-content"
-                                    aria-selected="true">@lang('Description')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
-                                    role="tab" aria-controls="product-team-content"
-                                    aria-selected="false">@lang('Team')</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
-                                aria-labelledby="product-tab-desc">
-                                <div class="product-desc-content">
-                                    {{ __($item->description) }}
-                                </div>
+                    <!-- Thumbnail image (occupying 20% width) -->
+                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" id="thumbnail"
+                        class="audio-thumbnail" />
+                </div>
+
+                <div class="product-tab mt-40">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="product-tab-desc" data-bs-toggle="tab"
+                                href="#product-desc-content" role="tab" aria-controls="product-desc-content"
+                                aria-selected="true">@lang('Description')</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
+                                role="tab" aria-controls="product-team-content"
+                                aria-selected="false">@lang('Team')</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
+                            aria-labelledby="product-tab-desc">
+                            <div class="product-desc-content">
+                                {{ __($item->description) }}
                             </div>
-                            <div class="tab-pane fade fade" id="product-team-content" role="tabpanel"
-                                aria-labelledby="product-tab-team">
-                                <div class="product-desc-content">
-                                    <ul class="team-list">
-                                        <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
-                                        <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
-                                        <li><span>@lang('Language'):</span> {{ __(@$item->team->language) }}</li>
-                                    </ul>
-                                </div>
+                        </div>
+                        <div class="tab-pane fade fade" id="product-team-content" role="tabpanel"
+                            aria-labelledby="product-tab-team">
+                            <div class="product-desc-content">
+                                <ul class="team-list">
+                                    <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
+                                    <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
+                                    <li><span>@lang('Language'):</span> {{ __(@$item->team->language) }}</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                @if (!blank($episodes))
-                    <div class="col-xl-4 col-lg-4 mb-30">
-                        <div class="widget-box">
-                            <div class="widget-wrapper audio-small-list pt-0">
-                                @foreach ($episodes as $episode)
-                                    @php
-                                        $status = checkLockStatus($episode, $userHasSubscribed, $hasSubscribedItem);
-                                    @endphp
-                                    <div class="widget-item widget-item__overlay d-flex align-items-center justify-content-between"
-                                        data-img="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}">
-                                        <div class="widget-item__content d-flex align-items-center audio-small flex-wrap">
-                                            <div class="widget-thumb">
-                                                <a href="{{ route('listen', [$item->slug, $episode->id]) }}">
-                                                    <img src="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}"
-                                                        alt="audio">
-                                                </a>
-                                            </div>
-                                            <div class="widget-content">
-                                                <h4 class="title">{{ __($episode->title) }}</h4>
-                                                <div class="widget-btn">
-                                                    @if ($status)
-                                                        <a class="custom-btn"
-                                                            href="{{ route('listen', [$item->slug, $episode->id]) }}">@lang('Play Now')</a>
-                                                    @else
-                                                        <a class="custom-btn"
-                                                            href="{{ route('user.login') }}">@lang('Subscribe to listen')</a>
-                                                    @endif
-                                                </div>
-                                            </div>
+            </div>
+            @if (!blank($episodes))
+                <div class="col-xl-4 col-lg-4 mb-30">
+                    <div class="widget-box">
+                        <div class="widget-wrapper audio-small-list pt-0">
+                            @foreach ($episodes as $episode)
+                                @php
+                                    $status = checkLockStatus($episode, $userHasSubscribed, $hasSubscribedItem);
+                                @endphp
+                                <div class="widget-item widget-item__overlay d-flex align-items-center justify-content-between"
+                                    data-img="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}">
+                                    <div class="widget-item__content d-flex align-items-center audio-small flex-wrap">
+                                        <div class="widget-thumb">
+                                            <a href="{{ route('listen', [$item->slug, $episode->id]) }}">
+                                                <img src="{{ getImage(getFilePath('episode') . '/' . $episode->image) }}"
+                                                    alt="audio">
+                                            </a>
                                         </div>
-                                        <div class="widget-item__lock">
-                                            <span class="widget-item__lock-icon">
+                                        <div class="widget-content">
+                                            <h4 class="title">{{ __($episode->title) }}</h4>
+                                            <div class="widget-btn">
                                                 @if ($status)
-                                                    <i class="fas fa-unlock"></i>
+                                                    <a class="custom-btn"
+                                                        href="{{ route('listen', [$item->slug, $episode->id]) }}">@lang('Play Now')</a>
                                                 @else
-                                                    <i class="fas fa-lock"></i>
+                                                    <a class="custom-btn"
+                                                        href="{{ route('user.login') }}">@lang('Subscribe to listen')</a>
                                                 @endif
-                                            </span>
+                                            </div>
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
+                                    <div class="widget-item__lock">
+                                        <span class="widget-item__lock-icon">
+                                            @if ($status)
+                                                <i class="fas fa-unlock"></i>
+                                            @else
+                                                <i class="fas fa-lock"></i>
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
+        </div>
         </div>
     </section>
     <section class="movie-section ptb-80">
