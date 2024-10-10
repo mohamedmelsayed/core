@@ -320,6 +320,7 @@
 
     /* Controls area */
     .audio-controls {
+        margin-left: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
