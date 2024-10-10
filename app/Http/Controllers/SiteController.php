@@ -163,7 +163,7 @@ class SiteController extends Controller
             return response('end');
         }
         $items = Item::scopeHasVideoOrAudio();
-
+        dd($items);
         if ($request->sectionName == 'recent_added') {
             $data['recent_added'] = (clone $items)->where('item_type', Status::SINGLE_ITEM)->orderBy('id', 'desc')->limit(18)->get();
         } else if ($request->sectionName == 'latest_series') {
