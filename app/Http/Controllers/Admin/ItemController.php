@@ -431,13 +431,18 @@ class ItemController extends Controller
 
     public function postStreamConfig(Request $request, $id)
     {
-        $validated =$request->validate([
+        $validator= Validator::make($request->all(), [
             'embed_code' => 'required',
             'start_at' => 'required|date',
         ]);
-        if ($validated->fails()) {
-            return response()->json(['error' => $validator->errors()->all()]);
+
+        if ($validator->fails()) {
+            // Handle validation failure
+            return redirect()->back()->withErrors($validator)->withInput();
         }
+
+        // If validation passes
+        $validated = $validator->validated();
         $item = Item::findOrFail($id);
         if($item==null){
         $notify[] = ['error', 'item does not exists'];
