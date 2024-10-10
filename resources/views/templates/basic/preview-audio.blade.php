@@ -14,13 +14,11 @@
                                 <!-- Play/Pause Button -->
                                 <button class="audio-control play-btn"  id="play-pause">
                                     <i class="fas fa-play" style="scale: 120%"></i>
+                                    <i class="fas fa-redo" style="scale: 120%"></i>
+
                                 </button>
 
 
-                                <!-- Repeat Button -->
-                                <button class="audio-control repeat-btn" id="repeat-btn">
-                                    <i class="las la-redo-alt"></i>
-                                </button>
 
                                 <!-- Waveform display -->
                                 <div id="waveform" class="waveform"></div>
@@ -29,12 +27,12 @@
                                 <div id="time-indicator" class="time-indicator"></div>
 
                                 <!-- Volume Control -->
-                                {{-- <button class="audio-control play-btn"  id="play-pause">
+                                <button class="audio-control play-btn"  id="v-mute">
                                     <i class="fas fa-volume-mute" style="scale: 120%"></i>
                                 </button>
-                                <button class="audio-control play-btn"  id="play-pause">
+                                <button class="audio-control play-btn"  id="v-up">
                                     <i class="fas fa-volume-up" style="scale: 120%"></i>
-                                </button> --}}
+                                </button>
 
 
                             </div>
@@ -399,8 +397,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const playPauseButton = document.getElementById('play-pause');
-            const volumeSlider = document.getElementById('v-slider');
+            // const volumeSlider = document.getElementById('v-slider');
             const repeatButton = document.getElementById('repeat-btn');
+            const muteButton = document.getElementById('v-mute');
+            const volumeUpButton = document.getElementById('v-up');
             let isRepeat = false; // Track repeat mode
 
             const wavesurfer = WaveSurfer.create({
@@ -428,14 +428,21 @@
                 }
             });
 
-            // Volume slider control
 
-
-            // Volume Slider Control
-            volumeSlider.addEventListener("input", (event) => {
+            volumeUpButton.addEventListener("input", (event) => {
                 event.stopPropagation();
+                volumeUpButton.innerHtml.style="display:none";
+                muteButton.innerHtml.style="display:block";
                 const volume = event.target.value;
-                wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
+                wavesurfer.setVolume(1); // Set the volume in the WaveSurfer instance
+            });
+
+            muteButton.addEventListener("input", (event) => {
+                event.stopPropagation();
+                volumeUpButton.innerHtml.style="display:block";
+                muteButton.innerHtml.style="display:none";
+                const volume = event.target.value;
+                wavesurfer.setVolume(0); // Set the volume in the WaveSurfer instance
             });
 
             // Toggle repeat functionality
