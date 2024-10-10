@@ -21,7 +21,6 @@
                                         <input type="range" class="volume-slider" id="v-slider" min="0"
                                             max="1" step="0.1" value="0.5">
                                     </div>
-                                </div>
 
                                 <!-- Repeat Button -->
                                 <button class="audio-control repeat-btn" id="repeat-btn">
