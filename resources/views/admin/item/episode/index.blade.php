@@ -69,7 +69,7 @@
                                                     @if (!$episode->item->is_audio)
                                                         <div class="button--group">
                                                             <a class="dropdown-item threshold"
-                                                                href="{{ route('admin.item.uploadVideo', $episode->item_id) }}">
+                                                                href="{{ route('admin.item.episode.upload', $episode->item_id) }}">
                                                                 <i class="las la-cloud-upload-alt"></i> @lang('Upload Video')
                                                             </a>
                                                         </div>
