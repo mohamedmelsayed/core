@@ -29,11 +29,12 @@
                                 <div id="time-indicator" class="time-indicator"></div>
 
                                 <!-- Volume Control -->
-                                <div class="vlc-volume">
-                                    <input type="range" class="volume-slider" id="v-slider" min="0" max="1"
-                                        step="0.1" value="0.5">
-                                </div>
-                                <i class="las la-speaker"></i>
+                                <button class="audio-control play-btn"  id="play-pause">
+                                    <i class="fas fa-volume-mute" style="scale: 120%"></i>
+                                </button>
+                                <button class="audio-control play-btn"  id="play-pause">
+                                    <i class="fas fa-volume-up" style="scale: 120%"></i>
+                                </button>
 
 
                             </div>
