@@ -93,40 +93,32 @@
                             @foreach ($featuredMovies as $featured)
                                 <div class="swiper-slide">
                                     <div class="movie-item">
-                                        <div class="movie-thumb" style="position: relative; overflow: hidden; border-radius: 10px;">
+                                        <div class="movie-thumb">
                                             <img class="lazy-loading-img"
-                                                data-src="{{ getImage(getFilePath('item_portrait') . '/' . $featured->image->portrait) }}"
-                                                src="{{ asset('assets/global/images/lazy.png') }}" alt="movie" style="width: 100%; height: auto; border-radius: 10px;">
-
-                                            <!-- Display Free or Trailer Badge -->
+                                                data-src="{{ getImage(getFilePath('item_portrait') . $featured->image->portrait) }}"
+                                                src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
                                             @if ($featured->item_type == 1 && $featured->version == 0)
-                                                <span class="movie-badge" style="background-color: #28a745; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
-                                                    @lang('Free')
-                                                </span>
+                                                <span class="movie-badge">@lang('Free')</span>
                                             @elseif($featured->item_type == 3)
-                                                <span class="movie-badge" style="background-color: #dc3545; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
-                                                    @lang('Trailer')
-                                                </span>
+                                                <span class="movie-badge">@lang('Trailer')</span>
                                             @endif
-
-                                            <!-- Play Button Overlay -->
-                                            <div class="movie-thumb-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); opacity: 0; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease-in-out;">
-                                                <a class="video-icon" href="{{ route('watch', $featured->slug) }}" style="font-size: 30px; color: white;">
-                                                    <i class="fas fa-play"></i>
-                                                </a>
+                                            <div class="movie-thumb-overlay">
+                                                <a class="video-icon" href="{{ route('watch', $featured->slug) }}"><i
+                                                        class="fas fa-play"></i></a>
                                             </div>
 
-                                            <!-- Media Type Icon (Audio or Video) -->
-                                            <span class="media-type" style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 14px;">
+                                            <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                                            <span class="media-type"
+                                                style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
                                                 @if ($featured->is_audio)
                                                     <i class="fas fa-headphones"></i> <!-- Audio Icon -->
                                                 @else
                                                     <i class="fas fa-video"></i> <!-- Video Icon -->
                                                 @endif
                                             </span>
+
                                         </div>
                                     </div>
-
                                 </div>
                             @endforeach
                         </div>
