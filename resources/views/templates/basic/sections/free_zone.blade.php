@@ -11,22 +11,22 @@
             @foreach ($frees as $free)
             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                 <div class="movie-item">
-                    <div class="movie-thumb" style="position: relative; overflow: hidden; border-radius: 10px;">
-                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $free->image->portrait) }}" alt="movie" style="width: 100%; height: auto; border-radius: 10px;">
+                    <div class="movie-thumb" style="position: relative;">
+                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $free->image->portrait) }}" alt="movie">
 
                         <!-- Display "Paid" if the item is not free with a yellow badge -->
                         @if ($free->version != 0)
-                        <span class="movie-badge" style="background-color: yellow; color: black; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
+                        <span class="movie-badge" style="background-color: yellow; color: black; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
                             @lang('Paid')
                         </span>
                         @else
-                        <span class="movie-badge" style="background-color: #28a745; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
+                        <span class="movie-badge" style="position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px;">
                             @lang('Free')
                         </span>
                         @endif
 
                         <!-- Display Font Awesome icon based on is_audio inside the thumb -->
-                        <span class="media-type" style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 14px;">
+                        <span class="media-type" style="position: absolute; top: 10px; right: 10px; background-color: #000; color: #fff; padding: 5px 10px; border-radius: 5px;">
                             @if($free->is_audio)
                                 <i class="fas fa-headphones"></i> <!-- Audio Icon -->
                             @else
@@ -34,8 +34,8 @@
                             @endif
                         </span>
 
-                        <div class="movie-thumb-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); opacity: 0; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease-in-out;">
-                            <a class="video-icon" href="{{ $free->is_audio ? route('preview.audio', $free->slug) : route('watch', $free->slug) }}" style="font-size: 30px; color: white;">
+                        <div class="movie-thumb-overlay">
+                            <a class="video-icon" href="{{ $free->is_audio ? route('preview.audio', $free->slug) : route('watch', $free->slug) }}">
                                 <i class="fas fa-play"></i>
                             </a>
                         </div>
