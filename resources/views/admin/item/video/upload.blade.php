@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="" id="uploadForm" method="POST" enctype="multipart/form-data">
+                    <form action="{{route}}" id="uploadForm" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="tab-content" id="pills-tabContent">

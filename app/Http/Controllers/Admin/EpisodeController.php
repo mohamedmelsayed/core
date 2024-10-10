@@ -100,7 +100,7 @@ class EpisodeController extends Controller {
         $prevUrl   = route('admin.item.episodes', $episode->item_id);
         $item      = $episode->item;
         $route     = route('admin.item.episode.upload', $episode->id);
-        return view('admin.item.video.upload', compact('pageTitle', 'episode', 'video', 'prevUrl', 'item'));
+        return view('admin.item.video.upload', compact('pageTitle', 'episode', 'video', 'prevUrl', 'item','route'));
     }
 
     public function storeEpisodeVideo(Request $request, $id) {
@@ -142,7 +142,6 @@ class EpisodeController extends Controller {
         }
 
         if (!$video) {
-            dd('hi');
             $video             = new Video();
             $video->episode_id = $episode->id;
         }

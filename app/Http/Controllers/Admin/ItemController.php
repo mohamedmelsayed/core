@@ -469,10 +469,11 @@ class ItemController extends Controller
             $notify[] = ['error', 'Already video exist'];
             return back()->withNotify($notify);
         }
+        $route     = route('admin.item.uploadVideo', $item->id);
 
         $pageTitle = "Upload video to: " . $item->title;
         $prevUrl = route('admin.item.index');
-        return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl'));
+        return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl','route'));
     }
 
     public function updateVideo(Request $request, $id)
