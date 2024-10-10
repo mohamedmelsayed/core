@@ -162,7 +162,7 @@ class SiteController extends Controller
         if ($request->sectionName == 'end') {
             return response('end');
         }
-        $items = Item::hasVideo()->orHasAudio();
+        $items = Item::scopeHasVideoOrAudio();
 
         if ($request->sectionName == 'recent_added') {
             $data['recent_added'] = (clone $items)->where('item_type', Status::SINGLE_ITEM)->orderBy('id', 'desc')->limit(18)->get();

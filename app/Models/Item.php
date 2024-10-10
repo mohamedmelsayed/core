@@ -54,6 +54,14 @@ class Item extends Model {
         return $this->hasMany(Wishlist::class);
     }
 
+    public function scopeHasVideoOrAudio($query) {
+        return $query->where(function ($q) {
+            $q->whereHas('video')
+              ->orWhereHas('audio');
+        });
+    }
+
+
     public function getVersionNameAttribute() {
         $versionName = '';
         if ($this->version == Status::FREE_VERSION && $this->is_trailer == Status::NO) {
