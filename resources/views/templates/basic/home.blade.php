@@ -98,14 +98,10 @@
                                                 data-src="{{ getImage(getFilePath('item_portrait') . '/' . $featured->image->portrait) }}"
                                                 src="{{ asset('assets/global/images/lazy.png') }}" alt="movie" style="width: 100%; height: auto; border-radius: 10px;">
 
-                                            <!-- Display Free, Paid, or Trailer Badge -->
+                                            <!-- Display Free or Trailer Badge -->
                                             @if ($featured->item_type == 1 && $featured->version == 0)
                                                 <span class="movie-badge" style="background-color: #28a745; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
                                                     @lang('Free')
-                                                </span>
-                                            @elseif($featured->version == 1)
-                                                <span class="movie-badge" style="background-color: yellow; color: black; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
-                                                    @lang('Paid')
                                                 </span>
                                             @elseif($featured->item_type == 3)
                                                 <span class="movie-badge" style="background-color: #dc3545; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">
@@ -130,7 +126,6 @@
                                             </span>
                                         </div>
                                     </div>
-
 
                                 </div>
                             @endforeach
