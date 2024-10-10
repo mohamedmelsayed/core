@@ -18,6 +18,15 @@
                             <div class="movie-thumb-overlay">
                                 <a class="video-icon" href="{{ route('watch', $latestSeries->slug) }}"><i class="fas fa-play"></i></a>
                             </div>
+                              <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                              <span class="media-type"
+                              style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                              @if ($featured->is_audio)
+                                  <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                              @else
+                                  <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                              @endif
+                          </span>
                         </div>
                     </div>
                 </div>
