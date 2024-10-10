@@ -442,7 +442,7 @@
                 event.stopPropagation();
                 volumeUpButton.style.display = "none"; // Hide volume up button
                 muteButton.style.display = "block"; // Show mute button
-                wavesurfer.setVolume(1); // Set volume to full
+                wavesurfer.setVolume(0); // Set volume to full
             });
 
             // Toggle mute
@@ -450,7 +450,7 @@
                 event.stopPropagation();
                 volumeUpButton.style.display = "block"; // Show volume up button
                 muteButton.style.display = "none"; // Hide mute button
-                wavesurfer.setVolume(0); // Mute volume
+                wavesurfer.setVolume(1); // Mute volume
             });
 
             // Toggle repeat functionality
