@@ -105,7 +105,7 @@ class EpisodeController extends Controller {
 
     public function storeEpisodeVideo(Request $request, $id) {
         $episode = Episode::findOrFail($id);
-        ini_set('memory_limit', '-1');
+        //ini_set('memory_limit', '-1');
 
         $video = $episode->video;
         if ($video) {
@@ -116,7 +116,7 @@ class EpisodeController extends Controller {
             $sevenTwentyVideo = 'required_if:video_type,1';
         }
 
-        ini_set('memory_limit', '-1');
+        //ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
 
             'video_type'    => 'required',
@@ -146,7 +146,7 @@ class EpisodeController extends Controller {
             $video->episode_id = $episode->id;
         }
 
-
+        dd('here');
 
 
         if ($request->hasFile('seven_twenty_video') || $request->seven_twenty_link) {

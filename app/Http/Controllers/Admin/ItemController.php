@@ -360,7 +360,7 @@ class ItemController extends Controller
             $audioFileRule = 'required_if:audio_type,1';
         }
 
-        ini_set('memory_limit', '-1');
+        //ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
             'audio_type' => 'required',
             'link' => $audioLinkRule,
@@ -497,7 +497,7 @@ class ItemController extends Controller
 
     public function updateItemVideo(Request $request, $id)
     {
-        ini_set('memory_limit', '-1');
+        //ini_set('memory_limit', '-1');
         $validation_rule['video_type'] = 'required';
         $validation_rule['link'] = 'required_without:video';
 
@@ -575,7 +575,7 @@ class ItemController extends Controller
             $sevenTwentyVideo = 'required_if:video_type_seven_twenty,1';
         }
 
-        ini_set('memory_limit', '-1');
+        //ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
             'video_type_three_sixty' => 'required',
             'three_sixty_link' => 'nullable',
