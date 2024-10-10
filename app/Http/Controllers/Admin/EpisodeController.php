@@ -21,7 +21,7 @@ class EpisodeController extends Controller {
             return redirect()->route('admin.dashboard')->withNotify($notify);
         }
         $pageTitle = "All Episode of : " . $item->title;
-        $episodes  = Episode::with('video')->where('item_id', $item->id)->paginate(getPaginate());
+        $episodes  = Episode::with('video','item')->where('item_id', $item->id)->paginate(getPaginate());
         return view('admin.item.episode.index', compact('pageTitle', 'item', 'episodes'));
     }
 
@@ -118,17 +118,17 @@ class EpisodeController extends Controller {
 
         ini_set('memory_limit', '-1');
         $validator = Validator::make($request->all(), [
-    
+
             'video_type'    => 'required',
             'seven_twenty_link'          => "$sevenTwentyLink",
             'video'         => ["$sevenTwentyVideo", new FileTypeValidate(['mp4', 'mkv', '3gp'])],
 
-          
+
         ], [
-        
+
             'seven_twenty_link'          => 'Video file 720P link is required',
             'video'         => 'Video file 720P video is required',
-            
+
         ]);
 
         if ($validator->fails()) {
@@ -144,8 +144,8 @@ class EpisodeController extends Controller {
             $video->episode_id = $episode->id;
         }
 
-     
-  
+
+
         if ($request->hasFile('seven_twenty_video') || $request->seven_twenty_link) {
             $uploadSevenTwenty = MultiVideoUploader::multiQualityVideoUpload($video, 'seven_twenty');
             if ($uploadSevenTwenty['error']) {
@@ -155,7 +155,7 @@ class EpisodeController extends Controller {
             $video->seven_twenty_video      = @$uploadSevenTwenty['seven_twenty_video'];
             $video->server_seven_twenty     = @$uploadSevenTwenty['server'] ?? 0;
         }
-        
+
 
         $video->save();
         return response()->json('success');
