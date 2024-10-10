@@ -9,30 +9,31 @@
                         <div class="main-audio">
                             @foreach ($audios as $audio)
                                 <div>
-                                    <div id="audio-player">
-                                        <audio id="audio" src="{{ $audio->content }}" controls
-                                            style="display:none;"></audio>
+                                    <div class="audio-card">
+                                        <div class="audio-thumbnail-container">
+                                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" id="thumbnail" alt="Thumbnail" />
+                                        </div>
 
-                                        <div id="audio-controls-container">
+                                        <div class="audio-details">
                                             <div id="file-title">{{ __($seoContents['social_title']) }}</div>
-                                            <div id="audio-controls">
-                                                <button class="audio-control" id="play-pause"><i
-                                                        class="las la-play-circle"></i></button>
-                                                <div class="volume-control">
-                                                    <input type="range" class="volume-slider" id="v-slider"
-                                                        min="0" max="1" step="0.1" value="0.5">
+
+                                            <div id="audio-player">
+                                                <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
+                                                <div id="audio-controls-container">
+                                                    <div id="audio-controls">
+                                                        <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
+                                                        <button class="audio-control" id="repeat-btn"><i class="las la-redo-alt"></i></button>
+                                                        <div class="volume-control">
+                                                            <input type="range" class="volume-slider" id="v-slider" min="0" max="1" step="0.1" value="0.5">
+                                                        </div>
+                                                    </div>
+                                                    <div id="waveform"></div>
+                                                    <div id="time-indicator"></div>
                                                 </div>
-                                                <!-- New Repeat Button -->
-                                                <button class="audio-control" id="repeat-btn">
-                                                    <i class="las la-redo-alt"></i>
-                                                </button>
-                                                <div id="waveform"></div>
-                                                <div id="time-indicator"></div>
                                             </div>
                                         </div>
-                                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                                            id="thumbnail" />
                                     </div>
+
 
 
                                 </div>
@@ -279,183 +280,64 @@
     </section>
 @endsection
 <style>
-    #audio-controls button {
-        background-color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    #audio-controls #repeat-btn.active {
-        color: gold;
-        /* Changes color when repeat is active */
-    }
-
-    #audio-player {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: rgb(220, 231, 231);
-        /* Light         background color for the player */
+    .audio-card {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        border-radius: 15px;
+        padding: 20px;
         width: 100%;
-        height: 250px;
-        padding: 10px;
-        box-sizing: border-box;
+        max-width: 400px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         position: relative;
     }
 
-    .audio-container .volume-control {
-        display: inline-block;
-        width: 150px;
-        /* Adjust the width as needed */
+    .audio-thumbnail {
+        width: 100px;
+        height: 100px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .volume-slider {
-        width: 100%;
-        height: 4px;
-        background: #f3f5f1;
-        border-radius: 5px;
-        outline: none;
-        transition: opacity 0.2s;
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-        width: 16px;
-        height: 16px;
-        background: rgba(241, 195, 88, 0.836);
-        border-radius: 50%;
-        cursor: pointer;
-        -webkit-appearance: none;
-        appearance: none;
-    }
-
-    .volume-slider::-moz-range-thumb {
-        width: 16px;
-        height: 16px;
-        background: #cd81ce;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-
-    #audio-controls-container {
-        display: flex;
-        align-items: center;
+    .audio-controls {
         flex: 1;
-        max-width: calc(100% - 220px);
-        /* Adjust to account for thumbnail */
-        margin-right: 10px;
-        /* Space between controls and thumbnail */
-        background-color: rgba(128, 108, 61, 0.705);
-        /* Background color for controls area */
-        padding: 10px;
-        /* Optional: Rounded corners for the controls area */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        /* Optional: Shadow for better visibility */
+        margin-left: 15px;
+        color: white;
     }
 
-    #file-title {
-        text-align: center;
-        margin-bottom: 10px;
-        color: #f7ecec;
+    .audio-title {
         font-size: 18px;
         font-weight: bold;
     }
 
-    #audio-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
+    .audio-artist {
+        font-size: 14px;
+        opacity: 0.8;
+        margin-bottom: 10px;
     }
 
-    #audio-controls button {
-        background-color: rgb(255, 255, 255);
+    .play-button {
+        background: rgba(255, 255, 255, 0.2);
         border: none;
-        padding: 10px;
-        border-radius: 5px;
+        padding: 15px;
+        border-radius: 50%;
         cursor: pointer;
+        transition: all 0.3s;
     }
 
-    #waveform {
-        flex: 1;
-        height: 100px;
-        margin-right: 10px;
-        /* Space between waveform and time indicator */
+    .play-button:hover {
+        background: rgba(255, 255, 255, 0.5);
+        transform: scale(1.1);
     }
 
-    #time-indicator {
-        width: 60px;
-        text-align: center;
+    .waveform {
+        width: 100%;
+        margin-top: 10px;
     }
 
-    #thumbnail {
-        width: 200px;
-        height: 200px;
-        background: url("{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}") no-repeat center center;
-        background-size: cover;
-        border-radius: 20%;
-        margin-left: 10px;
-    }
-
-    /* Responsive styling */
-    @media (max-width: 768px) {
-        #audio-player {
-            height: 200px;
-        }
-
-        #audio-controls-container {
-            max-width: 100%;
-            margin-right: 0;
-        }
-
-        #thumbnail {
-            display: none;
-        }
-
-        #file-title {
-            font-size: 16px;
-        }
-
-        #waveform {
-            height: 80px;
-        }
-
-        #audio-controls button {
-            padding: 8px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        #audio-player {
-            flex-direction: column;
-            align-items: flex-start;
-            height: auto;
-        }
-
-        #audio-controls-container {
-            width: 100%;
-            margin: 0;
-            padding: 5px;
-        }
-
-        #file-title {
-            font-size: 14px;
-        }
-
-        #waveform {
-            height: 60px;
-        }
-
-        #audio-controls button {
-            padding: 6px;
-            font-size: 14px;
-        }
-
-        #time-indicator {
-            width: 50px;
-        }
+    .volume-control {
+        margin-top: 10px;
     }
 </style>
 
