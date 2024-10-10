@@ -11,25 +11,29 @@
                                 <div class="audio-card">
                                     <img class="audio-thumbnail"
                                         src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                                        alt="Thumbnail">
+                                        alt="Audio Thumbnail">
 
-                                    <div class="audio-controls">
-                                        <div class="audio-title">{{ __($seoContents['social_title']) }}</div>
-                                        <div class="audio-artist">{{ __($seoContents['artist_name']) }}</div>
+                                    <div class="audio-player">
+                                        <div class="audio-info">
+                                            <div class="audio-title">{{ __($seoContents['social_title']) }}</div>
+                                            <div class="audio-artist">{{ __($seoContents['artist_name']) }}</div>
+                                        </div>
 
-                                        <div class="control-buttons">
+                                        <div class="audio-controls">
                                             <button class="audio-control play-button" id="play-pause"><i
                                                     class="las la-play-circle"></i></button>
-                                            <button class="audio-control repeat-button" id="repeat-btn"><i
-                                                    class="las la-redo-alt"></i></button>
-
                                             <div class="volume-control">
                                                 <input type="range" class="volume-slider" id="v-slider" min="0"
                                                     max="1" step="0.1" value="0.5">
                                             </div>
+                                            <button class="audio-control repeat-button" id="repeat-btn"><i
+                                                    class="las la-redo-alt"></i></button>
                                         </div>
 
-                                        <div class="waveform" id="waveform"></div>
+                                        <div class="waveform-container">
+                                            <div id="waveform"></div>
+                                        </div>
+
                                         <div class="time-indicator" id="time-indicator">00:00</div>
                                     </div>
                                 </div>
@@ -278,35 +282,47 @@
 <style>
     /* Audio Card Container */
     .audio-card {
+        display: flex;
         background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
         border-radius: 15px;
         padding: 20px;
-        width: 100%;
-        max-width: 450px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        display: flex;
-        flex-direction: row;
+        max-width: 600px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         align-items: center;
         position: relative;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(15px);
+        gap: 20px;
+        transition: transform 0.3s ease;
     }
 
-    /* Thumbnail Image */
+    /* Hover Effect */
+    .audio-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Thumbnail */
     .audio-thumbnail {
         width: 100px;
         height: 100px;
         border-radius: 15px;
+        object-fit: cover;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Controls Section */
-    .audio-controls {
+    /* Player and Controls */
+    .audio-player {
         flex: 1;
-        margin-left: 15px;
-        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     /* Audio Title and Artist */
+    .audio-info {
+        color: white;
+        text-align: left;
+    }
+
     .audio-title {
         font-size: 20px;
         font-weight: bold;
@@ -319,8 +335,8 @@
         margin-bottom: 10px;
     }
 
-    /* Control Buttons */
-    .control-buttons {
+    /* Controls */
+    .audio-controls {
         display: flex;
         gap: 15px;
         align-items: center;
@@ -328,37 +344,36 @@
 
     /* Play Button */
     .play-button {
-        background: rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.2);
         border: none;
         padding: 15px;
         border-radius: 50%;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     .play-button:hover {
-        background: rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.5);
         transform: scale(1.1);
     }
 
     /* Repeat Button */
     .repeat-button {
-        background: rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.2);
         border: none;
         padding: 12px;
         border-radius: 50%;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     .repeat-button:hover {
-        background: rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.5);
         transform: scale(1.1);
     }
 
     /* Volume Control */
     .volume-control {
-        margin-left: auto;
         width: 100px;
     }
 
@@ -367,24 +382,26 @@
         cursor: pointer;
     }
 
-    /* Waveform Visualization */
-    .waveform {
+    /* Waveform Container */
+    .waveform-container {
         width: 100%;
-        height: 40px;
+        height: 70px;
         margin-top: 10px;
-        background-color: #1e1e1e;
-        border-radius: 5px;
+    }
+
+    #waveform {
+        height: 100%;
     }
 
     /* Time Indicator */
     .time-indicator {
+        font-size: 14px;
+        color: #ddd;
         text-align: right;
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.7);
         margin-top: 5px;
     }
 
-    /* Media Query for Responsive Design */
+    /* Responsive Design */
     @media (max-width: 768px) {
         .audio-thumbnail {
             display: none;
@@ -396,11 +413,6 @@
         }
 
         .audio-controls {
-            margin-left: 0;
-            width: 100%;
-        }
-
-        .control-buttons {
             width: 100%;
             justify-content: space-between;
         }
@@ -416,10 +428,11 @@
             const audioElement = document.getElementById('audio');
             const waveform = WaveSurfer.create({
                 container: '#waveform',
-                waveColor: 'blue',
-                progressColor: 'purple',
-                barWidth: 2,
-                height: 40
+                waveColor: 'rgba(255, 255, 255, 0.2)',
+                progressColor: 'rgba(255, 255, 255, 0.7)',
+                barWidth: 3,
+                responsive: true,
+                height: 70
             });
 
             waveform.load(audioElement.src);
@@ -440,7 +453,7 @@
             repeatButton.addEventListener('click', function() {
                 isRepeating = !isRepeating;
                 this.style.color = isRepeating ? '#FFD700' : '#FFF'; // Highlight when active
-                waveform.setLoop(isRepeating);
+                audioElement.loop = isRepeating;
             });
 
             // Update time indicator
