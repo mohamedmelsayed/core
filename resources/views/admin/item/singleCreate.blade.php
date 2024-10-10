@@ -186,7 +186,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4 position-relative">
                             <label>@lang('Ratings') <small class="text--primary">(@lang('maximum 10 star'))</small></label>
                             <div class="input-group">
                                 <input class="form-control" name="ratings" type="number" value="{{ old('ratings') }}" step="any" placeholder="Ratings">

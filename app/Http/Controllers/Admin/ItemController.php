@@ -429,8 +429,13 @@ class ItemController extends Controller
 
     public function postStreamConfig(Request $request, $id)
     {
-        $validation_rule['embed_code'] = 'required';
-
+        $validated = Validator::make($request->all(), [
+            'embed_code' => 'required',
+            'start_at' => 'required,date',
+        ]);
+        if ($validated->fails()) {
+            return response()->json(['error' => $validator->errors()->all()]);
+        }
         $item = Item::findOrFail($id);
         if($item==null){
         $notify[] = ['error', 'item does not exists'];
@@ -440,14 +445,16 @@ class ItemController extends Controller
         $stream = $item->stream;
 
         if ($stream) {
-            $stream->embed_code=$request->embed_code;
+            $stream->embed_code= $validated['embed_code'];
+            $stream->start_at= $validated['start_at'];
             $stream->save();
 
         }
         else{
              $stream=new Stream;
-             $stream->embed_code=$request->embed_code;
-             $stream->item_id=$id;
+             $stream->embed_code= $validated['embed_code'];
+             $stream->start_at= $validated['start_at'];
+            $stream->item_id=$id;
              $stream->save();
 
         }
