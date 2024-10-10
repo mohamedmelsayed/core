@@ -265,25 +265,8 @@
         background-color: rgba(255, 255, 255, 0.5);
     }
 
-    /* Volume control */
-    .vlc-volume-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .vlc-volume {
-        width: 5px;
-        height: 100px;
-        background: linear-gradient(to top, #ff0000, #00ff00);
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-    }
 
     .volume-slider {
-        -webkit-appearance: none;
         width: 5px;
         height: 100%;
         background: transparent;
@@ -292,8 +275,6 @@
     }
 
     .volume-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
         width: 15px;
         height: 15px;
         border-radius: 50%;
@@ -356,9 +337,7 @@
         }
 
         .audio-thumbnail {
-            width: 100px;
-            height: 100px;
-            margin-top: 15px;
+           display: none;
         }
 
         .vlc-volume-container {
