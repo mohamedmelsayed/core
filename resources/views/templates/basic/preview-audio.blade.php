@@ -397,13 +397,13 @@
     .vlc-volume {
         position: absolute;
         top: -110px;
-        /* Adjusted to push the slider upwards */
+        /* Adjust as necessary */
         left: -5px;
         width: 35px;
         height: 100px;
         background: transparent;
         transform: scaleY(0);
-        /* Initially hidden */
+        /* Hidden by default */
         transform-origin: bottom;
         transition: transform 0.2s ease-in-out;
     }
@@ -441,8 +441,17 @@
         cursor: pointer;
     }
 
-    .volume-slider-container {
-        position: relative;
+    /* Ensure the slider appears larger on mobile for easier touch */
+    @media (max-width: 768px) {
+        .vlc-volume {
+            height: 80px;
+            /* Adjust for mobile */
+        }
+
+        .volume-slider {
+            height: 80px;
+            /* Ensure it's easily touchable */
+        }
     }
 
     /* Waveform */
@@ -492,8 +501,8 @@
 
             const wavesurfer = WaveSurfer.create({
                 container: '#waveform',
-                waveColor: 'blue',
-                progressColor: 'purple',
+                waveColor: 'white',
+                progressColor: '#58BFE1',
                 barWidth: 2,
                 responsive: true,
                 normalize: true,
