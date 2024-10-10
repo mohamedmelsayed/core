@@ -13,7 +13,7 @@
                             <div id="audio-controls" class="audio-controls">
                                 <!-- Play/Pause Button -->
                                 {{-- <button class="audio-control play-btn" id="play-pause"> --}}
-                                <i class="fas fa-play-circle" id="play-pause" style="scale: 120%"></i>
+                                <i class="fas fa-play-circle" id="play-pause" style="scale: 220%"></i>
 
                                 {{-- </button> --}}
 
