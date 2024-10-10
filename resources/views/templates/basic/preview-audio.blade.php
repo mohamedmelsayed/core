@@ -393,7 +393,7 @@
                 partialRender: true
             });
 
-            wavesurfer.load('{{ $audio->content }}');
+            wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
 
             playPauseButton.addEventListener('click', function(event) {
