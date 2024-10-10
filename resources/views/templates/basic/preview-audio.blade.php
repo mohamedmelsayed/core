@@ -8,35 +8,31 @@
                     <div class="audio-item">
                         <div class="main-audio">
                             @foreach ($audios as $audio)
+                                <div class="audio-card">
+                                    <img class="audio-thumbnail"
+                                        src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
+                                        alt="Thumbnail">
 
-                                    <div class="audio-card">
-                                        <div class="audio-thumbnail-container">
-                                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" id="thumbnail" alt="Thumbnail" />
-                                        </div>
+                                    <div class="audio-controls">
+                                        <div class="audio-title">{{ __($seoContents['social_title']) }}</div>
+                                        <div class="audio-artist">{{ __($seoContents['artist_name']) }}</div>
 
-                                        <div class="audio-details">
-                                            <div id="file-title">{{ __($seoContents['social_title']) }}</div>
+                                        <div class="control-buttons">
+                                            <button class="audio-control play-button" id="play-pause"><i
+                                                    class="las la-play-circle"></i></button>
+                                            <button class="audio-control repeat-button" id="repeat-btn"><i
+                                                    class="las la-redo-alt"></i></button>
 
-                                            <div id="audio-player">
-                                                <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
-                                                <div id="audio-controls-container">
-                                                    <div id="audio-controls">
-                                                        <button class="audio-control" id="play-pause"><i class="las la-play-circle"></i></button>
-                                                        <button class="audio-control" id="repeat-btn"><i class="las la-redo-alt"></i></button>
-                                                        <div class="volume-control">
-                                                            <input type="range" class="volume-slider" id="v-slider" min="0" max="1" step="0.1" value="0.5">
-                                                        </div>
-                                                    </div>
-                                                    <div id="waveform"></div>
-                                                    <div id="time-indicator"></div>
-                                                </div>
+                                            <div class="volume-control">
+                                                <input type="range" class="volume-slider" id="v-slider" min="0"
+                                                    max="1" step="0.1" value="0.5">
                                             </div>
                                         </div>
+
+                                        <div class="waveform" id="waveform"></div>
+                                        <div class="time-indicator" id="time-indicator">00:00</div>
                                     </div>
-
-
-
-
+                                </div>
                             @endforeach
 
                             @if ($item->version == Status::RENT_VERSION && !$watchEligable)
@@ -280,19 +276,22 @@
     </section>
 @endsection
 <style>
+    /* Audio Card Container */
     .audio-card {
         background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
         border-radius: 15px;
         padding: 20px;
         width: 100%;
-        max-width: 400px;
+        max-width: 450px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         display: flex;
         flex-direction: row;
         align-items: center;
         position: relative;
+        backdrop-filter: blur(10px);
     }
 
+    /* Thumbnail Image */
     .audio-thumbnail {
         width: 100px;
         height: 100px;
@@ -300,15 +299,18 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
+    /* Controls Section */
     .audio-controls {
         flex: 1;
         margin-left: 15px;
         color: white;
     }
 
+    /* Audio Title and Artist */
     .audio-title {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
+        color: #fff;
     }
 
     .audio-artist {
@@ -317,13 +319,21 @@
         margin-bottom: 10px;
     }
 
+    /* Control Buttons */
+    .control-buttons {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    /* Play Button */
     .play-button {
         background: rgba(255, 255, 255, 0.2);
         border: none;
         padding: 15px;
         border-radius: 50%;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
     }
 
     .play-button:hover {
@@ -331,13 +341,69 @@
         transform: scale(1.1);
     }
 
-    .waveform {
-        width: 100%;
-        margin-top: 10px;
+    /* Repeat Button */
+    .repeat-button {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        padding: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
 
+    .repeat-button:hover {
+        background: rgba(255, 255, 255, 0.5);
+        transform: scale(1.1);
+    }
+
+    /* Volume Control */
     .volume-control {
+        margin-left: auto;
+        width: 100px;
+    }
+
+    .volume-slider {
+        width: 100%;
+        cursor: pointer;
+    }
+
+    /* Waveform Visualization */
+    .waveform {
+        width: 100%;
+        height: 40px;
         margin-top: 10px;
+        background-color: #1e1e1e;
+        border-radius: 5px;
+    }
+
+    /* Time Indicator */
+    .time-indicator {
+        text-align: right;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 5px;
+    }
+
+    /* Media Query for Responsive Design */
+    @media (max-width: 768px) {
+        .audio-thumbnail {
+            display: none;
+        }
+
+        .audio-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .audio-controls {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .control-buttons {
+            width: 100%;
+            justify-content: space-between;
+        }
     }
 </style>
 
@@ -346,94 +412,40 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const playPauseButton = document.getElementById('play-pause');
-            const volumeSlider = document.getElementById('v-slider');
-            // const volumeUpButton = document.getElementById('volume-up');
-            // const volumeDownButton = document.getElementById('volume-down');
-            //  const audioControlButtons = document.querySelectorAll('.audio-control');
             const repeatButton = document.getElementById('repeat-btn');
-            let isRepeat = false; // To track the repeat mode
-            const wavesurfer = WaveSurfer.create({
+            const audioElement = document.getElementById('audio');
+            const waveform = WaveSurfer.create({
                 container: '#waveform',
                 waveColor: 'blue',
                 progressColor: 'purple',
                 barWidth: 2,
-                responsive: true,
-                normalize: true,
-                interact: true,
-                height: 100,
-                barGap: 3,
-                partialRender: true
+                height: 40
             });
 
-            wavesurfer.load('{{ $audios[0]->content }}');
-            wavesurfer.play();
+            waveform.load(audioElement.src);
 
-            playPauseButton.addEventListener('click', function(event) {
-                event.stopPropagation();
-                if (wavesurfer.isPlaying()) {
-                    wavesurfer.pause();
+            // Play/Pause functionality
+            playPauseButton.addEventListener('click', function() {
+                if (waveform.isPlaying()) {
+                    waveform.pause();
+                    this.innerHTML = '<i class="las la-play-circle"></i>';
                 } else {
-                    wavesurfer.play();
+                    waveform.play();
+                    this.innerHTML = '<i class="las la-pause-circle"></i>';
                 }
             });
 
-            document.addEventListener('keydown', function(event) {
-                if (event.code === 'Space') {
-                    event.preventDefault();
-                    if (wavesurfer.isPlaying()) {
-                        wavesurfer.pause();
-                    } else {
-                        wavesurfer.play();
-                    }
-                }
-            });
-
-            // volumeUpButton.addEventListener('click', function(event) {
-            //     event.stopPropagation();
-            //     let currentVolume = wavesurfer.getVolume();
-            //     wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
-            // });
-
-            // volumeDownButton.addEventListener('click', function(event) {
-            //     event.stopPropagation();
-            //     let currentVolume = wavesurfer.getVolume();
-            //     wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
-            // });
-
-            // audioControlButtons.forEach(button => {
-            //     button.addEventListener('click', function(event) {
-            //         event.stopPropagation();
-            //     });
-            // });
-
-            // Volume Slider Control
-            volumeSlider.addEventListener("input", (event) => {
-                event.stopPropagation();
-                const volume = event.target.value;
-                wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
-            });
-
-            // Toggle repeat functionality
+            // Repeat functionality
+            let isRepeating = false;
             repeatButton.addEventListener('click', function() {
-                isRepeat = !isRepeat; // Toggle repeat mode
-                if (isRepeat) {
-                    repeatButton.classList.add('active'); // Highlight the button
-                } else {
-                    repeatButton.classList.remove('active');
-                }
-            });
-
-            // When the audio finishes, check if repeat mode is active
-            wavesurfer.on('finish', function() {
-
-                if (isRepeat) {
-                    wavesurfer.play(); // Repeat the audio
-                }
+                isRepeating = !isRepeating;
+                this.style.color = isRepeating ? '#FFD700' : '#FFF'; // Highlight when active
+                waveform.setLoop(isRepeating);
             });
 
             // Update time indicator
-            wavesurfer.on('audioprocess', function() {
-                const currentTime = wavesurfer.getCurrentTime();
+            waveform.on('audioprocess', function() {
+                const currentTime = waveform.getCurrentTime();
                 document.getElementById('time-indicator').innerText = formatTime(currentTime);
             });
 
@@ -447,5 +459,109 @@
                 return number < 10 ? `0${number}` : number;
             }
         });
+
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     const playPauseButton = document.getElementById('play-pause');
+        //     const volumeSlider = document.getElementById('v-slider');
+        //     // const volumeUpButton = document.getElementById('volume-up');
+        //     // const volumeDownButton = document.getElementById('volume-down');
+        //     //  const audioControlButtons = document.querySelectorAll('.audio-control');
+        //     const repeatButton = document.getElementById('repeat-btn');
+        //     let isRepeat = false; // To track the repeat mode
+        //     const wavesurfer = WaveSurfer.create({
+        //         container: '#waveform',
+        //         waveColor: 'blue',
+        //         progressColor: 'purple',
+        //         barWidth: 2,
+        //         responsive: true,
+        //         normalize: true,
+        //         interact: true,
+        //         height: 100,
+        //         barGap: 3,
+        //         partialRender: true
+        //     });
+
+        //     wavesurfer.load('{{ $audios[0]->content }}');
+        //     wavesurfer.play();
+
+        //     playPauseButton.addEventListener('click', function(event) {
+        //         event.stopPropagation();
+        //         if (wavesurfer.isPlaying()) {
+        //             wavesurfer.pause();
+        //         } else {
+        //             wavesurfer.play();
+        //         }
+        //     });
+
+        //     document.addEventListener('keydown', function(event) {
+        //         if (event.code === 'Space') {
+        //             event.preventDefault();
+        //             if (wavesurfer.isPlaying()) {
+        //                 wavesurfer.pause();
+        //             } else {
+        //                 wavesurfer.play();
+        //             }
+        //         }
+        //     });
+
+        //     // volumeUpButton.addEventListener('click', function(event) {
+        //     //     event.stopPropagation();
+        //     //     let currentVolume = wavesurfer.getVolume();
+        //     //     wavesurfer.setVolume(Math.min(currentVolume + 0.1, 1));
+        //     // });
+
+        //     // volumeDownButton.addEventListener('click', function(event) {
+        //     //     event.stopPropagation();
+        //     //     let currentVolume = wavesurfer.getVolume();
+        //     //     wavesurfer.setVolume(Math.max(currentVolume - 0.1, 0));
+        //     // });
+
+        //     // audioControlButtons.forEach(button => {
+        //     //     button.addEventListener('click', function(event) {
+        //     //         event.stopPropagation();
+        //     //     });
+        //     // });
+
+        //     // Volume Slider Control
+        //     volumeSlider.addEventListener("input", (event) => {
+        //         event.stopPropagation();
+        //         const volume = event.target.value;
+        //         wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
+        //     });
+
+        //     // Toggle repeat functionality
+        //     repeatButton.addEventListener('click', function() {
+        //         isRepeat = !isRepeat; // Toggle repeat mode
+        //         if (isRepeat) {
+        //             repeatButton.classList.add('active'); // Highlight the button
+        //         } else {
+        //             repeatButton.classList.remove('active');
+        //         }
+        //     });
+
+        //     // When the audio finishes, check if repeat mode is active
+        //     wavesurfer.on('finish', function() {
+
+        //         if (isRepeat) {
+        //             wavesurfer.play(); // Repeat the audio
+        //         }
+        //     });
+
+        //     // Update time indicator
+        //     wavesurfer.on('audioprocess', function() {
+        //         const currentTime = wavesurfer.getCurrentTime();
+        //         document.getElementById('time-indicator').innerText = formatTime(currentTime);
+        //     });
+
+        //     function formatTime(seconds) {
+        //         const minutes = Math.floor(seconds / 60);
+        //         const remainingSeconds = Math.floor(seconds % 60);
+        //         return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+        //     }
+
+        //     function padZero(number) {
+        //         return number < 10 ? `0${number}` : number;
+        //     }
+        // });
     </script>
 @endpush
