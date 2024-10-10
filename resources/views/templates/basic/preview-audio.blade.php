@@ -12,8 +12,8 @@
                             <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
                             <div id="audio-controls" class="audio-controls">
                                 <!-- Play/Pause Button -->
-                                <button class="audio-control play-btn" id="play-pause">
-                                    <i class="las la-play-circle"></i>
+                                <button class="audio-control play-btn"  id="play-pause">
+                                    <i class="las la-play-circle" style="scale: 120%"></i>
                                 </button>
 
 
