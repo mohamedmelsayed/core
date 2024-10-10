@@ -6,61 +6,43 @@
             <div class="row @if (blank($episodes)) justify-content-center @endif mb-30-none">
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="audio-item">
-                        <div class="main-audio">
-                            @foreach ($audios as $audio)
-                                <div id="audio-player" class="audio-player-container">
-                                    <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
+                        <div id="audio-player" class="audio-player-container">
+                            <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
 
-                                    <div id="audio-controls-container" class="audio-controls-container">
-                                        <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}
-                                        </div>
-                                        <div id="audio-controls" class="audio-controls">
-                                            <button class="audio-control play-btn" id="play-pause">
-                                                <i class="las la-play-circle"></i>
-                                            </button>
+                            <div id="audio-controls-container" class="audio-controls-container">
+                                <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
+                                <div id="audio-controls" class="audio-controls">
+                                    <button class="audio-control play-btn" id="play-pause">
+                                        <i class="las la-play-circle"></i>
+                                    </button>
 
-                                            <div class="vlc-volume-container">
-                                                <div class="vlc-volume">
-                                                    <input type="range" class="volume-slider" id="v-slider"
-                                                        min="0" max="1" step="0.1" value="0.5">
-                                                </div>
-                                                <i class="las la-volume-up"></i>
-                                            </div>
-
-                                            <!-- Repeat Button -->
-                                            <button class="audio-control repeat-btn" id="repeat-btn">
-                                                <i class="las la-redo-alt"></i>
-                                            </button>
-
-                                            <!-- Waveform display -->
-                                            <div id="waveform" class="waveform"></div>
-
-                                            <!-- Time Indicator -->
-                                            <div id="time-indicator" class="time-indicator"></div>
+                                    <!-- Vertical Volume Slider -->
+                                    <div class="vlc-volume-container">
+                                        <i class="las la-volume-up volume-icon"></i>
+                                        <div class="vlc-volume">
+                                            <input type="range" class="volume-slider" id="v-slider" min="0"
+                                                max="1" step="0.1" value="0.5">
                                         </div>
                                     </div>
 
-                                    <!-- Thumbnail image -->
-                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                                        id="thumbnail" class="audio-thumbnail" />
-                                </div>
-                            @endforeach
+                                    <!-- Repeat Button -->
+                                    <button class="audio-control repeat-btn" id="repeat-btn">
+                                        <i class="las la-redo-alt"></i>
+                                    </button>
 
-                            @if ($item->version == Status::RENT_VERSION && !$watchEligable)
-                                <div class="main-audio-lock">
-                                    <div class="main-audio-lock-content">
-                                        <span class="icon"><i class="las la-lock"></i></span>
-                                        <p class="title">@lang('Purchase Now')</p>
-                                        <p class="price">
-                                            <span
-                                                class="price-amount">{{ $general->cur_sym }}{{ showAmount($item->rent_price) }}</span>
-                                            <span class="small-text ms-3">@lang('For') {{ $item->rental_period }}
-                                                @lang('Days')</span>
-                                        </p>
-                                    </div>
+                                    <!-- Waveform display -->
+                                    <div id="waveform" class="waveform"></div>
+
+                                    <!-- Time Indicator -->
+                                    <div id="time-indicator" class="time-indicator"></div>
                                 </div>
-                            @endif
+                            </div>
+
+                            <!-- Thumbnail image -->
+                            <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
+                                id="thumbnail" class="audio-thumbnail" />
                         </div>
+
                         <div class="audio-content">
                             <div class="audio-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                                 <div class="audio-content-left">
@@ -336,27 +318,35 @@
         border-radius: 50%;
         font-size: 24px;
         cursor: pointer;
-        transition: background 0.3s ease;
+        transition: background 0.3s ease, transform 0.2s ease;
     }
 
     .audio-control:hover {
         background-color: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
     }
 
     /* Volume control */
     .vlc-volume-container {
         position: relative;
         display: flex;
-        align-items: center;
         flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .volume-icon {
+        font-size: 24px;
+        color: #fff;
+        transition: transform 0.3s ease;
     }
 
     .vlc-volume {
         position: absolute;
-        top: -110px;
-        /* Adjust to position the slider */
-        width: 35px;
-        height: 100px;
+        bottom: -120px;
+        left: -30px;
+        width: 30px;
+        height: 120px;
         background: transparent;
         transform: scaleY(0);
         /* Initially hidden */
@@ -371,9 +361,13 @@
 
     .volume-slider {
         -webkit-appearance: none;
-        width: 5px;
-        height: 100px;
-        background: #fff;
+        writing-mode: bt-lr;
+        /* Vertical slider */
+        width: 120px;
+        /* Height becomes width */
+        height: 5px;
+        /* Width becomes height */
+        background: linear-gradient(to top, #ff0000 0%, #00ff00 100%);
         border-radius: 5px;
         outline: none;
     }
@@ -394,6 +388,11 @@
         border-radius: 50%;
         background: #ffb400;
         cursor: pointer;
+    }
+
+    /* Hover Effects */
+    .vlc-volume-container:hover .volume-icon {
+        transform: scale(1.2);
     }
 
     /* Waveform styling */
