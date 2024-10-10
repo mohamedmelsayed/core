@@ -23,9 +23,13 @@
                                             <button class="audio-control play-button" id="play-pause"><i
                                                     class="las la-play-circle"></i></button>
 
-                                            <div class="volume-container">
-                                                <input type="range" class="volume-slider" id="v-slider" min="0"
-                                                    max="1" step="0.1" value="0.5">
+                                            <!-- VLC-like Volume Control -->
+                                            <div class="vlc-volume-container">
+                                                <div class="vlc-volume">
+                                                    <input type="range" class="volume-slider" id="v-slider"
+                                                        min="0" max="1" step="0.1" value="0.5"
+                                                        orient="vertical">
+                                                </div>
                                             </div>
 
                                             <button class="audio-control repeat-button" id="repeat-btn"><i
@@ -288,7 +292,8 @@
         background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
         border-radius: 15px;
         padding: 20px;
-        max-width: 600px;
+        max-width: 700px;
+        /* Wider width for larger screens */
         align-items: center;
         position: relative;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
@@ -300,6 +305,13 @@
     .audio-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Wider width for big screens */
+    @media (min-width: 1024px) {
+        .audio-card {
+            max-width: 1000px;
+        }
     }
 
     /* Thumbnail */
@@ -373,17 +385,36 @@
         /* Gold color when active */
     }
 
-    /* Volume Control */
-    .volume-container {
-        display: flex;
-        align-items: center;
+    /* VLC-like Volume Control */
+    .vlc-volume-container {
         position: relative;
+        display: inline-block;
+        height: 20px;
+    }
+
+    .vlc-volume {
+        position: absolute;
+        top: -120px;
+        /* Push the slider upwards */
+        left: -10px;
+        width: 50px;
+        height: 100px;
+        background: transparent;
+        transform: scaleY(0);
+        /* Hide the slider initially */
+        transform-origin: bottom;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .vlc-volume-container:hover .vlc-volume {
+        transform: scaleY(1);
+        /* Show the slider when hovering */
     }
 
     .volume-slider {
         -webkit-appearance: none;
-        width: 100px;
-        height: 5px;
+        width: 5px;
+        height: 100%;
         background: #ddd;
         border-radius: 5px;
         outline: none;
