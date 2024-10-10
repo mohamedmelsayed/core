@@ -280,57 +280,54 @@
     </section>
 @endsection
 <style>
-    /* Audio Card Container */
+    /* Main Audio Card */
     .audio-card {
         display: flex;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
         border-radius: 15px;
         padding: 20px;
         max-width: 600px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         align-items: center;
         position: relative;
-        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
         gap: 20px;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     /* Hover Effect */
     .audio-card:hover {
         transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
-    /* Thumbnail */
+    /* Thumbnail Styling */
     .audio-thumbnail {
         width: 100px;
         height: 100px;
         border-radius: 15px;
         object-fit: cover;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    /* Player and Controls */
-    .audio-player {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    /* Audio Title and Artist */
+    /* Player Info */
     .audio-info {
-        color: white;
+        color: #fff;
         text-align: left;
+        flex: 1;
     }
 
     .audio-title {
         font-size: 20px;
         font-weight: bold;
-        color: #fff;
+        color: #58BFE1;
+        /* Light blue from logo */
     }
 
     .audio-artist {
         font-size: 14px;
+        color: #FFA500;
+        /* Orange from logo */
         opacity: 0.8;
         margin-bottom: 10px;
     }
@@ -344,7 +341,8 @@
 
     /* Play Button */
     .play-button {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(88, 191, 225, 0.8);
+        /* Blue color from logo */
         border: none;
         padding: 15px;
         border-radius: 50%;
@@ -353,13 +351,14 @@
     }
 
     .play-button:hover {
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(88, 191, 225, 1);
         transform: scale(1.1);
     }
 
     /* Repeat Button */
     .repeat-button {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 165, 0, 0.8);
+        /* Orange color from logo */
         border: none;
         padding: 12px;
         border-radius: 50%;
@@ -368,7 +367,7 @@
     }
 
     .repeat-button:hover {
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 165, 0, 1);
         transform: scale(1.1);
     }
 
@@ -382,7 +381,7 @@
         cursor: pointer;
     }
 
-    /* Waveform Container */
+    /* Waveform */
     .waveform-container {
         width: 100%;
         height: 70px;
@@ -422,56 +421,57 @@
 @push('script')
     <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const playPauseButton = document.getElementById('play-pause');
-            const repeatButton = document.getElementById('repeat-btn');
-            const audioElement = document.getElementById('audio');
-            const waveform = WaveSurfer.create({
-                container: '#waveform',
-                waveColor: 'rgba(255, 255, 255, 0.2)',
-                progressColor: 'rgba(255, 255, 255, 0.7)',
-                barWidth: 3,
-                responsive: true,
-                height: 70
-            });
+    document.addEventListener('DOMContentLoaded', function () {
+    const playPauseButton = document.getElementById('play-pause');
+    const repeatButton = document.getElementById('repeat-btn');
+    const audioElement = document.getElementById('audio');
+    const waveform = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: 'rgba(255, 255, 255, 0.2)',
+        progressColor: 'rgba(255, 255, 255, 0.7)',
+        barWidth: 3,
+        responsive: true,
+        height: 70
+    });
 
-            waveform.load(audioElement.src);
+    waveform.load(audioElement.src);
 
-            // Play/Pause functionality
-            playPauseButton.addEventListener('click', function() {
-                if (waveform.isPlaying()) {
-                    waveform.pause();
-                    this.innerHTML = '<i class="las la-play-circle"></i>';
-                } else {
-                    waveform.play();
-                    this.innerHTML = '<i class="las la-pause-circle"></i>';
-                }
-            });
+    // Play/Pause functionality
+    playPauseButton.addEventListener('click', function () {
+        if (waveform.isPlaying()) {
+            waveform.pause();
+            this.innerHTML = '<i class="las la-play-circle"></i>';
+        } else {
+            waveform.play();
+            this.innerHTML = '<i class="las la-pause-circle"></i>';
+        }
+    });
 
-            // Repeat functionality
-            let isRepeating = false;
-            repeatButton.addEventListener('click', function() {
-                isRepeating = !isRepeating;
-                this.style.color = isRepeating ? '#FFD700' : '#FFF'; // Highlight when active
-                audioElement.loop = isRepeating;
-            });
+    // Repeat functionality
+    let isRepeating = false;
+    repeatButton.addEventListener('click', function () {
+        isRepeating = !isRepeating;
+        this.style.color = isRepeating ? '#FFD700' : '#FFF';  // Highlight when active
+        audioElement.loop = isRepeating;
+    });
 
-            // Update time indicator
-            waveform.on('audioprocess', function() {
-                const currentTime = waveform.getCurrentTime();
-                document.getElementById('time-indicator').innerText = formatTime(currentTime);
-            });
+    // Update time indicator
+    waveform.on('audioprocess', function () {
+        const currentTime = waveform.getCurrentTime();
+        document.getElementById('time-indicator').innerText = formatTime(currentTime);
+    });
 
-            function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = Math.floor(seconds % 60);
-                return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
-            }
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+    }
 
-            function padZero(number) {
-                return number < 10 ? `0${number}` : number;
-            }
-        });
+    function padZero(number) {
+        return number < 10 ? `0${number}` : number;
+    }
+});
+
 
         // document.addEventListener('DOMContentLoaded', function() {
         //     const playPauseButton = document.getElementById('play-pause');
