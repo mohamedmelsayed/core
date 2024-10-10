@@ -399,7 +399,7 @@
         left: -10px;
         width: 50px;
         height: 100px;
-        background: transparent;
+        background: white;
         transform: scaleY(0);
         /* Hide the slider initially */
         transform-origin: bottom;
