@@ -267,7 +267,7 @@
 
 
     .volume-slider {
-        width: 5px;
+        width: 20px;
         height: 100%;
         background: transparent;
         outline: none;
@@ -332,7 +332,7 @@
         }
 
         .audio-controls {
-            flex-direction: column;
+            flex-direction: row;
             gap: 15px;
         }
 
@@ -340,10 +340,7 @@
            display: none;
         }
 
-        .vlc-volume-container {
-            display: none;
-            /* Hide the volume control on mobile */
-        }
+
     }
 </style>
 
