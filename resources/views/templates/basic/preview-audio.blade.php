@@ -16,11 +16,6 @@
                                     <i class="las la-play-circle"></i>
                                 </button>
 
-                                <!-- Volume Control -->
-                                <div class="vlc-volume">
-                                    <input type="range" class="volume-slider" id="v-slider" min="0" max="1"
-                                        step="0.1" value="0.5">
-                                </div>
 
                                 <!-- Repeat Button -->
                                 <button class="audio-control repeat-btn" id="repeat-btn">
@@ -32,6 +27,15 @@
 
                                 <!-- Time Indicator -->
                                 <div id="time-indicator" class="time-indicator"></div>
+
+                                <!-- Volume Control -->
+                                <div class="vlc-volume">
+                                    <input type="range" class="volume-slider" id="v-slider" min="0" max="1"
+                                        step="0.1" value="0.5">
+                                </div>
+                                <i class="las la-speaker"></i>
+
+
                             </div>
                         </div>
 
@@ -122,87 +126,85 @@
         </div>
     </section>
     <section class="movie-section ptb-80">
-        @if (($item->is_audio && $relatedAudios->isNotEmpty())  )
+        @if ($item->is_audio && $relatedAudios->isNotEmpty())
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-header">
+                            <h2 class="section-title">@lang(!$item->is_audio ? 'Related Video' : 'Related Audio')</h2>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="section-header">
-                        <h2 class="section-title">@lang(!$item->is_audio ? 'Related Video' : 'Related Audio')</h2>
-
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center mb-30-none">
-                @foreach ($item->is_audio ? $relatedAudios : $relatedItems as $related)
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
-                        <div class="movie-item">
-                            <div class="movie-thumb">
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
-                                    alt="movie">
-                                <span class="movie-badge">{{ __($related->versionName) }}</span>
-                                <div class="movie-thumb-overlay">
-                                    <a class="video-icon"
-                                        href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
-                                            class="fas fa-play"></i></a>
-                                </div>
-
-                                <!-- Display Font Awesome icon based on is_audio inside the thumb -->
-                                <span class="media-type"
-                                    style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                    @if ($related->is_audio)
-                                        <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
-                                    @else
-                                        <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
-                                    @endif
-                                </span>
-                            </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+                <div class="row justify-content-center mb-30-none">
+                    @foreach ($item->is_audio ? $relatedAudios : $relatedItems as $related)
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                            <div class="movie-item">
+                                <div class="movie-thumb">
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
+                                        alt="movie">
+                                    <span class="movie-badge">{{ __($related->versionName) }}</span>
+                                    <div class="movie-thumb-overlay">
+                                        <a class="video-icon"
+                                            href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
+                                                class="fas fa-play"></i></a>
+                                    </div>
 
-        </div>
+                                    <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                                    <span class="media-type"
+                                        style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                        @if ($related->is_audio)
+                                            <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                        @else
+                                            <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+            </div>
         @endif
-        @if (($item->is_audio && $relatedItems->isNotEmpty())  )
-
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="section-header">
-                        <h2 class="section-title">@lang($item->is_audio ? 'Related Video' : 'Related Audio')</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center mb-30-none">
-                @foreach (!$item->is_audio ? $relatedAudios : $relatedItems as $related)
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
-                        <div class="movie-item">
-                            <div class="movie-thumb">
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
-                                    alt="movie">
-                                <span class="movie-badge">{{ __($related->versionName) }}</span>
-                                <div class="movie-thumb-overlay">
-                                    <a class="video-icon"
-                                        href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
-                                            class="fas fa-play"></i></a>
-                                </div>
-                                <!-- Display Font Awesome icon based on is_audio inside the thumb -->
-                                <span class="media-type"
-                                    style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                    @if ($related->is_audio)
-                                        <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
-                                    @else
-                                        <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
-                                    @endif
-                                </span>
-                            </div>
+        @if ($item->is_audio && $relatedItems->isNotEmpty())
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-header">
+                            <h2 class="section-title">@lang($item->is_audio ? 'Related Video' : 'Related Audio')</h2>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+                <div class="row justify-content-center mb-30-none">
+                    @foreach (!$item->is_audio ? $relatedAudios : $relatedItems as $related)
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                            <div class="movie-item">
+                                <div class="movie-thumb">
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
+                                        alt="movie">
+                                    <span class="movie-badge">{{ __($related->versionName) }}</span>
+                                    <div class="movie-thumb-overlay">
+                                        <a class="video-icon"
+                                            href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
+                                                class="fas fa-play"></i></a>
+                                    </div>
+                                    <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                                    <span class="media-type"
+                                        style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                        @if ($related->is_audio)
+                                            <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                        @else
+                                            <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
 
-        </div>
+            </div>
         @endif
     </section>
 @endsection
