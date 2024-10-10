@@ -13,7 +13,7 @@
                             <div id="audio-controls" class="audio-controls">
                                 <!-- Play/Pause Button -->
                                 <button class="audio-control play-btn"  id="play-pause">
-                                    <i class="las la-play-fill" style="scale: 120%"></i>
+                                    <i class="fas fa-play" style="scale: 120%"></i>
                                 </button>
 
 
