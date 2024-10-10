@@ -99,21 +99,12 @@
 
                                     <!-- Display "Paid" if the item is not free with a yellow badge -->
                                     @if ($item->version != 0)
-                                        <span class="movie-badge"
-                                            style="background-color: yellow; color: black;">@lang('Paid')</span>
+                                        <span class="movie-badge" >@lang('Paid')</span>
                                     @else
                                         <span class="movie-badge">@lang('Free')</span>
                                     @endif
 
-                                    <!-- Display Font Awesome icon based on is_audio inside the thumb -->
-                                    <span class="media-type"
-                                        style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                        @if ($item->is_audio)
-                                            <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
-                                        @else
-                                            <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
-                                        @endif
-                                    </span>
+
 
 
                                     <div class="movie-thumb-overlay">
@@ -122,6 +113,16 @@
                                             <i class="fas fa-play"></i>
                                         </a>
                                     </div>
+
+                                       <!-- Display Font Awesome icon based on is_audio inside the thumb -->
+                                       <span class="media-type"
+                                       style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                       @if ($item->is_audio)
+                                           <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                       @else
+                                           <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                       @endif
+                                   </span>
                                 </div>
                             </div>
                         </div>
