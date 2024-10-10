@@ -7,7 +7,7 @@
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="audio-item">
                         <div id="audio-player" class="audio-player-container">
-                            <audio id="audio" src="{{ $audio[0]->content }}" controls style="display:none;"></audio>
+                            <audio id="audio" src="{{ $audio->content }}" controls style="display:none;"></audio>
 
                             <div id="audio-controls-container" class="audio-controls-container">
                                 <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
@@ -18,7 +18,6 @@
 
                                     <!-- Vertical Volume Slider -->
                                     <div class="vlc-volume-container">
-                                        <i class="las la-volume-up volume-icon"></i>
                                         <div class="vlc-volume">
                                             <input type="range" class="volume-slider" id="v-slider" min="0"
                                                 max="1" step="0.1" value="0.5">
@@ -318,40 +317,30 @@
         border-radius: 50%;
         font-size: 24px;
         cursor: pointer;
-        transition: background 0.3s ease, transform 0.2s ease;
+        transition: background 0.3s ease;
     }
 
     .audio-control:hover {
         background-color: rgba(255, 255, 255, 0.2);
-        transform: scale(1.1);
     }
 
     /* Volume control */
     .vlc-volume-container {
         position: relative;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        gap: 10px;
-    }
-
-    .volume-icon {
-        font-size: 24px;
-        color: #fff;
-        transition: transform 0.3s ease;
+        flex-direction: column;
     }
 
     .vlc-volume {
-        position: absolute;
-        bottom: -120px;
-        left: -30px;
-        width: 30px;
-        height: 120px;
+
+        top: -110px;
+        /* Adjust to position the slider */
+        width: 35px;
+        height: 100px;
         background: transparent;
         transform: scaleY(0);
-        /* Initially hidden */
-        transform-origin: bottom;
-        transition: transform 0.3s ease-in-out;
+
     }
 
     .vlc-volume-container:hover .vlc-volume {
@@ -361,13 +350,9 @@
 
     .volume-slider {
         -webkit-appearance: none;
-        writing-mode: bt-lr;
-        /* Vertical slider */
-        width: 120px;
-        /* Height becomes width */
-        height: 5px;
-        /* Width becomes height */
-        background: linear-gradient(to top, #ff0000 0%, #00ff00 100%);
+        width: 5px;
+        height: 100px;
+        background: #fff;
         border-radius: 5px;
         outline: none;
     }
@@ -388,11 +373,6 @@
         border-radius: 50%;
         background: #ffb400;
         cursor: pointer;
-    }
-
-    /* Hover Effects */
-    .vlc-volume-container:hover .volume-icon {
-        transform: scale(1.2);
     }
 
     /* Waveform styling */
@@ -463,7 +443,7 @@
                 partialRender: true
             });
 
-            wavesurfer.load('{{ $audios[0]->content }}');
+            wavesurfer.load('{{ $audio->content }}');
             wavesurfer.play();
 
             playPauseButton.addEventListener('click', function(event) {
