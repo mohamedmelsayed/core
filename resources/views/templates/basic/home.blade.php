@@ -98,9 +98,9 @@
                                                 data-src="{{ getImage(getFilePath('item_portrait') . $featured->image->portrait) }}"
                                                 src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
                                             @if ($featured->item_type == 1 && $featured->version == 0)
-                                                <span class="movie-badge">@lang('Free')</span>
+                                                <span class="movie-badge free">@lang('Free')</span>
                                             @elseif($featured->item_type == 3)
-                                                <span class="movie-badge">@lang('Trailer')</span>
+                                                <span class="movie-badge pais">@lang('Trailer')</span>
                                             @endif
                                             <div class="movie-thumb-overlay">
                                                 <a class="video-icon" href="{{ route('watch', $featured->slug) }}"><i
