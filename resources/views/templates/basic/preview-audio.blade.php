@@ -405,7 +405,7 @@
 
             const wavesurfer = WaveSurfer.create({
                 container: '#waveform',
-                waveColor: 'blue',
+                waveColor: 'white',
                 progressColor: 'purple',
                 barWidth: 2,
                 responsive: true,
