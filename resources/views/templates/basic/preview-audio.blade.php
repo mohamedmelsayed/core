@@ -12,10 +12,10 @@
                             <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
                             <div id="audio-controls" class="audio-controls">
                                 <!-- Play/Pause Button -->
-                                {{-- <button class="audio-control play-btn" id="play-pause"> --}}
-                                <i class="fas fa-play-circle" id="play-pause" style="scale: 220%"></i>
+                                <button class="audio-control play-btn" id="play-pause">
+                                    <i class="fas fa-play" style="scale: 120%"></i>
 
-                                {{-- </button> --}}
+                                </button>
 
                                 <button class="audio-control repeat-btn" id="repeat-btn">
                                     <i class="fas fa-redo" style="scale: 120%"></i>
@@ -235,6 +235,11 @@
         font-weight: 600;
         text-align: center;
         margin-bottom: 20px;
+    }
+
+    .audio-controls.play-btn {
+
+        align-items: center;
     }
 
     /* Audio controls container (taking 80% width) */
