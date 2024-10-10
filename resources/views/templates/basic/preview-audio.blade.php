@@ -12,8 +12,12 @@
                             <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
                             <div id="audio-controls" class="audio-controls">
                                 <!-- Play/Pause Button -->
-                                <button class="audio-control play-btn"  id="play-pause">
+                                <button class="audio-control play-btn" id="play-pause">
                                     <i class="fas fa-play" style="scale: 120%"></i>
+
+                                </button>
+
+                                <button class="audio-control repeat-btn" id="repeat-btn">
                                     <i class="fas fa-redo" style="scale: 120%"></i>
 
                                 </button>
@@ -27,10 +31,10 @@
                                 <div id="time-indicator" class="time-indicator"></div>
 
                                 <!-- Volume Control -->
-                                <button class="audio-control play-btn"  id="v-mute">
-                                    <i class="fas fa-volume-mute" style="scale: 120%"></i>
+                                <button class="audio-control play-btn" id="v-mute">
+                                    <i class="fas fa-volume-mute" style="scale: 120%;display:none;"></i>
                                 </button>
-                                <button class="audio-control play-btn"  id="v-up">
+                                <button class="audio-control play-btn" id="v-up">
                                     <i class="fas fa-volume-up" style="scale: 120%"></i>
                                 </button>
 
@@ -395,84 +399,79 @@
 @push('script')
     <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const playPauseButton = document.getElementById('play-pause');
-            // const volumeSlider = document.getElementById('v-slider');
-            const repeatButton = document.getElementById('repeat-btn');
-            const muteButton = document.getElementById('v-mute');
-            const volumeUpButton = document.getElementById('v-up');
-            let isRepeat = false; // Track repeat mode
+        const muteButton = document.getElementById('v-mute');
+        const volumeUpButton = document.getElementById('v-up');
+        let isRepeat = false; // Track repeat mode
 
-            const wavesurfer = WaveSurfer.create({
-                container: '#waveform',
-                waveColor: 'white',
-                progressColor: 'purple',
-                barWidth: 2,
-                responsive: true,
-                normalize: true,
-                interact: true,
-                height: 100,
-                barGap: 3,
-                partialRender: true
-            });
+        const wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'white',
+            progressColor: 'purple',
+            barWidth: 2,
+            responsive: true,
+            normalize: true,
+            interact: true,
+            height: 100,
+            barGap: 3,
+            partialRender: true
+        });
 
-            wavesurfer.load('{{ $audios[0]->content }}');
-            wavesurfer.play();
+        wavesurfer.load('{{ $audios[0]->content }}');
+        wavesurfer.play();
 
-            playPauseButton.addEventListener('click', function(event) {
-                event.stopPropagation();
-                if (wavesurfer.isPlaying()) {
-                    wavesurfer.pause();
-                } else {
-                    wavesurfer.play();
-                }
-            });
-
-
-            volumeUpButton.addEventListener("input", (event) => {
-                event.stopPropagation();
-                volumeUpButton.innerHtml.style="display:none";
-                muteButton.innerHtml.style="display:block";
-                const volume = event.target.value;
-                wavesurfer.setVolume(1); // Set the volume in the WaveSurfer instance
-            });
-
-            muteButton.addEventListener("input", (event) => {
-                event.stopPropagation();
-                volumeUpButton.innerHtml.style="display:block";
-                muteButton.innerHtml.style="display:none";
-                const volume = event.target.value;
-                wavesurfer.setVolume(0); // Set the volume in the WaveSurfer instance
-            });
-
-            // Toggle repeat functionality
-            repeatButton.addEventListener('click', function() {
-                isRepeat = !isRepeat; // Toggle repeat mode
-                repeatButton.classList.toggle('active', isRepeat);
-            });
-
-            // When the audio finishes, check if repeat mode is active
-            wavesurfer.on('finish', function() {
-                if (isRepeat) {
-                    wavesurfer.play(); // Repeat the audio
-                }
-            });
-
-            // Update time indicator
-            wavesurfer.on('audioprocess', function() {
-                const currentTime = wavesurfer.getCurrentTime();
-                document.getElementById('time-indicator').innerText = formatTime(currentTime);
-            });
-
-            function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = Math.floor(seconds % 60);
-                return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+        playPauseButton.addEventListener('click', function(event) {
+            event.stopPropagation();
+            if (wavesurfer.isPlaying()) {
+                wavesurfer.pause();
+            } else {
+                wavesurfer.play();
             }
+        });
 
-            function padZero(number) {
-                return number < 10 ? `0${number}` : number;
+        // Toggle volume up (unmute)
+        volumeUpButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            volumeUpButton.style.display = "none"; // Hide volume up button
+            muteButton.style.display = "block"; // Show mute button
+            wavesurfer.setVolume(1); // Set volume to full
+        });
+
+        // Toggle mute
+        muteButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            volumeUpButton.style.display = "block"; // Show volume up button
+            muteButton.style.display = "none"; // Hide mute button
+            wavesurfer.setVolume(0); // Mute volume
+        });
+
+        // Toggle repeat functionality
+        repeatButton.addEventListener('click', function() {
+            isRepeat = !isRepeat; // Toggle repeat mode
+            repeatButton.classList.toggle('active', isRepeat);
+        });
+
+        // When the audio finishes, check if repeat mode is active
+        wavesurfer.on('finish', function() {
+            if (isRepeat) {
+                wavesurfer.play(); // Repeat the audio
             }
+        });
+
+        // Update time indicator
+        wavesurfer.on('audioprocess', function() {
+            const currentTime = wavesurfer.getCurrentTime();
+            document.getElementById('time-indicator').innerText = formatTime(currentTime);
+        });
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+        }
+
+        function padZero(number) {
+            return number < 10 ? `0${number}` : number;
+        }
         });
 
 
