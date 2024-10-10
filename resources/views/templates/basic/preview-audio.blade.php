@@ -19,12 +19,7 @@
                                                 <i class="las la-play-circle"></i>
                                             </button>
 
-                                            <div class="vlc-volume-container">
-                                                <div class="vlc-volume">
-                                                    <input type="range" class="volume-slider" id="v-slider"
-                                                        min="0" max="1" step="0.1" value="0.5">
-                                                </div>
-                                            </div>
+
 
                                             <!-- Repeat Button -->
                                             <button class="audio-control repeat-btn" id="repeat-btn">
@@ -36,6 +31,13 @@
 
                                             <!-- Time Indicator -->
                                             <div id="time-indicator" class="time-indicator"></div>
+
+                                            <div class="vlc-volume-container">
+                                                <div class="vlc-volume">
+                                                    <input type="range" class="volume-slider" id="v-slider"
+                                                        min="0" max="1" step="0.1" value="0.5">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -355,14 +357,9 @@
         width: 35px;
         height: 100px;
         background: transparent;
-        transform: scaleY(0);
         /* Initially hidden */
     }
 
-    .vlc-volume-container:hover .vlc-volume {
-        transform: scaleY(1);
-        /* Show the slider on hover */
-    }
 
     .volume-slider {
         -webkit-appearance: none;
