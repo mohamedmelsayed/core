@@ -14,15 +14,12 @@
                                 <!-- Play/Pause Button -->
                                 <button class="audio-control play-btn" id="play-pause">
                                     <i class="fas fa-play" style="scale: 120%"></i>
-
                                 </button>
 
+                                <!-- Repeat Button -->
                                 <button class="audio-control repeat-btn" id="repeat-btn">
                                     <i class="fas fa-redo" style="scale: 120%"></i>
-
                                 </button>
-
-
 
                                 <!-- Waveform display -->
                                 <div id="waveform" class="waveform"></div>
@@ -37,8 +34,6 @@
                                 <button class="audio-control play-btn" id="v-up">
                                     <i class="fas fa-volume-up" style="scale: 120%"></i>
                                 </button>
-
-
                             </div>
                         </div>
 
@@ -237,11 +232,6 @@
         margin-bottom: 20px;
     }
 
-    .audio-controls.play-btn {
-
-        align-items: center;
-    }
-
     /* Audio controls container (taking 80% width) */
     .audio-controls-container {
         width: 80%;
@@ -277,97 +267,7 @@
         transform: scale(1.1);
     }
 
-    .audio-control:active {
-        background-color: rgba(255, 255, 255, 0.5);
-    }
-
-
-    /* Play Button */
-    .play-button {
-        background-color: rgba(88, 191, 225, 0.8);
-        border: none;
-        padding: 15px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .play-button:hover {
-        background-color: rgba(88, 191, 225, 1);
-        transform: scale(1.1);
-    }
-
-    /* Repeat Button */
-    .repeat-button {
-        background-color: rgba(255, 165, 0, 0.8);
-        border: none;
-        padding: 12px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .repeat-button:hover {
-        background-color: rgba(255, 165, 0, 1);
-        transform: scale(1.1);
-    }
-
-    .repeat-button.active {
-        background-color: #FFD700;
-        /* Gold color when active */
-    }
-
-    /* Volume Control */
-    .volume-container {
-        display: flex;
-        align-items: center;
-        position: relative;
-    }
-
-    .volume-slider {
-        -webkit-appearance: none;
-        width: 100px;
-        height: 5px;
-        background: #ddd;
-        border-radius: 5px;
-        outline: none;
-        transition: background 0.3s ease;
-    }
-
-    .volume-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        background: #58BFE1;
-        cursor: pointer;
-    }
-
-    .volume-slider::-moz-range-thumb {
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        background: #58BFE1;
-        cursor: pointer;
-    }
-
-
-    /* Waveform styling */
-    .waveform {
-        width: 50%;
-        height: 80px;
-        background-color: transparent;
-    }
-
-    /* Time indicator */
-    .time-indicator {
-        color: #fff;
-        font-size: 16px;
-        margin-left: 10px;
-    }
-
-    /* Thumbnail styling (taking 20% width) */
+    /* Thumbnail styling */
     .audio-thumbnail {
         width: 150px;
         height: 150px;
@@ -396,92 +296,86 @@
         .audio-thumbnail {
             display: none;
         }
-
-
     }
 </style>
 
 @push('script')
     <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const playPauseButton = document.getElementById('play-pause');
-            // const volumeSlider = document.getElementById('v-slider');
-            const repeatButton = document.getElementById('repeat-btn');
-            const muteButton = document.getElementById('v-mute');
-            const volumeUpButton = document.getElementById('v-up');
-            let isRepeat = false; // Track repeat mode
+      document.addEventListener('DOMContentLoaded', function() {
+        const playPauseButton = document.getElementById('play-pause');
+        const repeatButton = document.getElementById('repeat-btn');
+        const muteButton = document.getElementById('v-mute');
+        const volumeUpButton = document.getElementById('v-up');
+        let isRepeat = false;
 
-            const wavesurfer = WaveSurfer.create({
-                container: '#waveform',
-                waveColor: 'white',
-                progressColor: 'purple',
-                barWidth: 2,
-                responsive: true,
-                normalize: true,
-                interact: true,
-                height: 100,
-                barGap: 3,
-                partialRender: true
-            });
+        const wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'white',
+            progressColor: 'purple',
+            barWidth: 2,
+            responsive: true,
+            normalize: true,
+            interact: true,
+            height: 100,
+            barGap: 3,
+            partialRender: true
+        });
 
-            wavesurfer.load('{{ $audios[0]->content }}');
-            wavesurfer.play();
+        wavesurfer.load('{{ $audios[0]->content }}');
+        wavesurfer.play();
 
-            playPauseButton.addEventListener('click', function(event) {
-                event.stopPropagation();
-                if (wavesurfer.isPlaying()) {
-                    wavesurfer.pause();
-                } else {
-                    wavesurfer.play();
-                }
-            });
-
-            // Toggle volume up (unmute)
-            volumeUpButton.addEventListener("click", (event) => {
-                event.stopPropagation();
-                volumeUpButton.style.display = "none"; // Hide volume up button
-                muteButton.style.display = "block"; // Show mute button
-                wavesurfer.setVolume(0); // Set volume to full
-            });
-
-            // Toggle mute
-            muteButton.addEventListener("click", (event) => {
-                event.stopPropagation();
-                volumeUpButton.style.display = "block"; // Show volume up button
-                muteButton.style.display = "none"; // Hide mute button
-                wavesurfer.setVolume(1); // Mute volume
-            });
-
-            // Toggle repeat functionality
-            repeatButton.addEventListener('click', function() {
-                isRepeat = !isRepeat; // Toggle repeat mode
-                repeatButton.classList.toggle('active', isRepeat);
-            });
-
-            // When the audio finishes, check if repeat mode is active
-            wavesurfer.on('finish', function() {
-                if (isRepeat) {
-                    wavesurfer.play(); // Repeat the audio
-                }
-            });
-
-            // Update time indicator
-            wavesurfer.on('audioprocess', function() {
-                const currentTime = wavesurfer.getCurrentTime();
-                document.getElementById('time-indicator').innerText = formatTime(currentTime);
-            });
-
-            function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = Math.floor(seconds % 60);
-                return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
-            }
-
-            function padZero(number) {
-                return number < 10 ? `0${number}` : number;
+        playPauseButton.addEventListener('click', function(event) {
+            event.stopPropagation();
+            if (wavesurfer.isPlaying()) {
+                wavesurfer.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                wavesurfer.play();
+                playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
             }
         });
+
+        volumeUpButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            volumeUpButton.style.display = "none"; // Hide volume up button
+            muteButton.style.display = "block"; // Show mute button
+            wavesurfer.setVolume(0); // Mute audio
+        });
+
+        muteButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            volumeUpButton.style.display = "block"; // Show volume up button
+            muteButton.style.display = "none"; // Hide mute button
+            wavesurfer.setVolume(1); // Set volume to full
+        });
+
+        repeatButton.addEventListener('click', function() {
+            isRepeat = !isRepeat;
+            repeatButton.classList.toggle('active', isRepeat);
+        });
+
+        wavesurfer.on('finish', function() {
+            if (isRepeat) {
+                wavesurfer.play();
+            }
+        });
+
+        wavesurfer.on('audioprocess', function() {
+            const currentTime = wavesurfer.getCurrentTime();
+            document.getElementById('time-indicator').innerText = formatTime(currentTime);
+        });
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+        }
+
+        function padZero(number) {
+            return number < 10 ? `0${number}` : number;
+        }
+    });
 
 
 
