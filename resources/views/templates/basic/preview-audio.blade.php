@@ -302,80 +302,80 @@
 @push('script')
     <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const playPauseButton = document.getElementById('play-pause');
-        const repeatButton = document.getElementById('repeat-btn');
-        const muteButton = document.getElementById('v-mute');
-        const volumeUpButton = document.getElementById('v-up');
-        let isRepeat = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            const playPauseButton = document.getElementById('play-pause');
+            const repeatButton = document.getElementById('repeat-btn');
+            const muteButton = document.getElementById('v-mute');
+            const volumeUpButton = document.getElementById('v-up');
+            let isRepeat = false;
 
-        const wavesurfer = WaveSurfer.create({
-            container: '#waveform',
-            waveColor: 'white',
-            progressColor: 'purple',
-            barWidth: 2,
-            responsive: true,
-            normalize: true,
-            interact: true,
-            height: 100,
-            barGap: 3,
-            partialRender: true
-        });
+            const wavesurfer = WaveSurfer.create({
+                container: '#waveform',
+                waveColor: 'white',
+                progressColor: 'purple',
+                barWidth: 2,
+                responsive: true,
+                normalize: true,
+                interact: true,
+                height: 100,
+                barGap: 3,
+                partialRender: true
+            });
 
-        wavesurfer.load('{{ $audios[0]->content }}');
-        wavesurfer.play();
+            wavesurfer.load('{{ $audios[0]->content }}');
+            wavesurfer.play();
 
-        playPauseButton.addEventListener('click', function(event) {
-            event.stopPropagation();
-            if (wavesurfer.isPlaying()) {
-                wavesurfer.pause();
-                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
-            } else {
-                wavesurfer.play();
-                playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+            playPauseButton.addEventListener('click', function(event) {
+                event.stopPropagation();
+                if (wavesurfer.isPlaying()) {
+                    wavesurfer.pause();
+                    playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    wavesurfer.play();
+                    playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            });
+
+            volumeUpButton.addEventListener("click", (event) => {
+                event.stopPropagation();
+                volumeUpButton.style.display = "none"; // Hide volume up button
+                muteButton.style.display = "block"; // Show mute button
+                wavesurfer.setVolume(0); // Mute audio
+            });
+
+            muteButton.addEventListener("click", (event) => {
+                event.stopPropagation();
+                volumeUpButton.style.display = "block"; // Show volume up button
+                muteButton.style.display = "none"; // Hide mute button
+                wavesurfer.setVolume(1); // Set volume to full
+            });
+
+            repeatButton.addEventListener('click', function() {
+                isRepeat = !isRepeat;
+                repeatButton.classList.toggle('active', isRepeat);
+            });
+
+            wavesurfer.on('finish', function() {
+                if (isRepeat) {
+                    wavesurfer.play();
+                }
+            });
+
+            wavesurfer.on('audioprocess', function() {
+                const currentTime = wavesurfer.getCurrentTime();
+                document.getElementById('time-indicator').innerText = formatTime(currentTime);
+            });
+
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+            }
+
+            function padZero(number) {
+                return number < 10 ? `0${number}` : number;
             }
         });
-
-        volumeUpButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            volumeUpButton.style.display = "none"; // Hide volume up button
-            muteButton.style.display = "block"; // Show mute button
-            wavesurfer.setVolume(0); // Mute audio
-        });
-
-        muteButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            volumeUpButton.style.display = "block"; // Show volume up button
-            muteButton.style.display = "none"; // Hide mute button
-            wavesurfer.setVolume(1); // Set volume to full
-        });
-
-        repeatButton.addEventListener('click', function() {
-            isRepeat = !isRepeat;
-            repeatButton.classList.toggle('active', isRepeat);
-        });
-
-        wavesurfer.on('finish', function() {
-            if (isRepeat) {
-                wavesurfer.play();
-            }
-        });
-
-        wavesurfer.on('audioprocess', function() {
-            const currentTime = wavesurfer.getCurrentTime();
-            document.getElementById('time-indicator').innerText = formatTime(currentTime);
-        });
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = Math.floor(seconds % 60);
-            return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
-        }
-
-        function padZero(number) {
-            return number < 10 ? `0${number}` : number;
-        }
-    });
 
 
 
