@@ -100,7 +100,7 @@
                                             @if ($featured->item_type == 1 && $featured->version == 0)
                                                 <span class="movie-badge free">@lang('Free')</span>
                                             @elseif($featured->item_type == 3)
-                                                <span class="movie-badge pais">@lang('Trailer')</span>
+                                                <span class="movie-badge paid">@lang('Trailer')</span>
                                             @endif
                                             <div class="movie-thumb-overlay">
                                                 <a class="video-icon" href="{{ route('watch', $featured->slug) }}"><i
@@ -131,6 +131,96 @@
     <div class="sections"></div>
     <div class="custom_loading"></div>
 @endsection
+
+<style>
+    /* General styling for media type icon */
+.media-type {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px; /* Adjust font size */
+    width: 40px; /* Fixed size for the icon container */
+    height: 40px; /* Fixed height for the icon container */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover effect to slightly enlarge the icon */
+.movie-thumb:hover .media-type {
+    transform: scale(1.1);
+}
+
+/* Styling the icon (adjust sizes accordingly) */
+.media-type img {
+    width: 20px; /* Ensure the icon itself is centered and has consistent size */
+    height: 20px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .media-type {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .media-type img {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+
+/* General styling for movie badge */
+.movie-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: yellow; /* Default background color for paid content */
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px; /* Adjust font size */
+    font-weight: bold;
+    text-transform: uppercase; /* Optional: make the text uppercase */
+    z-index: 2; /* Ensure it stays on top */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow for better visibility */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Free badge specific color */
+.movie-badge.free {
+    background-color: green;
+    color: white;
+}
+
+/* Paid badge specific color */
+.movie-badge.paid {
+    background-color: gold;
+    color: black;
+}
+
+/* Hover effect for the badge */
+.movie-thumb:hover .movie-badge {
+    background-color: orange; /* Change color slightly on hover */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .movie-badge {
+        font-size: 12px; /* Reduce font size on smaller screens */
+        padding: 4px 8px; /* Adjust padding */
+    }
+}
+
+
+</style>
 
 @push('script')
     <script>
