@@ -488,18 +488,21 @@
             const playPauseButton = document.getElementById('play-pause');
             const volumeSlider = document.getElementById('v-slider');
             const repeatButton = document.getElementById('repeat-btn');
-            let isRepeat = false;
+            let isRepeat = false; // To track the repeat mode
 
             const wavesurfer = WaveSurfer.create({
                 container: '#waveform',
-                waveColor: 'rgba(255, 255, 255, 0.2)',
-                progressColor: 'rgba(255, 255, 255, 0.7)',
-                barWidth: 3,
+                waveColor: 'blue',
+                progressColor: 'purple',
+                barWidth: 2,
                 responsive: true,
-                height: 70
+                normalize: true,
+                interact: true,
+                height: 100,
+                barGap: 3,
+                partialRender: true
             });
 
-            // Load and auto-play audio
             wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
 
@@ -507,30 +510,50 @@
                 event.stopPropagation();
                 if (wavesurfer.isPlaying()) {
                     wavesurfer.pause();
-                    this.innerHTML = '<i class="las la-play-circle"></i>';
                 } else {
                     wavesurfer.play();
-                    this.innerHTML = '<i class="las la-pause-circle"></i>';
                 }
             });
 
-            // Volume Slider
+            document.addEventListener('keydown', function(event) {
+                if (event.code === 'Space') {
+                    event.preventDefault();
+                    if (wavesurfer.isPlaying()) {
+                        wavesurfer.pause();
+                    } else {
+                        wavesurfer.play();
+                    }
+                }
+            });
+
+            // Volume Slider Control for mouse input
             volumeSlider.addEventListener("input", (event) => {
                 event.stopPropagation();
                 const volume = event.target.value;
-                wavesurfer.setVolume(volume);
+                wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance
             });
 
-            // Repeat Button functionality
+            // Volume Slider Control for touch input
+            volumeSlider.addEventListener("touchmove", (event) => {
+                event.stopPropagation();
+                const volume = event.target.value;
+                wavesurfer.setVolume(volume); // Set the volume in the WaveSurfer instance for touch devices
+            });
+
+            // Toggle repeat functionality
             repeatButton.addEventListener('click', function() {
-                isRepeat = !isRepeat;
-                this.classList.toggle('active', isRepeat);
+                isRepeat = !isRepeat; // Toggle repeat mode
+                if (isRepeat) {
+                    repeatButton.classList.add('active'); // Highlight the button
+                } else {
+                    repeatButton.classList.remove('active');
+                }
             });
 
-            // When the audio finishes
+            // When the audio finishes, check if repeat mode is active
             wavesurfer.on('finish', function() {
                 if (isRepeat) {
-                    wavesurfer.play();
+                    wavesurfer.play(); // Repeat the audio
                 }
             });
 
@@ -550,6 +573,7 @@
                 return number < 10 ? `0${number}` : number;
             }
         });
+
 
 
 
