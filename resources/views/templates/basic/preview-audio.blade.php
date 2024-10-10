@@ -22,10 +22,12 @@
                                         <div class="audio-controls">
                                             <button class="audio-control play-button" id="play-pause"><i
                                                     class="las la-play-circle"></i></button>
-                                            <div class="volume-control">
+
+                                            <div class="volume-container">
                                                 <input type="range" class="volume-slider" id="v-slider" min="0"
                                                     max="1" step="0.1" value="0.5">
                                             </div>
+
                                             <button class="audio-control repeat-button" id="repeat-btn"><i
                                                     class="las la-redo-alt"></i></button>
                                         </div>
@@ -295,13 +297,12 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* Hover Effect */
     .audio-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
-    /* Thumbnail Styling */
+    /* Thumbnail */
     .audio-thumbnail {
         width: 100px;
         height: 100px;
@@ -321,13 +322,11 @@
         font-size: 20px;
         font-weight: bold;
         color: #58BFE1;
-        /* Light blue from logo */
     }
 
     .audio-artist {
         font-size: 14px;
         color: #FFA500;
-        /* Orange from logo */
         opacity: 0.8;
         margin-bottom: 10px;
     }
@@ -342,7 +341,6 @@
     /* Play Button */
     .play-button {
         background-color: rgba(88, 191, 225, 0.8);
-        /* Blue color from logo */
         border: none;
         padding: 15px;
         border-radius: 50%;
@@ -358,7 +356,6 @@
     /* Repeat Button */
     .repeat-button {
         background-color: rgba(255, 165, 0, 0.8);
-        /* Orange color from logo */
         border: none;
         padding: 12px;
         border-radius: 50%;
@@ -371,13 +368,43 @@
         transform: scale(1.1);
     }
 
+    .repeat-button.active {
+        background-color: #FFD700;
+        /* Gold color when active */
+    }
+
     /* Volume Control */
-    .volume-control {
-        width: 100px;
+    .volume-container {
+        display: flex;
+        align-items: center;
+        position: relative;
     }
 
     .volume-slider {
-        width: 100%;
+        -webkit-appearance: none;
+        width: 100px;
+        height: 5px;
+        background: #ddd;
+        border-radius: 5px;
+        outline: none;
+        transition: background 0.3s ease;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #58BFE1;
+        cursor: pointer;
+    }
+
+    .volume-slider::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #58BFE1;
         cursor: pointer;
     }
 
@@ -400,7 +427,6 @@
         margin-top: 5px;
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
         .audio-thumbnail {
             display: none;
@@ -421,56 +447,73 @@
 @push('script')
     <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const playPauseButton = document.getElementById('play-pause');
-    const repeatButton = document.getElementById('repeat-btn');
-    const audioElement = document.getElementById('audio');
-    const waveform = WaveSurfer.create({
-        container: '#waveform',
-        waveColor: 'rgba(255, 255, 255, 0.2)',
-        progressColor: 'rgba(255, 255, 255, 0.7)',
-        barWidth: 3,
-        responsive: true,
-        height: 70
-    });
+        document.addEventListener('DOMContentLoaded', function() {
+            const playPauseButton = document.getElementById('play-pause');
+            const volumeSlider = document.getElementById('v-slider');
+            const repeatButton = document.getElementById('repeat-btn');
+            let isRepeat = false;
 
-    waveform.load(audioElement.src);
+            const wavesurfer = WaveSurfer.create({
+                container: '#waveform',
+                waveColor: 'rgba(255, 255, 255, 0.2)',
+                progressColor: 'rgba(255, 255, 255, 0.7)',
+                barWidth: 3,
+                responsive: true,
+                height: 70
+            });
 
-    // Play/Pause functionality
-    playPauseButton.addEventListener('click', function () {
-        if (waveform.isPlaying()) {
-            waveform.pause();
-            this.innerHTML = '<i class="las la-play-circle"></i>';
-        } else {
-            waveform.play();
-            this.innerHTML = '<i class="las la-pause-circle"></i>';
-        }
-    });
+            // Load and auto-play audio
+            wavesurfer.load('{{ $audios[0]->content }}');
+            wavesurfer.play();
 
-    // Repeat functionality
-    let isRepeating = false;
-    repeatButton.addEventListener('click', function () {
-        isRepeating = !isRepeating;
-        this.style.color = isRepeating ? '#FFD700' : '#FFF';  // Highlight when active
-        audioElement.loop = isRepeating;
-    });
+            playPauseButton.addEventListener('click', function(event) {
+                event.stopPropagation();
+                if (wavesurfer.isPlaying()) {
+                    wavesurfer.pause();
+                    this.innerHTML = '<i class="las la-play-circle"></i>';
+                } else {
+                    wavesurfer.play();
+                    this.innerHTML = '<i class="las la-pause-circle"></i>';
+                }
+            });
 
-    // Update time indicator
-    waveform.on('audioprocess', function () {
-        const currentTime = waveform.getCurrentTime();
-        document.getElementById('time-indicator').innerText = formatTime(currentTime);
-    });
+            // Volume Slider
+            volumeSlider.addEventListener("input", (event) => {
+                event.stopPropagation();
+                const volume = event.target.value;
+                wavesurfer.setVolume(volume);
+            });
 
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
-    }
+            // Repeat Button functionality
+            repeatButton.addEventListener('click', function() {
+                isRepeat = !isRepeat;
+                this.classList.toggle('active', isRepeat);
+            });
 
-    function padZero(number) {
-        return number < 10 ? `0${number}` : number;
-    }
-});
+            // When the audio finishes
+            wavesurfer.on('finish', function() {
+                if (isRepeat) {
+                    wavesurfer.play();
+                }
+            });
+
+            // Update time indicator
+            wavesurfer.on('audioprocess', function() {
+                const currentTime = wavesurfer.getCurrentTime();
+                document.getElementById('time-indicator').innerText = formatTime(currentTime);
+            });
+
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                return `${padZero(minutes)}:${padZero(remainingSeconds)}`;
+            }
+
+            function padZero(number) {
+                return number < 10 ? `0${number}` : number;
+            }
+        });
+
 
 
         // document.addEventListener('DOMContentLoaded', function() {
