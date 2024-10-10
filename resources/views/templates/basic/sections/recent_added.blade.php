@@ -18,7 +18,7 @@
                             <span class="movie-badge">{{ $latest->versionName }}</span>
                             <div class="movie-thumb-overlay">
                                 <a class="video-icon"
-                                    href="{{ $latest->is_audio ? route('preview.audio', $free->slug) : route('watch', $free->slug) }}">
+                                    href="{{ $latest->is_audio ? route('preview.audio', $latest->slug) : route('watch', $latest->slug) }}">
                                     <i class="fas fa-play"></i>
                                 </a>
                             </div>
