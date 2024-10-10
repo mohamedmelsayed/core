@@ -29,12 +29,12 @@
                                 <div id="time-indicator" class="time-indicator"></div>
 
                                 <!-- Volume Control -->
-                                <button class="audio-control play-btn"  id="play-pause">
+                                {{-- <button class="audio-control play-btn"  id="play-pause">
                                     <i class="fas fa-volume-mute" style="scale: 120%"></i>
                                 </button>
                                 <button class="audio-control play-btn"  id="play-pause">
                                     <i class="fas fa-volume-up" style="scale: 120%"></i>
-                                </button>
+                                </button> --}}
 
 
                             </div>
