@@ -20,6 +20,8 @@ use App\Models\Subtitle;
 use App\Models\User;
 use App\Models\Video;
 use App\Rules\FileTypeValidate;
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -446,14 +448,14 @@ class ItemController extends Controller
 
         if ($stream) {
             $stream->embed_code= $validated['embed_code'];
-            $stream->start_at= $validated['start_at'];
+            $stream->start_at=Carbon::parse($validated['start_at']);
             $stream->save();
 
         }
         else{
              $stream=new Stream;
              $stream->embed_code= $validated['embed_code'];
-             $stream->start_at= $validated['start_at'];
+             $stream->start_at= Carbon::parse($validated['start_at']);
             $stream->item_id=$id;
              $stream->save();
 

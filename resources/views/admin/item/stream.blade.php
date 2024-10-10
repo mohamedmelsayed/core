@@ -6,6 +6,11 @@
             <h2>Stream Configuration for Item {{ $item->title }}</h2>
             <div class="card">
                 <div class="card-body">
+                    @php
+                        use Carbon\Carbon;
+                        $startAt = isset($stream) ? Carbon::parse($stream->start_at) : null;
+                    @endphp
+
                     <form action="{{ route('admin.item.configStream', $item->id) }}" method="POST">
                         @csrf
 
@@ -17,7 +22,7 @@
                         <div class="form-group">
                             <label for="start_at">@lang('Start At')</label>
                             <input type="datetime-local" id="start_at" name="start_at" class="form-control"
-                                value="{{ old('start_at', isset($stream) ? $stream->start_at->format('Y-m-d\TH:i') : '') }}">
+                                value="{{ old('start_at', $startAt ? $startAt->format('Y-m-d\TH:i') : '') }}">
                         </div>
 
                         <div class="form-group">
