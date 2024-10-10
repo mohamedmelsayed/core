@@ -17,10 +17,10 @@
                                 </button>
 
                                 <!-- Volume Control -->
-                                    <div class="vlc-volume">
-                                        <input type="range" class="volume-slider" id="v-slider" min="0"
-                                            max="1" step="0.1" value="0.5">
-                                    </div>
+                                <div class="vlc-volume">
+                                    <input type="range" class="volume-slider" id="v-slider" min="0" max="1"
+                                        step="0.1" value="0.5">
+                                </div>
 
                                 <!-- Repeat Button -->
                                 <button class="audio-control repeat-btn" id="repeat-btn">
@@ -266,19 +266,65 @@
     }
 
 
-    .volume-slider {
-        width: 20px;
-        height: 100%;
-        background: transparent;
-        outline: none;
+    /* Play Button */
+    .play-button {
+        background-color: rgba(88, 191, 225, 0.8);
+        border: none;
+        padding: 15px;
+        border-radius: 50%;
         cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .play-button:hover {
+        background-color: rgba(88, 191, 225, 1);
+        transform: scale(1.1);
+    }
+
+    /* Repeat Button */
+    .repeat-button {
+        background-color: rgba(255, 165, 0, 0.8);
+        border: none;
+        padding: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .repeat-button:hover {
+        background-color: rgba(255, 165, 0, 1);
+        transform: scale(1.1);
+    }
+
+    .repeat-button.active {
+        background-color: #FFD700;
+        /* Gold color when active */
+    }
+
+    /* Volume Control */
+    .volume-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .volume-slider {
+        -webkit-appearance: none;
+        width: 100px;
+        height: 5px;
+        background: #ddd;
+        border-radius: 5px;
+        outline: none;
+        transition: background 0.3s ease;
     }
 
     .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
         width: 15px;
         height: 15px;
         border-radius: 50%;
-        background: #ffb400;
+        background: #58BFE1;
         cursor: pointer;
     }
 
@@ -286,15 +332,10 @@
         width: 15px;
         height: 15px;
         border-radius: 50%;
-        background: #ffb400;
+        background: #58BFE1;
         cursor: pointer;
     }
 
-    .volume-icon {
-        font-size: 24px;
-        color: #fff;
-        transition: transform 0.3s ease;
-    }
 
     /* Waveform styling */
     .waveform {
@@ -337,7 +378,7 @@
         }
 
         .audio-thumbnail {
-           display: none;
+            display: none;
         }
 
 
@@ -379,6 +420,9 @@
             });
 
             // Volume slider control
+
+
+            // Volume Slider Control
             volumeSlider.addEventListener("input", (event) => {
                 event.stopPropagation();
                 const volume = event.target.value;
