@@ -330,8 +330,8 @@
             wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
 
-            const totalTime = wavesurfer.getDuration();
-            totalTime.innerText = formatTime(totalTime);
+            const duration = wavesurfer.getDuration();
+            totalTime.innerText = formatTime(duration);
 
             playPauseButton.addEventListener('click', function(event) {
                 event.stopPropagation();
