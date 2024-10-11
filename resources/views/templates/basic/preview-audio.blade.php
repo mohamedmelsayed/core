@@ -244,7 +244,7 @@
     .audio-controls {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        /* justify-content: space-between; */
         width: 100%;
         padding: 5px 0;
         gap: 5px;
