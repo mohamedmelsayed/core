@@ -12,20 +12,27 @@
                             <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
                             <div id="audio-controls" class="audio-controls">
                                 <!-- Play/Pause Button -->
-                                <i class="fas fa-play audio-control play-btn" id="play-pause" style="scale: 120%"></i>
+                                <button class="audio-control play-btn" id="play-pause">
+                                    <i class="fas fa-play" style="scale: 120%"></i>
+                                </button>
 
                                 <!-- Repeat Button -->
-                                <i class="fas fa-redo audio-control repeat-btn" id="repeat-btn" style="scale: 70%"></i>
+                                <button class="audio-control repeat-btn" id="repeat-btn" style="scale: 70%">
+                                    <i class="fas fa-redo" style="scale: 120%"></i>
+                                </button>
 
-                                <!-- Waveform display -->
-                                <div id="waveform" class="waveform" style="width: 50%"></div>
-
-                                <!-- Time Indicator -->
                                 <div id="time-indicator" class="time-indicator"></div>
 
+                                <!-- Waveform display -->
+                                <div id="waveform" class="waveform" style="width: 60%"></div>
+
+                                <!-- Time Indicator -->
+                                <div id="total-time" class="time-indicator"></div>
+
                                 <!-- Volume Control -->
-                                <i class="fas fa-volume-mute audio-control repeat-btn" id="repeat-btn"
-                                    style="scale: 70%"></i>
+                                <button class="audio-control play-btn" id="v-mute" style="display: none;" style="scale: 70%">
+                                    <i class="fas fa-volume-mute" style="scale: 120%"></i>
+                                </button>
                                 <button class="audio-control play-btn" id="v-up" style="scale: 70%">
                                     <i class="fas fa-volume-up" style="scale: 120%"></i>
                                 </button>
@@ -247,6 +254,7 @@
 
     /* Buttons (Play, Repeat, etc.) */
     .audio-control {
+        background-color: rgba(255, 255, 255, 0.1);
         border: none;
         color: #ffffff;
         padding: 15px;
@@ -299,6 +307,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const playPauseButton = document.getElementById('play-pause');
             const repeatButton = document.getElementById('repeat-btn');
+            const totalTime = document.getElementById('total-time');
             const muteButton = document.getElementById('v-mute');
             const volumeUpButton = document.getElementById('v-up');
             let isRepeat = false;
@@ -315,6 +324,9 @@
                 barGap: 3,
                 partialRender: true
             });
+
+            const totalTime = wavesurfer.getTotalTime();
+            totalTime.innerText = formatTime(totalTime);
 
             wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
@@ -348,11 +360,12 @@
 
             repeatButton.addEventListener('click', function() {
                 isRepeat = !isRepeat;
-                if (isRepeat) {
-                    volumeUpButton.style.bgColor = "#f3c56f"; // Show volume up button
+                if(isRepeat){
+                volumeUpButton.style.bgColor = "#f3c56f"; // Show volume up button
 
-                } else {
-                    volumeUpButton.style.bgColor = "transparent"; // Show volume up button
+                }
+                else{
+                volumeUpButton.style.bgColor = "transparent"; // Show volume up button
 
                 }
                 repeatButton.classList.toggle('active', isRepeat);
