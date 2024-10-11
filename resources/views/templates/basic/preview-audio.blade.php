@@ -325,7 +325,7 @@
                 partialRender: true
             });
 
-            const totalTime = wavesurfer.getTotalTime();
+            const totalTime = wavesurfer.getDuration();
             totalTime.innerText = formatTime(totalTime);
 
             wavesurfer.load('{{ $audios[0]->content }}');
