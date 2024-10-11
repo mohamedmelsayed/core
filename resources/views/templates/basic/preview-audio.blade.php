@@ -331,8 +331,10 @@
             wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
 
-            const duration = wavesurfer.getDuration();
-            document.getElementById('total-time').innerText = formatTime(duration);
+            wavesurfer.on('ready', function() {
+                const duration = wavesurfer.getDuration();
+                totalTime.innerText = formatTime(duration); // Update total time when the audio is ready
+            });
 
             playPauseButton.addEventListener('click', function(event) {
                 event.stopPropagation();
@@ -366,10 +368,10 @@
 
                 if (isRepeat) {
                     volumeUpButton.style.backgroundColor =
-                    "#f3c56f"; // Set background color when repeat is active
+                        "#f3c56f"; // Set background color when repeat is active
                 } else {
                     volumeUpButton.style.backgroundColor =
-                    "transparent"; // Reset background color when repeat is inactive
+                        "transparent"; // Reset background color when repeat is inactive
                 }
 
                 repeatButton.classList.toggle('active', isRepeat);
