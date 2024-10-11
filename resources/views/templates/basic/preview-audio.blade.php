@@ -247,7 +247,6 @@
 
     /* Buttons (Play, Repeat, etc.) */
     .audio-control {
-        background-color: rgba(255, 255, 255, 0.1);
         border: none;
         color: #ffffff;
         padding: 15px;
