@@ -246,8 +246,8 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding: 10px 0;
-        gap: 20px;
+        padding: 5px 0;
+        gap: 5px;
     }
 
     /* Buttons (Play, Repeat, etc.) */
