@@ -12,14 +12,10 @@
                             <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
                             <div id="audio-controls" class="audio-controls">
                                 <!-- Play/Pause Button -->
-                                <button class="audio-control play-btn" id="play-pause">
-                                    <i class="fas fa-play" style="scale: 120%"></i>
-                                </button>
+                                <i class="fas fa-play audio-control play-btn" id="play-pause" style="scale: 120%"></i>
 
                                 <!-- Repeat Button -->
-                                <button class="audio-control repeat-btn" id="repeat-btn" style="scale: 70%">
-                                    <i class="fas fa-redo" style="scale: 120%"></i>
-                                </button>
+                                <i class="fas fa-redo audio-control repeat-btn" id="repeat-btn" style="scale: 70%"></i>
 
                                 <!-- Waveform display -->
                                 <div id="waveform" class="waveform" style="width: 50%"></div>
@@ -28,9 +24,8 @@
                                 <div id="time-indicator" class="time-indicator"></div>
 
                                 <!-- Volume Control -->
-                                <button class="audio-control play-btn" id="v-mute" style="display: none;" style="scale: 70%">
-                                    <i class="fas fa-volume-mute" style="scale: 120%"></i>
-                                </button>
+                                <i class="fas fa-volume-mute audio-control repeat-btn" id="repeat-btn"
+                                    style="scale: 70%"></i>
                                 <button class="audio-control play-btn" id="v-up" style="scale: 70%">
                                     <i class="fas fa-volume-up" style="scale: 120%"></i>
                                 </button>
@@ -354,12 +349,11 @@
 
             repeatButton.addEventListener('click', function() {
                 isRepeat = !isRepeat;
-                if(isRepeat){
-                volumeUpButton.style.bgColor = "#f3c56f"; // Show volume up button
+                if (isRepeat) {
+                    volumeUpButton.style.bgColor = "#f3c56f"; // Show volume up button
 
-                }
-                else{
-                volumeUpButton.style.bgColor = "transparent"; // Show volume up button
+                } else {
+                    volumeUpButton.style.bgColor = "transparent"; // Show volume up button
 
                 }
                 repeatButton.classList.toggle('active', isRepeat);
