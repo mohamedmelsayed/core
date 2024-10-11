@@ -332,7 +332,7 @@
             wavesurfer.play();
 
             const duration = wavesurfer.getDuration();
-            totalTime.innerText = formatTime(duration);
+            document.getElementById('total-time').innerText = formatTime(duration);
 
             playPauseButton.addEventListener('click', function(event) {
                 event.stopPropagation();
