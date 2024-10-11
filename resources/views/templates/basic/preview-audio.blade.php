@@ -17,12 +17,12 @@
                                 </button>
 
                                 <!-- Repeat Button -->
-                                <button class="audio-control repeat-btn" id="repeat-btn">
+                                <button class="audio-control repeat-btn" id="repeat-btn" style="scale: 70%">
                                     <i class="fas fa-redo" style="scale: 120%"></i>
                                 </button>
 
                                 <!-- Waveform display -->
-                                <div id="waveform" class="waveform"></div>
+                                <div id="waveform" class="waveform" style="width: 50%"></div>
 
                                 <!-- Time Indicator -->
                                 <div id="time-indicator" class="time-indicator"></div>
@@ -254,7 +254,7 @@
     .audio-control {
         background-color: rgba(255, 255, 255, 0.1);
         border: none;
-        color: #fff;
+        color: #ffffff;
         padding: 15px;
         border-radius: 50%;
         font-size: 24px;
@@ -340,18 +340,28 @@
                 event.stopPropagation();
                 volumeUpButton.style.display = "none"; // Hide volume up button
                 muteButton.style.display = "block"; // Show mute button
+                muteButton.style.scale = "70%"; // Show mute button
                 wavesurfer.setVolume(0); // Mute audio
             });
 
             muteButton.addEventListener("click", (event) => {
                 event.stopPropagation();
                 volumeUpButton.style.display = "block"; // Show volume up button
+                volumeUpButton.style.scale = "70%"; // Show volume up button
                 muteButton.style.display = "none"; // Hide mute button
                 wavesurfer.setVolume(1); // Set volume to full
             });
 
             repeatButton.addEventListener('click', function() {
                 isRepeat = !isRepeat;
+                if(isRepeat){
+                volumeUpButton.style.bgColor = "#f3c56f"; // Show volume up button
+
+                }
+                else{
+                volumeUpButton.style.bgColor = "transparent"; // Show volume up button
+
+                }
                 repeatButton.classList.toggle('active', isRepeat);
             });
 
