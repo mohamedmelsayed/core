@@ -325,11 +325,13 @@
                 partialRender: true
             });
 
-            const totalTime = wavesurfer.getDuration();
-            totalTime.innerText = formatTime(totalTime);
+
 
             wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
+
+            const totalTime = wavesurfer.getDuration();
+            totalTime.innerText = formatTime(totalTime);
 
             playPauseButton.addEventListener('click', function(event) {
                 event.stopPropagation();
