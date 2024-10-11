@@ -29,10 +29,10 @@
 
                                 <!-- Volume Control -->
                                 <button class="audio-control play-btn" id="v-mute" style="display: none;">
-                                    <i class="fas fa-volume-mute" style="scale: 120%"></i>
+                                    <i class="fas fa-volume-mute" style="scale: 70%"></i>
                                 </button>
                                 <button class="audio-control play-btn" id="v-up">
-                                    <i class="fas fa-volume-up" style="scale: 120%"></i>
+                                    <i class="fas fa-volume-up" style="scale: 70%"></i>
                                 </button>
                             </div>
                         </div>
