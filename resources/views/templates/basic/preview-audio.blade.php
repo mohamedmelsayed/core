@@ -24,13 +24,14 @@
                                 <div id="time-indicator" class="time-indicator"></div>
 
                                 <!-- Waveform display -->
-                                <div id="waveform" class="waveform" style="width: 60%"></div>
+                                <div id="waveform" class="waveform" style="width: 70%"></div>
 
                                 <!-- Time Indicator -->
                                 <div id="total-time" class="time-indicator"></div>
 
                                 <!-- Volume Control -->
-                                <button class="audio-control play-btn" id="v-mute" style="display: none;" style="scale: 70%">
+                                <button class="audio-control play-btn" id="v-mute" style="display: none;"
+                                    style="scale: 70%">
                                     <i class="fas fa-volume-mute" style="scale: 120%"></i>
                                 </button>
                                 <button class="audio-control play-btn" id="v-up" style="scale: 70%">
@@ -362,16 +363,18 @@
 
             repeatButton.addEventListener('click', function() {
                 isRepeat = !isRepeat;
-                if(isRepeat){
-                volumeUpButton.style.bgColor = "#f3c56f"; // Show volume up button
 
+                if (isRepeat) {
+                    volumeUpButton.style.backgroundColor =
+                    "#f3c56f"; // Set background color when repeat is active
+                } else {
+                    volumeUpButton.style.backgroundColor =
+                    "transparent"; // Reset background color when repeat is inactive
                 }
-                else{
-                volumeUpButton.style.bgColor = "transparent"; // Show volume up button
 
-                }
                 repeatButton.classList.toggle('active', isRepeat);
             });
+
 
             wavesurfer.on('finish', function() {
                 if (isRepeat) {
