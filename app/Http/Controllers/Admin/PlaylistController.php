@@ -13,10 +13,13 @@ class PlaylistController extends Controller
     // Show the form to create a new playlist
     public function create()
     {
-        $categories = Category::all();
-        $pageTitle = 'Create New Playlist'; // Page title for create form
+        // Eager-load the 'subCategories' relationship
+        $categories = Category::with('subCategories')->get();
+        $pageTitle = 'Create New Playlist';
         return view('admin.playlists.create', compact('categories', 'pageTitle'));
     }
+
+
 
     // Store a new playlist
     public function store(Request $request)
@@ -70,9 +73,10 @@ class PlaylistController extends Controller
     // Show the form to edit a playlist
     public function edit(Playlist $playlist)
     {
-        $categories = Category::all();
+        // Eager-load the 'subCategories' relationship
+        $categories = Category::with('subCategories')->get();
         $subCategories = SubCategory::all();
-        $pageTitle = 'Edit Playlist: ' . $playlist->title; // Page title for edit form
+        $pageTitle = 'Edit Playlist: ' . $playlist->title;
         return view('admin.playlists.edit', compact('playlist', 'categories', 'subCategories', 'pageTitle'));
     }
 
