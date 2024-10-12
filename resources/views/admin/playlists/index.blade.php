@@ -1,57 +1,62 @@
 @extends('admin.layouts.app')
+
 @section('panel')
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <form action="{{ route('admin.playlist.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label>@lang('Title')</label>
-                                <input class="form-control" name="title" type="text" value="{{ old('title') }}" placeholder="@lang('Title')" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>@lang('Type')</label>
-                                <select class="form-control" name="type" required>
-                                    <option value="audio">@lang('Audio')</option>
-                                    <option value="video">@lang('Video')</option>
-                                </select>
-                            </div>
-                        </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between flex-wrap align-items-center mb-4">
+                    <h5 class="card-title">Playlists</h5>
+                    <a href="{{ route('admin.playlist.create') }}" class="btn btn--primary">@lang('Create Playlist')</a>
+                </div>
 
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label>@lang('Sub Category')</label>
-                                <select class="form-control" name="sub_category_id" required>
-                                    <option value="">@lang('Select One')</option>
-                                    @foreach ($categories as $category)
-                                        <optgroup label="{{ $category->name }}">
-                                            @foreach ($category->subCategories as $subCategory)
-                                                <option value="{{ $subCategory->id }}">{{ $subCategory->name }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label>@lang('Cover Image')</label>
-                                <input type="file" class="form-control" name="cover_image" accept="image/*" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>@lang('Description')</label>
-                            <textarea class="form-control" name="description" rows="5" placeholder="@lang('Description')" required>{{ old('description') }}</textarea>
-                        </div>
-                    </div>
-
-                    <div class="card-footer">
-                        <button class="btn btn--primary w-100" type="submit">@lang('Create Playlist')</button>
-                    </div>
-                </form>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead>
+                            <tr>
+                                <th>@lang('Title')</th>
+                                <th>@lang('Type')</th>
+                                <th>@lang('Sub Category')</th>
+                                <th>@lang('Cover Image')</th>
+                                <th>@lang('Actions')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($playlists as $playlist)
+                                <tr>
+                                    <td>{{ $playlist->title }}</td>
+                                    <td>{{ ucfirst($playlist->type) }}</td>
+                                    <td>{{ $playlist->subCategory->name ?? 'N/A' }}</td>
+                                    <td>
+                                        @if ($playlist->cover_image)
+                                            <img src="{{ asset('storage/' . $playlist->cover_image) }}" alt="cover image" width="50px">
+                                        @else
+                                            @lang('No Image')
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.playlist.edit', $playlist->id) }}" class="btn btn-sm btn--primary">
+                                            <i class="las la-edit"></i> @lang('Edit')
+                                        </a>
+                                        <form action="{{ route('admin.playlist.destroy', $playlist->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('@lang('Are you sure you want to delete this playlist?')');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn--danger">
+                                                <i class="las la-trash"></i> @lang('Delete')
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">@lang('No playlists found.')</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
