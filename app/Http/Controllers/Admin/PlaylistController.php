@@ -142,8 +142,8 @@ class PlaylistController extends Controller
             }
         }
 
-        dd( [
+        return [
             'portrait' => $portrait, // Return portrait as cover image
-        ]);
+        ];
     }
 }
