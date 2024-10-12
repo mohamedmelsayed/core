@@ -208,22 +208,28 @@ class PlaylistController extends Controller
 
 
     public function removeItemFromPlaylist(Request $request)
-{
-    $request->validate([
-        'playlist_id' => 'required|exists:playlists,id',
-        'item_id' => 'required|exists:items,id',
-    ]);
+    {
+        $request->validate([
+            'playlist_id' => 'required|exists:playlists,id',
+            'item_id' => 'required|exists:items,id',
+        ]);
 
-    // Find the playlist and item
-    $playlist = Playlist::find($request->playlist_id);
-    $item = Item::find($request->item_id);
+        // Find the playlist and item
+        $playlist = Playlist::find($request->playlist_id);
+        $item = Item::find($request->item_id);
 
-    // Detach the item from the playlist (pivot table)
-    $playlist->items()->detach($item->id);
+        // Detach the item from the playlist (pivot table)
+        $playlist->items()->detach($item->id);
 
-    return response()->json(['message' => 'Item removed from playlist successfully.']);
-}
+        return response()->json(['message' => 'Item removed from playlist successfully.']);
+    }
 
+    public function show($id)
+    {
+        // Fetch the playlist by ID
+        $playlist = Playlist::with('items')->findOrFail($id); // Assuming playlists have related items (audio/video)
 
-
+        // Pass the playlist data to a view
+        return view('playlists.show', compact('playlist'));
+    }
 }

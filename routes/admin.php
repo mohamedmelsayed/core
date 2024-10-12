@@ -36,6 +36,7 @@ Route::middleware('admin')->group(function () {
         Route::get('add-item/{type}/{id}', 'addItem')->name('addItem');
         Route::post('store-item',  'storeItemInPlaylist')->name('storeItemInPlaylist');
         Route::post('admin/playlist/remove-item', 'removeItemFromPlaylist')->name('removeItemFromPlaylist');
+        Route::get('/playlist/{id}', 'show')->name('show');
 
 
     });
