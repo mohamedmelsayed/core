@@ -21,69 +21,98 @@
                             <tr>
                                 <td>{{ $item->title }}</td>
                                 <td>{{ $item->category->name }}</td>
-                                <td>{{ @$item->sub_category->name ?? 'N/A' }}</td>
+                                <td>{{ $item->sub_category->name ?? 'N/A' }}</td>
                                 <td>
-                                    @if ($item->item_type == 1 && $item->is_trailer != 1)
-                                    <span class="badge badge--success">@lang('Single Item')</span>
-                                    @elseif($item->item_type == 2 && $item->is_trailer != 1)
-                                    <span class="badge badge--primary">@lang('Episode Item')</span>
+                                    @if ($item->item_type == 1 && !$item->is_trailer)
+                                        <span class="badge badge--success">@lang('Single Item')</span>
+                                    @elseif($item->item_type == 2 && !$item->is_trailer)
+                                        <span class="badge badge--primary">@lang('Episode Item')</span>
                                     @else
-                                    <span class="badge badge--warning">@lang('Trailer')</span>
+                                        <span class="badge badge--warning">@lang('Trailer')</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($item->status == 1)
-                                    <span class="badge badge--success">@lang('Active')</span>
-                                    @else
-                                    <span class="badge badge--danger">@lang('Deactive')</span>
-                                    @endif
+                                    <span class="badge badge--{{ $item->status ? 'success' : 'danger' }}">
+                                        @lang($item->status ? 'Active' : 'Deactive')
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="button--group">
-                                        <a class="btn btn-sm btn-outline--primary" href="{{ route('admin.item.edit', $item->id) }}">
-                                            <i class="la la-pencil"></i>@lang('Edit')
+                                        <!-- Edit Button -->
+                                        <a class="btn btn-sm btn-outline--primary"
+                                           href="{{ route('admin.item.edit', $item->id) }}">
+                                           <i class="la la-pencil"></i>@lang('Edit')
                                         </a>
-                                        <a class="btn btn-sm btn-outline--danger deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
-                                            <i class="las la-recycle"></i> @lang('Delete')
-                                        </a>
-                                     
-                                        <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="las la-ellipsis-v"></i>@lang('More')</button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item threshold" href="{{ route('preview.audio', $item->slug) }}" target="_blank"> <i class="las la-eye"></i> @lang('Preview') </a>
-                                            <a class="dropdown-item threshold" href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
-                                                <i class="las la-language"></i> @lang('Translate Content')
-                                            </a>
-                                            @if ($item->item_type == 2)
-                                            <a class="dropdown-item threshold" href="{{ route('admin.item.episodes', $item->id) }}">
-                                                <i class="las la-list"></i> @lang('Episodes')
-                                            </a>
-                                            @else
-                                            @if ($item->video)
-                                            <a class="dropdown-item threshold" href="{{ route('admin.item.updateVideo', $item->id) }}">
-                                                <i class="las la-cloud-upload-alt"></i> @lang('Update Video')
-                                            </a>
-                                            
-                                            <a class="dropdown-item threshold" href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
-                                                <i class="las la-language"></i> @lang('Translate Content')
-                                            </a>
-                                            <a class="dropdown-item threshold" href="{{ route('admin.item.ads.duration', $item->id) }}">
-                                                <i class="lab la-buysellads"></i> @lang('Update Ads')
-                                            </a>
-                                            <a class="dropdown-item threshold" href="{{ route('admin.item.subtitle.list', [$item->id, '']) }}">
-                                                <i class="las la-file-audio"></i> @lang('Subtitles')
-                                            </a>
-                                            <a class="dropdown-item threshold" href="{{ route('admin.item.report', [$item->id, '']) }}">
-                                                <i class="las la-chart-area"></i> @lang('Report')
-                                            </a>
-                                            @else
-                                            <a class="dropdown-item threshold" href="{{ route('admin.item.uploadAudio', $item->id) }}">
-                                                <i class="las la-cloud-upload-alt"></i> @lang('Upload Audio')
-                                            </a>
-                                            @endif
-                                            @endif
-                                            <a class="dropdown-item threshold confirmationBtn" data-action="{{ route('admin.item.send.notification', $item->id) }}" data-question="@lang('Are you sure to send notifications to all users?')" href="javascript:void(0)"> <i class="las la-bell"></i> @lang('Send Notification') </a>
-                                        </div>
 
+                                        <!-- More Actions Dropdown -->
+                                        <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown"
+                                                type="button" aria-expanded="false">
+                                                <i class="las la-ellipsis-v"></i>@lang('More')
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <!-- Preview Item -->
+                                            <a class="dropdown-item" href="{{ route('preview.audio', $item->slug) }}" target="_blank">
+                                                <i class="las la-eye"></i>@lang('Preview')
+                                            </a>
+
+                                            <!-- Add to Audio Playlist -->
+                                            @if($item->is_audio == 1)
+                                                <a class="dropdown-item threshold"
+                                                   href="{{ route('admin.playlist.addItem', ['type' => 'audio', 'id' => $item->id]) }}">
+                                                    <i class="las la-music"></i> @lang('Add to Audio Playlist')
+                                                </a>
+                                            @endif
+
+                                            <!-- Translate Content -->
+                                            <a class="dropdown-item"
+                                               href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
+                                                <i class="las la-language"></i>@lang('Translate Content')
+                                            </a>
+
+                                            <!-- Episodes (For Episode Items) -->
+                                            @if ($item->item_type == 2)
+                                                <a class="dropdown-item" href="{{ route('admin.item.episodes', $item->id) }}">
+                                                    <i class="las la-list"></i>@lang('Episodes')
+                                                </a>
+                                            @endif
+
+                                            <!-- Audio Upload and Related Actions -->
+                                            @if ($item->video)
+                                                <a class="dropdown-item"
+                                                   href="{{ route('admin.item.updateVideo', $item->id) }}">
+                                                    <i class="las la-cloud-upload-alt"></i>@lang('Update Video')
+                                                </a>
+
+                                                <!-- Ads, Subtitles, and Reports -->
+                                                <a class="dropdown-item" href="{{ route('admin.item.ads.duration', $item->id) }}">
+                                                    <i class="lab la-buysellads"></i>@lang('Update Ads')
+                                                </a>
+                                                <a class="dropdown-item" href="{{ route('admin.item.subtitle.list', [$item->id, '']) }}">
+                                                    <i class="las la-file-audio"></i>@lang('Subtitles')
+                                                </a>
+                                                <a class="dropdown-item" href="{{ route('admin.item.report', [$item->id, '']) }}">
+                                                    <i class="las la-chart-area"></i>@lang('Report')
+                                                </a>
+                                            @else
+                                                <a class="dropdown-item"
+                                                   href="{{ route('admin.item.uploadAudio', $item->id) }}">
+                                                    <i class="las la-cloud-upload-alt"></i>@lang('Upload Audio')
+                                                </a>
+                                            @endif
+
+                                            <!-- Send Notification -->
+                                            <a class="dropdown-item confirmationBtn"
+                                               data-action="{{ route('admin.item.send.notification', $item->id) }}"
+                                               data-question="@lang('Are you sure to send notifications to all users?')"
+                                               href="javascript:void(0)">
+                                                <i class="las la-bell"></i>@lang('Send Notification')
+                                            </a>
+
+                                            <!-- Delete Item -->
+                                            <a class="dropdown-item deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
+                                                <i class="las la-trash"></i>@lang('Delete')
+                                            </a>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -96,10 +125,11 @@
                     </table>
                 </div>
             </div>
+
             @if ($items->hasPages())
-            <div class="card-footer py-4">
-                {{ paginateLinks($items) }}
-            </div>
+                <div class="card-footer py-4">
+                    {{ paginateLinks($items) }}
+                </div>
             @endif
         </div>
     </div>
@@ -135,9 +165,7 @@
 </script>
 @endpush
 
-
-
-
+<!-- Confirmation Modal -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
