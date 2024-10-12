@@ -5,7 +5,7 @@
             <div class="card">
                 <form action="{{ route('admin.playlist.update', $playlist->id) }}" method="POST" enctype="multipart/form-data" id="playlistForm">
                     @csrf
-                    @method('PUT')
+                    @method('POST')
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-md-6">
