@@ -13,19 +13,24 @@
                     <p><strong>{{ $item->title }}</strong></p>
                 </div>
 
-                <!-- Select Playlists to add/remove the item -->
+                <!-- Playlist Selection with Checkboxes -->
                 <div class="form-group">
                     <label>@lang('Select Playlists')</label>
-                    <select class="form-control playlist-select" id="playlist-select" name="playlists[]" multiple required>
+                    <div class="playlist-checkbox-group">
                         @foreach($playlists as $playlist)
-                            <option value="{{ $playlist->id }}"
-                                    data-items="{{ $playlist->items->pluck('title')->implode(', ') }}"
-                                    @if($item->playlists->contains($playlist->id)) selected @endif>
-                                {{ $playlist->title }}
-                            </option>
+                            <div class="form-check">
+                                <input class="form-check-input playlist-checkbox"
+                                       type="checkbox"
+                                       id="playlist-{{ $playlist->id }}"
+                                       value="{{ $playlist->id }}"
+                                       data-items="{{ $playlist->items->pluck('title')->implode(', ') }}"
+                                       @if($item->playlists->contains($playlist->id)) checked @endif>
+                                <label class="form-check-label" for="playlist-{{ $playlist->id }}">
+                                    {{ $playlist->title }}
+                                </label>
+                            </div>
                         @endforeach
-                    </select>
-                    <small>@lang('Hold Ctrl (Cmd on Mac) to select multiple playlists')</small>
+                    </div>
                 </div>
 
                 <!-- Display items already in the selected playlist on hover -->
@@ -43,18 +48,17 @@
 
 @push('style')
 <style>
-    .playlist-select {
-        width: 100%; /* Make the dropdown wider */
-        padding: 10px;
-        font-size: 16px;
+    .playlist-checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
     }
 
-    .playlist-select option {
-        padding: 10px; /* Increase padding for readability */
-        font-size: 14px;
+    .form-check {
+        margin-right: 15px;
+        margin-bottom: 10px;
     }
 
-    /* Optional: Add custom styles for the hover popup or list */
+    /* Hover display */
     #playlist-items-list {
         margin-top: 15px;
         display: none;
@@ -74,9 +78,9 @@
     $(document).ready(function () {
         const itemId = '{{ $item->id }}'; // The item being added/removed from playlists
 
-        // Function to display items for the selected playlist
+        // Function to display items for the selected playlist on hover
         function displayPlaylistItems(playlistId) {
-            var option = $('#playlist-select option[value="' + playlistId + '"]');
+            var option = $('#playlist-' + playlistId);
             var items = option.data('items');
 
             // If items are available, show the list
@@ -94,30 +98,20 @@
         }
 
         // Handle mouseover to display playlist items
-        $('#playlist-select').on('mouseover', 'option', function() {
+        $('.playlist-checkbox').on('mouseover', function() {
             var playlistId = $(this).val();
             displayPlaylistItems(playlistId);
         });
 
-        // Handle change event to add/remove item from playlist
-        $('#playlist-select').on('change', function() {
-            // Get selected options
-            var selectedPlaylists = $(this).val();
+        // Handle checkbox change event to add/remove item from playlist
+        $('.playlist-checkbox').on('change', function() {
+            var playlistId = $(this).val();
 
-            // Remove items from unselected playlists
-            $('#items-list li').each(function() {
-                var playlistId = $(this).data('playlist-id');
-                if (selectedPlaylists.indexOf(playlistId.toString()) === -1) {
-                    $(this).remove();
-                    performRemoveRequest(playlistId); // Make remove request
-                }
-            });
-
-            // Add items for newly selected playlists
-            selectedPlaylists.forEach(function(playlistId) {
-                displayPlaylistItems(playlistId);
+            if ($(this).is(':checked')) {
                 performAddRequest(playlistId); // Make add request
-            });
+            } else {
+                performRemoveRequest(playlistId); // Make remove request
+            }
         });
 
         // Function to make an AJAX request to add item to playlist
