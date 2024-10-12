@@ -26,7 +26,7 @@
 
                                         <td>
                                             @if ($item->is_stream)
-                                                <span class="badge badge--success">@lang('Stream')</span>
+                                                <span class="badge badge--danger">@lang('Stream')</span>
                                             @else
                                                 <span class="badge badge--success">@lang('Normal Video')</span>
                                             @endif
