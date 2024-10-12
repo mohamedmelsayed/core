@@ -88,15 +88,6 @@
                                                         <i class="las la-cloud-upload-alt"></i>@lang('Upload Audio')
                                                     </a>
 
-
-                                                    <a class="dropdown-item threshold"
-                                                        href="{{ route('admin.item.ads.duration', $item->id) }}">
-                                                        <i class="lab la-buysellads"></i> @lang('Update Ads')
-                                                    </a>
-                                                    <a class="dropdown-item threshold"
-                                                        href="{{ route('admin.item.subtitle.list', [$item->id, '']) }}">
-                                                        <i class="las la-file-audio"></i> @lang('Subtitles')
-                                                    </a>
                                                     <a class="dropdown-item threshold"
                                                         href="{{ route('admin.item.report', [$item->id, '']) }}">
                                                         <i class="las la-chart-area"></i> @lang('Report')
