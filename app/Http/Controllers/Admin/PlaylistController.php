@@ -169,8 +169,14 @@ class PlaylistController extends Controller
 
         $pageTitle = 'Add Item to ' . ucfirst($type) . ' Playlist';
 
+        // Fetch all items that are already in the playlist
+        $playlistItems = $playlists->mapWithKeys(function ($playlist) {
+            return [$playlist->id => $playlist->items];
+        });
+
+
         // Render a view to choose which playlist to add the item to
-        return view('admin.playlists.add-item', compact('playlists', 'item', 'type', 'pageTitle'));
+        return view('admin.playlists.add-item', compact('playlists', 'item', 'type', 'pageTitle','playlistItems'));
     }
 
     // Process adding the item to a playlist
