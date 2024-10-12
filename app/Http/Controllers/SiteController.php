@@ -184,6 +184,18 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'sections.' . $request->sectionName, $data);
     }
 
+    public function show($id)
+    {
+        $pageTitle = 'PlayList Details';
+
+        // Fetch the playlist by ID
+        $playlist = Playlist::with('items')->findOrFail($id); // Assuming playlists have related items (audio/video)
+
+        // Pass the playlist data to a view
+        return view($this->activeTemplate . 'playlists.show', compact('pageTitle', 'playlist'));
+
+    }
+
     public function watchVideo($slug, $episodeId = null)
     {
         $item = Item::active()->where('slug', $slug)->with('video.subtitles')->firstOrFail();

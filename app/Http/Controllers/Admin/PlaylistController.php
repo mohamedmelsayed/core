@@ -224,12 +224,5 @@ class PlaylistController extends Controller
         return response()->json(['message' => 'Item removed from playlist successfully.']);
     }
 
-    public function show($id)
-    {
-        // Fetch the playlist by ID
-        $playlist = Playlist::with('items')->findOrFail($id); // Assuming playlists have related items (audio/video)
 
-        // Pass the playlist data to a view
-        return view('playlists.show', compact('playlist'));
-    }
 }
