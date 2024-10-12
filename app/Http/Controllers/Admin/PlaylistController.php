@@ -165,7 +165,7 @@ class PlaylistController extends Controller
         }
 
         // Find the playlist of the given type
-        $playlists = Playlist::where('type', $type)->get();
+        $playlists = Playlist::with('items')->where('type', $type)->get();
 
         $pageTitle = 'Add Item to ' . ucfirst($type) . ' Playlist';
 
