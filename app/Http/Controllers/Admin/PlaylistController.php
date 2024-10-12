@@ -57,7 +57,7 @@ class PlaylistController extends Controller
         $pageTitle = 'Manage Playlists';
 
         // Search for playlists by category, sub-category name, or ID
-        $playlists = Playlist::with('subCategory')
+        $playlists = Playlist::with('subCategory','items')
             ->when($searchTerm, function ($query, $searchTerm) {
                 return $query->whereHas('subCategory', function ($q) use ($searchTerm) {
                     $q->where('name', 'LIKE', "%{$searchTerm}%")
@@ -194,6 +194,7 @@ class PlaylistController extends Controller
 
         // Check if the item is already attached to the playlist
         if ($playlist->items()->where('item_id', $item->id)->exists()) {
+
             return redirect()->back()->with('error', 'This item is already in the playlist.');
         }
 
