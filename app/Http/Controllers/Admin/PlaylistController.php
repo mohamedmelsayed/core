@@ -14,7 +14,8 @@ class PlaylistController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.playlists.create', compact('categories'));
+        $pageTitle = 'Create New Playlist'; // Page title for create form
+        return view('admin.playlists.create', compact('categories', 'pageTitle'));
     }
 
     // Store a new playlist
@@ -47,6 +48,7 @@ class PlaylistController extends Controller
     public function index(Request $request)
     {
         $searchTerm = $request->input('search');
+        $pageTitle = 'Manage Playlists'; // Page title for index
 
         $playlists = Playlist::with('subCategory')
             ->when($searchTerm, function ($query, $searchTerm) {
@@ -62,7 +64,7 @@ class PlaylistController extends Controller
             })
             ->get();
 
-        return view('admin.playlists.index', compact('playlists'));
+        return view('admin.playlists.index', compact('playlists', 'pageTitle'));
     }
 
     // Show the form to edit a playlist
@@ -70,7 +72,8 @@ class PlaylistController extends Controller
     {
         $categories = Category::all();
         $subCategories = SubCategory::all();
-        return view('admin.playlists.edit', compact('playlist', 'categories', 'subCategories'));
+        $pageTitle = 'Edit Playlist: ' . $playlist->title; // Page title for edit form
+        return view('admin.playlists.edit', compact('playlist', 'categories', 'subCategories', 'pageTitle'));
     }
 
     // Update a playlist
@@ -102,6 +105,7 @@ class PlaylistController extends Controller
     // Delete a playlist
     public function destroy(Playlist $playlist)
     {
+        $pageTitle = 'Delete Playlist'; // Page title for delete action
         $playlist->delete();
         return redirect()->route('admin.playlist.index')->with('success', 'Playlist deleted successfully.');
     }
