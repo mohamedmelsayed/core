@@ -41,7 +41,7 @@
                                     <label>@lang('Cover Image')</label>
                                     <div class="image--uploader w-100">
                                         <div class="image-upload-wrapper">
-                                            <div class="image-upload-preview cover" style="background-image: url('{{ getImage(getFilePath('item_portrait') . '/' . @$playlist->cover_image) }})">
+                                            <div class="image-upload-preview cover" style="background-image: url('{{ getImage(getFilePath('item_portrait') . '/' . @$playlist->cover_image) }}">
                                             </div>
                                             <div class="image-upload-input-wrapper">
                                                 <input type="file" class="image-upload-input" name="cover_image" id="coverImageInput" accept=".png, .jpg, .jpeg">
