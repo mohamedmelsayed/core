@@ -16,7 +16,7 @@
                 <!-- Select Playlists to add/remove the item -->
                 <div class="form-group">
                     <label>@lang('Select Playlists')</label>
-                    <select class="form-control" id="playlist-select" name="playlists[]" multiple required>
+                    <select class="form-control playlist-select" id="playlist-select" name="playlists[]" multiple required>
                         @foreach($playlists as $playlist)
                             <option value="{{ $playlist->id }}"
                                     data-items="{{ $playlist->items->pluck('title')->implode(', ') }}"
@@ -43,9 +43,28 @@
 
 @push('style')
 <style>
+    .playlist-select {
+        width: 100%; /* Make the dropdown wider */
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .playlist-select option {
+        padding: 10px; /* Increase padding for readability */
+        font-size: 14px;
+    }
+
     /* Optional: Add custom styles for the hover popup or list */
     #playlist-items-list {
+        margin-top: 15px;
         display: none;
+    }
+
+    #items-list li {
+        padding: 5px 10px;
+        background: #f7f7f7;
+        margin-bottom: 5px;
+        border-radius: 4px;
     }
 </style>
 @endpush
