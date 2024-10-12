@@ -32,7 +32,7 @@ Route::middleware('admin')->group(function () {
         Route::post('/', 'store')->name('store');    // Store playlist
         Route::get('edit/{playlist}', 'edit')->name('edit'); // Edit playlist form
         Route::post('update/{playlist}', 'update')->name('update'); // Update playlist
-        Route::delete('delete/{playlist}', 'destroy')->name('destroy'); // Delete playlist
+        Route::post('delete/{playlist}', 'destroy')->name('destroy'); // Delete playlist
     });
     Route::controller('AdminController')->group(function () {
         Route::get('dashboard', 'dashboard')->name('dashboard');

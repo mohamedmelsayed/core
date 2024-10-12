@@ -38,9 +38,9 @@
                                         <a href="{{ route('admin.playlist.edit', $playlist->id) }}" class="btn btn-sm btn--primary">
                                             <i class="las la-edit"></i> @lang('Edit')
                                         </a>
-                                        <form action="{{ route('admin.playlist.destroy', $playlist->id) }}" method="DELETE" class="d-inline-block" onsubmit="return confirm('@lang('Are you sure you want to delete this playlist?')');">
+                                        <form action="{{ route('admin.playlist.destroy', $playlist->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('@lang('Are you sure you want to delete this playlist?')');">
                                             @csrf
-                                            @method('DELETE')
+                                            @method('POST')
                                             <button type="submit" class="btn btn-sm btn--danger">
                                                 <i class="las la-trash"></i> @lang('Delete')
                                             </button>
