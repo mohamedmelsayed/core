@@ -166,7 +166,7 @@ class SiteController extends Controller
         $items = Item::hasVideoOrAudio();
         if ($request->sectionName == 'recent_added') {
             $data['recent_added'] = (clone $items)->where('item_type', Status::SINGLE_ITEM)->orderBy('id', 'desc')->limit(18)->get();
-        } else if ($request->sectionName == 'latest_series') {
+        } else if ($request->sectionName == 'playlists') {
             $data['playlists'] = Playlist::with('items')->limit(18)->get();
         } else if ($request->sectionName == 'single') {
             $data['single'] = (clone $items)->orderBy('id', 'desc')->where('single', 1)->with('category')->first();
@@ -184,7 +184,7 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'sections.' . $request->sectionName, $data);
     }
 
-    public function show($id)
+    public function showPlaylist($id)
     {
         $pageTitle = 'PlayList Details';
 
