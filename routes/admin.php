@@ -35,6 +35,7 @@ Route::middleware('admin')->group(function () {
         Route::post('delete/{playlist}', 'destroy')->name('destroy'); // Delete playlist
         Route::get('add-item/{type}/{id}', 'addItem')->name('addItem');
         Route::post('store-item',  'storeItemInPlaylist')->name('storeItemInPlaylist');
+
     });
     Route::controller('AdminController')->group(function () {
         Route::get('dashboard', 'dashboard')->name('dashboard');
@@ -71,6 +72,8 @@ Route::middleware('admin')->group(function () {
 
     //ItemController
     Route::controller('ItemController')->name('item.')->group(function () {
+        Route::post('admin/item/remove-from-playlists/{id}', 'removeFromAllPlaylists')->name('removeFromAllPlaylists');
+
         Route::get('video-item-status/{id}', 'status')->name('status');
         Route::get('video-items', 'items')->name('index');
         Route::get('audio-items', 'audioItems')->name('audioItems');

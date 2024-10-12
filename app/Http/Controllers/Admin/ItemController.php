@@ -902,4 +902,14 @@ class ItemController extends Controller
         $pageTitle = 'Report - ' . $item->title;
         return view('admin.item.report', compact('pageTitle', 'reports', 'item', 'totalViews', 'title'));
     }
+
+    public function removeFromAllPlaylists(Request $request, $id)
+    {
+        $item = Item::findOrFail($id);
+
+        // Detach the item from all playlists
+        $item->playlists()->detach();
+
+        return response()->json(['success' => true]);
+    }
 }

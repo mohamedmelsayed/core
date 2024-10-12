@@ -57,7 +57,7 @@ class PlaylistController extends Controller
         $pageTitle = 'Manage Playlists';
 
         // Search for playlists by category, sub-category name, or ID
-        $playlists = Playlist::with('subCategory','items')
+        $playlists = Playlist::with('subCategory', 'items')
             ->when($searchTerm, function ($query, $searchTerm) {
                 return $query->whereHas('subCategory', function ($q) use ($searchTerm) {
                     $q->where('name', 'LIKE', "%{$searchTerm}%")
@@ -176,7 +176,7 @@ class PlaylistController extends Controller
 
 
         // Render a view to choose which playlist to add the item to
-        return view('admin.playlists.add-item', compact('playlists', 'item', 'type', 'pageTitle','playlistItems'));
+        return view('admin.playlists.add-item', compact('playlists', 'item', 'type', 'pageTitle', 'playlistItems'));
     }
 
     // Process adding the item to a playlist
@@ -206,4 +206,13 @@ class PlaylistController extends Controller
         return redirect()->route('admin.playlist.index')->withNotify($notify);
     }
 
+    public function removeFromAllPlaylists(Request $request, $id)
+    {
+        $item = Item::findOrFail($id);
+
+        // Detach the item from all playlists
+        $item->playlists()->detach();
+
+        return response()->json(['success' => true]);
+    }
 }

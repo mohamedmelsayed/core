@@ -112,6 +112,13 @@
                                                 <i class="las la-bell"></i>@lang('Send Notification')
                                             </a>
 
+                                            <!-- Remove from all Playlists -->
+                                            @if($item->playlists->isNotEmpty())
+                                                <a class="dropdown-item removeFromAllPlaylistsBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
+                                                    <i class="las la-minus-circle"></i> @lang('Remove from all Playlists')
+                                                </a>
+                                            @endif
+
                                             <!-- Delete Item -->
                                             <a class="dropdown-item deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
                                                 <i class="las la-trash"></i>@lang('Delete')
@@ -164,6 +171,29 @@
             var deleteUrl = "{{ route('admin.item.delete', ':id') }}".replace(':id', itemId);
             $('#deleteForm').attr('action', deleteUrl);
             $('#confirmationModal').modal('show');
+        });
+
+        // Remove from all Playlists functionality
+        $('.removeFromAllPlaylistsBtn').click(function () {
+            var itemId = $(this).data('item-id');
+            var removeUrl = "{{ route('admin.item.removeFromAllPlaylists', ':id') }}".replace(':id', itemId);
+
+            if (confirm("@lang('Are you sure you want to remove this item from all playlists?')")) {
+                $.ajax({
+                    url: removeUrl,
+                    method: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        item_id: itemId
+                    },
+                    success: function (response) {
+                        location.reload(); // Refresh the page after removing
+                    },
+                    error: function () {
+                        alert("@lang('Error occurred while removing the item from playlists.')");
+                    }
+                });
+            }
         });
     });
 </script>

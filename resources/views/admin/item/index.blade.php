@@ -12,7 +12,7 @@
                                     <th>@lang('Category')</th>
                                     <th>@lang('Subcategory')</th>
                                     <th>@lang('Content Type')</th>
-                                    <th>@lang('Playlists')</th> <!-- New column for playlists -->
+                                    <th>@lang('Playlists')</th> <!-- Column for playlists -->
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -72,6 +72,13 @@
                                                         @lang($item->is_audio ? 'Add to Audio Playlist' : 'Add to Video Playlist')
                                                     </a>
 
+                                                    <!-- Remove from all Playlists -->
+                                                    @if($item->playlists->isNotEmpty())
+                                                        <a class="dropdown-item threshold removeFromAllPlaylistsBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
+                                                            <i class="las la-minus-circle"></i> @lang('Remove from all Playlists')
+                                                        </a>
+                                                    @endif
+
                                                     <!-- Stream Configuration -->
                                                     @if ($item->is_stream)
                                                         <a class="dropdown-item threshold"
@@ -95,18 +102,6 @@
                                                             <a class="dropdown-item threshold"
                                                                href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
                                                                 <i class="las la-language"></i> @lang('Translate Content')
-                                                            </a>
-                                                            <a class="dropdown-item threshold"
-                                                               href="{{ route('admin.item.ads.duration', $item->id) }}">
-                                                                <i class="lab la-buysellads"></i> @lang('Update Ads')
-                                                            </a>
-                                                            <a class="dropdown-item threshold"
-                                                               href="{{ route('admin.item.subtitle.list', [$item->id, '']) }}">
-                                                                <i class="las la-file-audio"></i> @lang('Subtitles')
-                                                            </a>
-                                                            <a class="dropdown-item threshold"
-                                                               href="{{ route('admin.item.report', [$item->id, '']) }}">
-                                                                <i class="las la-chart-area"></i> @lang('Report')
                                                             </a>
                                                         @else
                                                             @if (!$item->is_stream)
@@ -179,6 +174,29 @@
                 var deleteUrl = "{{ route('admin.item.delete', ':id') }}".replace(':id', itemId);
                 $('#deleteForm').attr('action', deleteUrl);
                 $('#confirmationModal').modal('show');
+            });
+
+            // Remove from all Playlists functionality
+            $('.removeFromAllPlaylistsBtn').click(function () {
+                var itemId = $(this).data('item-id');
+                var removeUrl = "{{ route('admin.item.removeFromAllPlaylists', ':id') }}".replace(':id', itemId);
+
+                if (confirm("@lang('Are you sure you want to remove this item from all playlists?')")) {
+                    $.ajax({
+                        url: removeUrl,
+                        method: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            item_id: itemId
+                        },
+                        success: function (response) {
+                            location.reload(); // Refresh the page after removing
+                        },
+                        error: function () {
+                            alert("@lang('Error occurred while removing the item from playlists.')");
+                        }
+                    });
+                }
             });
         });
     </script>
