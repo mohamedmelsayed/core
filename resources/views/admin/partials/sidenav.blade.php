@@ -28,7 +28,7 @@
                     </a>
                 </li>
 
-                
+
 
                 <li class="sidebar-menu-item sidebar-dropdown">
                     <a class="{{ menuActive('admin.item*', 3) }}" href="javascript:void(0)">
@@ -57,7 +57,7 @@
                                     <span class="menu-title">@lang('Episode Items')</span>
                                 </a>
                             </li>
-                     
+
                             <li class="sidebar-menu-item {{ menuActive(['admin.item.trailer']) }}">
                                 <a class="nav-link" href="{{ route('admin.item.trailer') }}">
                                     <i class="menu-icon las la-dot-circle"></i>
@@ -90,7 +90,7 @@
                             </li>
                         </ul>
                     </div>
-                    
+
                 </li>
 
                 <li class="sidebar-menu-item {{ menuActive('admin.defaults.item.defaults.form') }}">
@@ -99,6 +99,14 @@
                         <span class="menu-title">@lang('Item Template')</span>
                     </a>
                 </li>
+
+                <li class="sidebar-menu-item {{ menuActive('admin.playlist.index') }}">
+                    <a class="nav-link" href="{{ route('admin.playlist.index') }}">
+                        <i class="menu-icon las la-list"></i> <!-- Changed to a list icon to represent Playlists -->
+                        <span class="menu-title">@lang('Playlists')</span> <!-- Corrected the spelling of Playlists -->
+                    </a>
+                </li>
+
 
                 @if (gs('watch_party'))
                     <li class="sidebar-menu-item sidebar-dropdown">
