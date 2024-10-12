@@ -20,7 +20,8 @@
 
                     <div class="form-group">
                         <label>@lang('Select Playlist')</label>
-                        <select class="form-control" name="playlist_id" required>
+                        <select class="form-control" id="playlistSelect" name="playlist_id" required>
+                            <option value="">@lang('Select a Playlist')</option>
                             @foreach($playlists as $playlist)
                                 <option value="{{ $playlist->id }}">{{ $playlist->title }}</option>
                             @endforeach
@@ -31,21 +32,54 @@
                 </form>
 
                 <!-- Display items already in each playlist -->
-                <div class="mt-5">
+                <div class="mt-5" id="playlistItemsContainer">
                     <h5>@lang('Items already in this playlist:')</h5>
-                    @forelse ($playlistItems as $playlistId => $items)
-                        <h6 class="mt-4">{{ $playlists->find($playlistId)->title }}</h6>
-                        <ul class="list-group">
-                            @foreach ($items as $playlistItem)
-                                <li class="list-group-item">{{ $playlistItem->title }}</li>
-                            @endforeach
-                        </ul>
-                    @empty
-                        <p>@lang('No items in the playlists yet.')</p>
-                    @endforelse
+                    @foreach ($playlists as $playlist)
+                        <div class="playlist-items" id="playlist-{{ $playlist->id }}" style="display:none;">
+                            <h6 class="mt-4">{{ $playlist->title }}</h6>
+                            <ul class="list-group">
+                                @forelse ($playlistItems[$playlist->id] ?? [] as $playlistItem)
+                                    <li class="list-group-item">{{ $playlistItem->title }}</li>
+                                @empty
+                                    <li class="list-group-item">@lang('No items in this playlist yet.')</li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('script')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get the playlist select element
+        const playlistSelect = document.getElementById('playlistSelect');
+        const playlistItemsContainer = document.getElementById('playlistItemsContainer');
+
+        // Hide all playlist items initially
+        function hideAllPlaylistItems() {
+            const playlists = document.querySelectorAll('.playlist-items');
+            playlists.forEach(playlist => playlist.style.display = 'none');
+        }
+
+        // Show the selected playlist's items
+        playlistSelect.addEventListener('change', function() {
+            hideAllPlaylistItems();
+            const selectedPlaylist = this.value;
+            if (selectedPlaylist) {
+                const selectedItems = document.getElementById(`playlist-${selectedPlaylist}`);
+                if (selectedItems) {
+                    selectedItems.style.display = 'block';
+                }
+            }
+        });
+
+        // Hide all on load
+        hideAllPlaylistItems();
+    });
+</script>
+@endpush
