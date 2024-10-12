@@ -7,6 +7,9 @@ use App\Models\Playlist;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use File;
 
 class PlaylistController extends Controller
 {
@@ -19,11 +22,10 @@ class PlaylistController extends Controller
         return view('admin.playlists.create', compact('categories', 'pageTitle'));
     }
 
-
-
     // Store a new playlist
     public function store(Request $request)
     {
+        // Validate request input
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -32,15 +34,15 @@ class PlaylistController extends Controller
             'sub_category_id' => 'required|exists:sub_categories,id',
         ]);
 
-        if ($request->hasFile('cover_image')) {
-            $coverImage = $request->file('cover_image')->store('playlists', 'public');
-        }
+        // Handle image upload
+        $imageData = $this->imageUpload($request, null, 'store');
 
+        // Create playlist
         Playlist::create([
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type,
-            'cover_image' => $coverImage ?? null,
+            'cover_image' => $imageData['portrait'] ?? null, // Store portrait as cover image
             'sub_category_id' => $request->sub_category_id,
         ]);
 
@@ -51,8 +53,9 @@ class PlaylistController extends Controller
     public function index(Request $request)
     {
         $searchTerm = $request->input('search');
-        $pageTitle = 'Manage Playlists'; // Page title for index
+        $pageTitle = 'Manage Playlists';
 
+        // Search for playlists by category, sub-category name, or ID
         $playlists = Playlist::with('subCategory')
             ->when($searchTerm, function ($query, $searchTerm) {
                 return $query->whereHas('subCategory', function ($q) use ($searchTerm) {
@@ -73,7 +76,6 @@ class PlaylistController extends Controller
     // Show the form to edit a playlist
     public function edit(Playlist $playlist)
     {
-        // Eager-load the 'subCategories' relationship
         $categories = Category::with('subCategories')->get();
         $subCategories = SubCategory::all();
         $pageTitle = 'Edit Playlist: ' . $playlist->title;
@@ -83,6 +85,7 @@ class PlaylistController extends Controller
     // Update a playlist
     public function update(Request $request, Playlist $playlist)
     {
+        // Validate request input
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -91,15 +94,15 @@ class PlaylistController extends Controller
             'sub_category_id' => 'required|exists:sub_categories,id',
         ]);
 
-        if ($request->hasFile('cover_image')) {
-            $coverImage = $request->file('cover_image')->store('playlists', 'public');
-        }
+        // Handle image upload
+        $imageData = $this->imageUpload($request, $playlist, 'update');
 
+        // Update playlist
         $playlist->update([
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type,
-            'cover_image' => $coverImage ?? $playlist->cover_image,
+            'cover_image' => $imageData['portrait'] ?? $playlist->cover_image, // Store portrait as cover image
             'sub_category_id' => $request->sub_category_id,
         ]);
 
@@ -109,8 +112,38 @@ class PlaylistController extends Controller
     // Delete a playlist
     public function destroy(Playlist $playlist)
     {
-        $pageTitle = 'Delete Playlist'; // Page title for delete action
         $playlist->delete();
         return redirect()->route('admin.playlist.index')->with('success', 'Playlist deleted successfully.');
+    }
+
+    // Handle image upload logic
+    private function imageUpload($request, $item, $type)
+    {
+        $portrait = $item->cover_image ?? null; // We're using portrait as cover image
+
+        // Handle portrait image upload
+        if ($request->hasFile('cover_image')) {
+            $maxPortraitSize = $request->cover_image->getSize() / 3000000;
+
+            if ($maxPortraitSize > 3) {
+                throw ValidationException::withMessages(['cover_image' => 'Cover image size cannot be greater than 3MB']);
+            }
+
+            try {
+                $date = date('Y') . '/' . date('m') . '/' . date('d');
+                // Remove old image on update
+                if ($type == 'update') {
+                    Storage::delete(getFilePath('item_portrait') . $portrait);
+                }
+                // Store new image
+                $portrait = $date . '/' . fileUploader($request->cover_image, getFilePath('item_portrait') . $date);
+            } catch (\Exception $e) {
+                throw ValidationException::withMessages(['cover_image' => 'Cover image could not be uploaded']);
+            }
+        }
+
+        return [
+            'portrait' => $portrait, // Return portrait as cover image
+        ];
     }
 }
