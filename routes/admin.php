@@ -35,6 +35,8 @@ Route::middleware('admin')->group(function () {
         Route::post('delete/{playlist}', 'destroy')->name('destroy'); // Delete playlist
         Route::get('add-item/{type}/{id}', 'addItem')->name('addItem');
         Route::post('store-item',  'storeItemInPlaylist')->name('storeItemInPlaylist');
+        Route::post('admin/playlist/remove-item', 'removeItemFromPlaylist')->name('removeItemFromPlaylist');
+
 
     });
     Route::controller('AdminController')->group(function () {

@@ -13,39 +13,27 @@
                     <p><strong>{{ $item->title }}</strong></p>
                 </div>
 
-                <!-- Select Playlist to add item -->
-                <form action="{{ route('admin.playlist.storeItemInPlaylist') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="item_id" value="{{ $item->id }}">
+                <!-- Select Playlists to add/remove the item -->
+                <div class="form-group">
+                    <label>@lang('Select Playlists')</label>
+                    <select class="form-control" id="playlist-select" name="playlists[]" multiple required>
+                        @foreach($playlists as $playlist)
+                            <option value="{{ $playlist->id }}"
+                                    data-items="{{ $playlist->items->pluck('title')->implode(', ') }}"
+                                    @if($item->playlists->contains($playlist->id)) selected @endif>
+                                {{ $playlist->title }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <small>@lang('Hold Ctrl (Cmd on Mac) to select multiple playlists')</small>
+                </div>
 
-                    <div class="form-group">
-                        <label>@lang('Select Playlist')</label>
-                        <select class="form-control" id="playlistSelect" name="playlist_id" required>
-                            <option value="">@lang('Select a Playlist')</option>
-                            @foreach($playlists as $playlist)
-                                <option value="{{ $playlist->id }}">{{ $playlist->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn--primary">@lang('Add to Playlist')</button>
-                </form>
-
-                <!-- Display items already in each playlist -->
-                <div class="mt-5" id="playlistItemsContainer">
-                    <h5>@lang('Items already in this playlist:')</h5>
-                    @foreach ($playlists as $playlist)
-                        <div class="playlist-items" id="playlist-{{ $playlist->id }}" style="display:none;">
-                            <h6 class="mt-4">{{ $playlist->title }}</h6>
-                            <ul class="list-group">
-                                @forelse ($playlistItems[$playlist->id] ?? [] as $playlistItem)
-                                    <li class="list-group-item">{{ $playlistItem->title }}</li>
-                                @empty
-                                    <li class="list-group-item">@lang('No items in this playlist yet.')</li>
-                                @endforelse
-                            </ul>
-                        </div>
-                    @endforeach
+                <!-- Display items already in the selected playlist on hover -->
+                <div id="playlist-items-list" class="mt-4">
+                    <h5>@lang('Items in this playlist:')</h5>
+                    <ul id="items-list" class="list-group">
+                        <!-- Dynamic list will be populated here -->
+                    </ul>
                 </div>
             </div>
         </div>
@@ -53,33 +41,107 @@
 </div>
 @endsection
 
+@push('style')
+<style>
+    /* Optional: Add custom styles for the hover popup or list */
+    #playlist-items-list {
+        display: none;
+    }
+</style>
+@endpush
+
 @push('script')
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Get the playlist select element
-        const playlistSelect = document.getElementById('playlistSelect');
-        const playlistItemsContainer = document.getElementById('playlistItemsContainer');
+    $(document).ready(function () {
+        const itemId = '{{ $item->id }}'; // The item being added/removed from playlists
 
-        // Hide all playlist items initially
-        function hideAllPlaylistItems() {
-            const playlists = document.querySelectorAll('.playlist-items');
-            playlists.forEach(playlist => playlist.style.display = 'none');
+        // Function to display items for the selected playlist
+        function displayPlaylistItems(playlistId) {
+            var option = $('#playlist-select option[value="' + playlistId + '"]');
+            var items = option.data('items');
+
+            // If items are available, show the list
+            if (items) {
+                $('#items-list').html(''); // Clear the existing list
+                var itemsArray = items.split(','); // Split items by comma
+                itemsArray.forEach(function (item) {
+                    $('#items-list').append('<li class="list-group-item" data-playlist-id="' + playlistId + '">' + item + '</li>');
+                });
+
+                $('#playlist-items-list').show(); // Show the list container
+            } else {
+                $('#playlist-items-list').hide(); // Hide if no items
+            }
         }
 
-        // Show the selected playlist's items
-        playlistSelect.addEventListener('change', function() {
-            hideAllPlaylistItems();
-            const selectedPlaylist = this.value;
-            if (selectedPlaylist) {
-                const selectedItems = document.getElementById(`playlist-${selectedPlaylist}`);
-                if (selectedItems) {
-                    selectedItems.style.display = 'block';
-                }
-            }
+        // Handle mouseover to display playlist items
+        $('#playlist-select').on('mouseover', 'option', function() {
+            var playlistId = $(this).val();
+            displayPlaylistItems(playlistId);
         });
 
-        // Hide all on load
-        hideAllPlaylistItems();
+        // Handle change event to add/remove item from playlist
+        $('#playlist-select').on('change', function() {
+            // Get selected options
+            var selectedPlaylists = $(this).val();
+
+            // Remove items from unselected playlists
+            $('#items-list li').each(function() {
+                var playlistId = $(this).data('playlist-id');
+                if (selectedPlaylists.indexOf(playlistId.toString()) === -1) {
+                    $(this).remove();
+                    performRemoveRequest(playlistId); // Make remove request
+                }
+            });
+
+            // Add items for newly selected playlists
+            selectedPlaylists.forEach(function(playlistId) {
+                displayPlaylistItems(playlistId);
+                performAddRequest(playlistId); // Make add request
+            });
+        });
+
+        // Function to make an AJAX request to add item to playlist
+        function performAddRequest(playlistId) {
+            $.ajax({
+                url: '{{ route("admin.playlist.storeItemInPlaylist") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    playlist_id: playlistId,
+                    item_id: itemId
+                },
+                success: function(response) {
+                    console.log('Item added to playlist', playlistId);
+                    notify('success', response.message);
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    notify('error', 'Unable to add item to playlist.');
+                }
+            });
+        }
+
+        // Function to make an AJAX request to remove item from playlist
+        function performRemoveRequest(playlistId) {
+            $.ajax({
+                url: '{{ route("admin.playlist.removeItemFromPlaylist") }}', // Assuming you have this route set up
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    playlist_id: playlistId,
+                    item_id: itemId
+                },
+                success: function(response) {
+                    console.log('Item removed from playlist', playlistId);
+                    notify('success', response.message);
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    notify('error', 'Unable to remove item from playlist.');
+                }
+            });
+        }
     });
 </script>
 @endpush

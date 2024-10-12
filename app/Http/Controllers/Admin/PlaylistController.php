@@ -206,13 +206,24 @@ class PlaylistController extends Controller
         return redirect()->route('admin.playlist.index')->withNotify($notify);
     }
 
-    public function removeFromAllPlaylists(Request $request, $id)
-    {
-        $item = Item::findOrFail($id);
 
-        // Detach the item from all playlists
-        $item->playlists()->detach();
+    public function removeItemFromPlaylist(Request $request)
+{
+    $request->validate([
+        'playlist_id' => 'required|exists:playlists,id',
+        'item_id' => 'required|exists:items,id',
+    ]);
 
-        return response()->json(['success' => true]);
-    }
+    // Find the playlist and item
+    $playlist = Playlist::find($request->playlist_id);
+    $item = Item::find($request->item_id);
+
+    // Detach the item from the playlist (pivot table)
+    $playlist->items()->detach($item->id);
+
+    return response()->json(['message' => 'Item removed from playlist successfully.']);
+}
+
+
+
 }
