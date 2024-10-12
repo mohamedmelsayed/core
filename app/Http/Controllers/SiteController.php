@@ -166,9 +166,9 @@ class SiteController extends Controller
         $items = Item::hasVideoOrAudio();
         if ($request->sectionName == 'recent_added') {
             $data['recent_added'] = (clone $items)->where('item_type', Status::SINGLE_ITEM)->orderBy('id', 'desc')->limit(18)->get();
-        } else if ($request->sectionName == 'latest_series') {
+        } else if ($request->sectionName == 'playlists') {
             $data['playlists'] = Playlist::with('items')->limit(18)->get();
-        } else if ($request->sectionName == 'latest_series2') {
+        } else if ($request->sectionName == 'latest_series') {
             $data['latestSerieses'] = (clone $items)->orderBy('id', 'desc')->where('item_type', Status::EPISODE_ITEM)->limit(12)->get();
         } else if ($request->sectionName == 'single') {
             $data['single'] = (clone $items)->orderBy('id', 'desc')->where('single', 1)->with('category')->first();
@@ -183,7 +183,7 @@ class SiteController extends Controller
         } else if ($request->sectionName == 'single1' || $request->sectionName == 'single2' || $request->sectionName == 'single3') {
             $data['single'] = (clone $items)->orderBy('id', 'desc')->where('single', Status::YES)->with('category')->get();
         }
-        return view($this->activeTemplate . 'sections.' . $request->sectionName=='latestSerieses'?'playlists':$request->sectionName, $data);
+        return view($this->activeTemplate . 'sections.' . $request->sectionName, $data);
     }
 
     public function showPlaylist($id)
