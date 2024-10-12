@@ -56,9 +56,9 @@ class ItemController extends Controller
 
 
         if ($scope) {
-            $items = Item::where("is_audio", 0)->$scope()->with('category', 'sub_category', 'video');
+            $items = Item::with('playlists')->where("is_audio", 0)->$scope()->with('category', 'sub_category', 'video');
         } else {
-            $items = Item::where("is_audio", 0)->with('category', 'sub_category', 'video');
+            $items = Item::with('playlists')->where("is_audio", 0)->with('category', 'sub_category', 'video');
         }
 
         $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
@@ -92,9 +92,9 @@ class ItemController extends Controller
     {
 
         if ($scope) {
-            $items = Item::where("is_audio", 1)->$scope()->with('category', 'sub_category', 'video');
+            $items = Item::with('playlists')->where("is_audio", 1)->$scope()->with('category', 'sub_category', 'video');
         } else {
-            $items = Item::where("is_audio", 1)->with('category', 'sub_category', 'video');
+            $items = Item::with('playlists')->where("is_audio", 1)->with('category', 'sub_category', 'video');
         }
 
         $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
