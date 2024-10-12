@@ -26,10 +26,13 @@ Route::namespace('Auth')->group(function () {
 
 Route::middleware('admin')->group(function () {
 
-    Route::controller('PlaylistController')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::post('/', 'store')->name('store');
-
+    Route::controller('PlaylistController')->prefix('playlists')->name('playlist.')->group(function () {
+        Route::get('/', 'index')->name('index');      // List playlists
+        Route::get('create', 'create')->name('create'); // Create playlist form
+        Route::post('/', 'store')->name('store');    // Store playlist
+        Route::get('edit/{playlist}', 'edit')->name('edit'); // Edit playlist form
+        Route::post('update/{playlist}', 'update')->name('update'); // Update playlist
+        Route::post('delete/{playlist}', 'destroy')->name('destroy'); // Delete playlist
     });
     Route::controller('AdminController')->group(function () {
         Route::get('dashboard', 'dashboard')->name('dashboard');
