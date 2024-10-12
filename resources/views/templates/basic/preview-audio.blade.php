@@ -367,10 +367,10 @@
                 isRepeat = !isRepeat;
 
                 if (isRepeat) {
-                    volumeUpButton.style.backgroundColor =
+                    repeatButton.style.backgroundColor =
                         "#f3c56f"; // Set background color when repeat is active
                 } else {
-                    volumeUpButton.style.backgroundColor =
+                    repeatButton.style.backgroundColor =
                         "transparent"; // Reset background color when repeat is inactive
                 }
 
