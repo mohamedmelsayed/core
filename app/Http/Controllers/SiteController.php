@@ -15,6 +15,7 @@ use App\Models\Item;
 use App\Models\Language;
 use App\Models\LiveTelevision;
 use App\Models\Plan;
+use App\Models\Playlist;
 use App\Models\Slider;
 use App\Models\SubCategory;
 use App\Models\Subscriber;
@@ -166,7 +167,7 @@ class SiteController extends Controller
         if ($request->sectionName == 'recent_added') {
             $data['recent_added'] = (clone $items)->where('item_type', Status::SINGLE_ITEM)->orderBy('id', 'desc')->limit(18)->get();
         } else if ($request->sectionName == 'latest_series') {
-            $data['latestSerieses'] = (clone $items)->orderBy('id', 'desc')->where('item_type', Status::EPISODE_ITEM)->limit(12)->get();
+            $data['playlists'] = Playlist::with('items')->limit(18)->get();
         } else if ($request->sectionName == 'single') {
             $data['single'] = (clone $items)->orderBy('id', 'desc')->where('single', 1)->with('category')->first();
         } else if ($request->sectionName == 'latest_trailer') {
