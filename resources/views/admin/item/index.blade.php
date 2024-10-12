@@ -13,7 +13,6 @@
                                     <th>@lang('Subcategory')</th>
                                     <th>@lang('Item Type')</th>
                                     <th>@lang('Content Type')</th>
-
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -23,11 +22,11 @@
                                     <tr>
                                         <td>{{ $item->title }}</td>
                                         <td>{{ $item->category->name }}</td>
-                                        <td>{{ @$item->sub_category->name ?? 'N/A' }}</td>
+                                        <td>{{ optional($item->sub_category)->name ?? 'N/A' }}</td>
                                         <td>
-                                            @if ($item->item_type == 1 && $item->is_trailer != 1)
+                                            @if ($item->item_type == 1 && !$item->is_trailer)
                                                 <span class="badge badge--success">@lang('Single Item')</span>
-                                            @elseif($item->item_type == 2 && $item->is_trailer != 1)
+                                            @elseif ($item->item_type == 2 && !$item->is_trailer)
                                                 <span class="badge badge--primary">@lang('Episode Item')</span>
                                             @else
                                                 <span class="badge badge--warning">@lang('Trailer')</span>
@@ -41,80 +40,92 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($item->status == 1)
-                                                <span class="badge badge--success">@lang('Active')</span>
-                                            @else
-                                                <span class="badge badge--danger">@lang('Deactive')</span>
-                                            @endif
+                                            <span class="badge badge--{{ $item->status ? 'success' : 'danger' }}">
+                                                @lang($item->status ? 'Active' : 'Deactive')
+                                            </span>
                                         </td>
                                         <td>
                                             <div class="button--group">
                                                 <a class="btn btn-sm btn-outline--primary"
-                                                    href="{{ route('admin.item.edit', $item->id) }}">
+                                                   href="{{ route('admin.item.edit', $item->id) }}">
                                                     <i class="la la-pencil"></i>@lang('Edit')
                                                 </a>
                                                 <a class="btn btn-sm btn-outline--danger deleteBtn"
-                                                    data-item-id="{{ $item->id }}" href="javascript:void(0)">
+                                                   data-item-id="{{ $item->id }}" href="javascript:void(0)">
                                                     <i class="las la-recycle"></i> @lang('Delete')
                                                 </a>
 
                                                 <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown"
-                                                    type="button" aria-expanded="false"><i
+                                                        type="button" aria-expanded="false"><i
                                                         class="las la-ellipsis-v"></i>@lang('More')</button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item threshold"
-                                                        href="{{ route('watch', $item->slug) }}" target="_blank"> <i
-                                                            class="las la-eye"></i> @lang('Preview') </a>
-                                                    @if ($item->is_stream == 1)
+                                                       href="{{ route('watch', $item->slug) }}" target="_blank">
+                                                        <i class="las la-eye"></i> @lang('Preview')
+                                                    </a>
+
+                                                    <!-- Playlist Addition Based on Type -->
+                                                    <a class="dropdown-item threshold"
+                                                       href="{{ route('admin.playlist.addItem', ['type' => $item->is_audio ? 'audio' : 'video', 'id' => $item->id]) }}">
+                                                        <i class="las {{ $item->is_audio ? 'la-music' : 'la-video' }}"></i>
+                                                        @lang($item->is_audio ? 'Add to Audio Playlist' : 'Add to Video Playlist')
+                                                    </a>
+
+                                                    <!-- Stream Configuration -->
+                                                    @if ($item->is_stream)
                                                         <a class="dropdown-item threshold"
-                                                            href="{{ route('admin.item.setStream', $item->id) }}">
+                                                           href="{{ route('admin.item.setStream', $item->id) }}">
                                                             <i class="las la-cloud-upload-alt"></i> @lang('Configure Stream')
                                                         </a>
                                                     @endif
 
+                                                    <!-- Episode and Video Handling -->
                                                     @if ($item->item_type == 2)
                                                         <a class="dropdown-item threshold"
-                                                            href="{{ route('admin.item.episodes', $item->id) }}">
+                                                           href="{{ route('admin.item.episodes', $item->id) }}">
                                                             <i class="las la-list"></i> @lang('Episodes')
                                                         </a>
                                                     @else
                                                         @if ($item->video)
                                                             <a class="dropdown-item threshold"
-                                                                href="{{ route('admin.item.updateVideo', $item->id) }}">
+                                                               href="{{ route('admin.item.updateVideo', $item->id) }}">
                                                                 <i class="las la-cloud-upload-alt"></i> @lang('Update Video')
                                                             </a>
                                                             <a class="dropdown-item threshold"
-                                                                href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
+                                                               href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
                                                                 <i class="las la-language"></i> @lang('Translate Content')
                                                             </a>
                                                             <a class="dropdown-item threshold"
-                                                                href="{{ route('admin.item.ads.duration', $item->id) }}">
+                                                               href="{{ route('admin.item.ads.duration', $item->id) }}">
                                                                 <i class="lab la-buysellads"></i> @lang('Update Ads')
                                                             </a>
                                                             <a class="dropdown-item threshold"
-                                                                href="{{ route('admin.item.subtitle.list', [$item->id, '']) }}">
+                                                               href="{{ route('admin.item.subtitle.list', [$item->id, '']) }}">
                                                                 <i class="las la-file-audio"></i> @lang('Subtitles')
                                                             </a>
                                                             <a class="dropdown-item threshold"
-                                                                href="{{ route('admin.item.report', [$item->id, '']) }}">
+                                                               href="{{ route('admin.item.report', [$item->id, '']) }}">
                                                                 <i class="las la-chart-area"></i> @lang('Report')
                                                             </a>
                                                         @else
-                                                            @if ($item->is_stream == 0)
+                                                            @if (!$item->is_stream)
                                                                 <a class="dropdown-item threshold"
-                                                                    href="{{ route('admin.item.uploadVideo', $item->id) }}">
+                                                                   href="{{ route('admin.item.uploadVideo', $item->id) }}">
                                                                     <i class="las la-cloud-upload-alt"></i>
                                                                     @lang('Upload Video')
                                                                 </a>
                                                             @endif
                                                         @endif
                                                     @endif
-                                                    <a class="dropdown-item threshold confirmationBtn"
-                                                        data-action="{{ route('admin.item.send.notification', $item->id) }}"
-                                                        data-question="@lang('Are you sure to send notifications to all users?')" href="javascript:void(0)"> <i
-                                                            class="las la-bell"></i> @lang('Send Notification') </a>
-                                                </div>
 
+                                                    <!-- Notifications -->
+                                                    <a class="dropdown-item threshold confirmationBtn"
+                                                       data-action="{{ route('admin.item.send.notification', $item->id) }}"
+                                                       data-question="@lang('Are you sure to send notifications to all users?')"
+                                                       href="javascript:void(0)">
+                                                        <i class="las la-bell"></i> @lang('Send Notification')
+                                                    </a>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -125,7 +136,6 @@
                                 @endforelse
                             </tbody>
                         </table>
-
                     </div>
                 </div>
                 @if ($items->hasPages())
@@ -138,7 +148,6 @@
     </div>
 
     <x-confirmation-modal />
-
 @endsection
 
 @push('breadcrumb-plugins')
@@ -157,8 +166,8 @@
 
 @push('script')
     <script>
-        $(document).ready(function() {
-            $('.deleteBtn').click(function() {
+        $(document).ready(function () {
+            $('.deleteBtn').click(function () {
                 var itemId = $(this).data('item-id');
                 var deleteUrl = "{{ route('admin.item.delete', ':id') }}".replace(':id', itemId);
                 $('#deleteForm').attr('action', deleteUrl);
@@ -167,29 +176,3 @@
         });
     </script>
 @endpush
-
-
-
-
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmationModalLabel">@lang('Confirmation')</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                @lang('Are you sure you want to delete this item?')
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('Cancel')</button>
-                <form id="deleteForm" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">@lang('Delete')</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
