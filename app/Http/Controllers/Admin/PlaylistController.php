@@ -194,14 +194,16 @@ class PlaylistController extends Controller
 
         // Check if the item is already attached to the playlist
         if ($playlist->items()->where('item_id', $item->id)->exists()) {
+            $notify[] = ['error', 'This item is already in the playlist.'];
 
-            return redirect()->back()->with('error', 'This item is already in the playlist.');
+            return redirect()->back()->withNotify($notify);
         }
 
         // Attach the item to the playlist (using the pivot table)
         $playlist->items()->attach($item->id);
+        $notify[] = ['success', 'Item added to the playlist successfully.'];
 
-        return redirect()->route('admin.playlist.index')->with('success', 'Item added to the playlist successfully.');
+        return redirect()->route('admin.playlist.index')->withNotify($notify);
     }
 
 }
