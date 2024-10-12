@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <form action="{{ route('admin.playlist.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.playlist.store') }}" method="POST" enctype="multipart/form-data" id="playlistForm">
                     @csrf
                     <div class="card-body">
                         <div class="row">
@@ -35,11 +35,22 @@
                                 </select>
                             </div>
 
-                            <div class="form-group col-md-6">
-                                <label>@lang('Cover Image')</label>
-                                <input type="file" class="form-control" name="cover_image" id="coverImageInput" accept="image/*" required>
-                                <div class="mt-3">
-                                    <img id="coverImagePreview" src="#" alt="Cover Image Preview" style="display:none; max-height: 200px; border: 1px solid #ddd; padding: 5px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@lang('Cover Image')</label>
+                                    <div class="image--uploader w-100">
+                                        <div class="image-upload-wrapper">
+                                            <div class="image-upload-preview cover" style="background-image: url({{ getImage('/') }})">
+                                            </div>
+                                            <div class="image-upload-input-wrapper">
+                                                <input type="file" class="image-upload-input" name="cover_image" id="coverImageInput" accept=".png, .jpg, .jpeg" required>
+                                                <label for="coverImageInput" class="bg--primary"><i class="la la-cloud-upload"></i></label>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <small class="mt-3 text-muted"> @lang('Supported Files:') <b>@lang('.png, .jpg, .jpeg')</b></small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -57,21 +68,25 @@
             </div>
         </div>
     </div>
+@endsection
 
-    @push('script')
-    <script>
-        document.getElementById('coverImageInput').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const preview = document.getElementById('coverImagePreview');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
+@push('script')
+<script>
+    (function($) {
+        "use strict";
+
+        // Preview cover image
+        $('#coverImageInput').on('change', function() {
+            var input = this;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.image-upload-preview.cover').css('background-image', 'url(' + e.target.result + ')');
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(input.files[0]);
             }
         });
-    </script>
-    @endpush
-@endsection
+
+    })(jQuery);
+</script>
+@endpush
