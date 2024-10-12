@@ -33,9 +33,9 @@
                                         </td>
                                         <!-- Playlists Column -->
                                         <td>
-                                            @if($item->playlists->isNotEmpty())
+                                            @if ($item->playlists->isNotEmpty())
                                                 <ul>
-                                                    @foreach($item->playlists as $playlist)
+                                                    @foreach ($item->playlists as $playlist)
                                                         <li>{{ $playlist->title }}</li>
                                                     @endforeach
                                                 </ul>
@@ -57,24 +57,25 @@
 
                                                 <!-- Action Dropdown Menu -->
                                                 <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown"
-                                                        type="button" aria-expanded="false"><i
+                                                    type="button" aria-expanded="false"><i
                                                         class="las la-ellipsis-v"></i>@lang('More')</button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item threshold"
-                                                       href="{{ route('watch', $item->slug) }}" target="_blank">
+                                                        href="{{ route('watch', $item->slug) }}" target="_blank">
                                                         <i class="las la-eye"></i> @lang('Preview')
                                                     </a>
 
                                                     <!-- Playlist Addition Based on Type -->
                                                     <a class="dropdown-item threshold"
-                                                       href="{{ route('admin.playlist.addItem', ['type' => $item->is_audio ? 'audio' : 'video', 'id' => $item->id]) }}">
+                                                        href="{{ route('admin.playlist.addItem', ['type' => $item->is_audio ? 'audio' : 'video', 'id' => $item->id]) }}">
                                                         <i class="las {{ $item->is_audio ? 'la-music' : 'la-video' }}"></i>
                                                         @lang($item->is_audio ? 'Add to Audio Playlist' : 'Add to Video Playlist')
                                                     </a>
 
                                                     <!-- Remove from all Playlists -->
-                                                    @if($item->playlists->isNotEmpty())
-                                                        <a class="dropdown-item threshold removeFromAllPlaylistsBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
+                                                    @if ($item->playlists->isNotEmpty())
+                                                        <a class="dropdown-item threshold removeFromAllPlaylistsBtn"
+                                                            data-item-id="{{ $item->id }}" href="javascript:void(0)">
                                                             <i class="las la-minus-circle"></i> @lang('Remove from all Playlists')
                                                         </a>
                                                     @endif
@@ -82,7 +83,7 @@
                                                     <!-- Stream Configuration -->
                                                     @if ($item->is_stream)
                                                         <a class="dropdown-item threshold"
-                                                           href="{{ route('admin.item.setStream', $item->id) }}">
+                                                            href="{{ route('admin.item.setStream', $item->id) }}">
                                                             <i class="las la-cloud-upload-alt"></i> @lang('Configure Stream')
                                                         </a>
                                                     @endif
@@ -90,40 +91,51 @@
                                                     <!-- Episode and Video Handling -->
                                                     @if ($item->item_type == 2)
                                                         <a class="dropdown-item threshold"
-                                                           href="{{ route('admin.item.episodes', $item->id) }}">
+                                                            href="{{ route('admin.item.episodes', $item->id) }}">
                                                             <i class="las la-list"></i> @lang('Episodes')
                                                         </a>
                                                     @else
                                                         @if ($item->video)
                                                             <a class="dropdown-item threshold"
-                                                               href="{{ route('admin.item.updateVideo', $item->id) }}">
+                                                                href="{{ route('admin.item.updateVideo', $item->id) }}">
                                                                 <i class="las la-cloud-upload-alt"></i> @lang('Update Video')
                                                             </a>
                                                             <a class="dropdown-item threshold"
-                                                               href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
+                                                                href="{{ route('admin.language.translate2.show', ['type' => 'video', 'id' => $item->id]) }}">
                                                                 <i class="las la-language"></i> @lang('Translate Content')
                                                             </a>
                                                         @else
                                                             @if (!$item->is_stream)
                                                                 <a class="dropdown-item threshold"
-                                                                   href="{{ route('admin.item.uploadVideo', $item->id) }}">
+                                                                    href="{{ route('admin.item.uploadVideo', $item->id) }}">
                                                                     <i class="las la-cloud-upload-alt"></i>
                                                                     @lang('Upload Video')
                                                                 </a>
                                                             @endif
                                                         @endif
                                                     @endif
-
+                                                    <a class="dropdown-item threshold"
+                                                        href="{{ route('admin.item.ads.duration', $item->id) }}">
+                                                        <i class="lab la-buysellads"></i> @lang('Update Ads')
+                                                    </a>
+                                                    <a class="dropdown-item threshold"
+                                                        href="{{ route('admin.item.subtitle.list', [$item->id, '']) }}">
+                                                        <i class="las la-file-audio"></i> @lang('Subtitles')
+                                                    </a>
+                                                    <a class="dropdown-item threshold"
+                                                        href="{{ route('admin.item.report', [$item->id, '']) }}">
+                                                        <i class="las la-chart-area"></i> @lang('Report')
+                                                    </a>
                                                     <!-- Send Notification -->
                                                     <a class="dropdown-item threshold confirmationBtn"
-                                                       data-action="{{ route('admin.item.send.notification', $item->id) }}"
-                                                       data-question="@lang('Are you sure to send notifications to all users?')"
-                                                       href="javascript:void(0)">
+                                                        data-action="{{ route('admin.item.send.notification', $item->id) }}"
+                                                        data-question="@lang('Are you sure to send notifications to all users?')" href="javascript:void(0)">
                                                         <i class="las la-bell"></i> @lang('Send Notification')
                                                     </a>
 
                                                     <!-- Delete Item -->
-                                                    <a class="dropdown-item deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
+                                                    <a class="dropdown-item deleteBtn" data-item-id="{{ $item->id }}"
+                                                        href="javascript:void(0)">
                                                         <i class="las la-trash"></i> @lang('Delete')
                                                     </a>
                                                 </div>
@@ -168,8 +180,8 @@
 
 @push('script')
     <script>
-        $(document).ready(function () {
-            $('.deleteBtn').click(function () {
+        $(document).ready(function() {
+            $('.deleteBtn').click(function() {
                 var itemId = $(this).data('item-id');
                 var deleteUrl = "{{ route('admin.item.delete', ':id') }}".replace(':id', itemId);
                 $('#deleteForm').attr('action', deleteUrl);
@@ -177,9 +189,10 @@
             });
 
             // Remove from all Playlists functionality
-            $('.removeFromAllPlaylistsBtn').click(function () {
+            $('.removeFromAllPlaylistsBtn').click(function() {
                 var itemId = $(this).data('item-id');
-                var removeUrl = "{{ route('admin.item.removeFromAllPlaylists', ':id') }}".replace(':id', itemId);
+                var removeUrl = "{{ route('admin.item.removeFromAllPlaylists', ':id') }}".replace(':id',
+                    itemId);
 
                 if (confirm("@lang('Are you sure you want to remove this item from all playlists?')")) {
                     $.ajax({
@@ -189,10 +202,10 @@
                             _token: "{{ csrf_token() }}",
                             item_id: itemId
                         },
-                        success: function (response) {
+                        success: function(response) {
                             location.reload(); // Refresh the page after removing
                         },
-                        error: function () {
+                        error: function() {
                             alert("@lang('Error occurred while removing the item from playlists.')");
                         }
                     });
