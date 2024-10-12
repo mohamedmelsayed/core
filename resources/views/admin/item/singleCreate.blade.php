@@ -6,7 +6,7 @@
             <form action="{{ route('admin.item.store') }}" method="post" enctype="multipart/form-data" id="itemForm">
                 @csrf
                 <div class="card-body">
-                    <div class="d-flex justify-content-end flex-wrap gap-3">
+                    {{-- <div class="d-flex justify-content-end flex-wrap gap-3">
                         <div class="form-group">
                             <input class="form-control" name="id" type="number" placeholder="@lang('Enter TMDB ID Ex: 1000')">
                         </div>
@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <button class="btn btn-outline--dark fetchBtn h-45" type="button"><i class="las la-server"></i> @lang('Fetch')</button>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
