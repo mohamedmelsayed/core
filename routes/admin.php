@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\PlaylistController;
 use Illuminate\Support\Facades\Route;
 
 Route::namespace('Auth')->group(function () {
@@ -9,7 +8,7 @@ Route::namespace('Auth')->group(function () {
         Route::post('/', 'login')->name('login');
         Route::get('logout', 'logout')->middleware('admin')->name('logout');
     });
-    Route::resource('playlist', PlaylistController::class)->except(['show']);
+
 
     // Admin Password Reset
     Route::controller('ForgotPasswordController')->prefix('password')->name('password.')->group(function () {
@@ -26,6 +25,12 @@ Route::namespace('Auth')->group(function () {
 });
 
 Route::middleware('admin')->group(function () {
+
+    Route::controller('PlaylistController')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+
+    });
     Route::controller('AdminController')->group(function () {
         Route::get('dashboard', 'dashboard')->name('dashboard');
         Route::get('profile', 'profile')->name('profile');
