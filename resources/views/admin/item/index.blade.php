@@ -11,8 +11,8 @@
                                     <th>@lang('Title')</th>
                                     <th>@lang('Category')</th>
                                     <th>@lang('Subcategory')</th>
-                                    <th>@lang('Item Type')</th>
                                     <th>@lang('Content Type')</th>
+                                    <th>@lang('Playlists')</th> <!-- New column for playlists -->
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -23,20 +23,24 @@
                                         <td>{{ $item->title }}</td>
                                         <td>{{ $item->category->name }}</td>
                                         <td>{{ optional($item->sub_category)->name ?? 'N/A' }}</td>
-                                        <td>
-                                            @if ($item->item_type == 1 && !$item->is_trailer)
-                                                <span class="badge badge--success">@lang('Single Item')</span>
-                                            @elseif ($item->item_type == 2 && !$item->is_trailer)
-                                                <span class="badge badge--primary">@lang('Episode Item')</span>
-                                            @else
-                                                <span class="badge badge--warning">@lang('Trailer')</span>
-                                            @endif
-                                        </td>
+
                                         <td>
                                             @if ($item->is_stream)
                                                 <span class="badge badge--success">@lang('Stream')</span>
                                             @else
                                                 <span class="badge badge--success">@lang('Normal Video')</span>
+                                            @endif
+                                        </td>
+                                        <!-- Playlists Column -->
+                                        <td>
+                                            @if($item->playlists->isNotEmpty())
+                                                <ul>
+                                                    @foreach($item->playlists as $playlist)
+                                                        <li>{{ $playlist->title }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <span class="badge badge--secondary">@lang('No Playlist')</span>
                                             @endif
                                         </td>
                                         <td>

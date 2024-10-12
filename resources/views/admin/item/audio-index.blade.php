@@ -11,7 +11,6 @@
                                 <th>@lang('Title')</th>
                                 <th>@lang('Category')</th>
                                 <th>@lang('Subcategory')</th>
-                                <th>@lang('Item Type')</th>
                                 <th>@lang('Playlists')</th> <!-- New column for playlists -->
                                 <th>@lang('Status')</th>
                                 <th>@lang('Action')</th>
@@ -23,15 +22,7 @@
                                 <td>{{ $item->title }}</td>
                                 <td>{{ $item->category->name }}</td>
                                 <td>{{ $item->sub_category->name ?? 'N/A' }}</td>
-                                <td>
-                                    @if ($item->item_type == 1 && !$item->is_trailer)
-                                        <span class="badge badge--success">@lang('Single Item')</span>
-                                    @elseif($item->item_type == 2 && !$item->is_trailer)
-                                        <span class="badge badge--primary">@lang('Episode Item')</span>
-                                    @else
-                                        <span class="badge badge--warning">@lang('Trailer')</span>
-                                    @endif
-                                </td>
+
                                 <!-- Display playlists -->
                                 <td>
                                     @if($item->playlists->isNotEmpty())
