@@ -37,7 +37,10 @@
 
                             <div class="form-group col-md-6">
                                 <label>@lang('Cover Image')</label>
-                                <input type="file" class="form-control" name="cover_image" accept="image/*" required>
+                                <input type="file" class="form-control" name="cover_image" id="coverImageInput" accept="image/*" required>
+                                <div class="mt-3">
+                                    <img id="coverImagePreview" src="#" alt="Cover Image Preview" style="display:none; max-height: 200px; border: 1px solid #ddd; padding: 5px;">
+                                </div>
                             </div>
                         </div>
 
@@ -54,4 +57,21 @@
             </div>
         </div>
     </div>
+
+    @push('script')
+    <script>
+        document.getElementById('coverImageInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('coverImagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    @endpush
 @endsection
