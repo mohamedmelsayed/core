@@ -183,7 +183,7 @@ class SiteController extends Controller
         } else if ($request->sectionName == 'single1' || $request->sectionName == 'single2' || $request->sectionName == 'single3') {
             $data['single'] = (clone $items)->orderBy('id', 'desc')->where('single', Status::YES)->with('category')->get();
         }
-        return view($this->activeTemplate . 'sections.' . $request->sectionName, $data);
+        return view($this->activeTemplate . 'sections.' . $request->sectionName=='latestSerieses'?'playlists':$request->sectionName, $data);
     }
 
     public function showPlaylist($id)
