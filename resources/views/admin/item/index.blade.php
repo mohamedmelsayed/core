@@ -47,14 +47,11 @@
                                         <td>
                                             <div class="button--group">
                                                 <a class="btn btn-sm btn-outline--primary"
-                                                   href="{{ route('admin.item.edit', $item->id) }}">
+                                                    href="{{ route('admin.item.edit', $item->id) }}">
                                                     <i class="la la-pencil"></i>@lang('Edit')
                                                 </a>
-                                                <a class="btn btn-sm btn-outline--danger deleteBtn"
-                                                   data-item-id="{{ $item->id }}" href="javascript:void(0)">
-                                                    <i class="las la-recycle"></i> @lang('Delete')
-                                                </a>
 
+                                                <!-- Action Dropdown Menu -->
                                                 <button class="btn btn-sm btn-outline--info" data-bs-toggle="dropdown"
                                                         type="button" aria-expanded="false"><i
                                                         class="las la-ellipsis-v"></i>@lang('More')</button>
@@ -118,12 +115,17 @@
                                                         @endif
                                                     @endif
 
-                                                    <!-- Notifications -->
+                                                    <!-- Send Notification -->
                                                     <a class="dropdown-item threshold confirmationBtn"
                                                        data-action="{{ route('admin.item.send.notification', $item->id) }}"
                                                        data-question="@lang('Are you sure to send notifications to all users?')"
                                                        href="javascript:void(0)">
                                                         <i class="las la-bell"></i> @lang('Send Notification')
+                                                    </a>
+
+                                                    <!-- Delete Item -->
+                                                    <a class="dropdown-item deleteBtn" data-item-id="{{ $item->id }}" href="javascript:void(0)">
+                                                        <i class="las la-trash"></i> @lang('Delete')
                                                     </a>
                                                 </div>
                                             </div>
@@ -136,6 +138,7 @@
                                 @endforelse
                             </tbody>
                         </table>
+
                     </div>
                 </div>
                 @if ($items->hasPages())
