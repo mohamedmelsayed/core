@@ -33,6 +33,8 @@ Route::middleware('admin')->group(function () {
         Route::get('edit/{playlist}', 'edit')->name('edit'); // Edit playlist form
         Route::post('update/{playlist}', 'update')->name('update'); // Update playlist
         Route::post('delete/{playlist}', 'destroy')->name('destroy'); // Delete playlist
+        Route::get('add-item/{type}/{id}', 'addItem')->name('addItem');
+        Route::post('store-item',  'storeItemInPlaylist')->name('storeItemInPlaylist');
     });
     Route::controller('AdminController')->group(function () {
         Route::get('dashboard', 'dashboard')->name('dashboard');

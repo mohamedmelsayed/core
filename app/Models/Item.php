@@ -8,7 +8,8 @@ use App\Traits\GlobalStatus;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model {
+class Item extends Model
+{
     use Searchable, GlobalStatus, ApiQuery;
 
     protected $casts = [
@@ -17,52 +18,70 @@ class Item extends Model {
         'thumbnail' => 'object',
     ];
 
-    public function video() {
+    public function video()
+    {
         return $this->hasOne(Video::class);
     }
-    public function stream() {
+    public function stream()
+    {
         return $this->hasOne(Stream::class);
     }
 
-    public function audio() {
+    public function audio()
+    {
         return $this->hasOne(Audio::class);
     }
-    public function subtitles() {
+    public function subtitles()
+    {
         return $this->hasMany(Subtitle::class);
     }
 
-    public function translations() {
+    public function translations()
+    {
         return $this->hasMany(ContentTranslation::class);
     }
-    public function videoReport() {
+    public function videoReport()
+    {
         return $this->hasMany(VideoReport::class);
     }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function sub_category() {
+    public function sub_category()
+    {
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
-    public function episodes() {
+    public function episodes()
+    {
         return $this->hasMany(Episode::class);
     }
 
-    public function wishlists() {
+    public function wishlists()
+    {
         return $this->hasMany(Wishlist::class);
     }
 
-    public function scopeHasVideoOrAudio($query) {
+    // Define the many-to-many relationship with playlists
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class, 'playlist_items', 'item_id', 'playlist_id');
+    }
+
+    public function scopeHasVideoOrAudio($query)
+    {
         return $query->where(function ($q) {
             $q->whereHas('video')
-              ->orWhereHas('audio');
+                ->orWhereHas('audio');
         });
     }
 
 
-    public function getVersionNameAttribute() {
+    public function getVersionNameAttribute()
+    {
         $versionName = '';
         if ($this->version == Status::FREE_VERSION && $this->is_trailer == Status::NO) {
             $versionName = 'Free';
@@ -76,7 +95,8 @@ class Item extends Model {
         return $versionName;
     }
 
-    public function scopeHasVideo($query) {
+    public function scopeHasVideo($query)
+    {
         return $query->where('status', Status::ENABLE)->where(function ($q) {
             $q->orWhereHas('video')->orWhereHas('episodes', function ($video) {
                 $video->where('status', Status::ENABLE)->whereHas('video');
@@ -84,7 +104,8 @@ class Item extends Model {
         });
     }
 
-    public function scopeHasAudio($query) {
+    public function scopeHasAudio($query)
+    {
         return $query->where('status', Status::ENABLE)->where(function ($q) {
             $q->orWhereHas('audio')->orWhereHas('episodes', function ($audio) {
                 $audio->where('status', Status::ENABLE)->whereHas('audio');
@@ -92,14 +113,16 @@ class Item extends Model {
         });
     }
 
-    public function scopeFree($query) {
+    public function scopeFree($query)
+    {
         return $query->where('status', Status::ENABLE)->where('item_type', '!=', 3)->where(function ($free) {
             $free->orWhere('version', Status::FREE_VERSION)->orWhereHas('episodes', function ($q) {
                 $q->where('version', Status::FREE_VERSION);
             });
         });
     }
-    public function scopeActive($query) {
+    public function scopeActive($query)
+    {
         return $query->where(function ($q) {
             $q->orWhere('status', Status::ENABLE)->orWhereHas('episodes', function ($episodes) {
                 $episodes->where('status', Status::ENABLE);
@@ -107,7 +130,8 @@ class Item extends Model {
         });
     }
 
-    public function scopeSearch($query, $search) {
+    public function scopeSearch($query, $search)
+    {
         return $query->where(function ($q) use ($search) {
             $q->orWhere('title', 'LIKE', "%$search%")
                 ->orWhereHas('category', function ($category) use ($search) {
@@ -126,18 +150,22 @@ class Item extends Model {
         });
     }
 
-    public function scopeSingleItems($query) {
+    public function scopeSingleItems($query)
+    {
         return $query->where('item_type', Status::SINGLE_ITEM);
     }
 
-    public function scopeEpisodeItems($query) {
+    public function scopeEpisodeItems($query)
+    {
         return $query->where('item_type', Status::EPISODE_ITEM);
     }
 
-    public function scopeTrailerItems($query) {
+    public function scopeTrailerItems($query)
+    {
         return $query->where('is_trailer', Status::TRAILER)->where('item_type', Status::SINGLE_ITEM);
     }
-    public function scopeRentItems($query) {
+    public function scopeRentItems($query)
+    {
         return $query->where('version', Status::RENT_VERSION);
     }
 }

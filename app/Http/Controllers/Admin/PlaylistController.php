@@ -146,4 +146,47 @@ class PlaylistController extends Controller
             'portrait' => $portrait, // Return portrait as cover image
         ];
     }
+
+
+    // Show the form to add an item to the playlist
+    public function addItem($type, $id)
+    {
+        // Validate the type of playlist (audio or video)
+        if (!in_array($type, ['audio', 'video'])) {
+            return redirect()->back()->with('error', 'Invalid playlist type.');
+        }
+
+        // Find the item by its ID
+        $item = Item::find($id);
+
+        if (!$item) {
+            return redirect()->back()->with('error', 'Item not found.');
+        }
+
+        // Find the playlist of the given type
+        $playlists = Playlist::where('type', $type)->get();
+
+        $pageTitle = 'Add Item to ' . ucfirst($type) . ' Playlist';
+
+        // Render a view to choose which playlist to add the item to
+        return view('admin.playlists.add-item', compact('playlists', 'item', 'type', 'pageTitle'));
+    }
+
+    // Process adding the item to a playlist
+    public function storeItemInPlaylist(Request $request)
+    {
+        $request->validate([
+            'playlist_id' => 'required|exists:playlists,id',
+            'item_id' => 'required|exists:items,id',
+        ]);
+
+        // Find the playlist and the item
+        $playlist = Playlist::find($request->playlist_id);
+        $item = Item::find($request->item_id);
+
+        // Assuming you have a relationship between Playlist and Item
+        $playlist->items()->attach($item);
+
+        return redirect()->route('admin.playlist.index')->with('success', 'Item added to the playlist successfully.');
+    }
 }

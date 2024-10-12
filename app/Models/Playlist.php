@@ -17,6 +17,12 @@ class Playlist extends Model
         'sub_category_id',
     ];
 
+      // Define the many-to-many relationship with items
+      public function items()
+      {
+          return $this->belongsToMany(Item::class, 'playlist_items', 'playlist_id', 'item_id');
+      }
+
     public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);
