@@ -182,6 +182,7 @@ class PlaylistController extends Controller
     // Process adding the item to a playlist
     public function storeItemInPlaylist(Request $request)
     {
+        // Validate the incoming request
         $request->validate([
             'playlist_id' => 'required|exists:playlists,id',
             'item_id' => 'required|exists:items,id',
@@ -191,9 +192,15 @@ class PlaylistController extends Controller
         $playlist = Playlist::find($request->playlist_id);
         $item = Item::find($request->item_id);
 
-        // Assuming you have a relationship between Playlist and Item
-        $playlist->items()->attach($item);
+        // Check if the item is already attached to the playlist
+        if ($playlist->items()->where('item_id', $item->id)->exists()) {
+            return redirect()->back()->with('error', 'This item is already in the playlist.');
+        }
+
+        // Attach the item to the playlist (using the pivot table)
+        $playlist->items()->attach($item->id);
 
         return redirect()->route('admin.playlist.index')->with('success', 'Item added to the playlist successfully.');
     }
+
 }
