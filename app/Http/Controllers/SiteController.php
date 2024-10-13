@@ -195,7 +195,7 @@ class SiteController extends Controller
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
         $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
-        $item = $playlistItems->first(); // Get the first item to play by default
+        $item =$playlist->type=='video'? $playlistItems->with('video')->first(): $playlistItems->with('audio')->first(); // Get the first item to play by default
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
@@ -215,7 +215,7 @@ class SiteController extends Controller
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
-        $item = Item::hasVideoOrAudio()->where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
+        $item =$playlist->type=='video'? Item::hasVideo()->with('video')->where('slug', $itemSlug)->firstOrFail():Item::hasAudio()->with('audio')->where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
         $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
 
         $seoContents = $this->getItemSeoContent($item);
