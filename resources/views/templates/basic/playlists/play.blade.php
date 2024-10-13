@@ -161,7 +161,7 @@
                 var itemSlug = $(this).data('item');
 
                 $.ajax({
-                    url: '/playlist/item/' + playlistId + '/' + itemSlug,
+                    url: '/playlist/' + playlistId + '/item/' + itemSlug,
                     type: 'GET',
                     success: function(response) {
                         // Update the player container with the new content
