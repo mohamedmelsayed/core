@@ -50,9 +50,14 @@
                     <ul class="list-group">
                         @foreach ($playlistItems as $playlistItem)
                             <li class="list-group-item">
-                                <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id]) }}">
+                                <p>
                                     {{ $playlistItem->title }}
-                                </a>
+                                    {{ $playlistItem->slug }}
+
+                                </p>
+                                {{-- <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
+                                    {{ $playlistItem->title }}
+                                </a> --}}
                             </li>
                         @endforeach
                     </ul>
