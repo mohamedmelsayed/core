@@ -216,8 +216,8 @@ class SiteController extends Controller
         $videos = $playlist->type == 'video' ? $this->videoList($item->video ?? null) : [];
         $audios = $playlist->type == 'audio' ? $this->audioList($item->audio ?? null) : [];
 
-        $adsTime = null;
-        $subtitles = null;
+        $adsTime = [];
+        $subtitles = [];
         if ($playlist->type == 'video') {
             $adsTime = $item->video->getAds() ?? [];
             $subtitles = $item->video->subtitles;
@@ -262,8 +262,8 @@ class SiteController extends Controller
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
 
-        $adsTime = null;
-        $subtitles = null;
+        $adsTime = [];
+        $subtitles = [];
         if ($playlist->type == 'video') {
             $adsTime = $item->video->getAds() ?? [];
             $subtitles = $item->video->subtitles;
@@ -273,7 +273,7 @@ class SiteController extends Controller
         if (request()->ajax()) {
             // Return the player content as a JSON response
             $playerContent = view($this->activeTemplate . 'partials.video-player', compact(
-                'pageTitle',
+            'pageTitle',
             'playlist',
             'item',
             'playlistItems',
