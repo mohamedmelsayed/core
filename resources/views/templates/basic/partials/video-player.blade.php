@@ -1,14 +1,18 @@
 <div class="movie-item">
     <div class="main-video">
-        <video class="video-player plyr-video" playsinline controls autoplay
-            data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
-            <source src="{{ $item->video->content }}" type="video/mp4" size="{{ $item->video->size }}" />
-            @foreach ($subtitles ?? [] as $subtitle)
-                <track kind="captions" label="{{ $subtitle->language }}"
-                    src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}"
-                    srclang="{{ $subtitle->code }}" />
-            @endforeach
-        </video>
+        @if ($item->video)
+            <video class="video-player plyr-video" playsinline controls autoplay
+                data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
+                <source src="{{ $item->video->content }}" type="video/mp4" size="{{ $item->video->size }}" />
+                @foreach ($subtitles ?? [] as $subtitle)
+                    <track kind="captions" label="{{ $subtitle->language }}"
+                        src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}"
+                        srclang="{{ $subtitle->code }}" />
+                @endforeach
+            </video>
+        @else
+            <p>@lang('Video content is not available for this item.')</p>
+        @endif
     </div>
 
     @if ($item->version == Status::RENT_VERSION && !$watchEligable)
