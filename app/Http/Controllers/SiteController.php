@@ -203,7 +203,7 @@ class SiteController extends Controller
         $pageTitle = 'PlayList Details';
 
         $playlistItems = $playlist->items; // Retrieve all items in the playlist
-        $item = $playlistItems->first(); // Get the first item to play by default
+        $item = $playlistItems->hasVideoOrAudio()->first(); // Get the first item to play by default
 
         return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));
     }
@@ -213,7 +213,7 @@ class SiteController extends Controller
     {
         $pageTitle = 'PlayList Details';
 
-        $item = Item::where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
+        $item = Item::hasVideoOrAudio()->where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
         $playlistItems = $playlist->items; // Retrieve all items in the playlist
 
         return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));

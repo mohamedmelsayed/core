@@ -37,9 +37,7 @@
                     <div class="movie-item">
                         <video class="video-player plyr-video" playsinline controls autoplay
                                data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
-                            @foreach ($item->videos as $video)
-                                <source src="{{ $video->content }}" type="video/mp4" size="{{ $video->size }}" />
-                            @endforeach
+                                <source src="{{ $item->video->content }}" type="video/mp4" size="{{ $item->video->size }}" />
                         </video>
                     </div>
                 @endif
