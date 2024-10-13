@@ -192,25 +192,29 @@ class SiteController extends Controller
     public function play(Playlist $playlist)
     {
         $pageTitle = 'PlayList Details';
+        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
         $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
         $item = $playlistItems->first(); // Get the first item to play by default
         $seoContents = $this->getItemSeoContent($item);
+        $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents'));
+        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents','checkWatchEligable'));
     }
 
     // Method to play a specific item from a playlist
     public function playItem(Playlist $playlist, $itemSlug)
     {
         $pageTitle = 'PlayList Details';
+        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
         $item = Item::hasVideoOrAudio()->where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
         $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
 
         $seoContents = $this->getItemSeoContent($item);
+        $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents'));
+        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents','checkWatchEligable'));
     }
 
     public function watchVideo($slug, $episodeId = null)
