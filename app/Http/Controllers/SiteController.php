@@ -194,8 +194,19 @@ class SiteController extends Controller
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
-        $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
-        $item =$playlist->type=='video'? $playlistItems->with('video')->first(): $playlistItems->with('audio')->first(); // Get the first item to play by default
+        // Retrieve all items in the playlist that have video or audio
+        $playlistItems = $playlist->items()->whereHas('video')->orWhereHas('audio')->get();
+
+        // Get the first item to play by default
+        $item = $playlist->type == 'video'
+            ? $playlist->items()->whereHas('video')->with('video')->first()
+            : $playlist->items()->whereHas('audio')->with('audio')->first();
+
+        if (!$item) {
+            // Handle the case where no video or audio is found
+            return redirect()->back()->with('error', 'No playable item found in this playlist.');
+        }
+
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
@@ -206,7 +217,16 @@ class SiteController extends Controller
             $subtitles = $item->video->subtitles;
         }
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems', 'seoContents', 'checkWatchEligable', 'adsTime', 'subtitles'));
+        return view($this->activeTemplate . 'playlists.play', compact(
+            'pageTitle',
+            'playlist',
+            'item',
+            'playlistItems',
+            'seoContents',
+            'checkWatchEligable',
+            'adsTime',
+            'subtitles'
+        ));
     }
 
     // Method to play a specific item from a playlist
@@ -215,11 +235,17 @@ class SiteController extends Controller
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
-        $item =$playlist->type=='video'? Item::hasVideo()->with('video')->where('slug', $itemSlug)->firstOrFail():Item::hasAudio()->with('audio')->where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
-        $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
+        // Find the item by slug based on whether the playlist is video or audio type
+        $item = $playlist->type == 'video'
+            ? Item::whereHas('video')->with('video')->where('slug', $itemSlug)->firstOrFail()
+            : Item::whereHas('audio')->with('audio')->where('slug', $itemSlug)->firstOrFail();
+
+        // Retrieve all items in the playlist that have video or audio
+        $playlistItems = $playlist->items()->whereHas('video')->orWhereHas('audio')->get();
 
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+
         $adsTime = null;
         $subtitles = null;
         if ($playlist->type == 'video') {
@@ -227,7 +253,16 @@ class SiteController extends Controller
             $subtitles = $item->video->subtitles;
         }
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems', 'seoContents', 'checkWatchEligable', 'adsTime', 'subtitles'));
+        return view($this->activeTemplate . 'playlists.play', compact(
+            'pageTitle',
+            'playlist',
+            'item',
+            'playlistItems',
+            'seoContents',
+            'checkWatchEligable',
+            'adsTime',
+            'subtitles'
+        ));
     }
 
     public function watchVideo($slug, $episodeId = null)
