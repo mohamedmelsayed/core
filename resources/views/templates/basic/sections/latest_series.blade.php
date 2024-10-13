@@ -16,7 +16,7 @@
                         <img class="lazy-loading-img" data-src="{{ getImage(getFilePath('item_portrait') . '/' . $playlist->cover_image) }}" src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
                         <span class="movie-badge">{{ 'Playlist' }}</span>
                         <div class="movie-thumb-overlay">
-                            <a class="video-icon" href="{{ route('playlist.show', $playlist->id) }}"><i class="fas fa-play"></i></a>
+                            <a class="video-icon" href="{{ route('playlist.play', $playlist->id) }}"><i class="fas fa-play"></i></a>
                         </div>
                           <!-- Display Font Awesome icon based on is_audio inside the thumb -->
                           <span class="media-type"
