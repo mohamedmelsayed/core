@@ -14,35 +14,35 @@
 
             <!-- Display the video/audio player -->
             <div class="row">
-                <div class="player-container col-xl-8 col-lg-8 mb-30">
-                        @if ($item)
-                            @if ($item->is_audio)
-                                <!-- Audio Player Widget -->
-                                @if ($item->audio)
-                                    <!-- Include Audio Player Partial -->
-                                    @include($activeTemplate . 'partials.audio-player', ['item' => $item])
-                                @else
-                                    <!-- Fallback message for missing audio content -->
-                                    <p>@lang('Audio content is not available for this item.')</p>
-                                @endif
+                <div class="col-xl-8 col-lg-8 mb-30" id="player-container">
+                    @if ($item)
+                        @if ($item->is_audio)
+                            <!-- Audio Player Widget -->
+                            @if ($item->audio)
+                                <!-- Include Audio Player Partial -->
+                                @include($activeTemplate . 'partials.audio-player', ['item' => $item])
                             @else
-                                <!-- Video Player Widget -->
-                                @if ($item->video)
-                                    <!-- Include Video Player Partial -->
-                                    @include($activeTemplate . 'partials.video-player', [
-                                        'item' => $item,
-                                        'subtitles' => $subtitles,
-                                        'adsTime' => $adsTime,
-                                        'watchEligable' => $watchEligable,
-                                    ])
-                                @else
-                                    <p>@lang('Video content is not available for this item.')</p>
-                                @endif
+                                <!-- Fallback message for missing audio content -->
+                                <p>@lang('Audio content is not available for this item.')</p>
                             @endif
                         @else
-                            <!-- Fallback message if no item is selected -->
-                            <p>@lang('No media available in this playlist to play.')</p>
+                            <!-- Video Player Widget -->
+                            @if ($item->video)
+                                <!-- Include Video Player Partial -->
+                                @include($activeTemplate . 'partials.video-player', [
+                                    'item' => $item,
+                                    'subtitles' => $subtitles,
+                                    'adsTime' => $adsTime,
+                                    'watchEligable' => $watchEligable,
+                                ])
+                            @else
+                                <p>@lang('Video content is not available for this item.')</p>
+                            @endif
                         @endif
+                    @else
+                        <!-- Fallback message if no item is selected -->
+                        <p>@lang('No media available in this playlist to play.')</p>
+                    @endif
                 </div>
 
                 <!-- Display playlist items on the right -->
@@ -165,7 +165,7 @@
                     type: 'GET',
                     success: function(response) {
                         // Update the player container with the new content
-                        $('#player-container col-xl-8 col-lg-8 mb-30').html(response.view);
+                        $('#player-container').html(response.view);
                     },
                     error: function(error) {
                         console.error('Error fetching item content:', error);
