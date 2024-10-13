@@ -415,7 +415,7 @@
 
         // Watch eligibility check
         player.on('play', function () {
-            let watchEligable = "{{ is_array($watchEligable) ? json_encode($watchEligable) : $watchEligable }}";
+            let watchEligable = "{{ @$watchEligable }}";
 
             if (!Number(watchEligable)) {
                 $('#alertModal').modal('show');
