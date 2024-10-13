@@ -1,19 +1,84 @@
-<div id="audio-player" class="audio-player-container">
-    <audio id="audio" src="{{ $item->audio->content }}" controls autoplay></audio>
+<section class="audio-details-section section--bg ptb-80">
+    <div class="container">
+        <div class="row @if (blank($episodes)) justify-content-center @endif mb-30-none">
+            <div class="col-xl-8 col-lg-8 mb-30">
+                <div id="audio-player" class="audio-player-container">
+                    <audio id="audio" src="{{ $audios[0]->content }}" controls style="display:none;"></audio>
 
-    <div id="audio-controls-container" class="audio-controls-container">
-        <div id="file-title" class="audio-title">{{ $item->title }}</div>
-        <div id="audio-controls" class="audio-controls">
-            <!-- Play/Pause Button -->
-            <button class="audio-control play-btn" id="play-pause">
-                <i class="fas fa-play"></i>
-            </button>
+                    <div id="audio-controls-container" class="audio-controls-container">
+                        <div id="file-title" class="audio-title">{{ __($seoContents['social_title']) }}</div>
+                        <div id="audio-controls" class="audio-controls">
+                            <!-- Play/Pause Button -->
+                            <button class="audio-control play-btn" id="play-pause">
+                                <i class="fas fa-play" style="scale: 120%"></i>
+                            </button>
+
+                            <!-- Repeat Button -->
+                            <button class="audio-control repeat-btn" id="repeat-btn" style="scale: 70%">
+                                <i class="fas fa-redo" style="scale: 120%"></i>
+                            </button>
+
+                            <div id="time-indicator" class="time-indicator"></div>
+
+                            <!-- Waveform display -->
+                            <div id="waveform" class="waveform" style="width: 70%"></div>
+
+                            <!-- Time Indicator -->
+                            <div id="total-time" class="time-indicator"></div>
+
+                            <!-- Volume Control -->
+                            <button class="audio-control play-btn" id="v-mute" style="display: none;"
+                                style="scale: 70%">
+                                <i class="fas fa-volume-mute" style="scale: 120%"></i>
+                            </button>
+                            <button class="audio-control play-btn" id="v-up" style="scale: 70%">
+                                <i class="fas fa-volume-up" style="scale: 120%"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Thumbnail image (occupying 20% width) -->
+                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
+                        id="thumbnail" class="audio-thumbnail" />
+                </div>
+
+                <div class="product-tab mt-40">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="product-tab-desc" data-bs-toggle="tab"
+                                href="#product-desc-content" role="tab" aria-controls="product-desc-content"
+                                aria-selected="true">@lang('Description')</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
+                                role="tab" aria-controls="product-team-content"
+                                aria-selected="false">@lang('Team')</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
+                            aria-labelledby="product-tab-desc">
+                            <div class="product-desc-content">
+                                {{ __($item->description) }}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade fade" id="product-team-content" role="tabpanel"
+                            aria-labelledby="product-tab-team">
+                            <div class="product-desc-content">
+                                <ul class="team-list">
+                                    <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
+                                    <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
+                                    <li><span>@lang('Language'):</span> {{ __(@$item->team->language) }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-    <!-- Thumbnail image -->
-    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" id="thumbnail"
-        class="audio-thumbnail" />
-</div>
+</section>
 
 <style>
     /* Container for the audio player */
@@ -108,7 +173,6 @@
     }
 </style>
 
-
 @push('script')
     <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
     <script>
@@ -135,7 +199,7 @@
 
 
 
-            wavesurfer.load('{{ $item->audio->content }}');
+            wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
 
             wavesurfer.on('ready', function() {

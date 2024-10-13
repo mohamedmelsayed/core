@@ -196,8 +196,8 @@ class SiteController extends Controller
 
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->type == 'video'
-        ? $playlist->items()->whereHas('video')->with('video')->get()
-        : $playlist->items()->whereHas('audio')->with('audio')->get();
+            ? $playlist->items()->whereHas('video')->with('video')->get()
+            : $playlist->items()->whereHas('audio')->with('audio')->get();
 
         // Get the first item to play by default
         $item = $playlist->type == 'video'
@@ -213,7 +213,8 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
-        $videos = $this->videoList($item->video??null);
+        $videos = $this->videoList($item->video ?? null);
+        $audios = $this->audioList($item->audio ?? null);
 
         $adsTime = null;
         $subtitles = null;
@@ -230,6 +231,7 @@ class SiteController extends Controller
             'seoContents',
             'watchEligable',
             'videos',
+            'audios',
             'adsTime',
             'subtitles'
         ));
@@ -248,13 +250,15 @@ class SiteController extends Controller
 
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->type == 'video'
-        ? $playlist->items()->whereHas('video')->with('video')->get()
-        : $playlist->items()->whereHas('audio')->with('audio')->get();
+            ? $playlist->items()->whereHas('video')->with('video')->get()
+            : $playlist->items()->whereHas('audio')->with('audio')->get();
 
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
-        $videos = $this->videoList($item->video??null);
+        $videos = $this->videoList($item->video ?? null);
+        $audios = $this->audioList($item->audio ?? null);
+
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
         $adsTime = null;
@@ -273,6 +277,7 @@ class SiteController extends Controller
             'watchEligable',
             'adsTime',
             'videos',
+            'audios',
             'subtitles'
         ));
     }
