@@ -20,7 +20,7 @@
                             <!-- Audio Player Widget -->
                             @if ($item->audio)
                                 <!-- Include Audio Player Partial -->
-                                @include('audio-player', ['item' => $item])
+                                @include('partials.audio-player', ['item' => $item])
                             @else
                                 <!-- Fallback message for missing audio content -->
                                 <p>@lang('Audio content is not available for this item.')</p>
@@ -29,7 +29,7 @@
                             <!-- Video Player Widget -->
                             @if ($item->video)
                                 <!-- Include Video Player Partial -->
-                                @include('video-player', ['item' => $item, 'subtitles' => $subtitles, 'adsTime' => $adsTime, 'watchEligable' => $checkWatchEligable])
+                                @include('partials.video-player', ['item' => $item, 'subtitles' => $subtitles, 'adsTime' => $adsTime, 'watchEligable' => $checkWatchEligable])
                             @else
                                 <p>@lang('Video content is not available for this item.')</p>
                             @endif
