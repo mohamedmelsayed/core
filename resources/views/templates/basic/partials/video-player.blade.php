@@ -6,7 +6,9 @@
 
                 <video class="video-player plyr-video" playsinline controls
                     data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
-                    <source src="{{ $item->video->content }}" type="video/mp4" size="{{ $item->video->size }}" />
+                    @foreach ($videos as $video)
+                        <source src="{{ $video->content }}" type="video/mp4" size="{{ $video->size }}" />
+                    @endforeach
                     @foreach ($subtitles ?? [] as $subtitle)
                         <track kind="captions" label="{{ $subtitle->language }}"
                             src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}"
@@ -371,13 +373,15 @@
             });
 
 
-            var data =
+            var data = [
+                @foreach ($videos as $video)
                     {
-                        src: "{{ $item->video->content }}",
+                        src: "{{ $video->content }}",
                         type: 'video/mp4',
-                        size: "{{ $item->video->size }}",
-                    };
-
+                        size: "{{ $video->size }}",
+                    },
+                @endforeach
+            ];
 
 
             player.on('qualitychange', event => {
@@ -574,8 +578,8 @@
             }
         })(jQuery);
     </script>
-
 @endpush
+
 @push('context')
 oncontextmenu="return false"
 @endpush

@@ -212,6 +212,7 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
+        $videos = $this->videoList($item->video??null);
 
         $adsTime = null;
         $subtitles = null;
@@ -227,6 +228,7 @@ class SiteController extends Controller
             'playlistItems',
             'seoContents',
             'watchEligable',
+            'videos',
             'adsTime',
             'subtitles'
         ));
@@ -251,6 +253,7 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
+        $videos = $this->videoList($item->video??null);
 
         $adsTime = null;
         $subtitles = null;
@@ -267,6 +270,7 @@ class SiteController extends Controller
             'seoContents',
             'watchEligable',
             'adsTime',
+            'videos',
             'subtitles'
         ));
     }
