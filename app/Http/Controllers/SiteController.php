@@ -202,8 +202,8 @@ class SiteController extends Controller
         $adsTime = null;
         $subtitles = null;
         if ($playlist->type == 'video') {
-            $adsTime = $video->getAds() ?? [];
-            $subtitles = $video->subtitles;
+            $adsTime = $item->video->getAds() ?? [];
+            $subtitles = $item->video->subtitles;
         }
 
         return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems', 'seoContents', 'checkWatchEligable', 'adsTime', 'subtitles'));
@@ -223,8 +223,8 @@ class SiteController extends Controller
         $adsTime = null;
         $subtitles = null;
         if ($playlist->type == 'video') {
-            $adsTime = $video->getAds() ?? [];
-            $subtitles = $video->subtitles;
+            $adsTime = $item->video->getAds() ?? [];
+            $subtitles = $item->video->subtitles;
         }
 
         return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems', 'seoContents', 'checkWatchEligable', 'adsTime', 'subtitles'));
