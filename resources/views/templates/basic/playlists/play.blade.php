@@ -29,7 +29,7 @@
                             <!-- Video Player Widget -->
                             @if ($item->video)
                                 <!-- Include Video Player Partial -->
-                                @include($activeTemplate .'partials.video-player', ['item' => $item, 'subtitles' => $subtitles, 'adsTime' => $adsTime, 'watchEligable' => $checkWatchEligable])
+                                @include($activeTemplate .'partials.video-player', ['item' => $item, 'subtitles' => $subtitles, 'adsTime' => $adsTime, 'watchEligable' => $watchEligable])
                             @else
                                 <p>@lang('Video content is not available for this item.')</p>
                             @endif
