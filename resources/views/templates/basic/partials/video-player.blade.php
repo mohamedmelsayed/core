@@ -316,7 +316,6 @@
                     src: "{{ $item->video->content }}",
                     type: 'video/mp4',
                     size: "{{ $item->video->size }}",
-                @endforeach
             ];
 
 
