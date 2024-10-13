@@ -48,9 +48,7 @@
 
                                     <video class="video-player plyr-video" playsinline controls
                                         data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
-                                        @foreach ($videos as $video)
-                                            <source src="{{ $video->content }}" type="video/mp4" size="{{ $video->size }}" />
-                                        @endforeach
+                                            <source src="{{ $item->video->content }}" type="video/mp4" size="{{ $item->video->size }}" />
                                         @foreach ($subtitles ?? [] as $subtitle)
                                             <track kind="captions" label="{{ $subtitle->language }}"
                                                 src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}"
