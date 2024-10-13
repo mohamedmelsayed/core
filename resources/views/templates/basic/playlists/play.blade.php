@@ -18,7 +18,7 @@
                     @if ($item->is_audio)
                         <!-- Audio Player Widget -->
                         <div id="audio-player" class="audio-player-container">
-                            <audio id="audio" src="{{ $item->audios->first()->content }}" controls autoplay></audio>
+                            <audio id="audio" src="{{ $item->audio->content }}" controls autoplay></audio>
 
                             <div id="audio-controls-container" class="audio-controls-container">
                                 <div id="file-title" class="audio-title">{{ $item->title }}</div>
@@ -52,14 +52,10 @@
                         <ul class="list-group">
                             @foreach ($playlistItems as $playlistItem)
                                 <li class="list-group-item">
-                                    <p>
-                                        {{ $playlistItem->title }}
-                                        {{ $playlistItem->slug }}
 
-                                    </p>
-                                    {{-- <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
+                                    <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
                                     {{ $playlistItem->title }}
-                                </a> --}}
+                                </a>
                                 </li>
                             @endforeach
                         </ul>
@@ -191,7 +187,7 @@
 
 
 
-                wavesurfer.load('{{ $audios[0]->content }}');
+                wavesurfer.load('{{ $item->audio->content }}');
                 wavesurfer.play();
 
                 wavesurfer.on('ready', function() {
