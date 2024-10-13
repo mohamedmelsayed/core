@@ -196,8 +196,8 @@ class SiteController extends Controller
 
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->type == 'video'
-            ? $playlist->items()->whereHas('video')->with('video','translations')->get()
-            : $playlist->items()->whereHas('audio')->with('audio','translations')->get();
+            ? $playlist->items()->whereHas('video')->with('video', 'translations')->get()
+            : $playlist->items()->whereHas('audio')->with('audio', 'translations')->get();
 
         // Get the first item to play by default
         $item = $playlist->type == 'video'
@@ -213,8 +213,8 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
-        $videos =$playlist->type=='video'? $this->videoList($item->video ?? null):[];
-        $audios =$playlist->type=='audio'? $this->audioList($item->audio ?? null):[];
+        $videos = $playlist->type == 'video' ? $this->videoList($item->video ?? null) : [];
+        $audios = $playlist->type == 'audio' ? $this->audioList($item->audio ?? null) : [];
 
         $adsTime = null;
         $subtitles = null;
@@ -250,14 +250,14 @@ class SiteController extends Controller
 
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->type == 'video'
-            ? $playlist->items()->whereHas('video')->with('video','translations')->get()
-            : $playlist->items()->whereHas('audio')->with('audio','translations')->get();
+            ? $playlist->items()->whereHas('video')->with('video', 'translations')->get()
+            : $playlist->items()->whereHas('audio')->with('audio', 'translations')->get();
 
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
-        $videos =$playlist->type=='video'? $this->videoList($item->video ?? null):[];
-        $audios =$playlist->type=='audio'? $this->audioList($item->audio ?? null):[];
+        $videos = $playlist->type == 'video' ? $this->videoList($item->video ?? null) : [];
+        $audios = $playlist->type == 'audio' ? $this->audioList($item->audio ?? null) : [];
 
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
@@ -677,35 +677,52 @@ class SiteController extends Controller
 
     public function category($id)
     {
+        // Find the main category
         $category = Category::findOrFail($id);
 
+        // Get the subcategories that belong to this main category
+
+        $subcategories = SubCategory::where('category_id', $id)->pluck('id')->toArray();
+
+        // Get playlists that belong to the subcategories
+        $playlists = Playlist::whereIn('sub_category_id', $subcategories)->orderBy('id', 'desc')->get();
+
+
+        // Check the category type (video/audio)
         if ($category->type === "vid") {
+
+            // Get items that have video in the main category
             $items = Item::hasVideo()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
         if ($category->type === "aud") {
+            // Get audio items from the main category
             $items = Item::hasAudio()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
 
-        $hasStream = false;
-        foreach ($items as  $value) {
-            if ($value->is_stream) {
-                $hasStream = true;
-                break;
-            }
-        }
+        // Check if any of the items has a live stream
+        $hasStream = $items->contains(function ($value) {
+            return $value->is_stream;
+        });
+
+        // Set the page title dynamically based on the locale
         $pageTitle = app()->getLocale() == 'ar' ? $category->name : $category->name_en;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'category', 'hasStream'));
+
+        // Return the view with the collected data
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'playlists', 'category', 'hasStream'));
     }
 
     public function subCategory($id)
     {
         $subcategory = SubCategory::findOrFail($id);
+
         if ($subcategory->type === "vid") {
             $items = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
         if ($subcategory->type === "aud") {
             $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
+        $playlists = Playlist::whereIn('sub_category_id', $id)->orderBy('id', 'desc')->get();
+
         $hasStream = false;
         foreach ($items as  $value) {
             if ($value->is_stream) {
@@ -715,7 +732,7 @@ class SiteController extends Controller
         }
         $pageTitle = app()->getLocale() == 'ar' ? $subcategory->name : $subcategory->name_en;
 
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory', 'hasStream'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory', 'hasStream','playlists'));
     }
 
     public function loadMore(Request $request)

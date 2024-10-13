@@ -1,6 +1,8 @@
 @extends($activeTemplate . 'layouts.frontend')
+
 @section('content')
     <section class="movie-section section--bg ptb-80">
+        <!-- Live Streams Section -->
         @if ($hasStream)
             <div class="container">
                 <div class="row">
@@ -27,15 +29,13 @@
 
                                         <!-- Display "Paid" if the item is not free with a yellow badge -->
                                         @if ($item->version != 0)
-                                            <span class="movie-badge"
-                                                style="background-color: yellow; color: black;">@lang('Paid')</span>
+                                            <span class="movie-badge" style="background-color: yellow; color: black;">@lang('Paid')</span>
                                         @else
                                             <span class="movie-badge">@lang('Free')</span>
                                         @endif
 
-                                        <!-- Display Font Awesome icon based on is_audio inside the thumb -->
-                                        <span class="media-type"
-                                            style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                        <!-- Media type icon -->
+                                        <span class="media-type" style="position: absolute; bottom: 10px; right: 10px; color: #fff; padding: 5px 10px; border-radius: 5px;">
                                             @if ($item->is_audio)
                                                 <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
                                             @else
@@ -51,29 +51,17 @@
                                     </div>
                                 </div>
                             </div>
-
-                            {{-- <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
-                <div class="movie-item">
-                    <div class="movie-thumb">
-                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="movie">
-                        <span class="movie-badge">{{ $item->versionName }}</span>
-                        <div class="movie-thumb-overlay">
-                            <a class="video-icon" href="{{route('watch.live', $item->slug) }}"><i class="fas fa-play"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
                         @endif
-
                     @empty
                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
                             <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="">
                         </div>
                     @endforelse
                 </div>
-
             </div>
         @endif
+
+        <!-- Category Items Section -->
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
@@ -99,13 +87,10 @@
 
                                     <!-- Display "Paid" if the item is not free with a yellow badge -->
                                     @if ($item->version != 0)
-                                        <span class="movie-badge" >@lang('Paid')</span>
+                                        <span class="movie-badge">@lang('Paid')</span>
                                     @else
                                         <span class="movie-badge">@lang('Free')</span>
                                     @endif
-
-
-
 
                                     <div class="movie-thumb-overlay">
                                         <a class="video-icon"
@@ -114,20 +99,19 @@
                                         </a>
                                     </div>
 
-                                       <!-- Display Font Awesome icon based on is_audio inside the thumb -->
-                                       <span class="media-type"
-                                       style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                       @if ($item->is_audio)
-                                           <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
-                                       @else
-                                           <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
-                                       @endif
-                                   </span>
+                                    <!-- Media type icon -->
+                                    <span class="media-type"
+                                        style="position: absolute; bottom: 10px; right: 10px; color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                        @if ($item->is_audio)
+                                            <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                        @else
+                                            <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     @endif
-
                 @empty
                     <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
                         <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="">
@@ -135,6 +119,47 @@
                 @endforelse
             </div>
 
+            <!-- Playlists Section -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-header">
+                        <h2 class="section-title">@lang('Playlists')</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mb-30-none">
+                @forelse($playlists as $playlist)
+                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                        <div class="movie-item">
+                            <div class="movie-thumb">
+                                <img class="lazy-loading-img" data-src="{{ getImage(getFilePath('item_portrait') . '/' . $playlist->cover_image) }}"
+                                    src="{{ asset('assets/global/images/lazy.png') }}" alt="playlist">
+
+                                <span class="movie-badge">{{ 'Playlist' }}</span>
+
+                                <div class="movie-thumb-overlay">
+                                    <a class="video-icon" href="{{ route('playlist.play', $playlist->id) }}">
+                                        <i class="fas fa-play"></i>
+                                    </a>
+                                </div>
+
+                                <!-- Media type icon -->
+                                <span class="media-type" style="position: absolute; bottom: 10px; right: 10px; color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                    @if ($playlist->type == 'audio')
+                                        <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                    @else
+                                        <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
+                        <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="">
+                    </div>
+                @endforelse
+            </div>
         </div>
     </section>
     <div class="custom_loading"></div>
