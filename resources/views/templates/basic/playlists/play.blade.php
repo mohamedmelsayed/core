@@ -61,7 +61,7 @@
                                     <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
                                         class="playlist-item-link">
                                         @if (app()->getLocale() === 'ar')
-                                            {{ $playlistItem->title }}
+                                            {{ $playlistItem->translations->where('language', 'ar')->first()->translated_title ?? $playlistItem->title  }}
                                         @else
                                             {{ $playlistItem->translations->where('language', 'en')->first()->translated_title ?? $playlistItem->title }}
                                         @endif
