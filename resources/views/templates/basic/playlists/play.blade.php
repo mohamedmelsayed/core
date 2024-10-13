@@ -41,14 +41,14 @@
                             @endif
                         @else
                             <!-- Video Player Widget -->
-                            @if ($item->video())
+                            @if ($item->video)
                             <div class="movie-item">
                                 <div class="main-video">
 
 
                                     <video class="video-player plyr-video" playsinline controls
                                         data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
-                                            <source src="{{ $item->video()->content }}" type="video/mp4" size="{{ $item->video()->size }}" />
+                                            <source src="{{ $item->video->content }}" type="video/mp4" size="{{ $item->video->size }}" />
                                         @foreach ($subtitles ?? [] as $subtitle)
                                             <track kind="captions" label="{{ $subtitle->language }}"
                                                 src="{{ getImage(getFilePath('subtitle') . '/' . $subtitle->file) }}"
@@ -436,9 +436,9 @@
             var data = [
                 @foreach ($playlistItems as $item)
                     {
-                        src: "{{ $item->video()->content }}",
+                        src: "{{ $item->video->content }}",
                         type: 'video/mp4',
-                        size: "{{ $item->video()()->size }}",
+                        size: "{{ $item->video->size }}",
                     },
                 @endforeach
             ];
