@@ -75,15 +75,13 @@
 
 
             var data = [
-                @foreach ($playlistItems as $item)
-                    @if ($item->video)
-                        data.push({
-                            src: "{{ $item->video->content }}",
-                            type: 'video/mp4',
-                            size: "{{ $item->video->size }}",
-                        });
-                    @endif
-                @endforeach
+
+                data.push({
+                    src: "{{ $item->video->content }}",
+                    type: 'video/mp4',
+                    size: "{{ $item->video->size }}",
+                });
+
             ];
 
 
@@ -94,7 +92,8 @@
             });
 
             player.on('play', () => {
-                let watchEligable = "{{ is_array($watchEligable) ? json_encode($watchEligable) : $watchEligable }}";
+                let watchEligable =
+                    "{{ is_array($watchEligable) ? json_encode($watchEligable) : $watchEligable }}";
 
                 if (!Number(watchEligable)) {
                     var modal = $('#alertModal');
