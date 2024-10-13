@@ -18,32 +18,43 @@
                     @if ($item)
                         @if ($item->is_audio)
                             <!-- Audio Player Widget -->
-                            <div id="audio-player" class="audio-player-container">
-                                <audio id="audio" src="{{ $item->audio->content }}" controls autoplay></audio>
+                            @if ($item->audio)
+                                <div id="audio-player" class="audio-player-container">
+                                    <audio id="audio" src="{{ $item->audio->content }}" controls autoplay></audio>
 
-                                <div id="audio-controls-container" class="audio-controls-container">
-                                    <div id="file-title" class="audio-title">{{ $item->title }}</div>
-                                    <div id="audio-controls" class="audio-controls">
-                                        <!-- Play/Pause Button -->
-                                        <button class="audio-control play-btn" id="play-pause">
-                                            <i class="fas fa-play"></i>
-                                        </button>
+                                    <div id="audio-controls-container" class="audio-controls-container">
+                                        <div id="file-title" class="audio-title">{{ $item->title }}</div>
+                                        <div id="audio-controls" class="audio-controls">
+                                            <!-- Play/Pause Button -->
+                                            <button class="audio-control play-btn" id="play-pause">
+                                                <i class="fas fa-play"></i>
+                                            </button>
+                                        </div>
                                     </div>
+                                    <!-- Thumbnail image -->
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
+                                        id="thumbnail" class="audio-thumbnail" />
                                 </div>
-                                <!-- Thumbnail image -->
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                                    id="thumbnail" class="audio-thumbnail" />
-                            </div>
+                            @else
+                                <!-- Fallback message for missing audio content -->
+                                <p>@lang('Audio content is not available for this item.')</p>
+                            @endif
                         @else
                             <!-- Video Player Widget -->
-                            <div class="movie-item">
-                                <video class="video-player plyr-video" playsinline controls autoplay
-                                    data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
-                                    <source src="{{ $item->video->content }}" type="video/mp4" />
-                                </video>
-                            </div>
+                            @if ($item->video)
+                                <div class="movie-item">
+                                    <video class="video-player plyr-video" playsinline controls autoplay
+                                        data-poster="{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}">
+                                        <source src="{{ $item->video->content }}" type="video/mp4" />
+                                    </video>
+                                </div>
+                            @else
+                                <!-- Fallback message for missing video content -->
+                                <p>@lang('Video content is not available for this item.')</p>
+                            @endif
                         @endif
                     @else
+                        <!-- Fallback message if no item is selected -->
                         <p>@lang('No media available in this playlist to play.')</p>
                     @endif
                 </div>
