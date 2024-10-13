@@ -261,6 +261,7 @@ class SiteController extends Controller
 
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
+
         $adsTime = null;
         $subtitles = null;
         if ($playlist->type == 'video') {
@@ -268,6 +269,22 @@ class SiteController extends Controller
             $subtitles = $item->video->subtitles;
         }
 
+        // Check if the request is an AJAX request
+        if (request()->ajax()) {
+            // Return the player content as a JSON response
+            $playerContent = view($this->activeTemplate . 'partials.player-content', compact(
+                'item',
+                'watchEligable',
+                'adsTime',
+                'videos',
+                'audios',
+                'subtitles'
+            ))->render();
+
+            return response()->json(['view' => $playerContent]);
+        }
+
+        // Default response for non-AJAX requests
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',

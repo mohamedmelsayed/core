@@ -53,14 +53,15 @@
                             @foreach ($playlistItems as $playlistItem)
                                 @php
                                     // Get the translated title based on the locale
-                                    $translation = $playlistItem->translations->where('language', app()->getLocale())->first();
+                                    $translation = $playlistItem->translations
+                                        ->where('language', app()->getLocale())
+                                        ->first();
                                     $title = $translation ? $translation->translated_title : $playlistItem->title;
                                 @endphp
                                 <li class="list-group-item d-flex align-items-center">
                                     <!-- Portrait image -->
                                     <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlistItem->image->portrait) }}"
-                                        alt="{{ $title }}"
-                                        class="playlist-item-image me-3" />
+                                        alt="{{ $title }}" class="playlist-item-image me-3" />
 
                                     <!-- Title with dynamic language based on translations relation -->
                                     <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
@@ -150,4 +151,30 @@
             }
         }
     </style>
+@endpush
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            // Handle click on playlist item
+            $('.playlist-item-link').on('click', function(e) {
+                e.preventDefault();
+
+                var playlistId = $(this).data('playlist');
+                var itemSlug = $(this).data('item');
+
+                $.ajax({
+                    url: '/playlist/item/' + playlistId + '/' + itemSlug,
+                    type: 'GET',
+                    success: function(response) {
+                        // Update the player container with the new content
+                        $('#player-container').html(response.view);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching item content:', error);
+                    }
+                });
+            });
+        });
+    </script>
 @endpush
