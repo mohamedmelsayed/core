@@ -53,9 +53,10 @@
                             @foreach ($playlistItems as $playlistItem)
                                 <li class="list-group-item">
 
-                                    <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
-                                    {{ $playlistItem->title }}
-                                </a>
+                                    <a
+                                        href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
+                                        {{ $playlistItem->title }}
+                                    </a>
                                 </li>
                             @endforeach
                         </ul>
@@ -67,100 +68,103 @@
 @endsection
 
 
-<style>
-    /* Container for the audio player */
-    .audio-player-container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 20px auto;
-        background: linear-gradient(to right, #1e3c72, #2a5298);
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
 
-    /* Title styling */
-    .audio-title {
-        color: #fff;
-        font-size: 24px;
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 20px;
-    }
+@if ($playlist->type == 'audio')
+    @push('style')
+        <style>
+            /* Container for the audio player */
+            .audio-player-container {
+                width: 100%;
+                max-width: 1200px;
+                margin: 20px auto;
+                background: linear-gradient(to right, #1e3c72, #2a5298);
+                border-radius: 15px;
+                padding: 20px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
 
-    /* Audio controls container (taking 80% width) */
-    .audio-controls-container {
-        width: 80%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+            /* Title styling */
+            .audio-title {
+                color: #fff;
+                font-size: 24px;
+                font-weight: 600;
+                text-align: center;
+                margin-bottom: 20px;
+            }
 
-    /* Controls area */
-    .audio-controls {
-        display: flex;
-        align-items: center;
-        /* justify-content: space-between; */
-        width: 100%;
-        padding: 5px 0;
-        gap: 5px;
-    }
+            /* Audio controls container (taking 80% width) */
+            .audio-controls-container {
+                width: 80%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
-    /* Buttons (Play, Repeat, etc.) */
-    .audio-control {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: #ffffff;
-        padding: 15px;
-        border-radius: 50%;
-        font-size: 24px;
-        cursor: pointer;
-        transition: background 0.3s ease, transform 0.3s ease;
-    }
+            /* Controls area */
+            .audio-controls {
+                display: flex;
+                align-items: center;
+                /* justify-content: space-between; */
+                width: 100%;
+                padding: 5px 0;
+                gap: 5px;
+            }
 
-    .audio-control:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-        transform: scale(1.1);
-    }
+            /* Buttons (Play, Repeat, etc.) */
+            .audio-control {
+                background-color: rgba(255, 255, 255, 0.1);
+                border: none;
+                color: #ffffff;
+                padding: 15px;
+                border-radius: 50%;
+                font-size: 24px;
+                cursor: pointer;
+                transition: background 0.3s ease, transform 0.3s ease;
+            }
 
-    /* Thumbnail styling */
-    .audio-thumbnail {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 10%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
+            .audio-control:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+                transform: scale(1.1);
+            }
 
-    /* Responsive styling */
-    @media (max-width: 768px) {
-        .audio-player-container {
-            padding: 15px;
-            flex-direction: column;
-            align-items: flex-start;
-        }
+            /* Thumbnail styling */
+            .audio-thumbnail {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 10%;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
 
-        .audio-controls-container {
-            width: 100%;
-        }
+            /* Responsive styling */
+            @media (max-width: 768px) {
+                .audio-player-container {
+                    padding: 15px;
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
 
-        .audio-controls {
-            flex-direction: row;
-            gap: 15px;
-        }
+                .audio-controls-container {
+                    width: 100%;
+                }
 
-        .audio-thumbnail {
-            display: none;
-        }
-    }
-</style>
+                .audio-controls {
+                    flex-direction: row;
+                    gap: 15px;
+                }
 
-@if ($item->is_audio)
+                .audio-thumbnail {
+                    display: none;
+                }
+            }
+        </style>
+    @endpush
+
     @push('script')
         <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
         <script>
@@ -259,5 +263,337 @@
                 }
             });
         </script>
+    @endpush
+@endif
+
+@if ($playlist->type == 'video')
+    @push('style-lib')
+        <link rel="stylesheet" href="{{ asset('assets/global/css/plyr.min.css') }}">
+    @endpush
+
+    @push('script-lib')
+        <script src="{{ asset('assets/global/js/plyr.min.js') }}"></script>
+        <script src="{{ asset('assets/global/js/hls.min.js') }}"></script>
+    @endpush
+
+    @push('style')
+        <style>
+            .main-video:has(.main-video-lock) {
+                position: relative;
+            }
+
+            .main-video-lock {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                background-color: rgba(0, 0, 0, 0.555);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .main-video-lock-content {
+                padding: 20px;
+                background: rgb(0 0 0 / 70%);
+                border-radius: 4px;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+                display: grid;
+                place-content: center;
+            }
+
+            .main-video-lock-content .title {
+                text-align: center;
+                color: #fff;
+                font-size: 14px;
+            }
+
+            .main-video-lock-content .icon {
+                font-size: 56px;
+                display: block;
+                text-align: center;
+                line-height: 1;
+                color: #ee005f;
+            }
+
+            .main-video-lock-content .price {
+                font-size: 36px;
+                display: block;
+                text-align: center;
+                color: white;
+                background: rgb(238 0 5 / 5%);
+                margin-top: 10px;
+                border-radius: inherit;
+                line-height: 1;
+                padding: 7px 0;
+            }
+
+            .main-video-lock-content .price .price-amount {
+                color: #ee005f;
+                font-weight: 700;
+                letter-spacing: -2;
+            }
+
+            .main-video-lock-content .price .small-text {
+                font-size: 14px;
+            }
+
+            .main-video-lock-content .price span {
+                line-height: 1;
+            }
+
+            .watch-party-modal .modal-dialog {
+                max-width: 500px;
+            }
+        </style>
+    @endpush
+
+    @push('script')
+        <script>
+            $(document).ready(function() {
+                $(document).find('.plyr__controls').addClass('d-none');
+                $(document).find('.ad-video').find('.plyr__controls').addClass('d-none');
+            });
+
+            (function($) {
+                "use strict";
+
+                let rent = "{{ Status::RENT_VERSION }}";
+
+                $('.main-video-lock').on('click', function(e) {
+                    var modal = $('#rentModal');
+                    modal.modal('show');
+                });
+
+                const controls = [
+                    'play-large',
+                    'rewind',
+                    'play',
+                    'fast-forward',
+                    'progress',
+                    'mute',
+                    'settings',
+                    'pip',
+                    'airplay',
+                    'fullscreen'
+                ];
+
+                let player = new Plyr('.video-player', {
+                    controls,
+                    ratio: '16:9'
+                });
+
+
+                var data = [
+                    @foreach ($videos as $video)
+                        {
+                            src: "{{ $video->content }}",
+                            type: 'video/mp4',
+                            size: "{{ $video->size }}",
+                        },
+                    @endforeach
+                ];
+
+
+                player.on('qualitychange', event => {
+                    $.each(data, function() {
+                        initData();
+                    })
+                });
+
+                player.on('play', () => {
+                    let watchEligable = "{{ @$watchEligable }}";
+                    if (!Number(watchEligable)) {
+                        var modal = $('#alertModal');
+                        modal.modal('show');
+                        player.pause();
+                        return false;
+                    }
+                    $(document).find('.plyr__controls').removeClass('d-none');
+                });
+
+                const skipButton = $('#skip-button');
+
+                const adItems = [
+                    @foreach ($adsTime as $key => $ads)
+                        {
+                            timing: "{{ $key }}",
+                            source: "{{ $ads }}"
+                        },
+                    @endforeach
+                ];
+
+                const adPlayer = new Plyr('.ad-player', {
+                    clickToPlay: false,
+                    ratio: '16:9'
+                });
+
+                let firstAd = false;
+                const result = adItems.filter((obj) => {
+                    if (obj.timing == 0) {
+                        firstAd = true;
+                        return obj;
+                    }
+                });
+
+                if (firstAd) {
+                    adPlayer.source = {
+                        type: 'video',
+                        sources: [{
+                            src: $('.ad-links').children('source:first').attr('src'),
+                            type: 'video/mp4'
+                        }],
+                    };
+                    player.pause();
+                    $('.main-video').addClass('d-none');
+                    $('.ad-video').removeClass('d-none');
+                    $(document).find('.ad-video').find('.plyr__controls').hide();
+                    adPlayer.play();
+                }
+
+                let skipTime = Number("{{ $general->skip_time }}");
+
+                player.on('timeupdate', function() {
+                    const currentTime = Math.floor(player.currentTime);
+                    for (let i = 0; i < adItems.length; i++) {
+                        const adItem = adItems[i];
+
+                        if (currentTime >= adItem.timing && !adItem.played) {
+                            skipButton.addClass('d-none');
+                            adPlayer.source = {
+                                type: 'video',
+                                sources: [{
+                                    src: $('.ad-links').children('source').eq(i).attr('src'),
+                                    type: 'video/mp4'
+                                }],
+                                poster: "{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}",
+                            };
+                            player.pause();
+                            $('.main-video').addClass('d-none');
+                            $('.ad-video').removeClass('d-none');
+                            $(document).find('.ad-video').find('.plyr__controls').hide();
+                            adPlayer.play();
+                            adPlayer.on('play', () => {
+                                $('.advertise-text').removeClass('d-none');
+                            })
+                            adPlayer.on('timeupdate', () => {
+                                const currentTime = Math.floor(adPlayer.currentTime);
+                                const duration = Math.floor(adPlayer.duration);
+                                if (!isNaN(currentTime) && !isNaN(duration)) {
+                                    const remainingTime = duration - currentTime;
+                                    const formattedTime = formatTime(remainingTime);
+                                    $('.remains-ads-time').text(formattedTime);
+                                }
+                                if (adPlayer.currentTime >= skipTime) {
+                                    skipButton.removeClass('d-none');
+                                }
+                            });
+                            adItem.played = true;
+                            break;
+                        }
+                    }
+                });
+
+                function formatTime(timeInSeconds) {
+                    const date = new Date(null);
+                    date.setSeconds(timeInSeconds);
+                    return date.toISOString().substr(11, 8);
+                }
+
+                adPlayer.on('ended', () => {
+                    player.play();
+                    $('.ad-video').addClass('d-none');
+                    $('.main-video').removeClass('d-none');
+                    $('.advertise-text').addClass('d-none');
+                });
+
+                skipButton.on('click', function() {
+                    adPlayer.pause();
+                    $('.ad-video').addClass('d-none');
+                    $('.main-video').removeClass('d-none');
+                    player.play();
+                    skipButton.addClass('d-none');
+                    $('.advertise-text').addClass('d-none');
+                });
+
+
+                $('.watchPartyBtn').on('click', function(e) {
+                    let modal = $("#watchPartyModal");
+                    modal.modal('show')
+                });
+
+                $('.copy-code').on('click', function() {
+                    var copyText = $('.party-code');
+                    copyText = copyText[0];
+                    copyText.select();
+                    copyText.setSelectionRange(0, 99999);
+                    document.execCommand("copy");
+                    copyText.blur();
+                });
+
+                $('.startPartyBtn').on('click', function(e) {
+                    let processBtn =
+                        `<span class="processing">@lang('Processing') <i class="las la-spinner"></i> </span>`;
+                    let startBtn = `@lang('Now Start Your Party') <i class="las la-long-arrow-alt-right"></i>`;
+                    $.ajax({
+                        type: "POST",
+                        url: `{{ route('user.watch.party.create') }}`,
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            item_id: "{{ @$item->id }}",
+                            episode_id: "{{ @$episodeId }}"
+                        },
+                        beforeSend: function() {
+                            $('.startPartyBtn').html('');
+                            $('.startPartyBtn').html(processBtn);
+                            $('.startPartyBtn').prop('disabled', true);
+                        },
+                        success: function(response) {
+                            if (response.error) {
+                                notify('error', response.error)
+                                $('.startPartyBtn').html('');
+                                $('.startPartyBtn').html(startBtn);
+                                $('.startPartyBtn').prop('disabled', false);
+
+                                return;
+                            }
+                            setTimeout(() => {
+                                window.location.href = response.redirect_url
+                            }, 3000);
+                        }
+                    });
+                });
+
+
+                function initData() {
+                    const video = document.querySelector('video');
+                    $.each(data, function() {
+                        if (!Hls.isSupported()) {
+                            video.src = this.src;
+                        } else {
+                            if (isM3U8(this.src)) {
+                                const hls = new Hls();
+                                hls.loadSource(this.src);
+                                hls.attachMedia(video);
+                                window.hls = hls;
+                            }
+                        }
+                        window.player = player;
+                    })
+                }
+
+                initData();
+
+                function isM3U8(url) {
+                    return /\.m3u8$/.test(url);
+                }
+            })(jQuery);
+        </script>
+    @endpush
+    @push('context')
+        oncontextmenu="return false"
     @endpush
 @endif
