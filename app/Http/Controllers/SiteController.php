@@ -208,7 +208,8 @@ class SiteController extends Controller
             // Handle the case where no video or audio is found
             return redirect()->back()->with('error', 'No playable item found in this playlist.');
         }
-
+        $this->storeHistory($item->id);
+        $this->storeVideoReport($item->id);
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
@@ -254,7 +255,8 @@ class SiteController extends Controller
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
         $videos = $this->videoList($item->video??null);
-
+        $this->storeHistory($item->id);
+        $this->storeVideoReport($item->id);
         $adsTime = null;
         $subtitles = null;
         if ($playlist->type == 'video') {
