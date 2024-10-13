@@ -574,7 +574,6 @@
             }
         })(jQuery);
     </script>
-@endpush
 
 @endpush
 @push('context')
