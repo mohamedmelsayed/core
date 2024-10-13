@@ -193,7 +193,6 @@ class SiteController extends Controller
     {
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-        dd($playlist->items);
 
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->items()->whereHas('video')->orWhereHas('audio')->get();
