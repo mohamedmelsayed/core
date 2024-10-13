@@ -76,11 +76,13 @@
 
             var data = [
                 @foreach ($playlistItems as $item)
-                    {
-                        src: "{{ $item->video->content }}",
-                        type: 'video/mp4',
-                        size: "{{ $item->video->size }}",
-                    },
+                    @if ($item->video)
+                        data.push({
+                            src: "{{ $item->video->content }}",
+                            type: 'video/mp4',
+                            size: "{{ $item->video->size }}",
+                        });
+                    @endif
                 @endforeach
             ];
 
