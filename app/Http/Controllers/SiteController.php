@@ -214,7 +214,7 @@ class SiteController extends Controller
         $pageTitle = 'PlayList Details';
 
         $item = Item::hasVideoOrAudio()->where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
-        $playlistItems = $playlist->items; // Retrieve all items in the playlist
+        $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
 
         return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));
     }
