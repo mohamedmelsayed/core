@@ -199,7 +199,14 @@ class SiteController extends Controller
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents','checkWatchEligable'));
+        $adsTime = null;
+        $subtitles = null;
+        if ($playlist->type == 'video') {
+            $adsTime = $video->getAds() ?? [];
+            $subtitles = $video->subtitles;
+        }
+
+        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems', 'seoContents', 'checkWatchEligable', 'adsTime', 'subtitles'));
     }
 
     // Method to play a specific item from a playlist
@@ -213,8 +220,14 @@ class SiteController extends Controller
 
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+        $adsTime = null;
+        $subtitles = null;
+        if ($playlist->type == 'video') {
+            $adsTime = $video->getAds() ?? [];
+            $subtitles = $video->subtitles;
+        }
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents','checkWatchEligable'));
+        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems', 'seoContents', 'checkWatchEligable', 'adsTime', 'subtitles'));
     }
 
     public function watchVideo($slug, $episodeId = null)
