@@ -14,8 +14,7 @@
 
             <!-- Display the video/audio player -->
             <div class="row">
-                <div class="col-xl-8 col-lg-8 mb-30">
-                    <div id="player-container">
+                <div class="player-container col-xl-8 col-lg-8 mb-30">
                         @if ($item)
                             @if ($item->is_audio)
                                 <!-- Audio Player Widget -->
@@ -44,7 +43,6 @@
                             <!-- Fallback message if no item is selected -->
                             <p>@lang('No media available in this playlist to play.')</p>
                         @endif
-                    </div>
                 </div>
 
                 <!-- Display playlist items on the right -->
