@@ -54,19 +54,24 @@
                                 <li class="list-group-item d-flex align-items-center">
                                     <!-- Portrait image -->
                                     <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlistItem->image->portrait) }}"
-                                        alt="{{ app()->getLocale() === 'ar' ? $playlistItem->title : $playlistItem->title_en }}"
+                                        alt="{{ app()->getLocale() === 'ar' ? $playlistItem->title : $playlistItem->translations->where('language', 'en')->first()->translated_title ?? $playlistItem->title }}"
                                         class="playlist-item-image me-3" />
 
-                                    <!-- Title with dynamic language -->
+                                    <!-- Title with dynamic language based on translations relation -->
                                     <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
                                         class="playlist-item-link">
-                                        {{ app()->getLocale() === 'ar' ? $playlistItem->title : $playlistItem->title_en }}
+                                        @if (app()->getLocale() === 'ar')
+                                            {{ $playlistItem->title }}
+                                        @else
+                                            {{ $playlistItem->translations->where('language', 'en')->first()->translated_title ?? $playlistItem->title }}
+                                        @endif
                                     </a>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
+
 
             </div>
         </div>
@@ -101,7 +106,8 @@
         }
 
         .list-group-item:hover {
-            background-color: {{ $general->theme_color ?? '#ee005f' }}; /* Use theme color */
+            background-color: {{ $general->theme_color ?? '#ee005f' }};
+            /* Use theme color */
             color: #fff;
         }
 
@@ -122,7 +128,8 @@
         }
 
         .playlist-item-link:hover {
-            color: #fff; /* Change color on hover */
+            color: #fff;
+            /* Change color on hover */
         }
 
         /* Responsive adjustments */
