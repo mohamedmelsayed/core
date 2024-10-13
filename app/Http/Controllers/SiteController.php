@@ -186,16 +186,7 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'sections.' . $request->sectionName, $data);
     }
 
-    public function showPlaylist($id)
-    {
-        $pageTitle = 'PlayList Details';
 
-        // Fetch the playlist by ID
-        $playlist = Playlist::with('items')->findOrFail($id); // Assuming playlists have related items (audio/video)
-
-        // Pass the playlist data to a view
-        return view($this->activeTemplate . 'playlists.show', compact('pageTitle', 'playlist'));
-    }
 
     // Method to view playlist and play items
     public function play(Playlist $playlist)
@@ -204,8 +195,9 @@ class SiteController extends Controller
 
         $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
         $item = $playlistItems->first(); // Get the first item to play by default
+        $seoContents = $this->getItemSeoContent($item);
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));
+        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents'));
     }
 
     // Method to play a specific item from a playlist
@@ -216,7 +208,9 @@ class SiteController extends Controller
         $item = Item::hasVideoOrAudio()->where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
         $playlistItems = $playlist->items()->hasVideoOrAudio()->get(); // Retrieve all items in the playlist
 
-        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));
+        $seoContents = $this->getItemSeoContent($item);
+
+        return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems','seoContents'));
     }
 
     public function watchVideo($slug, $episodeId = null)
