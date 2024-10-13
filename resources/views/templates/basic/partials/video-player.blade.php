@@ -200,245 +200,261 @@
     <script src="{{ asset('assets/global/js/hls.min.js') }}"></script>
 @endpush
 
+@push('style')
+    <style>
+        /* Main Video Section */
+        .main-video {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Lock for video rent/purchase */
+        .main-video-lock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+        }
+
+        .main-video-lock-content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .main-video-lock-content .icon {
+            font-size: 3rem;
+            color: #ee005f;
+        }
+
+        .main-video-lock-content .price {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        .main-video-lock-content .price-amount {
+            color: #ee005f;
+            font-weight: bold;
+        }
+
+        /* Advertisement styling */
+        .ad-video {
+            display: none;
+            width: 100%;
+            position: relative;
+        }
+
+        .ad-player {
+            width: 100%;
+        }
+
+        .skipButton {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            cursor: pointer;
+        }
+
+        .advertise-text {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            display: none;
+        }
+
+        /* Watch party modal */
+        .watch-party-modal .modal-dialog {
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .watch-party-modal h3.title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .watch-party-modal h6.tagline {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .watch-party-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ee005f;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .watch-party-btn i {
+            margin-right: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-video {
+                height: auto;
+            }
+
+            .main-video-lock-content {
+                padding: 15px;
+            }
+
+            .ad-player, .video-player {
+                width: 100%;
+            }
+        }
+    </style>
+@endpush
+
 @push('script')
-    <script>
-        $(document).ready(function() {
-            $(document).find('.plyr__controls').addClass('d-none');
-            $(document).find('.ad-video').find('.plyr__controls').addClass('d-none');
+@push('script')
+<script>
+    $(document).ready(function () {
+        $('.plyr__controls').addClass('d-none'); // Hide controls initially
+    });
+
+    (function ($) {
+        "use strict";
+
+        const rentVersion = "{{ Status::RENT_VERSION }}";
+
+        // Initialize Plyr video player
+        const player = new Plyr('.video-player', {
+            controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'mute', 'settings', 'pip', 'airplay', 'fullscreen'],
+            ratio: '16:9'
         });
 
-        (function($) {
-                "use strict";
+        const adPlayer = new Plyr('.ad-player', {
+            clickToPlay: false,
+            ratio: '16:9'
+        });
 
-                let rent = "{{ Status::RENT_VERSION }}";
+        // Data initialization for ads and video content
+        let videoData = [
+            {
+                src: "{{ $item->video->content ?? '' }}",
+                type: 'video/mp4',
+                size: "{{ $item->video->size ?? '720' }}",
+            }
+        ];
 
-                $('.main-video-lock').on('click', function(e) {
-                    var modal = $('#rentModal');
-                    modal.modal('show');
-                });
+        let adItems = [
+            @foreach ($adsTime ?? [] as $key => $ads)
+                {
+                    timing: "{{ $key }}",
+                    source: "{{ $ads }}"
+                },
+            @endforeach
+        ];
 
-                const controls = [
-                    'play-large',
-                    'rewind',
-                    'play',
-                    'fast-forward',
-                    'progress',
-                    'mute',
-                    'settings',
-                    'pip',
-                    'airplay',
-                    'fullscreen'
-                ];
+        // Play ad before content
+        function loadAd(adItem) {
+            adPlayer.source = {
+                type: 'video',
+                sources: [{ src: adItem.source, type: 'video/mp4' }]
+            };
+            player.pause();
+            $('.main-video').addClass('d-none');
+            $('.ad-video').removeClass('d-none');
+            adPlayer.play();
+        }
 
-                let player = new Plyr('.video-player', {
-                    controls,
-                    ratio: '16:9'
-                });
+        // Skip Ad functionality
+        const skipButton = $('#skip-button');
+        skipButton.on('click', function () {
+            adPlayer.pause();
+            $('.ad-video').addClass('d-none');
+            $('.main-video').removeClass('d-none');
+            player.play();
+            $(this).addClass('d-none');
+        });
 
-
-                var data = [
-
-                    src: "{{ $item->video->content }}",
-                    type: 'video/mp4',
-                    size: "{{ $item->video->size }}",
-            ];
-
-
-            player.on('qualitychange', event => {
-                $.each(data, function() {
-                    initData();
-                })
-            });
-
-            player.on('play', () => {
-                let watchEligable = "{{ is_array($watchEligable) ? json_encode($watchEligable) : $watchEligable }}";
-
-                if (!Number(watchEligable)) {
-                    var modal = $('#alertModal');
-                    modal.modal('show');
-                    player.pause();
-                    return false;
-                }
-                $(document).find('.plyr__controls').removeClass('d-none');
-            });
-
-            const skipButton = $('#skip-button');
-
-            const adItems = [
-                @foreach ($adsTime as $key => $ads)
-                    {
-                        timing: "{{ $key }}",
-                        source: "{{ $ads }}"
-                    },
-                @endforeach
-            ];
-
-            const adPlayer = new Plyr('.ad-player', {
-                clickToPlay: false,
-                ratio: '16:9'
-            });
-
-            let firstAd = false;
-            const result = adItems.filter((obj) => {
-                if (obj.timing == 0) {
-                    firstAd = true;
-                    return obj;
+        // Ad player events
+        player.on('timeupdate', function () {
+            const currentTime = Math.floor(player.currentTime);
+            adItems.forEach((adItem) => {
+                if (currentTime >= adItem.timing && !adItem.played) {
+                    loadAd(adItem);
+                    adItem.played = true;
                 }
             });
+        });
 
-            if (firstAd) {
-                adPlayer.source = {
-                    type: 'video',
-                    sources: [{
-                        src: $('.ad-links').children('source:first').attr('src'),
-                        type: 'video/mp4'
-                    }],
-                };
+        adPlayer.on('ended', function () {
+            $('.ad-video').addClass('d-none');
+            $('.main-video').removeClass('d-none');
+            player.play();
+        });
+
+        // Watch eligibility check
+        player.on('play', function () {
+            let watchEligable = "{{ is_array($watchEligable) ? json_encode($watchEligable) : $watchEligable }}";
+
+            if (!Number(watchEligable)) {
+                $('#alertModal').modal('show');
                 player.pause();
-                $('.main-video').addClass('d-none');
-                $('.ad-video').removeClass('d-none');
-                $(document).find('.ad-video').find('.plyr__controls').hide();
-                adPlayer.play();
+                return false;
             }
+            $('.plyr__controls').removeClass('d-none');
+        });
 
-            let skipTime = Number("{{ $general->skip_time }}");
+        // Watch party modal
+        $('.watchPartyBtn').on('click', function () {
+            $('#watchPartyModal').modal('show');
+        });
 
-            player.on('timeupdate', function() {
-                const currentTime = Math.floor(player.currentTime);
-                for (let i = 0; i < adItems.length; i++) {
-                    const adItem = adItems[i];
+        // Copy watch party code to clipboard
+        $('.copy-code').on('click', function () {
+            let copyText = $('.party-code')[0];
+            copyText.select();
+            document.execCommand('copy');
+        });
 
-                    if (currentTime >= adItem.timing && !adItem.played) {
-                        skipButton.addClass('d-none');
-                        adPlayer.source = {
-                            type: 'video',
-                            sources: [{
-                                src: $('.ad-links').children('source').eq(i).attr('src'),
-                                type: 'video/mp4'
-                            }],
-                            poster: "{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}",
-                        };
-                        player.pause();
-                        $('.main-video').addClass('d-none');
-                        $('.ad-video').removeClass('d-none');
-                        $(document).find('.ad-video').find('.plyr__controls').hide();
-                        adPlayer.play();
-                        adPlayer.on('play', () => {
-                            $('.advertise-text').removeClass('d-none');
-                        })
-                        adPlayer.on('timeupdate', () => {
-                            const currentTime = Math.floor(adPlayer.currentTime);
-                            const duration = Math.floor(adPlayer.duration);
-                            if (!isNaN(currentTime) && !isNaN(duration)) {
-                                const remainingTime = duration - currentTime;
-                                const formattedTime = formatTime(remainingTime);
-                                $('.remains-ads-time').text(formattedTime);
-                            }
-                            if (adPlayer.currentTime >= skipTime) {
-                                skipButton.removeClass('d-none');
-                            }
-                        });
-                        adItem.played = true;
-                        break;
-                    }
-                }
-            });
-
-            function formatTime(timeInSeconds) {
-                const date = new Date(null);
-                date.setSeconds(timeInSeconds);
-                return date.toISOString().substr(11, 8);
-            }
-
-            adPlayer.on('ended', () => {
-                player.play();
-                $('.ad-video').addClass('d-none');
-                $('.main-video').removeClass('d-none');
-                $('.advertise-text').addClass('d-none');
-            });
-
-            skipButton.on('click', function() {
-                adPlayer.pause();
-                $('.ad-video').addClass('d-none');
-                $('.main-video').removeClass('d-none');
-                player.play();
-                skipButton.addClass('d-none');
-                $('.advertise-text').addClass('d-none');
-            });
-
-
-            $('.watchPartyBtn').on('click', function(e) {
-                let modal = $("#watchPartyModal");
-                modal.modal('show')
-            });
-
-            $('.copy-code').on('click', function() {
-                var copyText = $('.party-code');
-                copyText = copyText[0];
-                copyText.select();
-                copyText.setSelectionRange(0, 99999);
-                document.execCommand("copy");
-                copyText.blur();
-            });
-
-            $('.startPartyBtn').on('click', function(e) {
-                let processBtn =
-                    `<span class="processing">@lang('Processing') <i class="las la-spinner"></i> </span>`;
-                let startBtn = `@lang('Now Start Your Party') <i class="las la-long-arrow-alt-right"></i>`;
-                $.ajax({
-                    type: "POST",
-                    url: `{{ route('user.watch.party.create') }}`,
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        item_id: "{{ @$item->id }}",
-                        episode_id: "{{ @$episodeId }}"
-                    },
-                    beforeSend: function() {
-                        $('.startPartyBtn').html('');
-                        $('.startPartyBtn').html(processBtn);
-                        $('.startPartyBtn').prop('disabled', true);
-                    },
-                    success: function(response) {
-                        if (response.error) {
-                            notify('error', response.error)
-                            $('.startPartyBtn').html('');
-                            $('.startPartyBtn').html(startBtn);
-                            $('.startPartyBtn').prop('disabled', false);
-
-                            return;
-                        }
-                        setTimeout(() => {
-                            window.location.href = response.redirect_url
-                        }, 3000);
-                    }
+        // Initialize Plyr data and ads
+        function initData() {
+            if (!Hls.isSupported()) {
+                player.source = { type: 'video', sources: videoData };
+            } else {
+                videoData.forEach((video) => {
+                    const hls = new Hls();
+                    hls.loadSource(video.src);
+                    hls.attachMedia(document.querySelector('.video-player'));
                 });
-            });
-
-
-            function initData() {
-                const video = document.querySelector('video');
-                $.each(data, function() {
-                    if (!Hls.isSupported()) {
-                        video.src = this.src;
-                    } else {
-                        if (isM3U8(this.src)) {
-                            const hls = new Hls();
-                            hls.loadSource(this.src);
-                            hls.attachMedia(video);
-                            window.hls = hls;
-                        }
-                    }
-                    window.player = player;
-                })
             }
+        }
 
-            initData();
+        initData();
+    })(jQuery);
+</script>
+@endpush
 
-            function isM3U8(url) {
-                return /\.m3u8$/.test(url);
-            }
-        })(jQuery);
-    </script>
 @endpush
 @push('context')
     oncontextmenu="return false"
