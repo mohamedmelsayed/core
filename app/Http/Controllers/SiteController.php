@@ -197,6 +197,28 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'playlists.show', compact('pageTitle', 'playlist'));
     }
 
+    // Method to view playlist and play items
+    public function play(Playlist $playlist)
+    {
+        $pageTitle = 'PlayList Details';
+
+        $playlistItems = $playlist->items; // Retrieve all items in the playlist
+        $item = $playlistItems->first(); // Get the first item to play by default
+
+        return view($this->activeTemplate . 'playlist.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));
+    }
+
+    // Method to play a specific item from a playlist
+    public function playItem(Playlist $playlist, $itemSlug)
+    {
+        $pageTitle = 'PlayList Details';
+
+        $item = Item::where('slug', $itemSlug)->firstOrFail(); // Find the item by slug
+        $playlistItems = $playlist->items; // Retrieve all items in the playlist
+
+        return view($this->activeTemplate . 'playlist.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));
+    }
+
     public function watchVideo($slug, $episodeId = null)
     {
         $item = Item::active()->where('slug', $slug)->with('video.subtitles')->firstOrFail();
