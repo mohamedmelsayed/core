@@ -166,9 +166,9 @@ class SiteController extends Controller
         $items = Item::hasVideoOrAudio();
         if ($request->sectionName == 'recent_added') {
             $data['recent_added'] = (clone $items)->where('item_type', Status::SINGLE_ITEM)->orderBy('id', 'desc')->limit(18)->get();
-        } else if ($request->sectionName == 'playlists') {
-            $data['playlists'] = Playlist::with('items')->limit(18)->get();
         } else if ($request->sectionName == 'latest_series') {
+            $data['playlists'] = Playlist::with('items')->limit(18)->get();
+        } else if ($request->sectionName == 'latest_series1') {
             $data['latestSerieses'] = (clone $items)->orderBy('id', 'desc')->where('item_type', Status::EPISODE_ITEM)->limit(12)->get();
         } else if ($request->sectionName == 'single') {
             $data['single'] = (clone $items)->orderBy('id', 'desc')->where('single', 1)->with('category')->first();
