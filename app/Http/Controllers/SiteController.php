@@ -272,7 +272,7 @@ class SiteController extends Controller
         // Check if the request is an AJAX request
         if (request()->ajax()) {
             // Return the player content as a JSON response
-            $playerContent = view($this->activeTemplate . 'partials.player-content', compact(
+            $playerContent = view($this->activeTemplate . 'partials.playlists.play', compact(
                 'item',
                 'watchEligable',
                 'adsTime',
