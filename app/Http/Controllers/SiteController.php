@@ -273,12 +273,16 @@ class SiteController extends Controller
         if (request()->ajax()) {
             // Return the player content as a JSON response
             $playerContent = view($this->activeTemplate . 'partials.video-player', compact(
-                'item',
-                'watchEligable',
-                'adsTime',
-                'videos',
-                'audios',
-                'subtitles'
+                'pageTitle',
+            'playlist',
+            'item',
+            'playlistItems',
+            'seoContents',
+            'watchEligable',
+            'adsTime',
+            'videos',
+            'audios',
+            'subtitles'
             ))->render();
 
             return response()->json(['view' => $playerContent]);
