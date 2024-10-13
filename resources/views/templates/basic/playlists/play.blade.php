@@ -165,7 +165,7 @@
                     type: 'GET',
                     success: function(response) {
                         // Update the player container with the new content
-                        $('#player-container').html(response.view);
+                        $('#player-container col-xl-8 col-lg-8 mb-30').html(response.view);
                     },
                     error: function(error) {
                         console.error('Error fetching item content:', error);
