@@ -242,7 +242,7 @@ class SiteController extends Controller
 
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->items()->whereHas('video')->orWhereHas('audio')->get();
-dd($playlist->items);
+// dd($playlist->items);
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
