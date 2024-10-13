@@ -132,7 +132,7 @@
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                         <div class="movie-item">
                             <div class="movie-thumb">
-                                <img class="lazy-loading-img" data-src="{{ getImage(getFilePath('item_portrait') . '/' . $playlist->cover_image) }}" src="{{ asset('assets/global/images/lazy.png') }}" alt="playlist">
+                                <img class="lazy-loading-img" data-src="{{ getImage(getFilePath('item_portrait')  . $playlist->cover_image) }}" src="{{ asset('assets/global/images/lazy.png') }}" alt="movie">
 
                                 <span class="movie-badge">{{ 'Playlist' }}</span>
 
