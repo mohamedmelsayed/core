@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends($activeTemplate . 'layouts.frontend')
 
 @section('content')
 <section class="playlist-section section--bg section pb-80">
