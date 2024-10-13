@@ -371,13 +371,13 @@
             });
 
 
-            var data = [
+            var data =
                     {
                         src: "{{ $item->video->content }}",
                         type: 'video/mp4',
                         size: "{{ $item->video->size }}",
-                    },
-            ];
+                    };
+
 
 
             player.on('qualitychange', event => {
