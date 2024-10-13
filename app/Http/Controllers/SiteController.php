@@ -203,7 +203,7 @@ class SiteController extends Controller
         $pageTitle = 'PlayList Details';
 
         $playlistItems = $playlist->items; // Retrieve all items in the playlist
-        $item = $playlistItems->hasVideoOrAudio()->first(); // Get the first item to play by default
+        $item = $playlistItems->items()->hasVideoOrAudio()->first(); // Get the first item to play by default
 
         return view($this->activeTemplate . 'playlists.play', compact('pageTitle', 'playlist', 'item', 'playlistItems'));
     }
