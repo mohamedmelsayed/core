@@ -51,20 +51,21 @@
                         <h5>@lang('Playlist Items')</h5>
                         <ul class="list-group">
                             @foreach ($playlistItems as $playlistItem)
+                                @php
+                                    // Get the translated title based on the locale
+                                    $translation = $playlistItem->translations->where('language', app()->getLocale())->first();
+                                    $title = $translation ? $translation->translated_title : $playlistItem->title;
+                                @endphp
                                 <li class="list-group-item d-flex align-items-center">
                                     <!-- Portrait image -->
                                     <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlistItem->image->portrait) }}"
-                                        alt="{{ app()->getLocale() === 'ar' ? $playlistItem->title : $playlistItem->translations->where('language', 'en')->first()->translated_title ?? $playlistItem->title }}"
+                                        alt="{{ $title }}"
                                         class="playlist-item-image me-3" />
 
                                     <!-- Title with dynamic language based on translations relation -->
                                     <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
                                         class="playlist-item-link">
-                                        @if (app()->getLocale() === 'ar')
-                                            {{ $playlistItem->translations->where('language', 'ar')->first()->translated_title ?? $playlistItem->title  }}
-                                        @else
-                                            {{ $playlistItem->translations->where('language', 'en')->first()->translated_title ?? $playlistItem->title }}
-                                        @endif
+                                        {{ $title }}
                                     </a>
                                 </li>
                             @endforeach
@@ -72,13 +73,10 @@
                     </div>
                 </div>
 
-
             </div>
         </div>
     </section>
 @endsection
-
-
 
 @push('style')
     <style>
@@ -107,7 +105,6 @@
 
         .list-group-item:hover {
             background-color: {{ $general->theme_color ?? '#ee005f' }};
-            /* Use theme color */
             color: #fff;
         }
 
@@ -129,7 +126,6 @@
 
         .playlist-item-link:hover {
             color: #fff;
-            /* Change color on hover */
         }
 
         /* Responsive adjustments */
@@ -141,6 +137,16 @@
 
             .playlist-item-link {
                 font-size: 14px;
+            }
+
+            .playlist-items {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .playlist-item-link {
+                font-size: 12px;
             }
         }
     </style>
