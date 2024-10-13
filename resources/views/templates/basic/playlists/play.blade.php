@@ -52,20 +52,18 @@
                         <ul class="list-group">
                             @foreach ($playlistItems as $playlistItem)
                                 @php
-                                    // Get the translated title based on the locale
                                     $translation = $playlistItem->translations
                                         ->where('language', app()->getLocale())
                                         ->first();
                                     $title = $translation ? $translation->translated_title : $playlistItem->title;
                                 @endphp
                                 <li class="list-group-item d-flex align-items-center">
-                                    <!-- Portrait image -->
                                     <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlistItem->image->portrait) }}"
                                         alt="{{ $title }}" class="playlist-item-image me-3" />
 
-                                    <!-- Title with dynamic language based on translations relation -->
-                                    <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
-                                        class="playlist-item-link">
+                                    <!-- AJAX click event for playlist item -->
+                                    <a href="javascript:void(0);" class="playlist-item-link"
+                                        data-playlist="{{ $playlist->id }}" data-item="{{ $playlistItem->slug }}">
                                         {{ $title }}
                                     </a>
                                 </li>
@@ -73,7 +71,6 @@
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
