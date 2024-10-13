@@ -20,7 +20,7 @@
                             <!-- Audio Player Widget -->
                             @if ($item->audio)
                                 <!-- Include Audio Player Partial -->
-                                @include($activeTemplate .'partials.audio-player', ['item' => $item])
+                                @include($activeTemplate . 'partials.audio-player', ['item' => $item])
                             @else
                                 <!-- Fallback message for missing audio content -->
                                 <p>@lang('Audio content is not available for this item.')</p>
@@ -29,7 +29,12 @@
                             <!-- Video Player Widget -->
                             @if ($item->video)
                                 <!-- Include Video Player Partial -->
-                                @include($activeTemplate .'partials.video-player', ['item' => $item, 'subtitles' => $subtitles, 'adsTime' => $adsTime, 'watchEligable' => $watchEligable])
+                                @include($activeTemplate . 'partials.video-player', [
+                                    'item' => $item,
+                                    'subtitles' => $subtitles,
+                                    'adsTime' => $adsTime,
+                                    'watchEligable' => $watchEligable,
+                                ])
                             @else
                                 <p>@lang('Video content is not available for this item.')</p>
                             @endif
@@ -46,15 +51,23 @@
                         <h5>@lang('Playlist Items')</h5>
                         <ul class="list-group">
                             @foreach ($playlistItems as $playlistItem)
-                                <li class="list-group-item">
-                                    <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
-                                        {{ $playlistItem->title }}
+                                <li class="list-group-item d-flex align-items-center">
+                                    <!-- Portrait image -->
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlistItem->image->portrait) }}"
+                                        alt="{{ app()->getLocale() === 'ar' ? $playlistItem->title : $playlistItem->title_en }}"
+                                        class="playlist-item-image me-3" />
+
+                                    <!-- Title with dynamic language -->
+                                    <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
+                                        class="playlist-item-link">
+                                        {{ app()->getLocale() === 'ar' ? $playlistItem->title : $playlistItem->title_en }}
                                     </a>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -64,75 +77,64 @@
 
 @push('style')
     <style>
-        .main-video:has(.main-video-lock) {
-            position: relative;
+        /* Playlist container */
+        .playlist-items {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .main-video-lock {
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.555);
+        /* List group item */
+        .list-group-item {
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 10px 15px;
+            border: none;
+            background-color: transparent;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid #ececec;
         }
 
-        .main-video-lock-content {
-            padding: 20px;
-            background: rgb(0 0 0 / 70%);
-            border-radius: 4px;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            display: grid;
-            place-content: center;
+        .list-group-item:last-child {
+            border-bottom: none;
         }
 
-        .main-video-lock-content .title {
-            text-align: center;
+        .list-group-item:hover {
+            background-color: {{ $general->theme_color ?? '#ee005f' }}; /* Use theme color */
             color: #fff;
-            font-size: 14px;
         }
 
-        .main-video-lock-content .icon {
-            font-size: 56px;
-            display: block;
-            text-align: center;
-            line-height: 1;
-            color: #ee005f;
+        /* Playlist item portrait image */
+        .playlist-item-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            object-fit: cover;
         }
 
-        .main-video-lock-content .price {
-            font-size: 36px;
-            display: block;
-            text-align: center;
-            color: white;
-            background: rgb(238 0 5 / 5%);
-            margin-top: 10px;
-            border-radius: inherit;
-            line-height: 1;
-            padding: 7px 0;
+        /* Playlist item link */
+        .playlist-item-link {
+            text-decoration: none;
+            font-weight: bold;
+            color: {{ $general->theme_color ?? '#333' }};
+            transition: color 0.3s ease;
         }
 
-        .main-video-lock-content .price .price-amount {
-            color: #ee005f;
-            font-weight: 700;
-            letter-spacing: -2;
+        .playlist-item-link:hover {
+            color: #fff; /* Change color on hover */
         }
 
-        .main-video-lock-content .price .small-text {
-            font-size: 14px;
-        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .playlist-item-image {
+                width: 40px;
+                height: 40px;
+            }
 
-        .main-video-lock-content .price span {
-            line-height: 1;
-        }
-
-        .watch-party-modal .modal-dialog {
-            max-width: 500px;
+            .playlist-item-link {
+                font-size: 14px;
+            }
         }
     </style>
 @endpush
