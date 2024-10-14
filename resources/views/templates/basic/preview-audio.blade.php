@@ -212,61 +212,76 @@
 @endsection
 
 @push('style')
-    <style>
-        /* Container for each playlist item */
-        .playlist-item {
-            background-color: #f7f7f7;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
 
-        /* Thumbnail container with a fixed size */
-        .playlist-thumb {
-            width: 100%;
-            /* Responsive width */
-            max-width: 200px;
-            /* Maximum width for thumbnail */
-            height: 120px;
-            /* Fixed height */
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 6px;
-        }
+@push('style')
+<style>
+    /* Container for the playlists */
+    .playlists-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+        background-color: #1e1e2d;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Ensuring the image fits nicely inside the container */
-        .playlist-thumb img {
-            width: 100%;
-            /* Ensure it takes the width of the container */
-            height: 100%;
-            /* Ensure it takes the height of the container */
-            object-fit: cover;
-            /* This ensures the image is cropped to fit without stretching */
-            border-radius: 6px;
-        }
+    /* Playlist item */
+    .playlist-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.05);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
 
-        /* Playlist title styling */
-        .playlist-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 10px;
-            color: #333;
-        }
+    /* Thumbnail */
+    .playlist-thumb {
+        width: 100px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 15px;
+    }
 
-        .playlist-title:hover {
-            color: {{ $general->theme_color ?? '#ee005f' }};
-        }
+    /* Playlist title styling */
+    .playlist-title {
+        font-size: 16px;
+        color: #fff;
+        margin: 0;
+        font-weight: bold;
+    }
+
+    /* Hover effects */
+    .playlist-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1.02);
+    }
+
+    /* Button for viewing playlist */
+    .playlist-btn {
+        margin-left: auto;
+        padding: 8px 12px;
+        background-color: #ee005f;
+        color: #fff;
+        text-transform: uppercase;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+
+    .playlist-btn:hover {
+        background-color: #d5004f;
+    }
 
 
-        .playlist-heading {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            /* Optional shadow */
-            border-bottom: 2px solid {{ $general->theme_color ?? '#ffffff' }};
-            /* Optional border for separation */
-        }
-    </style>
+</style>
 @endpush
+
 <style>
     /* Container for the audio player */
     .audio-player-container {
