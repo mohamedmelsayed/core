@@ -775,11 +775,7 @@ class SiteController extends Controller
             })
             ->where(function ($query) {
                 $query->orWhereHas('video')
-                      ->orWhereHas('episodes', function ($episode) {
-                          $episode->where('status', 1)
-                                  ->whereHas('video')
-                                  ->orWhereHas('audio');
-                      });
+                      ->orWhereHas('audio');
             })
             ->orderBy('id', 'desc')
             ->limit(12)
@@ -796,12 +792,7 @@ class SiteController extends Controller
                 })
                 ->where(function ($query) {
                     $query->orWhereHas('video')
-                          ->orWhereHas('audio')
-                          ->orWhereHas('episodes', function ($episode) {
-                              $episode->where('status', 1)
-                                      ->whereHas('video')
-                                      ->orWhereHas('audio');
-                          });
+                          ->orWhereHas('audio');
                 });
         })
         ->orderBy('id', 'desc')
@@ -822,6 +813,7 @@ class SiteController extends Controller
         // Return the items and playlists in the view
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'playlists', 'hasStream', 'search'));
     }
+
 
 
     public function policy($id, $slug)
