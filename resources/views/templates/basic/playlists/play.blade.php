@@ -53,14 +53,15 @@
                             @foreach ($playlistItems as $playlistItem)
                                 @php
                                     // Get the translated title based on the locale
-                                    $translation = $playlistItem->translations->where('language', app()->getLocale())->first();
+                                    $translation = $playlistItem->translations
+                                        ->where('language', app()->getLocale())
+                                        ->first();
                                     $title = $translation ? $translation->translated_title : $playlistItem->title;
                                 @endphp
                                 <li class="list-group-item d-flex align-items-center">
                                     <!-- Portrait image -->
                                     <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlistItem->image->portrait) }}"
-                                        alt="{{ $title }}"
-                                        class="playlist-item-image me-3" />
+                                        alt="{{ $title }}" class="playlist-item-image" />
 
                                     <!-- Title with dynamic language based on translations relation -->
                                     <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
@@ -73,6 +74,7 @@
                     </div>
                 </div>
 
+
             </div>
         </div>
     </section>
@@ -82,57 +84,64 @@
     <style>
         /* Playlist container */
         .playlist-items {
-            background-color: #f7f7f7;
+            background-color: #1e1e2d;
+            /* Matching the dark background */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         /* List group item */
         .list-group-item {
             display: flex;
             align-items: center;
-            padding: 10px 15px;
-            border: none;
-            background-color: transparent;
-            transition: background 0.3s ease;
-            border-bottom: 1px solid #ececec;
-        }
-
-        .list-group-item:last-child {
-            border-bottom: none;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-bottom: 10px;
+            /* Space between items */
         }
 
         .list-group-item:hover {
-            background-color: {{ $general->theme_color ?? '#ee005f' }};
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+            /* Slight scale on hover */
             color: #fff;
         }
 
         /* Playlist item portrait image */
         .playlist-item-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 5px;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
             object-fit: cover;
+            margin-right: 15px;
+            /* Space between image and text */
         }
 
         /* Playlist item link */
         .playlist-item-link {
-            text-decoration: none;
             font-weight: bold;
-            color: {{ $general->theme_color ?? '#333' }};
+            color: #fff;
             transition: color 0.3s ease;
+            flex-grow: 1;
+            /* Makes the link take remaining space */
+            font-size: 16px;
         }
 
         .playlist-item-link:hover {
-            color: #fff;
+            color: #ee005f;
+            /* Color change on hover */
         }
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .playlist-item-image {
-                width: 40px;
-                height: 40px;
+                width: 50px;
+                height: 50px;
             }
 
             .playlist-item-link {
@@ -147,6 +156,11 @@
         @media (max-width: 576px) {
             .playlist-item-link {
                 font-size: 12px;
+            }
+
+            .playlist-item-image {
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
