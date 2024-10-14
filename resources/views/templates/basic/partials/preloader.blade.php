@@ -25,7 +25,7 @@
         .logo-loader {
             width: 100px;
             /* Adjust size as necessary */
-            animation: spin 2s linear infinite;
+            animation: spin 3s linear infinite;
             /* Or use pulse animation */
             filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
             /* Optional shadow */

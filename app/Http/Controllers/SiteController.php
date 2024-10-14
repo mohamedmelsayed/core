@@ -721,7 +721,7 @@ class SiteController extends Controller
         if ($subcategory->type === "aud") {
             $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
-        $playlists = Playlist::whereIn('sub_category_id', $id)->orderBy('id', 'desc')->get();
+        $playlists = Playlist::where('sub_category_id', $id)->orderBy('id', 'desc')->get();
 
         $hasStream = false;
         foreach ($items as  $value) {
