@@ -115,7 +115,6 @@
     .audio-controls {
         display: flex;
         align-items: center;
-        /* justify-content: space-between; */
         width: 100%;
         padding: 5px 0;
         gap: 5px;
@@ -128,14 +127,28 @@
         color: #ffffff;
         padding: 15px;
         border-radius: 50%;
+        /* Keeps the buttons circular */
         font-size: 24px;
         cursor: pointer;
-        transition: background 0.3s ease, transform 0.3s ease;
+        transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .audio-control:hover {
         background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Prevent distortion on hover */
+    .audio-control i {
+        transform: scale(1);
+        transition: transform 0.3s ease;
+    }
+
+    .audio-control:hover i {
         transform: scale(1.1);
+        /* Only scale the icon, not the button */
     }
 
     /* Thumbnail styling */
