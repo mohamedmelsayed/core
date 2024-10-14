@@ -763,32 +763,66 @@ class SiteController extends Controller
         if (!$search) {
             return redirect()->route('home');
         }
-        $items = Item::search($search)->where('status', 1)->orWhereHas('translations', function ($translation) use ($search) {
-            $translation->where('translated_title', 'LIKE', "%$search%")
-                ->orWhere('translated_description', 'LIKE', "%$search%")
-                ->orWhere('translated_tags', 'LIKE', "%$search%")
-                ->orWhere('translated_keywords', 'LIKE', "%$search%");
-        })->where(function ($query) {
-            $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
-                $video->where('status', 1)->whereHas('video')->orWhereHas('audio');
-            });
-        })->orderBy('id', 'desc')->limit(12)->get();
-        // $audioItem = Item::search($search)->where('status', 1)->where('is_audio', 1)->where(function ($query) {
-        //     $query->orWhereHas('video')->orWhereHas('episodes', function ($video) {
-        //         $video->where('status', 1)->whereHas('audio');
-        //     });
-        // })->orderBy('id', 'desc')->limit(12)->get();
 
+        // Fetch items that match the search criteria
+        $items = Item::search($search)
+            ->where('status', 1)
+            ->orWhereHas('translations', function ($translation) use ($search) {
+                $translation->where('translated_title', 'LIKE', "%$search%")
+                    ->orWhere('translated_description', 'LIKE', "%$search%")
+                    ->orWhere('translated_tags', 'LIKE', "%$search%")
+                    ->orWhere('translated_keywords', 'LIKE', "%$search%");
+            })
+            ->where(function ($query) {
+                $query->orWhereHas('video')
+                      ->orWhereHas('episodes', function ($episode) {
+                          $episode->where('status', 1)
+                                  ->whereHas('video')
+                                  ->orWhereHas('audio');
+                      });
+            })
+            ->orderBy('id', 'desc')
+            ->limit(12)
+            ->get();
+
+        // Fetch playlists where at least one item matches the search criteria
+        $playlists = Playlist::whereHas('items', function ($itemQuery) use ($search) {
+            $itemQuery->where('status', 1)
+                ->orWhereHas('translations', function ($translation) use ($search) {
+                    $translation->where('translated_title', 'LIKE', "%$search%")
+                        ->orWhere('translated_description', 'LIKE', "%$search%")
+                        ->orWhere('translated_tags', 'LIKE', "%$search%")
+                        ->orWhere('translated_keywords', 'LIKE', "%$search%");
+                })
+                ->where(function ($query) {
+                    $query->orWhereHas('video')
+                          ->orWhereHas('audio')
+                          ->orWhereHas('episodes', function ($episode) {
+                              $episode->where('status', 1)
+                                      ->whereHas('video')
+                                      ->orWhereHas('audio');
+                          });
+                });
+        })
+        ->orderBy('id', 'desc')
+        ->limit(12)
+        ->get();
+
+        // Check if there are any live streams among the items
         $hasStream = false;
-        foreach ($items as  $value) {
+        foreach ($items as $value) {
             if ($value->is_stream) {
                 $hasStream = true;
                 break;
             }
         }
+
         $pageTitle = "Result Showing For " . $search;
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'hasStream', 'search'));
+
+        // Return the items and playlists in the view
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'playlists', 'hasStream', 'search'));
     }
+
 
     public function policy($id, $slug)
     {
