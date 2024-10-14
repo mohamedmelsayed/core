@@ -4,7 +4,6 @@
     </div>
 </div>
 
-@push('style')
     <style>
         /* Preloader container */
         .preloader {
@@ -55,4 +54,3 @@
             }
         }
     </style>
-@endpush
