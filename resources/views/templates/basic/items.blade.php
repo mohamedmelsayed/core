@@ -47,7 +47,7 @@
 
                                         <!-- Countdown timer tag -->
                                         <div class="countdown-timer" data-start-at="{{ $item->start_at }}"
-                                            style="position: absolute; top: 30%; right: 10px; background-color: rgba(237, 35, 35, 0.7); color: white; padding: 5px 10px; border-radius: 5px;">
+                                            style="position: absolute; bottom: 10px; right: 22px; background-color: rgba(237, 35, 35, 0.7); color: white; padding: 5px 10px; border-radius: 5px;">
                                             <span class="countdown-text">@lang('Starting in:')</span>
                                             <span class="countdown-time"></span>
                                         </div>
