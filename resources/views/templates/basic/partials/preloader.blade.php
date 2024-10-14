@@ -12,7 +12,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: #ffffff;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+
             /* Or any background color you prefer */
             display: flex;
             align-items: center;
