@@ -5,7 +5,7 @@
             <div class="row justify-content-center mb-30-none">
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
-                        <div class="main-video position-relative" data-start-at="{{ $item->stream->start_at }}">
+                        <div class="main-video position-relative" data-start-at="{{ $item->stream->start_at }}"  style="background-image: url('{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}'); background-size: cover; background-position: center;">
                             @if ($item->version == Status::RENT_VERSION || !$watchEligable)
                                 <div class="main-video-lock">
                                     <div class="main-video-lock-content">
