@@ -782,26 +782,20 @@ class SiteController extends Controller
             ->get();
 
         // Fetch playlists where at least one item matches the search criteria
-        $playlists = Playlist::with(['items' => function ($query) {
-            $query->hasVideoOrAudio();  // Eager-load items that have video/audio
-        }])
-            ->whereHas('items', function ($itemQuery) use ($search) {
-                // Make sure the item is active
-                $itemQuery->where('status', 1)
-                    ->where(function ($query) use ($search) {
-                        // Ensure the search criteria matches the translations
-                        $query->whereHas('translations', function ($translation) use ($search) {
-                            $translation->where('translated_title', 'LIKE', "%$search%")
-                                ->orWhere('translated_description', 'LIKE', "%$search%")
-                                ->orWhere('translated_tags', 'LIKE', "%$search%")
-                                ->orWhere('translated_keywords', 'LIKE', "%$search%");
-                        });
-                    });
-            })
-            ->orderBy('id', 'desc')
-            ->limit(12)
-            ->get();
 
+        // Initialize an empty collection to hold unique playlists
+        $playlists = collect();
+
+        // Loop through the items and add their playlists to the collection
+        foreach ($items as $item) {
+            if ($item->playlists) {
+                // Merge unique playlists into the collection
+                $playlists = $playlists->merge($item->playlists);
+            }
+        }
+
+        // Get unique playlists by 'id'
+        $playlists = $playlists->unique('id');
 
 
         // Check if there are any live streams among the items
