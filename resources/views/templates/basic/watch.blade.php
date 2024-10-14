@@ -390,6 +390,18 @@
             color: {{ $general->theme_color ?? '#ee005f' }};
         }
 
+
+        .playlist-heading {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            /* Optional shadow */
+            border-bottom: 2px solid {{ $general->theme_color ?? '#ffffff' }};
+            /* Optional border for separation */
+        }
+    </style>
+@endpush
+
+@push('style')
+    <style>
         .main-video:has(.main-video-lock) {
             position: relative;
         }

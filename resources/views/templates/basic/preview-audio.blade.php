@@ -210,53 +210,64 @@
         @endif
     </section>
 @endsection
+
+@push('style')
+    <style>
+        /* Container for each playlist item */
+        .playlist-item {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Thumbnail container with a fixed size */
+        .playlist-thumb {
+            width: 100%;
+            /* Responsive width */
+            max-width: 200px;
+            /* Maximum width for thumbnail */
+            height: 120px;
+            /* Fixed height */
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 6px;
+        }
+
+        /* Ensuring the image fits nicely inside the container */
+        .playlist-thumb img {
+            width: 100%;
+            /* Ensure it takes the width of the container */
+            height: 100%;
+            /* Ensure it takes the height of the container */
+            object-fit: cover;
+            /* This ensures the image is cropped to fit without stretching */
+            border-radius: 6px;
+        }
+
+        /* Playlist title styling */
+        .playlist-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .playlist-title:hover {
+            color: {{ $general->theme_color ?? '#ee005f' }};
+        }
+
+
+        .playlist-heading {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            /* Optional shadow */
+            border-bottom: 2px solid {{ $general->theme_color ?? '#ffffff' }};
+            /* Optional border for separation */
+        }
+    </style>
+@endpush
 <style>
-    /* Container for each playlist item */
-    .playlist-item {
-        background-color: #f7f7f7;
-        padding: 15px;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Thumbnail container with a fixed size */
-    .playlist-thumb {
-        width: 100%;
-        /* Responsive width */
-        max-width: 200px;
-        /* Maximum width for thumbnail */
-        height: 120px;
-        /* Fixed height */
-        margin: 0 auto;
-        overflow: hidden;
-        border-radius: 6px;
-    }
-
-    /* Ensuring the image fits nicely inside the container */
-    .playlist-thumb img {
-        width: 100%;
-        /* Ensure it takes the width of the container */
-        height: 100%;
-        /* Ensure it takes the height of the container */
-        object-fit: cover;
-        /* This ensures the image is cropped to fit without stretching */
-        border-radius: 6px;
-    }
-
-    /* Playlist title styling */
-    .playlist-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-top: 10px;
-        color: #333;
-    }
-
-    .playlist-title:hover {
-        color: {{ $general->theme_color ?? '#ee005f' }};
-    }
-
-
     /* Container for the audio player */
     .audio-player-container {
         width: 100%;
