@@ -1,4 +1,3 @@
-// resources/views/partials/_playlist-section.blade.php
 
 @if($playlists->isNotEmpty())
 <div class="playlist-section mt-4">
