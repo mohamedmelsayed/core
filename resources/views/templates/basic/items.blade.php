@@ -46,8 +46,8 @@
                                         </span>
 
                                         <!-- Countdown timer tag -->
-                                        <div class="countdown-timer" data-start-at="{{ $item->stream->start_at }}"
-                                            style="position: absolute; top: 70%;  background-color: rgba(237, 35, 35, 0.7); color: white; padding: 5px 10px; border-radius: 5px;">
+                                        <!-- Countdown timer in the center -->
+                                        <div class="countdown-timer" data-start-at="{{ $item->stream->start_at }}">
                                             <span class="countdown-text">@lang('Starting in:')</span>
                                             <span class="countdown-time"></span>
                                         </div>
@@ -188,18 +188,26 @@
 
         .countdown-timer {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(237, 35, 35, 0.7);
             color: white;
-            padding: 5px 10px;
+            padding: 10px 15px;
             border-radius: 5px;
-            font-size: 14px;
-            font-weight: bold;
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
         }
 
         .countdown-text {
-            margin-right: 5px;
+            font-size: 14px;
+        }
+
+        .countdown-time {
+            font-size: 18px;
+            font-weight: bold;
         }
 
         .movie-thumb:hover .countdown-timer {
