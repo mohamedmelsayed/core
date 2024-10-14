@@ -1,31 +1,58 @@
 <div class="preloader">
     <div class="loader">
-        <div class="camera__wrap">
-            <div class="camera__body">
-                <div class="camera__body-k7">
-                    <div class="tape">
-                        <div class="roll"></div>
-                        <div class="roll"></div>
-                        <div class="roll"></div>
-                        <div class="roll"></div>
-                        <div class="center"></div>
-                    </div>
-                    <div class="tape">
-                        <div class="roll"></div>
-                        <div class="roll"></div>
-                        <div class="roll"></div>
-                        <div class="roll"></div>
-                        <div class="center"></div>
-                    </div>
-                </div>
-                <div class="camera__body__stuff">
-                    <div class="camera__body__stuff-bat"></div>
-                    <div class="camera__body__stuff-pointer first"></div>
-                    <div class="camera__body__stuff-pointer"></div>
-                </div>
-            </div>
-            <div class="camera__body-optic"></div>
-            <div class="camera__body-light"></div>
-        </div>
+        <img src="{{ getImage(getFilePath('logoIcon') . '/logo.png') }}" alt="Logo Preloader" class="logo-loader">
     </div>
 </div>
+
+@push('style')
+    <style>
+        /* Preloader container */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            /* Or any background color you prefer */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        /* Loader animation */
+        .logo-loader {
+            width: 100px;
+            /* Adjust size as necessary */
+            animation: spin 2s linear infinite;
+            /* Or use pulse animation */
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
+            /* Optional shadow */
+        }
+
+        /* Spinning animation */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Optional pulse effect */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+@endpush
