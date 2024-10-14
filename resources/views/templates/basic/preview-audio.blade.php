@@ -44,7 +44,7 @@
                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
                             id="thumbnail" class="audio-thumbnail" />
                     </div>
-                    @include($activeTemplate .'partials._playlist-section', ['playlists' => $playlists])
+                    @include($activeTemplate . 'partials._playlist-section', ['playlists' => $playlists])
 
                     <div class="product-tab mt-40">
                         <ul class="nav nav-tabs" role="tablist">
@@ -211,6 +211,32 @@
     </section>
 @endsection
 <style>
+    /* public/css/components.css */
+    .playlist-item {
+        background-color: #f7f7f7;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .playlist-thumb img {
+        border-radius: 6px;
+        max-width: 100%;
+    }
+
+    .playlist-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 10px;
+        color: #333;
+    }
+
+    .playlist-title:hover {
+        color: var(--theme-color);
+    }
+
+
     /* Container for the audio player */
     .audio-player-container {
         width: 100%;

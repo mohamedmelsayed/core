@@ -36,7 +36,9 @@
                         </div>
 
                         <!-- Include Playlist Section Partial -->
-                        @include($activeTemplate .'partials._playlist-section', ['playlists' => $playlists])
+                        @include($activeTemplate . 'partials._playlist-section', [
+                            'playlists' => $playlists,
+                        ])
                         <div class="ad-video position-relative d-none">
                             <video class="ad-player" style="display: none" id="ad-video"></video>
                             <div class="ad-links d-none">
@@ -211,84 +213,83 @@
         </div>
     </section>
     <section class="movie-section ptb-80">
-        @if ((!$item->is_audio && $relatedItems->isNotEmpty())  )
+        @if (!$item->is_audio && $relatedItems->isNotEmpty())
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-header">
+                            <h2 class="section-title">@lang(!$item->is_audio ? 'Related Video' : 'Related Audio')</h2>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="section-header">
-                        <h2 class="section-title">@lang(!$item->is_audio ? 'Related Video' : 'Related Audio')</h2>
-
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center mb-30-none">
-                @foreach ($item->is_audio ? $relatedAudios : $relatedItems as $related)
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
-                        <div class="movie-item">
-                            <div class="movie-thumb">
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
-                                    alt="movie">
-                                <span class="movie-badge">{{ __($related->versionName) }}</span>
-                                <div class="movie-thumb-overlay">
-                                    <a class="video-icon"
-                                        href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
-                                            class="fas fa-play"></i></a>
-                                </div>
-                                <span class="media-type"
-                                    style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                    @if ($related->is_audio)
-                                        <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
-                                    @else
-                                        <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
-                                    @endif
-                                </span>
-
-                            </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+                <div class="row justify-content-center mb-30-none">
+                    @foreach ($item->is_audio ? $relatedAudios : $relatedItems as $related)
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                            <div class="movie-item">
+                                <div class="movie-thumb">
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
+                                        alt="movie">
+                                    <span class="movie-badge">{{ __($related->versionName) }}</span>
+                                    <div class="movie-thumb-overlay">
+                                        <a class="video-icon"
+                                            href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
+                                                class="fas fa-play"></i></a>
+                                    </div>
+                                    <span class="media-type"
+                                        style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                        @if ($related->is_audio)
+                                            <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                        @else
+                                            <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                        @endif
+                                    </span>
 
-        </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+            </div>
         @endif
-        @if(!$item->is_audio && $relatedAudios->isNotEmpty())
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="section-header">
-                        <h2 class="section-title">@lang($item->is_audio ? 'Related Video' : 'Related Audio')</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center mb-30-none">
-                @foreach (!$item->is_audio ? $relatedAudios : $relatedItems as $related)
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
-                        <div class="movie-item">
-                            <div class="movie-thumb">
-                                <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
-                                    alt="movie">
-                                <span class="movie-badge">{{ __($related->versionName) }}</span>
-                                <div class="movie-thumb-overlay">
-                                    <a class="video-icon"
-                                        href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
-                                            class="fas fa-play"></i></a>
-                                </div>
-                                <span class="media-type"
-                                    style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                    @if ($related->is_audio)
-                                        <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
-                                    @else
-                                        <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
-                                    @endif
-                                </span>
-                            </div>
+        @if (!$item->is_audio && $relatedAudios->isNotEmpty())
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-header">
+                            <h2 class="section-title">@lang($item->is_audio ? 'Related Video' : 'Related Audio')</h2>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+                <div class="row justify-content-center mb-30-none">
+                    @foreach (!$item->is_audio ? $relatedAudios : $relatedItems as $related)
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+                            <div class="movie-item">
+                                <div class="movie-thumb">
+                                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $related->image->portrait) }}"
+                                        alt="movie">
+                                    <span class="movie-badge">{{ __($related->versionName) }}</span>
+                                    <div class="movie-thumb-overlay">
+                                        <a class="video-icon"
+                                            href="{{ $related->is_audio ? route('preview.audio', $related->slug) : route('watch', $related->slug) }}"><i
+                                                class="fas fa-play"></i></a>
+                                    </div>
+                                    <span class="media-type"
+                                        style="position: absolute; bottom: 10px; right: 10px;  color: #fff; padding: 5px 10px; border-radius: 5px;">
+                                        @if ($related->is_audio)
+                                            <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
+                                        @else
+                                            <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
 
-        </div>
+            </div>
         @endif
     </section>
 
@@ -344,6 +345,33 @@
 
 @push('style')
     <style>
+        /* public/css/components.css */
+        .playlist-item {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .playlist-thumb img {
+            border-radius: 6px;
+            max-width: 100%;
+        }
+
+        .playlist-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .playlist-title:hover {
+            color: var(--theme-color);
+        }
+
+
+
         .main-video:has(.main-video-lock) {
             position: relative;
         }
