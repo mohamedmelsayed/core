@@ -13,7 +13,7 @@
                     </div>
                     <div class="playlist-content">
                         <h5 class="playlist-title">{{ $playlist->title }}</h5>
-                        <a href="{{ route('playlist.view', ['playlist' => $playlist->id]) }}" class="btn btn--base mt-2">
+                        <a href="{{ route('playlist.play', $playlist->id) }}" class="btn btn--base mt-2">
                             @lang('View Playlist')
                         </a>
                     </div>
