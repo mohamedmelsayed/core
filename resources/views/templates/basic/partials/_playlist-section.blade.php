@@ -8,7 +8,7 @@
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
                 <div class="playlist-item">
                     <div class="playlist-thumb">
-                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlist->image->portrait) }}"
+                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlist->cover_image) }}"
                             alt="{{ $playlist->title }}" class="img-fluid">
                     </div>
                     <div class="playlist-content">
