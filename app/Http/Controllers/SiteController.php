@@ -776,7 +776,7 @@ class SiteController extends Controller
             ->where(function ($query) {
                 $query->orWhereHas('video')
                     ->orWhereHas('audio');
-            })
+            })->with('playlists')
             ->orderBy('id', 'desc')
             ->limit(12)
             ->get();
