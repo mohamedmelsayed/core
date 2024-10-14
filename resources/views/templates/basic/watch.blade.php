@@ -34,6 +34,9 @@
                                 </div>
                             @endif
                         </div>
+
+                        <!-- Include Playlist Section Partial -->
+                        @include($activeTemplate .'partials._playlist-section', ['playlists' => $playlists])
                         <div class="ad-video position-relative d-none">
                             <video class="ad-player" style="display: none" id="ad-video"></video>
                             <div class="ad-links d-none">

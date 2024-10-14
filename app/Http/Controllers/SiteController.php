@@ -340,10 +340,12 @@ class SiteController extends Controller
         }
 
         $adsTime = $video->getAds() ?? [];
+        $playlists = $item->playlists()->get(); // Or however you're fetching playlists related to the item
+
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'watch', compact('playlists','pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
     public function watchLive($slug)
@@ -667,10 +669,11 @@ class SiteController extends Controller
             $notify[] = ['error', 'There are no audio for this item'];
             return back()->withNotify($notify);
         }
+        $playlists = $item->playlists()->get(); // Or however you're fetching playlists related to the item
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'preview-audio', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'preview-audio', compact('playlists','pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'audios', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
 
