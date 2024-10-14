@@ -23,7 +23,7 @@
                             @endif
                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                                 <div class="movie-item">
-                                    <div class="movie-thumb">
+                                    <div class="movie-thumb" data-start-at="{{ $item->start_at }}">
                                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
                                             alt="movie">
 
@@ -45,6 +45,13 @@
                                             @endif
                                         </span>
 
+                                        <!-- Countdown timer tag -->
+                                        <div class="countdown-timer" data-start-at="{{ $item->start_at }}"
+                                            style="position: absolute; top: 10px; right: 10px; background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px 10px; border-radius: 5px;">
+                                            <span class="countdown-text">@lang('Starting in:')</span>
+                                            <span class="countdown-time"></span>
+                                        </div>
+
                                         <div class="movie-thumb-overlay">
                                             <a class="video-icon" href="{{ route('watch.live', $item->slug) }}">
                                                 <i class="fas fa-play"></i>
@@ -60,6 +67,7 @@
                         </div>
                     @endforelse
                 </div>
+
             </div>
         @endif
 
@@ -171,14 +179,34 @@
 
 
 @push('style')
-<style>
-    .lazy-loading-img {
-    width: auto !important;
-    height: auto !important;
-    display: block !important;
-}
+    <style>
+        .lazy-loading-img {
+            width: auto !important;
+            height: auto !important;
+            display: block !important;
+        }
 
-</style>
+        .countdown-timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .countdown-text {
+            margin-right: 5px;
+        }
+
+        .movie-thumb:hover .countdown-timer {
+            background-color: rgba(0, 0, 0, 0.9);
+            /* Slightly darker on hover */
+        }
+    </style>
 @endpush
 @push('script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async=""></script>
@@ -249,6 +277,43 @@
                     lazyImage.src = lazyImage.dataset.src;
                 });
             }
+
+            // Function to calculate time remaining and update the countdown
+            function updateCountdown(startTime, element) {
+                const now = new Date().getTime();
+                const distance = startTime - now;
+
+                // Time calculations for days, hours, minutes, and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Update the countdown timer display
+                if (distance > 0) {
+                    element.querySelector('.countdown-time').textContent =
+                        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                } else {
+                    element.querySelector('.countdown-text').textContent = '@lang('Stream Started')';
+                    element.querySelector('.countdown-time').textContent = '';
+                }
+            }
+
+            // Find all movie thumbnails with countdown timers
+            const thumbnails = document.querySelectorAll('.movie-thumb[data-start-at]');
+
+            thumbnails.forEach(function(thumb) {
+                const startAt = new Date(thumb.getAttribute('data-start-at')).getTime();
+                const countdownElement = thumb.querySelector('.countdown-timer');
+
+                // Initial update
+                updateCountdown(startAt, countdownElement);
+
+                // Update the countdown every second
+                setInterval(function() {
+                    updateCountdown(startAt, countdownElement);
+                }, 1000);
+            });
         });
     </script>
 @endpush
