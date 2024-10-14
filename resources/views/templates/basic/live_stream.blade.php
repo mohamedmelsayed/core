@@ -5,7 +5,7 @@
             <div class="row justify-content-center mb-30-none">
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
-                        <div class="main-video">
+                        <div class="main-video position-relative" data-start-at="{{ $item->stream->start_at }}">
                             @if ($item->version == Status::RENT_VERSION || !$watchEligable)
                                 <div class="main-video-lock">
                                     <div class="main-video-lock-content">
@@ -20,6 +20,7 @@
                                     </div>
                                 </div>
                             @else
+                                <!-- Video Embed Code -->
                                 {!! $item->stream->embed_code !!}
 
                                 <!-- Countdown Timer (hidden if the stream already started) -->
@@ -30,123 +31,122 @@
                                 </div>
                             @endif
                         </div>
+                    </div>
 
-                        <div class="ad-video position-relative d-none">
-                            <video class="ad-player" style="display: none" id="ad-video"></video>
-                            <div class="ad-links d-none">
-                                @foreach ($adsTime ?? [] as $ads)
-                                    <source src="{{ $ads }}" type="video/mp4" />
-                                @endforeach
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center flex-wrap skip-video">
-                                <span class="advertise-text d-none">@lang('Advertisement') - <span
-                                        class="remains-ads-time">00:52</span></span>
-                                <button class="skipButton d-none" id="skip-button"
-                                    data-skip-time="0">@lang('Skip Ad')</button>
-                            </div>
+                    <div class="ad-video position-relative d-none">
+                        <video class="ad-player" style="display: none" id="ad-video"></video>
+                        <div class="ad-links d-none">
+                            @foreach ($adsTime ?? [] as $ads)
+                                <source src="{{ $ads }}" type="video/mp4" />
+                            @endforeach
                         </div>
-
-                        <div class="movie-content">
-                            <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
-                                <div class="movie-content-left">
-                                    <h3 class="title">{{ __($seoContents['social_title']) }}</h3>
-                                    <span class="sub-title">@lang('Category') :
-                                        <span
-                                            class="cat">{{ app()->getLocale() === 'ar' ? $item->category->name : $item->category->name_en }}</span>
-                                        @if ($item->sub_category)
-                                            @lang('Sub Category'):
-                                            {{ app()->getLocale() === 'ar' ? $item->sub_category->name : $item->sub_category->name_en }}
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="movie-content-right">
-                                    <div class="movie-widget-area align-items-center">
-                                        @auth
-                                            @if ($watchEligable && gs('watch_party'))
-                                                <button type="button" class="watch-party-btn watchPartyBtn">
-                                                    <i class="las la-desktop base--color"></i>
-                                                    <span>@lang('Watch party')</span>
-                                                </button>
-                                            @endif
-                                        @endauth
-
-                                        <span class="movie-widget"><i class="lar la-star text--warning"></i>
-                                            {{ getAmount($item->ratings) }}</span>
-                                        <span class="movie-widget"><i class="lar la-eye text--danger"></i>
-                                            {{ getAmount($item->view) }} @lang('views')</span>
-
-                                        @php
-                                            $wishlist = $item->wishlists->where('user_id', auth()->id())->count();
-                                        @endphp
-
-                                        <span class="movie-widget addWishlist {{ $wishlist ? 'd-none' : '' }}"
-                                            data-id="{{ $item->id }}" data-type="item"><i
-                                                class="las la-plus-circle"></i></span>
-                                        <span class="movie-widget removeWishlist {{ $wishlist ? '' : 'd-none' }}"
-                                            data-id="{{ $item->id }}" data-type="item"><i
-                                                class="las la-minus-circle"></i></span>
-                                    </div>
-
-                                    <ul class="post-share d-flex align-items-center justify-content-sm-end mt-2 flex-wrap">
-                                        <li class="caption">@lang('Share') : </li>
-                                        <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Facebook')">
-                                            <a
-                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"><i
-                                                    class="lab la-facebook-f"></i></a>
-                                        </li>
-                                        <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Linkedin')">
-                                            <a
-                                                href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode(url()->current()) }}&amp;title={{ __(@$item->title) }}&amp;summary=@php echo strLimit(strip_tags($item->description), 130); @endphp"><i
-                                                    class="lab la-linkedin-in"></i></a>
-                                        </li>
-                                        <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Twitter')">
-                                            <a
-                                                href="https://twitter.com/intent/tweet?text={{ __(@$item->title) }}%0A{{ url()->current() }}"><i
-                                                    class="lab la-twitter"></i></a>
-                                        </li>
-                                        <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Pinterest')">
-                                            <a
-                                                href="http://pinterest.com/pin/create/button/?url={{ urlencode(url()->current()) }}&description={{ __(@$item->title) }}&media={{ getImage(getFilePath('item_landscape') . '/' . @$item->image->landscape) }}"><i
-                                                    class="lab la-pinterest"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <p class="movie-widget__desc">{{ $seoContents['social_description'] }}</p>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap skip-video">
+                            <span class="advertise-text d-none">@lang('Advertisement') - <span
+                                    class="remains-ads-time">00:52</span></span>
+                            <button class="skipButton d-none" id="skip-button" data-skip-time="0">@lang('Skip Ad')</button>
                         </div>
                     </div>
 
-                    <div class="product-tab mt-40">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="product-tab-desc" data-bs-toggle="tab"
-                                    href="#product-desc-content" role="tab" aria-controls="product-desc-content"
-                                    aria-selected="true">@lang('Description')</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
-                                    role="tab" aria-controls="product-team-content"
-                                    aria-selected="false">@lang('Team')</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
-                                aria-labelledby="product-tab-desc">
-                                <div class="product-desc-content">
-                                    {{ $seoContents['social_description'] }}
-                                </div>
+                    <div class="movie-content">
+                        <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
+                            <div class="movie-content-left">
+                                <h3 class="title">{{ __($seoContents['social_title']) }}</h3>
+                                <span class="sub-title">@lang('Category') :
+                                    <span
+                                        class="cat">{{ app()->getLocale() === 'ar' ? $item->category->name : $item->category->name_en }}</span>
+                                    @if ($item->sub_category)
+                                        @lang('Sub Category'):
+                                        {{ app()->getLocale() === 'ar' ? $item->sub_category->name : $item->sub_category->name_en }}
+                                    @endif
+                                </span>
                             </div>
-                            <div class="tab-pane fade" id="product-team-content" role="tabpanel"
-                                aria-labelledby="product-tab-team">
-                                <div class="product-desc-content">
-                                    <ul class="team-list">
-                                        <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
-                                        <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
-                                        {{-- <li><span>@lang('Cast'):</span> {{ __($item->team->casts) }}</li> --}}
-                                        {{-- <li><span>@lang('Genres'):</span> {{ __(@$item->team->genres) }}</li> --}}
-                                        <li><span>@lang('Language'):</span> {{ __(@$item->team->language) }}</li>
-                                    </ul>
+                            <div class="movie-content-right">
+                                <div class="movie-widget-area align-items-center">
+                                    @auth
+                                        @if ($watchEligable && gs('watch_party'))
+                                            <button type="button" class="watch-party-btn watchPartyBtn">
+                                                <i class="las la-desktop base--color"></i>
+                                                <span>@lang('Watch party')</span>
+                                            </button>
+                                        @endif
+                                    @endauth
+
+                                    <span class="movie-widget"><i class="lar la-star text--warning"></i>
+                                        {{ getAmount($item->ratings) }}</span>
+                                    <span class="movie-widget"><i class="lar la-eye text--danger"></i>
+                                        {{ getAmount($item->view) }} @lang('views')</span>
+
+                                    @php
+                                        $wishlist = $item->wishlists->where('user_id', auth()->id())->count();
+                                    @endphp
+
+                                    <span class="movie-widget addWishlist {{ $wishlist ? 'd-none' : '' }}"
+                                        data-id="{{ $item->id }}" data-type="item"><i
+                                            class="las la-plus-circle"></i></span>
+                                    <span class="movie-widget removeWishlist {{ $wishlist ? '' : 'd-none' }}"
+                                        data-id="{{ $item->id }}" data-type="item"><i
+                                            class="las la-minus-circle"></i></span>
                                 </div>
+
+                                <ul class="post-share d-flex align-items-center justify-content-sm-end mt-2 flex-wrap">
+                                    <li class="caption">@lang('Share') : </li>
+                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Facebook')">
+                                        <a
+                                            href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"><i
+                                                class="lab la-facebook-f"></i></a>
+                                    </li>
+                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Linkedin')">
+                                        <a
+                                            href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode(url()->current()) }}&amp;title={{ __(@$item->title) }}&amp;summary=@php echo strLimit(strip_tags($item->description), 130); @endphp"><i
+                                                class="lab la-linkedin-in"></i></a>
+                                    </li>
+                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Twitter')">
+                                        <a
+                                            href="https://twitter.com/intent/tweet?text={{ __(@$item->title) }}%0A{{ url()->current() }}"><i
+                                                class="lab la-twitter"></i></a>
+                                    </li>
+                                    <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Pinterest')">
+                                        <a
+                                            href="http://pinterest.com/pin/create/button/?url={{ urlencode(url()->current()) }}&description={{ __(@$item->title) }}&media={{ getImage(getFilePath('item_landscape') . '/' . @$item->image->landscape) }}"><i
+                                                class="lab la-pinterest"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="movie-widget__desc">{{ $seoContents['social_description'] }}</p>
+                    </div>
+                </div>
+
+                <div class="product-tab mt-40">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="product-tab-desc" data-bs-toggle="tab"
+                                href="#product-desc-content" role="tab" aria-controls="product-desc-content"
+                                aria-selected="true">@lang('Description')</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
+                                role="tab" aria-controls="product-team-content"
+                                aria-selected="false">@lang('Team')</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
+                            aria-labelledby="product-tab-desc">
+                            <div class="product-desc-content">
+                                {{ $seoContents['social_description'] }}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="product-team-content" role="tabpanel"
+                            aria-labelledby="product-tab-team">
+                            <div class="product-desc-content">
+                                <ul class="team-list">
+                                    <li><span>@lang('Director'):</span> {{ __($item->team->director) }}</li>
+                                    <li><span>@lang('Producer'):</span> {{ __($item->team->producer) }}</li>
+                                    {{-- <li><span>@lang('Cast'):</span> {{ __($item->team->casts) }}</li> --}}
+                                    {{-- <li><span>@lang('Genres'):</span> {{ __(@$item->team->genres) }}</li> --}}
+                                    <li><span>@lang('Language'):</span> {{ __(@$item->team->language) }}</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -307,75 +307,80 @@
 
 
 @push('style')
-<style>
-    .main-video {
-        position: relative;
-        width: 100%;
-        padding-top: 56.25%; /* 16:9 Aspect Ratio */
-    }
-    .main-video iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none; /* Disable clicks until stream starts */
-    }
-    .main-video-lock {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 1.5rem;
-        text-align: center;
-    }
-    .main-video-lock-content {
-        max-width: 80%;
-        padding: 20px;
-    }
-</style>
+    <style>
+        .main-video {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            /* 16:9 Aspect Ratio */
+        }
+
+        .main-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* Disable clicks until stream starts */
+        }
+
+        .main-video-lock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .main-video-lock-content {
+            max-width: 80%;
+            padding: 20px;
+        }
+    </style>
 @endpush
 
 @push('script')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var mainVideo = document.querySelector('.main-video');
-    var countdownTimer = document.querySelector('.countdown-timer');
-    var startAt = mainVideo.getAttribute('data-start-at');
-    var countdownTimeElement = countdownTimer.querySelector('.countdown-time');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var mainVideo = document.querySelector('.main-video');
+            var countdownTimer = document.querySelector('.countdown-timer');
+            var startAt = mainVideo.getAttribute('data-start-at');
+            var countdownTimeElement = countdownTimer.querySelector('.countdown-time');
 
-    function startCountdown() {
-        var now = new Date().getTime();
-        var eventTime = new Date(startAt).getTime();
-        var distance = eventTime - now;
+            function startCountdown() {
+                var now = new Date().getTime();
+                var eventTime = new Date(startAt).getTime();
+                var distance = eventTime - now;
 
-        if (distance < 0) {
-            // Stream started, hide countdown and enable video
-            countdownTimer.style.display = 'none';
-            document.querySelector('.main-video iframe').style.pointerEvents = 'auto';
-        } else {
-            // Update countdown
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                if (distance < 0) {
+                    // Stream started, hide countdown and enable video
+                    countdownTimer.style.display = 'none';
+                    document.querySelector('.main-video iframe').style.pointerEvents = 'auto';
+                } else {
+                    // Update countdown
+                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            countdownTimeElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    countdownTimeElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-            // Run countdown every second
-            setTimeout(startCountdown, 1000);
-        }
-    }
+                    // Run countdown every second
+                    setTimeout(startCountdown, 1000);
+                }
+            }
 
-    if (countdownTimer) {
-        startCountdown();
-    }
-});
-</script>
+            if (countdownTimer) {
+                startCountdown();
+            }
+        });
+    </script>
 @endpush
