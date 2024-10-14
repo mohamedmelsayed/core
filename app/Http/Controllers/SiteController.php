@@ -783,16 +783,15 @@ class SiteController extends Controller
 
         // Fetch playlists where at least one item matches the search criteria
         $playlists = Playlist::whereHas('items', function ($itemQuery) use ($search) {
-            $itemQuery->where('status', 1)  // Ensure the item is active
+            $itemQuery->hasVideoOrAudio()->where('status', 1)  // Ensure the item is active
                 ->where(function ($query) use ($search) {
                     $query->whereHas('translations', function ($translation) use ($search) {
                         $translation->where('translated_title', 'LIKE', "%$search%")
                             ->orWhere('translated_description', 'LIKE', "%$search%")
                             ->orWhere('translated_tags', 'LIKE', "%$search%")
                             ->orWhere('translated_keywords', 'LIKE', "%$search%");
-                    })
-                        ->orWhereHas('video')  // Check if the item has a video
-                        ->orWhereHas('audio');  // Check if the item has an audio
+                    });
+
                 });
         })
             ->orderBy('id', 'desc')
