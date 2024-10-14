@@ -5,31 +5,32 @@
             <div class="row justify-content-center mb-30-none">
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <div class="movie-item">
-                        <div class="main-video position-relative" data-start-at="{{ $item->stream->start_at }}"  style="background-image: url('{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}'); background-size: cover; background-position: center;">
-                            @if ($item->version == Status::RENT_VERSION || !$watchEligable)
-                                <div class="main-video-lock">
-                                    <div class="main-video-lock-content">
-                                        <span class="icon"><i class="las la-lock"></i></span>
-                                        <p class="title">@lang('Purchase Now')</p>
-                                        <p class="price">
-                                            <span
-                                                class="price-amount">{{ $general->cur_sym }}{{ showAmount($item->rent_price) }}</span>
-                                            <span class="small-text ms-3">@lang('For') {{ $item->rental_period }}
-                                                @lang('Days')</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            @else
-                                <!-- Video Embed Code -->
-                                {!! $item->stream->embed_code !!}
+                        <div class="main-video position-relative" data-start-at="{{ $item->stream->start_at }}"
+                            style="background-image: url('{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}'); background-size: cover; background-position: center;">
+                            <div id="video-content">
 
-                                <!-- Countdown Timer (hidden if the stream already started) -->
-                                <div class="countdown-timer"
-                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(237, 35, 35, 0.8); color: white; padding: 20px; border-radius: 10px;">
-                                    <span class="countdown-text">@lang('Starting in:')</span>
-                                    <span class="countdown-time"></span>
-                                </div>
-                            @endif
+                                @if ($item->version == Status::RENT_VERSION || !$watchEligable)
+                                    <div class="main-video-lock">
+                                        <div class="main-video-lock-content">
+                                            <span class="icon"><i class="las la-lock"></i></span>
+                                            <p class="title">@lang('Purchase Now')</p>
+                                            <p class="price">
+                                                <span
+                                                    class="price-amount">{{ $general->cur_sym }}{{ showAmount($item->rent_price) }}</span>
+                                                <span class="small-text ms-3">@lang('For') {{ $item->rental_period }}
+                                                    @lang('Days')</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                @else
+                                    <!-- Countdown Timer (hidden if the stream already started) -->
+                                    <div class="countdown-timer"
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(237, 35, 35, 0.8); color: white; padding: 20px; border-radius: 10px;">
+                                        <span class="countdown-text">@lang('Starting in:')</span>
+                                        <span class="countdown-time"></span>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
 
@@ -354,16 +355,17 @@
             var countdownTimer = document.querySelector('.countdown-timer');
             var startAt = mainVideo.getAttribute('data-start-at');
             var countdownTimeElement = countdownTimer.querySelector('.countdown-time');
+            var videoContent = document.getElementById('video-content');
 
             function startCountdown() {
                 var now = new Date().getTime();
                 var eventTime = new Date(startAt).getTime();
                 var distance = eventTime - now;
 
-                if (distance < 0) {
-                    // Stream started, hide countdown and enable video
+                if (distance <= 0) {
+                    // Stream started, show the stream embed code and remove countdown
                     countdownTimer.style.display = 'none';
-                    document.querySelector('.main-video iframe').style.pointerEvents = 'auto';
+                    videoContent.innerHTML = `{!! $item->stream->embed_code !!}`;
                 } else {
                     // Update countdown
                     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -378,9 +380,10 @@
                 }
             }
 
-            if (countdownTimer) {
-                startCountdown();
-            }
+            // Initialize the countdown
+            startCountdown();
         });
     </script>
+@endpush
+</script>
 @endpush
