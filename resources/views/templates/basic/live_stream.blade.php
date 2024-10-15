@@ -24,11 +24,8 @@
                                     </div>
                                 @else
                                     <!-- Countdown Timer (hidden if the stream already started) -->
-                                    <div class="countdown-timer"
-                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -20%); background-color: rgba(237, 35, 35, 0.8); color: white; padding: 20px; border-radius: 10px;">
-                                        <span class="countdown-text">@lang('Starting in:')</span>
-                                        <span class="countdown-time"></span>
-                                    </div>
+                                    @include('partials.countdown-timer', ['item' => $item])
+
                                 @endif
                             </div>
                         </div>

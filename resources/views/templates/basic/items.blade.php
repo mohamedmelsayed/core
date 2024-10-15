@@ -46,11 +46,8 @@
                                         </span>
 
                                         <!-- Countdown timer tag -->
-                                        <!-- Countdown timer in the center -->
-                                        <div class="countdown-timer" data-start-at="{{ $item->stream->start_at }}">
-                                            <span class="countdown-text">@lang('Starting in:')</span>
-                                            <span class="countdown-time"></span>
-                                        </div>
+                                        @include('partials.countdown-timer', ['item' => $item])
+
 
                                         <div class="movie-thumb-overlay">
                                             <a class="video-icon" href="{{ route('watch.live', $item->slug) }}">
