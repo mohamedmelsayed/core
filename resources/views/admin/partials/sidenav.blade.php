@@ -51,12 +51,12 @@
                                 </a>
                             </li>
 
-                            <li class="sidebar-menu-item {{ menuActive(['admin.item.episode']) }}">
+                            {{-- <li class="sidebar-menu-item {{ menuActive(['admin.item.episode']) }}">
                                 <a class="nav-link" href="{{ route('admin.item.episode') }}">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Episode Items')</span>
                                 </a>
-                            </li>
+                            </li> --}}
 
                             <li class="sidebar-menu-item {{ menuActive(['admin.item.trailer']) }}">
                                 <a class="nav-link" href="{{ route('admin.item.trailer') }}">
@@ -64,12 +64,12 @@
                                     <span class="menu-title">@lang('Trailer Items')</span>
                                 </a>
                             </li>
-                            <li class="sidebar-menu-item {{ menuActive(['admin.item.rents']) }}">
+                            {{-- <li class="sidebar-menu-item {{ menuActive(['admin.item.rents']) }}">
                                 <a class="nav-link" href="{{ route('admin.item.rents') }}">
                                     <i class="menu-icon las la-dot-circle"></i>
                                     <span class="menu-title">@lang('Rent Items')</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>
