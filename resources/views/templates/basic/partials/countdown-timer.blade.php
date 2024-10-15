@@ -44,13 +44,13 @@
              color: #fff;
              background-color: #333;
              border-radius: 5px;
-             padding: 7px 14px;
+             padding: 3px 5px;
              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
          }
 
          .flip-clock-label {
              display: block;
-             font-size: 0.8rem;
+             font-size: 0.6rem;
              color: #fff;
              margin-top: 5px;
          }
@@ -58,11 +58,11 @@
          @media (max-width: 768px) {
              .flip-clock-number {
                  font-size: 2rem;
-                 padding: 5px 10px;
+                 padding: 3px 5px;
              }
 
              .flip-clock-label {
-                 font-size: 0.7rem;
+                 font-size: 0.5rem;
              }
 
 
