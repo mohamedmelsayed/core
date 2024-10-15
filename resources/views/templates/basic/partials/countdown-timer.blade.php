@@ -21,6 +21,7 @@
  @push('style')
      <style>
          .flip-clock {
+             direction: ltr;
              display: flex;
              justify-content: center;
              align-items: center;
@@ -64,8 +65,6 @@
              .flip-clock-label {
                  font-size: 0.5rem;
              }
-
-
      </style>
  @endpush
 
