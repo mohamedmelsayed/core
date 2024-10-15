@@ -27,7 +27,7 @@
              position: absolute;
              bottom: 20px;
              left: 50%;
-             transform: translateX(-40%);
+             transform: translateX(-50%);
              background-color: rgba(0, 0, 0, 0.5);
              border-radius: 10px;
              padding: 10px 20px;
@@ -66,7 +66,7 @@
              }
 
              .flip-clock {
-                max-width:70%;
+                width:70%;
          }
      </style>
  @endpush
