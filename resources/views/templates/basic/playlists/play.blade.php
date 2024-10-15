@@ -58,20 +58,22 @@
                                         ->first();
                                     $title = $translation ? $translation->translated_title : $playlistItem->title;
                                 @endphp
-                                <li class="list-group-item d-flex align-items-center">
-                                    <a
-                                        href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
+                                <a
+                                    href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
+
+                                    <li class="list-group-item d-flex align-items-center">
 
                                         <!-- Portrait image -->
                                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $playlistItem->image->portrait) }}"
                                             alt="{{ $title }}" class="playlist-item-image" />
 
                                         <!-- Title with dynamic language based on translations relation -->
-                                        <p class="playlist-item-link">
+                                        <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
+                                            class="playlist-item-link">
                                             {{ $title }}
-                                        </p>
-                                    </a>
-                                </li>
+                                        </a>
+                                    </li>
+                                </a>
                             @endforeach
                         </ul>
                     </div>
