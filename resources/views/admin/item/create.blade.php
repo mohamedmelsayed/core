@@ -75,7 +75,7 @@
                                 <option value="">@lang('Select One')</option>
                                 <option value="0">@lang('Free')</option>
                                 <option value="1">@lang('Paid')</option>
-                                <option value="2">@lang('Rent')</option>
+                                {{-- <option value="2">@lang('Rent')</option> --}}
                             </select>
                         </div>
                         <div class="form-group col-md-3 is_audio">
