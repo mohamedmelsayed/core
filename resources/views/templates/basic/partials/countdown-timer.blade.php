@@ -40,11 +40,11 @@
 
          .flip-clock-number {
              display: block;
-             font-size: 3rem;
+             font-size: 2rem;
              color: #fff;
              background-color: #333;
              border-radius: 5px;
-             padding: 10px 20px;
+             padding: 7px 14px;
              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
          }
 
@@ -65,9 +65,7 @@
                  font-size: 0.7rem;
              }
 
-             .flip-clock {
-                width:70%;
-         }
+
      </style>
  @endpush
 
