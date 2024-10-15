@@ -46,7 +46,9 @@
                                         </span>
 
                                         <!-- Countdown timer tag -->
-                                        @include($activeTemplate .'partials.countdown-timer', ['item' => $item])
+                                        @include($activeTemplate . 'partials.countdown-timer', [
+                                            'item' => $item,
+                                        ])
 
 
                                         <div class="movie-thumb-overlay">
@@ -175,44 +177,6 @@
 @endsection
 
 
-@push('style')
-    <style>
-        .lazy-loading-img {
-            width: auto !important;
-            height: auto !important;
-            display: block !important;
-        }
-
-        .countdown-timer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(237, 35, 35, 0.7);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-align: center;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .countdown-text {
-            font-size: 14px;
-        }
-
-        .countdown-time {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .movie-thumb:hover .countdown-timer {
-            background-color: rgba(0, 0, 0, 0.9);
-            /* Slightly darker on hover */
-        }
-    </style>
-@endpush
 @push('script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async=""></script>
 @endpush
@@ -284,41 +248,7 @@
             }
 
             // Function to calculate time remaining and update the countdown
-            function updateCountdown(startTime, element) {
-                const now = new Date().getTime();
-                const distance = startTime - now;
 
-                // Time calculations for days, hours, minutes, and seconds
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                // Update the countdown timer display
-                if (distance > 0) {
-                    element.querySelector('.countdown-time').textContent =
-                        `${days}d ${hours}h ${minutes}m ${seconds}s`;
-                } else {
-                    element.querySelector('.countdown-text').textContent = '@lang('Stream Started')';
-                    element.querySelector('.countdown-time').textContent = '';
-                }
-            }
-
-            // Find all movie thumbnails with countdown timers
-            const thumbnails = document.querySelectorAll('.movie-thumb[data-start-at]');
-
-            thumbnails.forEach(function(thumb) {
-                const startAt = new Date(thumb.getAttribute('data-start-at')).getTime();
-                const countdownElement = thumb.querySelector('.countdown-timer');
-
-                // Initial update
-                updateCountdown(startAt, countdownElement);
-
-                // Update the countdown every second
-                setInterval(function() {
-                    updateCountdown(startAt, countdownElement);
-                }, 1000);
-            });
         });
     </script>
 @endpush
