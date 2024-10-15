@@ -24,7 +24,7 @@
                                     </div>
                                 @else
                                     <!-- Countdown Timer (hidden if the stream already started) -->
-                                    @include('partials.countdown-timer', ['item' => $item])
+                                    @include($activeTemplate .'partials.countdown-timer', ['item' => $item])
 
                                 @endif
                             </div>

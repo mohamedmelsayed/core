@@ -46,7 +46,7 @@
                                         </span>
 
                                         <!-- Countdown timer tag -->
-                                        @include('partials.countdown-timer', ['item' => $item])
+                                        @include($activeTemplate .'partials.countdown-timer', ['item' => $item])
 
 
                                         <div class="movie-thumb-overlay">
