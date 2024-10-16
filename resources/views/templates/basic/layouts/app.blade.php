@@ -8,6 +8,8 @@
     <title> {{ $general->siteName(__($pageTitle)) }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
+
     @include('partials.seo')
 
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -17,6 +19,7 @@
         rel="stylesheet">
     <link href="{{ asset($activeTemplateTrue . 'css/fontawesome-all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/global/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/global/css/arabic.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/global/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset($activeTemplateTrue . 'css/swiper.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/global/css/line-awesome.min.css') }}" rel="stylesheet" />
