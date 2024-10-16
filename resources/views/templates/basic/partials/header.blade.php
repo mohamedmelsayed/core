@@ -32,7 +32,7 @@
                                         <li><a class="nav-link category-nav item"
                                                href="{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
                                             <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
-                                            <ul class="sub-menu">
+                                            <ul class="{{app()->getLocale() === 'ar' ?'sub-menu-rtl':'sub-menu'}}"">
                                                 @forelse($category->subcategories as $subcategory)
                                                     <li>
                                                         <a href="{{ route('subCategory', $subcategory->id) }}">{{app()->getLocale() === 'ar' ? $subcategory->name:$subcategory->name_en }}</a>
