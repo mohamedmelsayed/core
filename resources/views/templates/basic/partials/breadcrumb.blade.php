@@ -10,9 +10,9 @@
             <div class="col-xl-12 text-center">
                 <div class="banner-content">
                     <h1 class="title text-white">@lang($pageTitle)</h1>
-                    <div class="breadcrumb-area {{ $isRTL ? 'breadcrumb-rtl' : '' }}" >
+                    <div class="breadcrumb-area">
                         <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb justify-content-center" >
+                            <ol class="breadcrumb justify-content-center {{ $isRTL ? 'breadcrumb-rtl' : '' }}">
                                 <li class="breadcrumb-item item">
                                     <a href="{{ route('home') }}">@lang('Home')</a>
                                 </li>
@@ -20,7 +20,6 @@
                             </ol>
                         </nav>
                     </div>
-
                 </div>
             </div>
         </div>
