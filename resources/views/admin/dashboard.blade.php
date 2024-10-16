@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('panel')
-    @if (@json_decode($general->system_info)->version > systemDetails()['version'])
+    @if (@json_decode($general->system_info)->version > systemDetails()['version']&&false)
         <div class="row">
             <div class="col-md-12">
                 <div class="card bg-warning mb-3 text-white">
