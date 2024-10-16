@@ -35,7 +35,7 @@
                                             <ul class="sub-menu">
                                                 @forelse($category->subcategories as $subcategory)
                                                     <li>
-                                                        <a href="{{ route('subCategory', $subcategory->id) }}">{{app()->getLocale() === 'ar' ? $subcategory->name:$subcategory->name_en }}</a>
+                                                        <a class="nav-link category-nav item" href="{{ route('subCategory', $subcategory->id) }}">{{app()->getLocale() === 'ar' ? $subcategory->name:$subcategory->name_en }}</a>
                                                     </li>
                                                 @empty
                                                 @endforelse
@@ -43,13 +43,13 @@
                                         </li>
                                     @else
                                         <li>
-                                            <a href="{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
+                                            <a  href="{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
                                         </li>
                                     @endif
                                 @endforeach
 
                                 <li><a href="{{ route('live.tv') }}">@lang('Live TV')</a></li>
-                                <li><a href="{{ route('subscription') }}">@lang('Subscribe')</a></li>
+                                <li><a class="nav-link category-nav item" href="{{ route('subscription') }}">@lang('Subscribe')</a></li>
 
                                 @auth
                                     <li><a href="javascript:void(0)">@lang('Ticket') </a>
@@ -78,7 +78,7 @@
                                         </ul>
                                     </li>
                                 @else
-                                    <li><a href="{{ route('contact') }}">@lang('Contact')</a></li>
+                                    <li><a class="nav-link category-nav item" href="{{ route('contact') }}">@lang('Contact')</a></li>
                                 @endauth
                             </ul>
 
