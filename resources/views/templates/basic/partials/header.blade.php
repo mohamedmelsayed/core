@@ -5,7 +5,7 @@
                 <div class="header-menu-content">
                     <nav class="navbar navbar-expand-xl p-0">
                         <a class="site-logo site-title" href="{{ route('home') }}"><img src="{{ siteLogo() }}"
-                                                                                        alt="site-logo"></a>
+                                alt="site-logo"></a>
                         <div class="search-bar d-block d-xl-none ml-auto">
                             <a href="#0"><i class="fas fa-search"></i></a>
                             <div class="header-top-search-area">
@@ -17,9 +17,8 @@
                             </div>
                         </div>
                         <button class="navbar-toggler ml-auto" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent" type="button"
-                                aria-controls="navbarSupportedContent" aria-expanded="false"
-                                aria-label="Toggle navigation">
+                            data-bs-target="#navbarSupportedContent" type="button"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="las la-bars"></span>
                         </button>
                         <div class="navbar-collapse collapse" id="navbarSupportedContent">
@@ -30,12 +29,18 @@
                                 @foreach ($categories as $category)
                                     @if ($category->subcategories->count())
                                         <li><a class="nav-link category-nav item"
-                                               href="{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
+                                                href="{{ route('category', $category->id) }}">{{ app()->getLocale() === 'ar' ? $category->name : $category->name_en }}</a>
                                             <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
-                                            <ul class="{{app()->getLocale() === 'ar' ?'sub-menu-rtl':'sub-menu'}}"">
+                                            <ul class="sub-menu"
+                                                style="{{ app()->getLocale() === 'ar'
+                                                    ? ' left: 0;
+                                                  right: auto;'
+                                                    : ' left: auto;
+                                                  right: 0;' }}">
                                                 @forelse($category->subcategories as $subcategory)
                                                     <li>
-                                                        <a href="{{ route('subCategory', $subcategory->id) }}">{{app()->getLocale() === 'ar' ? $subcategory->name:$subcategory->name_en }}</a>
+                                                        <a
+                                                            href="{{ route('subCategory', $subcategory->id) }}">{{ app()->getLocale() === 'ar' ? $subcategory->name : $subcategory->name_en }}</a>
                                                     </li>
                                                 @empty
                                                 @endforelse
@@ -43,7 +48,8 @@
                                         </li>
                                     @else
                                         <li>
-                                            <a href="{{ route('category', $category->id) }}">{{app()->getLocale() === 'ar' ? $category->name:$category->name_en}}</a>
+                                            <a
+                                                href="{{ route('category', $category->id) }}">{{ app()->getLocale() === 'ar' ? $category->name : $category->name_en }}</a>
                                         </li>
                                     @endif
                                 @endforeach
@@ -71,7 +77,8 @@
                                             </li>
                                             @if (gs('watch_party'))
                                                 <li>
-                                                    <a href="{{ route('user.watch.party.history') }}">@lang('Watch Party')</a>
+                                                    <a
+                                                        href="{{ route('user.watch.party.history') }}">@lang('Watch Party')</a>
                                                 </li>
                                             @endif
                                             <li><a href="{{ route('user.rented.item') }}">@lang('Rented Item')</a></li>
@@ -97,15 +104,15 @@
 
                                 <div class="language-select-area">
                                     <a class="language-select langSel" id="langSel"
-                                       href="{{ app()->getLocale() === 'ar' ? route('change-Lang','en') : route('change-Lang','ar') }}">
-                                        {{app()->getLocale() === 'ar' ? "EN" :"AR" }}
+                                        href="{{ app()->getLocale() === 'ar' ? route('change-Lang', 'en') : route('change-Lang', 'ar') }}">
+                                        {{ app()->getLocale() === 'ar' ? 'EN' : 'AR' }}
                                     </a>
                                 </div>
 
                                 @auth
                                     <div class="header-right dropdown">
-                                        <button class="" data-bs-toggle="dropdown" data-display="static" type="button"
-                                                aria-haspopup="true" aria-expanded="false">
+                                        <button class="" data-bs-toggle="dropdown" data-display="static"
+                                            type="button" aria-haspopup="true" aria-expanded="false">
                                             <div
                                                 class="header-user-area d-flex align-items-center justify-content-between flex-wrap">
                                                 <div class="header-user-content">
@@ -120,17 +127,17 @@
                                         <div class="dropdown-menu dropdown-menu--sm dropdown-menu-end border-0 p-0">
 
                                             <a class="dropdown-menu__item d-flex align-items-center px-3 py-2"
-                                               href="{{ route('user.profile.setting') }}">
+                                                href="{{ route('user.profile.setting') }}">
                                                 <i class="dropdown-menu__icon las la-user-circle"></i>
                                                 <span class="dropdown-menu__caption">@lang('Profile Settings')</span>
                                             </a>
                                             <a class="dropdown-menu__item d-flex align-items-center px-3 py-2"
-                                               href="{{ route('user.change.password') }}">
+                                                href="{{ route('user.change.password') }}">
                                                 <i class="dropdown-menu__icon las la-key"></i>
                                                 <span class="dropdown-menu__caption">@lang('Change Password')</span>
                                             </a>
                                             <a class="dropdown-menu__item d-flex align-items-center px-3 py-2"
-                                               href="{{ route('user.logout') }}">
+                                                href="{{ route('user.logout') }}">
                                                 <i class="dropdown-menu__icon las la-sign-out-alt"></i>
                                                 <span class="dropdown-menu__caption">@lang('Logout')</span>
                                             </a>
