@@ -9,9 +9,8 @@
                 <div class="banner-content">
                     <h1 class="title text-white">@lang($pageTitle)</h1>
                     <div class="breadcrumb-area">
-                        <nav aria-label="breadcrumb" style="{{ app()->getLocale() === 'ar' ?'direction:rtl;':'direction:ltr;' }}>
+                        <nav aria-label="breadcrumb" style="{{ app()->getLocale() === 'ar' ?'direction:rtl;':'direction:ltr;' }}">
 
-                        @endauth">
                             <ol class="breadcrumb justify-content-center" style="display: flex; list-style: none; padding: 0; margin: 0; {{ app()->getLocale() === 'ar' ? 'flex-direction: row-reverse; text-align: right;' : 'flex-direction: row; text-align: left;' }}">
                                 <li class="breadcrumb-item item" style="{{ app()->getLocale() === 'ar' ? 'padding-left: 0; padding-right: 0.5rem;' : 'padding-right: 0; padding-left: 0.5rem;' }}">
                                     <a href="{{ route('home') }}">@lang('Home')</a>
