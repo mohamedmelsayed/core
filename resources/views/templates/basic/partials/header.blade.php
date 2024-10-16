@@ -33,10 +33,10 @@
                                             <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
                                             <ul class="sub-menu"
                                                 style="{{ app()->getLocale() === 'ar'
-                                                    ? ' left: 0;
-                                                  right: auto;'
-                                                    : ' left: auto;
-                                                  right: 0;' }}">
+                                                    ? ' left: auto;
+                                                  right: 0;'
+                                                    : ' left: 0;
+                                                  right: auto;' }}">
                                                 @forelse($category->subcategories as $subcategory)
                                                     <li>
                                                         <a
