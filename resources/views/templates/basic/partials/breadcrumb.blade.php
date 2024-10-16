@@ -1,10 +1,8 @@
 @php
     $breadcrumb = getContent('breadcrumb.content',true);
-    $isRTL = app()->getLocale() === 'ar'; // Check if the language is Arabic (or any RTL language)
 @endphp
 
-<section class="inner-banner-section banner-section bg-overlay-black bg_img"
-         data-background="{{ getImage('assets/images/frontend/breadcrumb/'.@$breadcrumb->data_values->background_image, '1778x755') }}">
+<section class="inner-banner-section banner-section bg-overlay-black bg_img" data-background="{{ getImage('assets/images/frontend/breadcrumb/'.@$breadcrumb->data_values->background_image, '1778x755') }}">
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-xl-12 text-center">
@@ -12,10 +10,8 @@
                     <h1 class="title text-white">@lang($pageTitle)</h1>
                     <div class="breadcrumb-area">
                         <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb justify-content-center {{ $isRTL ? 'breadcrumb-rtl' : '' }}">
-                                <li class="breadcrumb-item item">
-                                    <a href="{{ route('home') }}">@lang('Home')</a>
-                                </li>
+                            <ol class="breadcrumb justify-content-center">
+                                <li class="breadcrumb-item item"><a href="{{ route('home') }}">@lang('Home')</a></li>
                                 <li class="breadcrumb-item active item" aria-current="page">@lang($pageTitle)</li>
                             </ol>
                         </nav>
