@@ -10,11 +10,16 @@
                     <h1 class="title text-white">@lang($pageTitle)</h1>
                     <div class="breadcrumb-area">
                         <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb justify-content-center">
-                                <li class="breadcrumb-item item"><a href="{{ route('home') }}">@lang('Home')</a></li>
-                                <li class="breadcrumb-item active item" aria-current="page">@lang($pageTitle)</li>
+                            <ol class="breadcrumb justify-content-center" style="display: flex; list-style: none; padding: 0; margin: 0; {{ app()->getLocale() === 'ar' ? 'flex-direction: row-reverse; text-align: right;' : 'flex-direction: row; text-align: left;' }}">
+                                <li class="breadcrumb-item item" style="{{ app()->getLocale() === 'ar' ? 'padding-left: 0; padding-right: 0.5rem;' : 'padding-right: 0; padding-left: 0.5rem;' }}">
+                                    <a href="{{ route('home') }}">@lang('Home')</a>
+                                </li>
+                                <li class="breadcrumb-item active item" aria-current="page" style="color: #6c757d;">
+                                    @lang($pageTitle)
+                                </li>
                             </ol>
                         </nav>
+
                     </div>
                 </div>
             </div>
