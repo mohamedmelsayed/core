@@ -37,7 +37,7 @@
                                         @forelse($playlists as $playlist)
                                             <li>
                                                 <a
-                                                    href="{{ route('playlist.play', $playlist->id) }}">{{ app()->getLocale() === 'ar' ? $playlist->title : $subcategory->title_en }}</a>
+                                                    href="{{ route('playlist.play', $playlist->id) }}">{{ app()->getLocale() === 'ar' ? $playlist->title : $playlist->title_en }}</a>
                                             </li>
                                         @empty
                                         @endforelse

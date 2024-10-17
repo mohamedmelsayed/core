@@ -12,6 +12,8 @@ class Playlist extends Model
     protected $fillable = [
         'title',
         'description',
+         'title_en',
+        'description_en',
         'type',
         'cover_image',
         'sub_category_id',
