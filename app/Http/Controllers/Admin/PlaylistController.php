@@ -30,6 +30,8 @@ class PlaylistController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'title_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
             'type' => 'required|in:audio,video',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'sub_category_id' => 'required|exists:sub_categories,id',
@@ -43,6 +45,8 @@ class PlaylistController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type,
+            'title_en' => $request->title_en,
+            'description_en' => $request->description_en,
             'cover_image' => $imageData['portrait'] ?? null, // Store portrait as cover image
             'sub_category_id' => $request->sub_category_id,
         ]);
@@ -90,6 +94,8 @@ class PlaylistController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'title_en' => 'required|string|max:255',
+            'description_en' => 'required|string',
             'type' => 'required|in:audio,video',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'sub_category_id' => 'required|exists:sub_categories,id',
@@ -102,6 +108,8 @@ class PlaylistController extends Controller
         $playlist->update([
             'title' => $request->title,
             'description' => $request->description,
+            'title_en' => $request->title_en,
+            'description_en' => $request->description_en,
             'type' => $request->type,
             'cover_image' => $imageData['portrait'] ?? $playlist->cover_image, // Store portrait as cover image
             'sub_category_id' => $request->sub_category_id,
@@ -223,6 +231,4 @@ class PlaylistController extends Controller
 
         return response()->json(['message' => 'Item removed from playlist successfully.']);
     }
-
-
 }

@@ -35,10 +35,11 @@ class SiteController extends Controller
     {
         $currentLang = session()->get('lang', 'ar');
         $pageTitle = 'Home';
+        $playlists=Playlist::all();
         $sliders = Slider::orderBy('id', 'desc')->where('status', 1)->with('item', 'item.category', 'item.video')->get();
         $featuredMovies = Item::active()->hasVideo()->where('featured', 1)->orderBy('id', 'desc')->get();
         $advertise = Advertise::where('device', 1)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
-        return view($this->activeTemplate . 'home', compact('pageTitle', 'sliders', 'featuredMovies', 'advertise', 'currentLang'));
+        return view($this->activeTemplate . 'home', compact('pageTitle', 'playlists','sliders', 'featuredMovies', 'advertise', 'currentLang'));
     }
 
     public function contact()

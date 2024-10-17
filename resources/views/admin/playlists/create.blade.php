@@ -7,10 +7,21 @@
                     @csrf
                     <div class="card-body">
                         <div class="row">
+                            <!-- Title -->
                             <div class="form-group col-md-6">
                                 <label>@lang('Title')</label>
                                 <input class="form-control" name="title" type="text" value="{{ old('title') }}" placeholder="@lang('Title')" required>
                             </div>
+
+                            <!-- Title (English) -->
+                            <div class="form-group col-md-6">
+                                <label>@lang('Title (English)')</label>
+                                <input class="form-control" name="title_en" type="text" value="{{ old('title_en') }}" placeholder="@lang('Title (English)')" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Type -->
                             <div class="form-group col-md-6">
                                 <label>@lang('Type')</label>
                                 <select class="form-control" name="type" required>
@@ -18,9 +29,8 @@
                                     <option value="video">@lang('Video')</option>
                                 </select>
                             </div>
-                        </div>
 
-                        <div class="row">
+                            <!-- Sub Category -->
                             <div class="form-group col-md-6">
                                 <label>@lang('Sub Category')</label>
                                 <select class="form-control" name="sub_category_id" required>
@@ -34,7 +44,10 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
 
+                        <div class="row">
+                            <!-- Cover Image -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>@lang('Cover Image')</label>
@@ -48,16 +61,23 @@
                                             </div>
                                         </div>
                                         <div class="mt-2">
-                                            <small class="mt-3 text-muted"> @lang('Supported Files:') <b>@lang('.png, .jpg, .jpeg')</b></small>
+                                            <small class="mt-3 text-muted">@lang('Supported Files:') <b>@lang('.png, .jpg, .jpeg')</b></small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Description -->
                         <div class="form-group">
                             <label>@lang('Description')</label>
                             <textarea class="form-control" name="description" rows="5" placeholder="@lang('Description')" required>{{ old('description') }}</textarea>
+                        </div>
+
+                        <!-- Description (English) -->
+                        <div class="form-group">
+                            <label>@lang('Description (English)')</label>
+                            <textarea class="form-control" name="description_en" rows="5" placeholder="@lang('Description (English)')" required>{{ old('description_en') }}</textarea>
                         </div>
                     </div>
 
