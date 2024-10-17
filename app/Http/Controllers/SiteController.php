@@ -45,12 +45,14 @@ class SiteController extends Controller
     public function contact()
     {
         $pageTitle = "Contact Us";
+        $playlists=Playlist::limit(12)->get();
         $user = auth()->user();
         return view($this->activeTemplate . 'contact', compact('pageTitle', 'user'));
     }
 
     public function contactSubmit(Request $request)
     {
+
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required',
@@ -116,6 +118,8 @@ class SiteController extends Controller
     {
         $pageTitle = 'Cookie Policy';
         $cookie = Frontend::where('data_keys', 'cookie.data')->first();
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'cookie', compact('pageTitle', 'cookie'));
     }
 
@@ -155,6 +159,8 @@ class SiteController extends Controller
             return to_route('home');
         }
         $maintenance = Frontend::where('data_keys', 'maintenance.data')->first();
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'maintenance', compact('pageTitle', 'maintenance'));
     }
 
@@ -227,7 +233,7 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',
-            'playlists',
+            // 'playlists',
             'item',
             'playlistItems',
             'seoContents',
@@ -274,7 +280,7 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',
-            'playlists',
+            // 'playlists',
             'item',
             'playlistItems',
             'seoContents',
@@ -345,6 +351,7 @@ class SiteController extends Controller
 
         $adsTime = $video->getAds() ?? [];
         $playlists = $item->playlists()->get(); // Or however you're fetching playlists related to the item
+        $playlists=Playlist::limit(12)->get();
 
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
@@ -381,6 +388,8 @@ class SiteController extends Controller
         }
         $adsTime = $stream->getAds() ?? [];
         $seoContents = $this->getItemSeoContent($item);
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'live_stream', compact('pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
     private function relatedItems($itemId, $itemType, $keyword, $type)
@@ -674,6 +683,7 @@ class SiteController extends Controller
             return back()->withNotify($notify);
         }
         $playlists = $item->playlists()->get(); // Or however you're fetching playlists related to the item
+        $playlists=Playlist::limit(12)->get();
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
@@ -713,6 +723,7 @@ class SiteController extends Controller
 
         // Set the page title dynamically based on the locale
         $pageTitle = app()->getLocale() == 'ar' ? $category->name : $category->name_en;
+        $playlists=Playlist::limit(12)->get();
 
         // Return the view with the collected data
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'playlists', 'category', 'hasStream'));
@@ -738,6 +749,7 @@ class SiteController extends Controller
             }
         }
         $pageTitle = app()->getLocale() == 'ar' ? $subcategory->name : $subcategory->name_en;
+        $playlists=Playlist::limit(12)->get();
 
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'subcategory', 'hasStream', 'playlists'));
     }
@@ -815,6 +827,7 @@ class SiteController extends Controller
         }
 
         $pageTitle = "Result Showing For " . $search;
+        $playlists=Playlist::limit(12)->get();
 
         // Return the items and playlists in the view
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'playlists', 'hasStream', 'search'));
@@ -826,6 +839,8 @@ class SiteController extends Controller
     {
         $item = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'item'));
     }
 
@@ -833,6 +848,8 @@ class SiteController extends Controller
     {
         $item = Frontend::where('id', $id)->where('data_keys', 'short_links.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'item'));
     }
 
@@ -854,6 +871,8 @@ class SiteController extends Controller
     {
         $pageTitle = 'Live TV list';
         $tvs = LiveTelevision::where('status', 1)->get();
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'live_tvs', compact('pageTitle', 'tvs'));
     }
 
@@ -862,6 +881,8 @@ class SiteController extends Controller
         $tv = LiveTelevision::active()->findOrFail($id);
         $pageTitle = $tv->title;
         $otherTvs = LiveTelevision::active()->where('id', '!=', $id)->get();
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'watch_tv', compact('pageTitle', 'tv', 'otherTvs'));
     }
 
@@ -985,6 +1006,8 @@ class SiteController extends Controller
     {
         $pageTitle = 'Subscribe';
         $plans = Plan::active()->paginate(getPaginate());
+        $playlists=Playlist::limit(12)->get();
+
         return view($this->activeTemplate . 'subscription', compact('pageTitle', 'plans'));
     }
 
