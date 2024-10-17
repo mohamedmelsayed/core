@@ -11,8 +11,9 @@
                                     <th>@lang('Title')</th>
                                     <th>@lang('Category')</th>
                                     <th>@lang('Subcategory')</th>
-                                    <th>@lang('Content Type')</th>
                                     <th>@lang('Playlists')</th> <!-- Column for playlists -->
+                                    <th>@lang('Content Type')</th>
+
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -24,13 +25,7 @@
                                         <td>{{ $item->category->name }}</td>
                                         <td>{{ optional($item->sub_category)->name ?? 'N/A' }}</td>
 
-                                        <td>
-                                            @if ($item->is_stream)
-                                                <span class="badge badge--danger">@lang('Stream')</span>
-                                            @else
-                                                <span class="badge badge--success">@lang('Normal Video')</span>
-                                            @endif
-                                        </td>
+
                                         <!-- Playlists Column -->
                                         <td>
                                             @if ($item->playlists->isNotEmpty())
@@ -41,6 +36,13 @@
                                                 </ul>
                                             @else
                                                 <span class="badge badge--secondary">@lang('No Playlist')</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->is_stream)
+                                                <span class="badge badge--danger">@lang('Stream')</span>
+                                            @else
+                                                <span class="badge badge--success">@lang('Normal Video')</span>
                                             @endif
                                         </td>
                                         <td>
