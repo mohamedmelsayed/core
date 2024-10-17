@@ -194,7 +194,7 @@ class SiteController extends Controller
     {
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-
+        $playlists=Playlist::limit(12)->get();
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->type == 'video'
             ? $playlist->items()->whereHas('video')->with('video', 'translations')->get()
@@ -227,6 +227,7 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',
+            'playlists',
             'item',
             'playlistItems',
             'seoContents',
@@ -243,6 +244,7 @@ class SiteController extends Controller
     {
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
+        $playlists=Playlist::limit(12)->get();
 
         // Find the item by slug based on whether the playlist is video or audio type
         $item = $playlist->type == 'video'
@@ -272,6 +274,7 @@ class SiteController extends Controller
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',
+            'playlists',
             'item',
             'playlistItems',
             'seoContents',
