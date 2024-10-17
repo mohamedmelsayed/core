@@ -8,10 +8,21 @@
                     @method('POST')
                     <div class="card-body">
                         <div class="row">
+                            <!-- Title -->
                             <div class="form-group col-md-6">
                                 <label>@lang('Title')</label>
                                 <input class="form-control" name="title" type="text" value="{{ old('title', $playlist->title) }}" placeholder="@lang('Title')" required>
                             </div>
+
+                            <!-- Title (English) -->
+                            <div class="form-group col-md-6">
+                                <label>@lang('Title (English)')</label>
+                                <input class="form-control" name="title_en" type="text" value="{{ old('title_en', $playlist->title_en) }}" placeholder="@lang('Title (English)')" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Type -->
                             <div class="form-group col-md-6">
                                 <label>@lang('Type')</label>
                                 <select class="form-control" name="type" required>
@@ -19,9 +30,8 @@
                                     <option value="video" @if($playlist->type == 'video') selected @endif>@lang('Video')</option>
                                 </select>
                             </div>
-                        </div>
 
-                        <div class="row">
+                            <!-- Sub Category -->
                             <div class="form-group col-md-6">
                                 <label>@lang('Sub Category')</label>
                                 <select class="form-control" name="sub_category_id" required>
@@ -35,13 +45,16 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
 
+                        <div class="row">
+                            <!-- Cover Image -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>@lang('Cover Image')</label>
                                     <div class="image--uploader w-100">
                                         <div class="image-upload-wrapper">
-                                            <div class="image-upload-preview cover" style="background-image: url('{{ getImage(getFilePath('item_portrait') . '/' . @$playlist->cover_image) }}">
+                                            <div class="image-upload-preview cover" style="background-image: url('{{ getImage(getFilePath('item_portrait') . '/' . @$playlist->cover_image) }}');">
                                             </div>
                                             <div class="image-upload-input-wrapper">
                                                 <input type="file" class="image-upload-input" name="cover_image" id="coverImageInput" accept=".png, .jpg, .jpeg">
@@ -56,9 +69,16 @@
                             </div>
                         </div>
 
+                        <!-- Description -->
                         <div class="form-group">
                             <label>@lang('Description')</label>
                             <textarea class="form-control" name="description" rows="5" placeholder="@lang('Description')" required>{{ old('description', $playlist->description) }}</textarea>
+                        </div>
+
+                        <!-- Description (English) -->
+                        <div class="form-group">
+                            <label>@lang('Description (English)')</label>
+                            <textarea class="form-control" name="description_en" rows="5" placeholder="@lang('Description (English)')" required>{{ old('description_en', $playlist->description_en) }}</textarea>
                         </div>
                     </div>
 
