@@ -128,7 +128,7 @@
                 @endforelse
             </div>
 
-            @if($playlist->isNotEmpty()) <!-- Check if playlist is not empty -->
+            @if($playlists->isNotEmpty()) <!-- Check if playlist is not empty -->
 
             <!-- Playlists Section -->
             <div class="row">
