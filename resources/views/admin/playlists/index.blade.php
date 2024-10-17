@@ -17,7 +17,6 @@
                                 <th>@lang('Title')</th>
                                 <th>@lang('Type')</th>
                                 <th>@lang('Sub Category')</th>
-                                <th>@lang('Cover Image')</th>
                                 <th>@lang('Actions')</th>
                             </tr>
                         </thead>
@@ -27,13 +26,7 @@
                                     <td>{{ $playlist->title }}</td>
                                     <td>{{ ucfirst($playlist->type) }}</td>
                                     <td>{{ $playlist->subCategory->name ?? 'N/A' }}</td>
-                                    <td>
-                                        @if ($playlist->cover_image)
-                                            <img src="{{ asset('storage/' . $playlist->cover_image) }}" alt="cover image" width="50px">
-                                        @else
-                                            @lang('No Image')
-                                        @endif
-                                    </td>
+
                                     <td>
                                         <a href="{{ route('admin.playlist.edit', $playlist->id) }}" class="btn btn-sm btn--primary">
                                             <i class="las la-edit"></i> @lang('Edit')
