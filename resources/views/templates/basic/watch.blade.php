@@ -35,10 +35,7 @@
                             @endif
                         </div>
 
-                        <!-- Include Playlist Section Partial -->
-                        @include($activeTemplate . 'partials._playlist-section', [
-                            'playlists' => $playlists,
-                        ])
+
                         <div class="ad-video position-relative d-none">
                             <video class="ad-player" style="display: none" id="ad-video"></video>
                             <div class="ad-links d-none">
@@ -53,7 +50,10 @@
                                     data-skip-time="0">@lang('Skip Ad')</button>
                             </div>
                         </div>
-
+                        <!-- Include Playlist Section Partial -->
+                        @include($activeTemplate . 'partials._playlist-section', [
+                            'playlists' => $playlists,
+                        ])
                         <div class="movie-content">
                             <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                                 <div class="movie-content-left">
@@ -495,8 +495,6 @@
         .watch-party-modal .modal-dialog {
             max-width: 500px;
         }
-
-
     </style>
 @endpush
 

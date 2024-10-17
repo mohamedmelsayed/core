@@ -44,7 +44,6 @@
                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
                             id="thumbnail" class="audio-thumbnail" />
                     </div>
-                    @include($activeTemplate . 'partials._playlist-section', ['playlists' => $playlists])
 
                     <div class="product-tab mt-40">
                         <ul class="nav nav-tabs" role="tablist">
@@ -78,6 +77,9 @@
                             </div>
                         </div>
                     </div>
+
+                    @include($activeTemplate . 'partials._playlist-section', ['playlists' => $playlists])
+
                 </div>
                 @if (!blank($episodes))
                     <div class="col-xl-4 col-lg-4 mb-30">
