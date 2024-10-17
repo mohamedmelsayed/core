@@ -25,7 +25,24 @@
                             <ul class="navbar-nav main-menu ms-auto me-auto">
 
                                 <li><a href="{{ route('home') }}">@lang('Home')</a></li>
-
+                                <li><a class="nav-link category-nav item"
+                                        href="#" target="none">@lang('PlayLists')</a>
+                                    <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
+                                    <ul class="sub-menu"
+                                        style="{{ app()->getLocale() === 'ar'
+                                            ? ' left: auto;
+                                                                              right: 0;'
+                                            : ' left: 0;
+                                                                              right: auto;' }}">
+                                        @forelse($playlists as $playlist)
+                                            <li>
+                                                <a
+                                                    href="{{ route('playlist.play', $playlist->id) }}">{{ app()->getLocale() === 'ar' ? $playlist->title : $subcategory->title_en }}</a>
+                                            </li>
+                                        @empty
+                                        @endforelse
+                                    </ul>
+                                </li>
                                 @foreach ($categories as $category)
                                     @if ($category->subcategories->count())
                                         <li><a class="nav-link category-nav item"
@@ -34,9 +51,9 @@
                                             <ul class="sub-menu"
                                                 style="{{ app()->getLocale() === 'ar'
                                                     ? ' left: auto;
-                                                  right: 0;'
+                                                                                                  right: 0;'
                                                     : ' left: 0;
-                                                  right: auto;' }}">
+                                                                                                  right: auto;' }}">
                                                 @forelse($category->subcategories as $subcategory)
                                                     <li>
                                                         <a
