@@ -128,6 +128,8 @@
                 @endforelse
             </div>
 
+            @if($playlist->isNotEmpty()) <!-- Check if playlist is not empty -->
+
             <!-- Playlists Section -->
             <div class="row">
                 <div class="col-xl-12">
@@ -171,6 +173,7 @@
                     </div>
                 @endforelse
             </div>
+            @endif
         </div>
     </section>
     <div class="custom_loading"></div>
