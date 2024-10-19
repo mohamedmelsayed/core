@@ -356,7 +356,7 @@ class SiteController extends Controller
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'playlists','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item','allPlaylists', 'playlists','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
     public function watchLive($slug)
