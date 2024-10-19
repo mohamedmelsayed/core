@@ -50,10 +50,7 @@
                                     data-skip-time="0">@lang('Skip Ad')</button>
                             </div>
                         </div>
-                        <!-- Include Playlist Section Partial -->
-                        @include($activeTemplate . 'partials._playlist-section', [
-                            'playlists' => $playlists,
-                        ])
+
                         <div class="movie-content">
                             <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
                                 <div class="movie-content-left">
@@ -126,6 +123,10 @@
                             </div>
                             <!-- <p class="movie-widget__desc">{{ __($seoContents['social_description']) }}</p> -->
                         </div>
+                         <!-- Include Playlist Section Partial -->
+                         @include($activeTemplate . 'partials._playlist-section', [
+                            'playlists' => $playlists,
+                        ])
                     </div>
 
                     <div class="product-tab mt-40">
