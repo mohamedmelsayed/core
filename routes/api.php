@@ -182,12 +182,11 @@ Route::namespace('Api')->name('api.')->group(function () {
         Route::get('policy-pages', 'policyPages');
         Route::get('language/{code?}', 'language');
         Route::get('pop-up/ads', 'popUpAds');
-    });
-
-    Route::controller('FrontendController')->group(function () {
         Route::get('playlists', 'playlists');
 
     });
+
+
 
 
 });
