@@ -356,7 +356,7 @@ class SiteController extends Controller
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
         $seoContents = $this->getItemSeoContent($item);
-        return view($this->activeTemplate . 'watch', compact('allPlaylists','pageTitle', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
+        return view($this->activeTemplate . 'watch', compact('pageTitle', 'item', 'playlists','relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'subtitles', 'videos', 'episodes', 'episodeId', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
 
     public function watchLive($slug)
@@ -726,7 +726,7 @@ class SiteController extends Controller
         $allPlaylists=Playlist::limit(12)->get();
 
         // Return the view with the collected data
-        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'allPlaylists', 'category', 'hasStream'));
+        return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'allPlaylists','playlists', 'category', 'hasStream'));
     }
 
     public function subCategory($id)
