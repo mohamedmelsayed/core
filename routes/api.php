@@ -184,4 +184,10 @@ Route::namespace('Api')->name('api.')->group(function () {
         Route::get('pop-up/ads', 'popUpAds');
     });
 
+    Route::controller('FrontendController')->group(function () {
+        Route::get('playlists', 'playlists');
+
+    });
+
+
 });
