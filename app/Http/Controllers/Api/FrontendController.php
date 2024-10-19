@@ -20,9 +20,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class FrontendController extends Controller {
+class FrontendController extends Controller
+{
 
-    public function logo() {
+    public function logo()
+    {
         $notify[] = 'Logo Information';
         $logo     = getFilePath('logoIcon') . '/logo.png';
         $favicon  = getFilePath('logoIcon') . '/favicon.png';
@@ -38,7 +40,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function welcomeInfo() {
+    public function welcomeInfo()
+    {
         $notify[] = 'Welcome Info';
         $welcome  = Frontend::where('data_keys', 'app_welcome.content')->first();
         $path     = 'assets/images/frontend/app_welcome';
@@ -52,10 +55,10 @@ class FrontendController extends Controller {
                 'path'    => $path,
             ],
         ]);
-
     }
 
-    public function sliders() {
+    public function sliders()
+    {
         $sliders  = Slider::with('item', 'item.category', 'item.sub_category')->get();
         $notify[] = 'All Sliders';
         $path     = getFilePath('item_landscape');
@@ -71,7 +74,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function liveTelevision() {
+    public function liveTelevision()
+    {
         $notify[]    = 'Live Television';
         $televisions = LiveTelevision::where('status', 1)->apiQuery();
         $imagePath   = getFilePath('television');
@@ -87,9 +91,10 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function featured() {
+    public function featured()
+    {
         $notify[]     = 'Featured';
-        $featured     = Item::active()->hasVideo()->where('featured', Status::ENABLE)->apiQuery();
+        $featured     =  $this->fetchItems(Item::active()->where('featured', Status::ENABLE));
         $imagePath    = getFilePath('item_landscape');
         $portraitPath = getFilePath('item_portrait');
 
@@ -105,9 +110,10 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function recentlyAdded() {
+    public function recentlyAdded()
+    {
         $notify[]      = 'Recently Added';
-        $recentlyAdded = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
+        $recentlyAdded = $this->fetchItems(Item::active()->where('item_type', Status::SINGLE_ITEM));
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
 
@@ -123,7 +129,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function latestSeries() {
+    public function latestSeries()
+    {
         $notify[]      = 'Latest Series';
         $latestSeries  = Item::active()->hasVideo()->where('item_type', Status::EPISODE_ITEM)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
@@ -141,7 +148,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function single() {
+    public function single()
+    {
         $notify[] = 'Single Item';
 
         $single = Item::active()->hasVideo()->where('single', 1)->with('category')->apiQuery();
@@ -161,7 +169,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function trailer() {
+    public function trailer()
+    {
         $notify[] = 'Trailer';
         $trailer  = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->where('is_trailer', Status::TRAILER)->apiQuery();
 
@@ -180,7 +189,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function rent() {
+    public function rent()
+    {
         $notify[] = 'Rent';
         $rent     = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->where('version', Status::RENT_VERSION)->apiQuery();
 
@@ -199,7 +209,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function freeZone() {
+    public function freeZone()
+    {
         $notify[]      = 'Free Zone';
         $freeZone      = Item::active()->hasVideo()->free()->orderBy('id', 'desc')->apiQuery();
         $imagePath     = getFilePath('item_portrait');
@@ -217,7 +228,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function categories() {
+    public function categories()
+    {
         $notify[]   = 'All Categories';
         $categories = Category::where('status', Status::ENABLE)->apiQuery();
         return response()->json([
@@ -230,7 +242,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function subcategories(Request $request) {
+    public function subcategories(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'category_id' => 'required',
         ]);
@@ -256,7 +269,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $notify[] = 'Search';
         $search   = $request->search;
 
@@ -291,7 +305,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function watchVideo(Request $request) {
+    public function watchVideo(Request $request)
+    {
         $item = Item::hasVideo()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
 
         if (!$item) {
@@ -370,10 +385,10 @@ class FrontendController extends Controller {
                 'type'           => $watchEligable[1],
             ],
         ]);
-
     }
 
-    protected function checkWatchEligableItem($item, $userHasSubscribed) {
+    protected function checkWatchEligableItem($item, $userHasSubscribed)
+    {
         if ($item->version == Status::PAID_VERSION) {
             $watchEligable = $userHasSubscribed ? true : false;
             $type          = 'paid';
@@ -392,7 +407,8 @@ class FrontendController extends Controller {
         return [$watchEligable, $type];
     }
 
-    protected function checkWatchEligableEpisode($episode, $userHasSubscribed) {
+    protected function checkWatchEligableEpisode($episode, $userHasSubscribed)
+    {
         if ($episode->version == Status::PAID_VERSION) {
             $watchEligable = $userHasSubscribed ? true : false;
             $type          = 'paid';
@@ -411,7 +427,8 @@ class FrontendController extends Controller {
         return [$watchEligable, $type];
     }
 
-    public function playVideo(Request $request) {
+    public function playVideo(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'item_id' => 'required',
         ]);
@@ -469,7 +486,6 @@ class FrontendController extends Controller {
             $video    = $episode->video;
             $remark   = 'episode_video';
             $notify[] = 'Episode Video';
-
         } else {
 
             $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
@@ -507,10 +523,10 @@ class FrontendController extends Controller {
                 'type'          => $watchEligable[1],
             ],
         ]);
-
     }
 
-    private function videoList($video) {
+    private function videoList($video)
+    {
         $videoFile = [];
         if ($video->three_sixty_video) {
             $videoFile[] = [
@@ -540,7 +556,8 @@ class FrontendController extends Controller {
         return json_decode(json_encode($videoFile, true));
     }
 
-    protected function storeHistory($itemId = null, $episodeId = null) {
+    protected function storeHistory($itemId = null, $episodeId = null)
+    {
         if (auth()->check()) {
             if ($itemId) {
                 $history = History::where('user_id', auth()->id())->orderBy('id', 'desc')->limit(1)->first();
@@ -563,7 +580,8 @@ class FrontendController extends Controller {
         }
     }
 
-    protected function storeVideoReport($itemId = null, $episodeId = null) {
+    protected function storeVideoReport($itemId = null, $episodeId = null)
+    {
         $deviceId = md5($_SERVER['HTTP_USER_AGENT']);
 
         if ($itemId) {
@@ -582,7 +600,8 @@ class FrontendController extends Controller {
         }
     }
 
-    public function policyPages() {
+    public function policyPages()
+    {
         $notify[]    = 'Policy Page';
         $policyPages = Frontend::where('data_keys', 'policy_pages.element')->get();
 
@@ -596,7 +615,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function movies() {
+    public function movies()
+    {
         $notify[]      = 'All Movies';
         $movies        = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
@@ -614,7 +634,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function episodes() {
+    public function episodes()
+    {
         $notify[]      = 'All Episodes';
         $episodes      = Item::active()->hasVideo()->where('item_type', Status::EPISODE_ITEM)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
@@ -632,7 +653,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function watchTelevision($id = 0) {
+    public function watchTelevision($id = 0)
+    {
         $tv = LiveTelevision::where('id', $id)->where('status', Status::ENABLE)->first();
 
         if (!$tv) {
@@ -658,7 +680,8 @@ class FrontendController extends Controller {
         ]);
     }
 
-    public function language($code = 'en') {
+    public function language($code = 'en')
+    {
         $language = Language::where('code', $code)->first();
         if (!$language) {
             $code = 'en';
@@ -676,7 +699,8 @@ class FrontendController extends Controller {
             ],
         ]);
     }
-    public function popUpAds() {
+    public function popUpAds()
+    {
         $advertise = Advertise::where('device', 2)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
         if (!$advertise) {
             return response()->json([
@@ -694,5 +718,35 @@ class FrontendController extends Controller {
                 'imagePath' => $imagePath,
             ],
         ]);
+    }
+
+    public function playlists() {
+        $notify[] = 'Playlists';
+        $playlists = Playlist::with('items')->get();
+        return response()->json([
+            'remark' => 'all_playlists',
+            'status' => 'success',
+            'message' => ['success' => $notify],
+            'data' => [
+                'playlists' => $playlists,
+            ],
+        ]);
+    }
+
+
+
+    private function fetchItems($query)
+    {
+        return $query->with([
+            'video' => function ($query) {
+                $query->where('is_audio', false)->where('is_stream', false);
+            },
+            'audio' => function ($query) {
+                $query->where('is_audio', true);
+            },
+            'stream' => function ($query) {
+                $query->where('is_stream', true);
+            },
+        ])->get();
     }
 }
