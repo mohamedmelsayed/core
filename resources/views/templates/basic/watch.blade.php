@@ -123,10 +123,7 @@
                             </div>
                             <!-- <p class="movie-widget__desc">{{ __($seoContents['social_description']) }}</p> -->
                         </div>
-                         <!-- Include Playlist Section Partial -->
-                         @include($activeTemplate . 'partials._playlist-section', [
-                            'playlists' => $playlists,
-                        ])
+
                     </div>
 
                     <div class="product-tab mt-40">
@@ -163,7 +160,10 @@
                             </div>
                         </div>
                     </div>
-
+                    <!-- Include Playlist Section Partial -->
+                    @include($activeTemplate . 'partials._playlist-section', [
+                        'playlists' => $playlists,
+                    ])
                 </div>
                 @if (!blank($episodes))
                     <div class="col-xl-4 col-lg-4 mb-30">
