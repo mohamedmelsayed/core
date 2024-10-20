@@ -20,7 +20,12 @@
                             <!-- Audio Player Widget -->
                             @if ($item->audio)
                                 <!-- Include Audio Player Partial -->
-                                @include($activeTemplate . 'partials.audio-player', ['item' => $item,'watchEligable' => $watchEligable])
+                                @include($activeTemplate . 'partials.audio-player' , [
+                                    'item' => $item,
+                                    'subtitles' => $subtitles,
+                                    'adsTime' => $adsTime,
+                                    'watchEligable' => $watchEligable,
+                                ])
                             @else
                                 <!-- Fallback message for missing audio content -->
                                 <p>@lang('Audio content is not available for this item.')</p>
