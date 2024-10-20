@@ -213,12 +213,13 @@ class SiteController extends Controller
 
         if (!$item) {
             // Handle the case where no video or audio is found
-            return redirect()->back()->with('error', 'No playable item found in this playlist.');
+            return back()->withNotify(['error', 'No playable item found in this playlist.']);
         }
 
         if (!$item->hasVideoOrAudio()) {
             // Handle the case where no video or audio is found
-            return redirect()->back()->with('error', 'No playable item found in this playlist.');
+            return back()->withNotify(['error', 'No playable item found in this playlist.']);
+
         }
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
