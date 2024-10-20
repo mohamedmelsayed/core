@@ -229,7 +229,7 @@ class SiteController extends Controller
             $adsTime = $item->video->getAds() ?? [];
             $subtitles = $item->video->subtitles;
         }
-        dd($item);
+        // dd($item);
 
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
