@@ -165,9 +165,7 @@ class ItemController extends Controller
             return redirect()->route('admin.item.uploadAudio', $item->id)->withNotify($notify);
 
         }
-        if ($request->item_type == Status::EPISODE_ITEM) {
-            return redirect()->route('admin.item.episodes', $item->id)->withNotify($notify);
-        } else {
+        else {
             return redirect()->route('admin.item.uploadVideo', $item->id)->withNotify($notify);
         }
     }
@@ -343,7 +341,9 @@ class ItemController extends Controller
 
         $pageTitle = "Upload audio to: " . $item->title;
         $prevUrl = route('admin.item.index');
-        return view('admin.item.audio.upload', compact('item', 'pageTitle', 'audio', 'prevUrl'));
+        $items = $this->itemsDataAudio();
+        return view('admin.item.audio-index', compact('pageTitle', 'items'));
+        // return view('admin.item.audio.upload', compact('item', 'pageTitle', 'audio', 'prevUrl'));
     }
 
     public function uploadAudioFile(Request $request, $id)
@@ -488,7 +488,9 @@ class ItemController extends Controller
 
         $pageTitle = "Upload video to: " . $item->title;
         $prevUrl = route('admin.item.index');
-        return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl','route'));
+        $items = $this->itemsDataVideo();
+        return view('admin.item.index', compact('pageTitle', 'items'));
+        // return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl','route'));
     }
 
     public function updateVideo(Request $request, $id)
