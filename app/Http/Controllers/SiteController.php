@@ -35,7 +35,11 @@ class SiteController extends Controller
     {
         $currentLang = session()->get('lang', 'ar');
         $pageTitle = 'Home';
-        $allPlaylists = Playlist::all();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
         $sliders = Slider::orderBy('id', 'desc')->where('status', 1)->with('item', 'item.category', 'item.video')->get();
         $featuredMovies = Item::active()->hasVideo()->where('featured', 1)->orderBy('id', 'desc')->get();
         $advertise = Advertise::where('device', 1)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
@@ -45,7 +49,11 @@ class SiteController extends Controller
     public function contact()
     {
         $pageTitle = "Contact Us";
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
         $user = auth()->user();
         return view($this->activeTemplate . 'contact', compact('pageTitle', 'user', 'allPlaylists'));
     }
@@ -118,7 +126,11 @@ class SiteController extends Controller
     {
         $pageTitle = 'Cookie Policy';
         $cookie = Frontend::where('data_keys', 'cookie.data')->first();
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'cookie', compact('pageTitle', 'cookie', 'allPlaylists'));
     }
@@ -159,7 +171,11 @@ class SiteController extends Controller
             return to_route('home');
         }
         $maintenance = Frontend::where('data_keys', 'maintenance.data')->first();
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'maintenance', compact('pageTitle', 'maintenance', 'allPlaylists'));
     }
@@ -200,7 +216,11 @@ class SiteController extends Controller
     {
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
         // Retrieve all items in the playlist that have video or audio
         $playlistItems = $playlist->type == 'video'
             ? $playlist->items()->whereHas('video')->with('video', 'translations')->get()
@@ -219,7 +239,6 @@ class SiteController extends Controller
         if (!$item->hasVideoOrAudio()) {
             // Handle the case where no video or audio is found
             return back()->withNotify(['error', 'No playable item found in this playlist.']);
-
         }
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
@@ -257,7 +276,11 @@ class SiteController extends Controller
     {
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         // Find the item by slug based on whether the playlist is video or audio type
         $item = $playlist->type == 'video'
@@ -358,7 +381,11 @@ class SiteController extends Controller
 
         $adsTime = $video->getAds() ?? [];
         $playlists = $item->playlists()->get(); // Or however you're fetching playlists related to the item
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         $subtitles = $video->subtitles;
         $videos = $this->videoList($video);
@@ -395,7 +422,11 @@ class SiteController extends Controller
         }
         $adsTime = $stream->getAds() ?? [];
         $seoContents = $this->getItemSeoContent($item);
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'live_stream', compact('pageTitle', 'allPlaylists', 'item', 'relatedAudios', 'relatedItems', 'seoContents', 'adsTime', 'watchEligable', 'userHasSubscribed', 'hasSubscribedItem'));
     }
@@ -690,7 +721,11 @@ class SiteController extends Controller
             return back()->withNotify($notify);
         }
         $playlists = $item->playlists()->get(); // Or however you're fetching playlists related to the item
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         $audios = $this->audioList($audio);
         $seoContents = $this->getItemSeoContent($item);
@@ -730,7 +765,11 @@ class SiteController extends Controller
 
         // Set the page title dynamically based on the locale
         $pageTitle = app()->getLocale() == 'ar' ? $category->name : $category->name_en;
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         // Return the view with the collected data
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'allPlaylists', 'playlists', 'category', 'hasStream'));
@@ -756,7 +795,11 @@ class SiteController extends Controller
             }
         }
         $pageTitle = app()->getLocale() == 'ar' ? $subcategory->name : $subcategory->name_en;
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'items', compact('pageTitle', 'allPlaylists', 'items', 'subcategory', 'hasStream', 'playlists'));
     }
@@ -834,7 +877,11 @@ class SiteController extends Controller
         }
 
         $pageTitle = "Result Showing For " . $search;
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         // Return the items and playlists in the view
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'allPlaylists', 'playlists', 'hasStream', 'search'));
@@ -846,7 +893,11 @@ class SiteController extends Controller
     {
         $item = Frontend::where('id', $id)->where('data_keys', 'policy_pages.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'allPlaylists', 'item'));
     }
@@ -855,7 +906,11 @@ class SiteController extends Controller
     {
         $item = Frontend::where('id', $id)->where('data_keys', 'short_links.element')->firstOrFail();
         $pageTitle = $item->data_values->title;
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'links_details', compact('pageTitle', 'allPlaylists', 'item'));
     }
@@ -878,7 +933,11 @@ class SiteController extends Controller
     {
         $pageTitle = 'Live TV list';
         $tvs = LiveTelevision::where('status', 1)->get();
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'live_tvs', compact('pageTitle', 'allPlaylists', 'tvs'));
     }
@@ -888,7 +947,11 @@ class SiteController extends Controller
         $tv = LiveTelevision::active()->findOrFail($id);
         $pageTitle = $tv->title;
         $otherTvs = LiveTelevision::active()->where('id', '!=', $id)->get();
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'watch_tv', compact('pageTitle', 'tv', 'allPlaylists', 'otherTvs'));
     }
@@ -1013,7 +1076,11 @@ class SiteController extends Controller
     {
         $pageTitle = 'Subscribe';
         $plans = Plan::active()->paginate(getPaginate());
-        $allPlaylists = Playlist::limit(12)->get();
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
 
         return view($this->activeTemplate . 'subscription', compact('pageTitle', 'allPlaylists', 'plans'));
     }
