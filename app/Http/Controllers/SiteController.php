@@ -198,6 +198,7 @@ class SiteController extends Controller
     // Method to view playlist and play items
     public function play(Playlist $playlist)
     {
+        dd('play');
         $pageTitle = 'PlayList Details';
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
         $allPlaylists=Playlist::limit(12)->get();
