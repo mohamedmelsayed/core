@@ -211,7 +211,7 @@ class SiteController extends Controller
             ? $playlist->items()->whereHas('video')->with('video')->first()
             : $playlist->items()->whereHas('audio')->with('audio')->first();
 
-        if (($playlist->type == 'audio'&&!$item->audio)||($playlist->type == 'video'&&!$item->video)) {
+        if (($playlist->type == 'audio'&&$item->audio??false)||($playlist->type == 'video'&&$item->video??false)) {
             // Handle the case where no video or audio is found
             return redirect()->back()->with('error', 'No playable item found in this playlist.');
         }
