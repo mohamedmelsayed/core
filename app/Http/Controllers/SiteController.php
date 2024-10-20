@@ -223,8 +223,8 @@ class SiteController extends Controller
         $videos = $playlist->type == 'video' ? $this->videoList($item->video ?? null) : [];
         $audios = $playlist->type == 'audio' ? $this->audioList($item->audio ?? null) : [];
 
-        $adsTime = null;
-        $subtitles = null;
+        $adsTime = [];
+        $subtitles = [];
         if ($playlist->type == 'video') {
             $adsTime = $item->video->getAds() ?? [];
             $subtitles = $item->video->subtitles;
