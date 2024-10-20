@@ -186,7 +186,7 @@ class ItemController extends Controller
             'producer' => 'required',
             // 'casts' => 'required',
             'tags' => 'required',
-
+            // 'item_type' => "$validation|in:1,2",
             'is_audio' => "$validation|in:0,1",
             'is_stream' => "$validation|in:0,1",
             'version' => "nullable|required_if:item_type,==,1|in:$versions",
