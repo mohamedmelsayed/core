@@ -271,8 +271,8 @@ class SiteController extends Controller
 
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
-        $adsTime = null;
-        $subtitles = null;
+        $adsTime = [];
+        $subtitles = [];
         if ($playlist->type == 'video') {
             $adsTime = $item->video->getAds() ?? [];
             $subtitles = $item->video->subtitles;
