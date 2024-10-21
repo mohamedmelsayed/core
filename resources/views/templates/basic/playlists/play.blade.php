@@ -194,7 +194,7 @@
             const nextItem = currentItem.nextElementSibling;
             if (nextItem) {
                 const nextItemLink = nextItem.getAttribute('href');
-                console.log(nextItem);
+console.log(nextItem);
 
                 // Fetch the next item data via an API or reload the page
                 window.location.href = nextItemLink;
@@ -207,7 +207,7 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            const currentIndex = {{ $currentItemIndex }}; // Assuming you pass this from the controller
+            const currentIndex = {{ $currentItemIndex }};  // Assuming you pass this from the controller
 
             @if ($playlist->type == 'audio')
                 function updateAudioPlayer(nextAudioContent) {
@@ -300,13 +300,7 @@
                     window.location.href = nextItem.getAttribute('href');
 
                 } else {
-                    setActivePlaylistItem(-1);
-                    @if ($playlist->type == 'audio')
-                        playNextItemAudio();
-                    @else
-                        playNextItem();
-                    @endif
-
+                    alert('End of playlist');
                 }
             }
 
