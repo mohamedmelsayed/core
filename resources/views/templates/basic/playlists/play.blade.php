@@ -89,7 +89,7 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form action="{{ route('playlist.show', $playlist->id) }}" method="GET">
+            <form action="{{ route('playlist.play', $playlist->id) }}" method="GET">
                 @csrf
                 <div class="modal-body">
                     <span class="alert-icon"><i class="fas fa-question-circle"></i></span>
