@@ -255,11 +255,13 @@ class SiteController extends Controller
             $subtitles = $item->video->subtitles;
         }
         // dd($item);
+        $currentItemIndex = 0;
 
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',
             'allPlaylists',
+            'currentItemIndex',
             'item',
             'playlistItems',
             'seoContents',
