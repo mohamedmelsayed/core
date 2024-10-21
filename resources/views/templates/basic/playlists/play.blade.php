@@ -174,18 +174,26 @@
 
 @push('script')
     <script>
-        // Find the media player (audio or video)
-        const mediaElement = document.querySelector('audio, video');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find the media player (audio or video)
+            const mediaElement = document.querySelector('audio, video');
 
-        if (mediaElement) {
+            if (mediaElement) {
 
-            // Add event listener to autoplay the next item when media ends
-            mediaElement.addEventListener('ended', function() {
+
+                console.log("Media element found", mediaElement);
+
+                // Add event listener to autoplay the next item when media ends
+                mediaElement.addEventListener('ended', function() {
                 alert('End of playlist');
 
-                playNextItem();
-            });
-        }
+                    console.log("Media ended, playing next item");
+                    playNextItem();
+                });
+            } else {
+                console.log("Media element not found");
+            }
+        });
 
         function playNextItem() {
             // Find the current playing item from the playlist
