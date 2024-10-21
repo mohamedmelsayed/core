@@ -186,6 +186,7 @@
 @push('script')
     <script src="https://unpkg.com/wavesurfer.js@7.7.15/dist/wavesurfer.min.js"></script>
     <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const playPauseButton = document.getElementById('play-pause');
             const repeatButton = document.getElementById('repeat-btn');

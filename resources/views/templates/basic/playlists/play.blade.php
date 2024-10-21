@@ -176,14 +176,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Find the media player (audio or video)
-            const mediaElement = document.querySelector('audio, video');
+            const mediaElement = document.querySelector('waveform, video');
 
             if (mediaElement) {
 
 
                 console.log("Media element found", mediaElement);
                 @if ($playlist->type == 'audio')
-                    wavesurfer.on('finish', function() {
+
+                    waveformContainer.dataset.wavesurfer.on('finish', function() {
                         console.log("Media ended, playing next item");
 
                         playNextItem();
