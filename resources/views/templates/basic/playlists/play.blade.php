@@ -6,8 +6,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section-header">
-                        <h2 class="section-title">{{ $playlist->title }}</h2>
-                        <p>{{ $playlist->description }}</p> <!-- Display playlist description -->
+                        <h2 class="section-title">{{app()->getLocale()=='ar'? $playlist->title:$playlist->title_en }}</h2>
+                        <p>{{app()->getLocale()=='ar'?  $playlist->description:$playlist->description_en }}</p> <!-- Display playlist description -->
                     </div>
                 </div>
             </div>
@@ -174,52 +174,63 @@
 
 @push('script')
     <script>
-        function getWaveSurferInstance() {
-            if (waveformContainer) {
-                return waveformContainer.dataset.wavesurfer;
-            }
-            return null;
-        }
         document.addEventListener('DOMContentLoaded', function() {
-            // Find the media player (audio or video)
-            const mediaElement = document.querySelector('waveform, video');
-
-            if (mediaElement) {
-
-
-                console.log("Media element found", mediaElement);
-                @if ($playlist->type == 'audio')
-
-                    mediaElement.dataset.wavesurfer.on('finish', function() {
-                        console.log("Media ended, playing next item");
-
-                        playNextItem();
-
-                    });
-                @else
-                    // Add event listener to autoplay the next item when media ends
-                    mediaElement.addEventListener('ended', function() {
-
-                        console.log("Media ended, playing next item");
-                        playNextItem();
-                    });
-                @endif
-
-
-            } else {
-                try {
-                    const waveformContainer = document.getElementById('waveform');
-                    waveformContainer.dataset.wavesurfer.on('finish', function() {
-                        console.log("Media ended, playing next item");
-
-                        playNextItem();
-
-                    });
-                } catch (error) {
-
-                }
-                console.log("Media element not found");
+            // Helper function to get the media element
+            function getMediaElement() {
+                return document.querySelector('#waveform') || document.querySelector('video');
             }
+
+            // Helper function to handle when media finishes playing
+            function handleMediaEnd() {
+                console.log("Media ended, playing next item");
+                playNextItem();
+            }
+
+            // Attach event listener for audio or video media element
+            function attachMediaEndListener() {
+                const mediaElement = getMediaElement();
+
+                if (!mediaElement) {
+                    console.error("Media element not found");
+                    return;
+                }
+
+                if (mediaElement.dataset.wavesurfer) {
+                    // For WaveSurfer (audio)
+                    const wavesurfer = mediaElement.dataset.wavesurfer;
+                    wavesurfer.on('finish', handleMediaEnd);
+                } else {
+                    // For video
+                    mediaElement.addEventListener('ended', handleMediaEnd);
+                }
+            }
+
+            // Function to autoplay the next item in the playlist
+            function playNextItem() {
+                const currentItem = document.querySelector('.playlist-item.active');
+
+                if (!currentItem) {
+                    console.error("No active playlist item found.");
+                    return;
+                }
+
+                const nextItem = currentItem.nextElementSibling;
+
+                if (nextItem) {
+                    const nextItemLink = nextItem.querySelector('a');
+
+                    if (nextItemLink) {
+                        window.location.href = nextItemLink.getAttribute('href');
+                    } else {
+                        console.error("No link found for next playlist item.");
+                    }
+                } else {
+                    alert('End of playlist');
+                }
+            }
+
+            // Initialize when DOM is ready
+            attachMediaEndListener();
         });
 
         function playNextItem() {
