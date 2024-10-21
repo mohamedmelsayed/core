@@ -242,6 +242,8 @@ class SiteController extends Controller
         }
         $this->storeHistory($item->id);
         $this->storeVideoReport($item->id);
+        $item->views++;
+        $item->save();
         $seoContents = $this->getItemSeoContent($item);
         $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $watchEligable = $checkWatchEligable[0];
@@ -311,7 +313,8 @@ class SiteController extends Controller
 
         $currentItemIndex = $playlistItems->pluck('slug')->search($itemSlug);
 
-
+        $item->views++;
+        $item->save();
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',
