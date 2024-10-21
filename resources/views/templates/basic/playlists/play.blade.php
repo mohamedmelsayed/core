@@ -182,14 +182,23 @@
 
 
                 console.log("Media element found", mediaElement);
+                @if ($playlist->type == 'audio')
+                    wavesurfer.on('finish', function() {
+                        console.log("Media ended, playing next item");
 
-                // Add event listener to autoplay the next item when media ends
-                mediaElement.addEventListener('ended', function() {
-                alert('End of playlist');
+                        playNextItem();
 
-                    console.log("Media ended, playing next item");
-                    playNextItem();
-                });
+                    });
+                @else
+                    // Add event listener to autoplay the next item when media ends
+                    mediaElement.addEventListener('ended', function() {
+
+                        console.log("Media ended, playing next item");
+                        playNextItem();
+                    });
+                @endif
+
+
             } else {
                 console.log("Media element not found");
             }
