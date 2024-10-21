@@ -207,6 +207,8 @@ console.log(nextItem);
 
 
         document.addEventListener('DOMContentLoaded', function() {
+            const currentIndex = {{ $currentItemIndex }};  // Assuming you pass this from the controller
+
             @if ($playlist->type == 'audio')
                 function updateAudioPlayer(nextAudioContent) {
                     // Assuming you have an audio element and wavesurfer instance in the partial
@@ -303,7 +305,7 @@ console.log(nextItem);
             }
 
             // Set the first item as active when the page loads
-            setActivePlaylistItem(0);
+            setActivePlaylistItem(currentIndex);
 
             // Initialize when DOM is ready
             attachMediaEndListener();

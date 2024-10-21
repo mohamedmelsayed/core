@@ -307,10 +307,14 @@ class SiteController extends Controller
             $subtitles = $item->video->subtitles;
         }
 
+        $currentItemIndex = $playlistItems->pluck('slug')->search($itemSlug);
+
+
         return view($this->activeTemplate . 'playlists.play', compact(
             'pageTitle',
             'playlist',
             'allPlaylists',
+            'currentItemIndex',
             'item',
             'playlistItems',
             'seoContents',
