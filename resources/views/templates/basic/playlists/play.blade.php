@@ -231,6 +231,8 @@
                 const nextItem = currentItem.nextElementSibling;
 
                 if (nextItem) {
+                    console.log(nextItem);
+
                     const nextItemLink = nextItem.querySelector('a');
 
                     if (nextItemLink) {
