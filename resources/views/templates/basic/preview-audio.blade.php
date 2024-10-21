@@ -126,8 +126,8 @@
                                     aria-selected="true">@lang('Description')</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab" href="#product-team-content"
-                                    role="tab" aria-controls="product-team-content"
+                                <a class="nav-link" id="product-tab-team" data-bs-toggle="tab"
+                                    href="#product-team-content" role="tab" aria-controls="product-team-content"
                                     aria-selected="false">@lang('Team')</a>
                             </li>
                         </ul>
@@ -286,76 +286,75 @@
     </section>
 @endsection
 
-@push('style')
 
 @push('style')
-<style>
-    /* Container for the playlists */
-    .playlists-container {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        padding: 20px;
-        background-color: #1e1e2d;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+    <style>
+        /* Container for the playlists */
+        .playlists-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background-color: #1e1e2d;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    /* Playlist item */
-    .playlist-item {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.05);
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
+        /* Playlist item */
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
 
-    /* Thumbnail */
-    .playlist-thumb {
-        width: 100px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-right: 15px;
-    }
+        /* Thumbnail */
+        .playlist-thumb {
+            width: 100px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
 
-    /* Playlist title styling */
-    .playlist-title {
-        font-size: 16px;
-        color: #fff;
-        margin: 0;
-        font-weight: bold;
-    }
+        /* Playlist title styling */
+        .playlist-title {
+            font-size: 16px;
+            color: #fff;
+            margin: 0;
+            font-weight: bold;
+        }
 
-    /* Hover effects */
-    .playlist-item:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        transform: scale(1.02);
-    }
+        /* Hover effects */
+        .playlist-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
 
-    /* Button for viewing playlist */
-    .playlist-btn {
-        margin-left: auto;
-        padding: 8px 12px;
-        background-color: #ee005f;
-        color: #fff;
-        text-transform: uppercase;
-        border-radius: 5px;
-        font-size: 12px;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-    }
+        /* Button for viewing playlist */
+        .playlist-btn {
+            margin-left: auto;
+            padding: 8px 12px;
+            background-color: #ee005f;
+            color: #fff;
+            text-transform: uppercase;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
 
-    .playlist-btn:hover {
-        background-color: #d5004f;
-    }
-
-
-</style>
+        .playlist-btn:hover {
+            background-color: #d5004f;
+        }
+    </style>
 @endpush
+
+
 
 <style>
     /* Container for the audio player */
@@ -395,7 +394,6 @@
     .audio-controls {
         display: flex;
         align-items: center;
-        /* justify-content: space-between; */
         width: 100%;
         padding: 5px 0;
         gap: 5px;
@@ -408,14 +406,28 @@
         color: #ffffff;
         padding: 15px;
         border-radius: 50%;
+        /* Keeps the buttons circular */
         font-size: 24px;
         cursor: pointer;
-        transition: background 0.3s ease, transform 0.3s ease;
+        transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .audio-control:hover {
         background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Prevent distortion on hover */
+    .audio-control i {
+        transform: scale(1);
+        transition: transform 0.3s ease;
+    }
+
+    .audio-control:hover i {
         transform: scale(1.1);
+        /* Only scale the icon, not the button */
     }
 
     /* Thumbnail styling */
@@ -429,18 +441,6 @@
 
     /* Responsive styling */
     @media (max-width: 768px) {
-        .playlist-thumb {
-            max-width: 150px;
-            /* Reduce size on smaller screens */
-            height: 100px;
-        }
-
-        .playlist-title {
-            font-size: 16px;
-            /* Slightly smaller font for mobile */
-        }
-
-
         .audio-player-container {
             padding: 15px;
             flex-direction: column;
