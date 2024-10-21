@@ -417,6 +417,7 @@
 
             wavesurfer.load('{{ $audios[0]->content }}');
             wavesurfer.play();
+            playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
 
             wavesurfer.on('ready', function() {
                 const duration = wavesurfer.getDuration();
