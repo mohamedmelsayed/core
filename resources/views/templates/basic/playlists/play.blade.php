@@ -117,6 +117,13 @@
             color: #fff;
         }
 
+        .list-group-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+            /* Slight scale on hover */
+            color: #eab8;
+        }
+
         /* Playlist item portrait image */
         .playlist-item-image {
             width: 60px;
