@@ -300,7 +300,7 @@
                     window.location.href = nextItem.getAttribute('href');
 
                 } else {
-                    setActivePlaylistItem(-1);
+                    setActivePlaylistItem(0);
                     @if ($playlist->type == 'audio')
                         playNextItemAudio();
                     @else
