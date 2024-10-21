@@ -20,7 +20,7 @@
                             <!-- Audio Player Widget -->
                             @if ($item->audio)
                                 <!-- Include Audio Player Partial -->
-                                @include($activeTemplate . 'partials.audio-player' , [
+                                @include($activeTemplate . 'partials.audio-player', [
                                     'item' => $item,
                                     'subtitles' => $subtitles,
                                     'adsTime' => $adsTime,
@@ -54,18 +54,16 @@
                 <div class="col-xl-4 col-lg-4 mb-30">
                     <div class="playlist-items">
                         <h5>@lang('Playlist Items')</h5>
-                        <ul class="list-group">
-                            @foreach ($playlistItems as $playlistItem)
+                        <ul class="list-group" id="playlist-items-list">
+                            @foreach ($playlistItems as $index => $playlistItem)
                                 @php
-                                    // Get the translated title based on the locale
                                     $translation = $playlistItem->translations
                                         ->where('language', app()->getLocale())
                                         ->first();
                                     $title = $translation ? $translation->translated_title : $playlistItem->title;
                                 @endphp
-                                <a
-                                    href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}">
-
+                                <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
+                                    data-item-index="{{ $index }}" class="playlist-item">
                                     <li class="list-group-item d-flex align-items-center">
 
                                         <!-- Portrait image -->
@@ -73,20 +71,16 @@
                                             alt="{{ $title }}" class="playlist-item-image" />
 
                                         <!-- Title with dynamic language based on translations relation -->
-                                        <a href="{{ route('playlist.item.play', ['playlist' => $playlist->id, 'itemSlug' => $playlistItem->slug]) }}"
-                                            class="playlist-item-link">
+                                        <span class="playlist-item-link">
                                             {{ $title }}
-                                        </a>
+                                        </span>
                                     </li>
                                 </a>
                             @endforeach
                         </ul>
                     </div>
                 </div>
-
-
             </div>
-        </div>
     </section>
 @endsection
 
@@ -174,4 +168,38 @@
             }
         }
     </style>
+@endpush
+
+
+
+@push('script')
+    <script>
+        // Find the media player (audio or video)
+        const mediaElement = document.querySelector('audio, video');
+
+        if (mediaElement) {
+            // Add event listener to autoplay the next item when media ends
+            mediaElement.addEventListener('ended', function() {
+                playNextItem();
+            });
+        }
+
+        function playNextItem() {
+            // Find the current playing item from the playlist
+            const currentItem = document.querySelector('.playlist-item.active');
+            if (currentItem) {
+                // Find the next item in the playlist
+                const nextItem = currentItem.nextElementSibling;
+                if (nextItem) {
+                    // Redirect to the next item's play route
+                    const nextItemLink = nextItem.querySelector('a');
+                    if (nextItemLink) {
+                        window.location.href = nextItemLink.getAttribute('href');
+                    }
+                } else {
+                    alert('End of playlist');
+                }
+            }
+        }
+    </script>
 @endpush
