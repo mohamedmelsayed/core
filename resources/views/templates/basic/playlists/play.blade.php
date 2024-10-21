@@ -178,8 +178,11 @@
         const mediaElement = document.querySelector('audio, video');
 
         if (mediaElement) {
+        alert('End of playlist');
+
             // Add event listener to autoplay the next item when media ends
             mediaElement.addEventListener('ended', function() {
+
                 playNextItem();
             });
         }
