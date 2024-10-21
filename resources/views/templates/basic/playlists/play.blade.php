@@ -197,18 +197,8 @@
 console.log(nextItem);
 
                 // Fetch the next item data via an API or reload the page
-                fetch(nextItemLink)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Assuming 'data' contains the next item details
-                        const nextItemAudioContent = data.audioContent; // Adjust this based on your response
+                window.location.href = nextItemLink;
 
-                        // Update the audio player in the partial view with new content
-                        updateAudioPlayer(nextItemAudioContent);
-                    })
-                    .catch(error => {
-                        console.error('Error loading the next item:', error);
-                    });
             } else {
                 alert('End of playlist');
             }
