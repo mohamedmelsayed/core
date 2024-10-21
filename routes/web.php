@@ -33,7 +33,7 @@ Route::controller('SiteController')->name('wishlist.')->prefix('wishlist')->grou
 
 Route::controller('SiteController')->group(function () {
     Route::get('cron', 'cron')->name('cron');
-    Route::get('/playlist/{id}',  'showPlaylist')->name('playlist.show');
+    // Route::get('/playlist/{id}',  'showPlaylist')->name('playlist.show');
 
     Route::get('playlist/{playlist}/play', 'play')->name('playlist.play');
     Route::get('playlist/{playlist}/item/{itemSlug}', 'playItem')->name('playlist.item.play');
