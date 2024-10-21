@@ -177,7 +177,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Helper function to get the media element
             function getMediaElement() {
-                return document.getElementById('#waveform') || document.querySelector('video');
+                return document.getElementById('waveform') || document.querySelector('video');
             }
 
             // Helper function to handle when media finishes playing
