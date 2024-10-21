@@ -268,11 +268,11 @@
 
 @push('script')
     <script>
-        // Prevent back navigation with the history API
-        window.history.pushState(null, "", window.location.href);
-        window.onpopstate = function() {
-            window.history.pushState(null, "", window.location.href);
-        };
+        // // Prevent back navigation with the history API
+        // window.history.pushState(null, "", window.location.href);
+        // window.onpopstate = function() {
+        //     window.history.pushState(null, "", window.location.href);
+        // };
 
         // Prompt the user before leaving the page
         window.onbeforeunload = function(event) {
