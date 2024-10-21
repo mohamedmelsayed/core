@@ -6,8 +6,9 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section-header">
-                        <h2 class="section-title">{{app()->getLocale()=='ar'? $playlist->title:$playlist->title_en }}</h2>
-                        <p>{{app()->getLocale()=='ar'?  $playlist->description:$playlist->description_en }}</p> <!-- Display playlist description -->
+                        <h2 class="section-title">{{ app()->getLocale() == 'ar' ? $playlist->title : $playlist->title_en }}</h2>
+                        <p>{{ app()->getLocale() == 'ar' ? $playlist->description : $playlist->description_en }}</p>
+                        <!-- Display playlist description -->
                     </div>
                 </div>
             </div>
@@ -177,7 +178,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Helper function to get the media element
             function getMediaElement() {
-                return document.getElementById('waveform') || document.querySelector('video');
+                return document.querySelector('#waveform') || document.querySelector('video');
             }
 
             // Helper function to handle when media finishes playing
@@ -205,6 +206,19 @@
                 }
             }
 
+            // Function to set the active item in the playlist
+            function setActivePlaylistItem(itemIndex) {
+                // Remove 'active' class from all playlist items
+                const playlistItems = document.querySelectorAll('.playlist-item');
+                playlistItems.forEach(item => item.classList.remove('active'));
+
+                // Add 'active' class to the current item
+                const currentItem = document.querySelector(`.playlist-item[data-item-index="${itemIndex}"]`);
+                if (currentItem) {
+                    currentItem.classList.add('active');
+                }
+            }
+
             // Function to autoplay the next item in the playlist
             function playNextItem() {
                 const currentItem = document.querySelector('.playlist-item.active');
@@ -220,6 +234,11 @@
                     const nextItemLink = nextItem.querySelector('a');
 
                     if (nextItemLink) {
+                        // Set the next item as active
+                        const nextItemIndex = nextItemLink.getAttribute('data-item-index');
+                        setActivePlaylistItem(nextItemIndex);
+
+                        // Redirect to the next item's play route
                         window.location.href = nextItemLink.getAttribute('href');
                     } else {
                         console.error("No link found for next playlist item.");
@@ -228,6 +247,9 @@
                     alert('End of playlist');
                 }
             }
+
+            // Set the first item as active when the page loads
+            setActivePlaylistItem(0);
 
             // Initialize when DOM is ready
             attachMediaEndListener();
