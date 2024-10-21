@@ -184,7 +184,6 @@
 @push('script')
     <script>
         function playNextItemAudio() {
-            console.log('hello');
 
             const currentItem = document.querySelector('.playlist-item.active');
             if (!currentItem) {
@@ -195,6 +194,7 @@
             const nextItem = currentItem.nextElementSibling;
             if (nextItem) {
                 const nextItemLink = nextItem.getAttribute('href');
+console.log(nextItem);
 
                 // Fetch the next item data via an API or reload the page
                 fetch(nextItemLink)
