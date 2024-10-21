@@ -184,6 +184,8 @@
 @push('script')
     <script>
         function playNextItemAudio() {
+            console.log('hello');
+
             const currentItem = document.querySelector('.playlist-item.active');
             if (!currentItem) {
                 console.error("No active playlist item found.");
