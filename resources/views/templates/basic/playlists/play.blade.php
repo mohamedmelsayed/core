@@ -6,7 +6,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section-header">
-                        <h2 class="section-title">{{ app()->getLocale() == 'ar' ? $playlist->title : $playlist->title_en }}</h2>
+                        <h2 class="section-title">{{ app()->getLocale() == 'ar' ? $playlist->title : $playlist->title_en }}
+                        </h2>
                         <p>{{ app()->getLocale() == 'ar' ? $playlist->description : $playlist->description_en }}</p>
                         <!-- Display playlist description -->
                     </div>
@@ -240,18 +241,14 @@
                 if (nextItem) {
                     console.log(nextItem);
 
-                    const nextItemLink = nextItem.querySelector('a');
 
-                    if (nextItemLink) {
-                        // Set the next item as active
-                        const nextItemIndex = nextItemLink.getAttribute('data-item-index');
-                        setActivePlaylistItem(nextItemIndex);
+                    // Set the next item as active
+                    const nextItemIndex = nextItem.getAttribute('data-item-index');
+                    setActivePlaylistItem(nextItemIndex);
 
-                        // Redirect to the next item's play route
-                        window.location.href = nextItemLink.getAttribute('href');
-                    } else {
-                        console.error("No link found for next playlist item.");
-                    }
+                    // Redirect to the next item's play route
+                    window.location.href = nextItem.getAttribute('href');
+
                 } else {
                     alert('End of playlist');
                 }
