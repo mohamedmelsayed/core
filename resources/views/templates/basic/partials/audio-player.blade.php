@@ -39,7 +39,77 @@
                 <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" id="thumbnail"
                     class="audio-thumbnail" />
             </div>
+            <div class="movie-content">
+                <div class="movie-content-inner d-sm-flex justify-content-between align-items-center flex-wrap">
+                    <div class="movie-content-left">
+                        <h3 class="title">{{ __($seoContents['social_title']) }}</h3>
+                        <span class="sub-title">@lang('Category') : <span
+                                class="cat">{{ app()->getLocale() === 'ar' ? $item->category->name : $item->category->name_en }}</span>
+                            @if ($item->sub_category)
+                                @lang('Sub Category'):
+                                {{ app()->getLocale() === 'ar' ? $item->sub_category->name : $item->sub_category->name_en }}
+                            @endif
+                        </span>
+                    </div>
+                    <div class="movie-content-right">
+                        <div class="movie-widget-area align-items-center">
 
+                            @auth
+                                @if ($watchEligable && gs('watch_party'))
+                                    <button type="button" class="watch-party-btn watchPartyBtn">
+                                        <i class="las la-desktop base--color"></i>
+                                        <span>@lang('Watch party')</span>
+                                    </button>
+                                @endif
+                            @endauth
+
+                            <span class="movie-widget"><i class="lar la-star text--warning"></i>
+                                {{ getAmount($item->ratings) }}</span>
+                            <span class="movie-widget"><i class="lar la-eye text--danger"></i>
+                                {{ getAmount($item->view) }} @lang('views')</span>
+
+                            @php
+                                $wishlist = $item->wishlists->where('user_id', auth()->id())->count();
+                            @endphp
+
+                            <span class="movie-widget addWishlist {{ $wishlist ? 'd-none' : '' }}"
+                                data-id="{{ $item->id }}" data-type="item"><i class="las la-plus-circle"></i></span>
+                            <span class="movie-widget removeWishlist {{ $wishlist ? '' : 'd-none' }}"
+                                data-id="{{ $item->id }}" data-type="item"><i
+                                    class="las la-minus-circle"></i></span>
+                        </div>
+
+                        <ul class="post-share d-flex align-items-center justify-content-sm-end mt-2 flex-wrap">
+                            <li class="caption">@lang('Share') : </li>
+
+                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Facebook')">
+                                <a
+                                    href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}"><i
+                                        class="lab la-facebook-f"></i></a>
+                            </li>
+                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Linkedin')">
+                                <a
+                                    href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode(url()->current()) }}&amp;title={{ __(@$item->title) }}&amp;summary=@php echo strLimit(strip_tags($item->description), 130); @endphp"><i
+                                        class="lab la-linkedin-in"></i></a>
+                            </li>
+                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Twitter')">
+                                <a
+                                    href="https://twitter.com/intent/tweet?text={{ __(@$item->title) }}%0A{{ url()->current() }}"><i
+                                        class="lab la-twitter"></i></a>
+                            </li>
+                            <li data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('Pinterest')">
+                                <a
+                                    href="http://pinterest.com/pin/create/button/?url={{ urlencode(url()->current()) }}&description={{ __(@$item->title) }}&media={{ getImage(getFilePath('item_landscape') . '/' . @$item->image->landscape) }}"><i
+                                        class="lab la-pinterest"></i></a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                <div class="movie-widget-area">
+                </div>
+                <!-- <p class="movie-widget__desc">{{ __($seoContents['social_description']) }}</p> -->
+            </div>
             <div class="product-tab mt-40">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
