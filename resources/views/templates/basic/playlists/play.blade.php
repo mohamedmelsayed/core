@@ -85,7 +85,15 @@
             </div>
     </section>
 @endsection
+<div class="modal alert-modal" id="endofplaylist" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <p class="modal--text">@lang('End of playlist') {{ $item->rental_period }} @lang('days')</p>
 
+        </div>
+    </div>
+</div>
 @push('style')
     <style>
         /* Playlist container */
@@ -194,20 +202,21 @@
             const nextItem = currentItem.nextElementSibling;
             if (nextItem) {
                 const nextItemLink = nextItem.getAttribute('href');
-console.log(nextItem);
+                console.log(nextItem);
 
                 // Fetch the next item data via an API or reload the page
                 window.location.href = nextItemLink;
 
             } else {
-                alert('End of playlist');
+                var modal = $('#endofplaylist');
+                modal.modal('show');
             }
         }
 
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            const currentIndex = {{ $currentItemIndex }};  // Assuming you pass this from the controller
+            const currentIndex = {{ $currentItemIndex }}; // Assuming you pass this from the controller
 
             @if ($playlist->type == 'audio')
                 function updateAudioPlayer(nextAudioContent) {
@@ -300,7 +309,8 @@ console.log(nextItem);
                     window.location.href = nextItem.getAttribute('href');
 
                 } else {
-                    alert('End of playlist');
+                    var modal = $('#endofplaylist');
+                    modal.modal('show');
                 }
             }
 
@@ -324,7 +334,8 @@ console.log(nextItem);
                         window.location.href = nextItemLink.getAttribute('href');
                     }
                 } else {
-                    alert('End of playlist');
+                    var modal = $('#endofplaylist');
+                    modal.modal('show');
                 }
             }
         }
