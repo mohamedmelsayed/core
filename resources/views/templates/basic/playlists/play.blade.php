@@ -198,6 +198,7 @@
             // Attach event listener for audio or video media element
             function attachMediaEndListener() {
                 const mediaElement = getMediaElement();
+console.log(mediaElement);
 
                 if (!mediaElement) {
                     console.error("Media element not found");
