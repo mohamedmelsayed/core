@@ -340,10 +340,9 @@ class ItemController extends Controller
 
 
         $pageTitle = "Upload audio to: " . $item->title;
-        $prevUrl = route('admin.item.index');
-        $items = $this->itemsDataAudio();
-        return view('admin.item.audio-index', compact('pageTitle', 'items'));
-        // return view('admin.item.audio.upload', compact('item', 'pageTitle', 'audio', 'prevUrl'));
+        $prevUrl = route('admin.item.audioItems');
+
+        return view('admin.item.audio.upload', compact('item', 'pageTitle', 'audio', 'prevUrl'));
     }
 
     public function uploadAudioFile(Request $request, $id)
@@ -488,9 +487,8 @@ class ItemController extends Controller
 
         $pageTitle = "Upload video to: " . $item->title;
         $prevUrl = route('admin.item.index');
-        $items = $this->itemsDataVideo();
-        return view('admin.item.index', compact('pageTitle', 'items'));
-        // return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl','route'));
+
+        return view('admin.item.video.upload', compact('item', 'pageTitle', 'video', 'prevUrl','route'));
     }
 
     public function updateVideo(Request $request, $id)
