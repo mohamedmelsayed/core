@@ -183,7 +183,62 @@
 
 @push('script')
     <script>
+        function playNextItemAudio() {
+            const currentItem = document.querySelector('.playlist-item.active');
+            if (!currentItem) {
+                console.error("No active playlist item found.");
+                return;
+            }
+
+            const nextItem = currentItem.nextElementSibling;
+            if (nextItem) {
+                const nextItemLink = nextItem.getAttribute('href');
+
+                // Fetch the next item data via an API or reload the page
+                fetch(nextItemLink)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Assuming 'data' contains the next item details
+                        const nextItemAudioContent = data.audioContent; // Adjust this based on your response
+
+                        // Update the audio player in the partial view with new content
+                        updateAudioPlayer(nextItemAudioContent);
+                    })
+                    .catch(error => {
+                        console.error('Error loading the next item:', error);
+                    });
+            } else {
+                alert('End of playlist');
+            }
+        }
+
+
+
         document.addEventListener('DOMContentLoaded', function() {
+            @if ($playlist->type == 'audio')
+                function updateAudioPlayer(nextAudioContent) {
+                    // Assuming you have an audio element and wavesurfer instance in the partial
+                    const wavesurfer = WaveSurfer.create({
+                        container: '#waveform',
+                        waveColor: 'white',
+                        progressColor: 'purple',
+                        barWidth: 2,
+                        responsive: true,
+                        normalize: true,
+                        interact: true,
+                        height: 100,
+                        barGap: 3,
+                        partialRender: true
+                    });
+
+                    // Load the new audio content dynamically
+                    wavesurfer.load(nextAudioContent);
+
+                    // Optionally auto-play the next audio
+                    wavesurfer.play();
+                }
+            @endif
+
             // Helper function to get the media element
             function getMediaElement() {
                 return document.querySelector('#waveform') || document.querySelector('video');

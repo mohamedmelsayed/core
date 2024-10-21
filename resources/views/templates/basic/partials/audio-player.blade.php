@@ -264,7 +264,7 @@
                     wavesurfer.play();
                 } else {
                     // Call the function to play the next item
-                    playNextItem();
+                    playNextItemAudio();
                 }
             });
 
