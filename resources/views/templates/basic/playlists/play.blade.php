@@ -174,6 +174,12 @@
 
 @push('script')
     <script>
+        function getWaveSurferInstance() {
+            if (waveformContainer) {
+                return waveformContainer.dataset.wavesurfer;
+            }
+            return null;
+        }
         document.addEventListener('DOMContentLoaded', function() {
             // Find the media player (audio or video)
             const mediaElement = document.querySelector('waveform, video');
@@ -184,7 +190,7 @@
                 console.log("Media element found", mediaElement);
                 @if ($playlist->type == 'audio')
 
-                    waveformContainer.dataset.wavesurfer.on('finish', function() {
+                    mediaElement.dataset.wavesurfer.on('finish', function() {
                         console.log("Media ended, playing next item");
 
                         playNextItem();
@@ -201,6 +207,17 @@
 
 
             } else {
+                try {
+                    const waveformContainer = document.getElementById('waveform');
+                    waveformContainer.dataset.wavesurfer.on('finish', function() {
+                        console.log("Media ended, playing next item");
+
+                        playNextItem();
+
+                    });
+                } catch (error) {
+
+                }
                 console.log("Media element not found");
             }
         });
