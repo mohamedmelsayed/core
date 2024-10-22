@@ -52,8 +52,8 @@
 
         /* Thumbnail */
         .playlist-thumb {
-            width: 100px;
-            height: 80px;
+            width: 30%;
+            height: 90%;
             object-fit: cover;
             border-radius: 8px;
             margin-right: 15px;
