@@ -63,7 +63,7 @@
         .playlist-title {
             font-size: 16px;
             color: #fff;
-            margin: 0;
+            margin: 1%;
             font-weight: bold;
         }
 
