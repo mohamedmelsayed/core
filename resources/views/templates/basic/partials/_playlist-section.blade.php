@@ -63,7 +63,7 @@
         .playlist-title {
             font-size: 16px;
             color: #fff;
-            margin: 1%;
+            margin: 0;
             font-weight: bold;
         }
 
@@ -73,19 +73,7 @@
             transform: scale(1.02);
         }
 
-        /* Button for viewing playlist */
-        .playlist-btn {
-            margin-left: auto;
-            padding: 8px 12px;
-            background-color: #ee005f;
-            color: #fff;
-            text-transform: uppercase;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-        }
+
 
         .playlist-btn:hover {
             background-color: #d5004f;
