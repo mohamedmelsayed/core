@@ -28,9 +28,9 @@
                                 <li><a class="nav-link category-nav item" href="#"
                                         target="none">@lang('PlayLists')</a>
                                     <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
-                                    <ul class="sub-menu">
+                                    <ul >
                                         @forelse($allPlaylists as $playlist)
-                                            <li>
+                                            <li class="sub-menu">
                                                 <a href="{{ route('playlist.play', $playlist->id) }}">
                                                     {{ app()->getLocale() === 'ar' ? $playlist->title : $playlist->title_en }}
                                                 </a>
@@ -47,9 +47,9 @@
                                         </a>
                                         @if ($category->subcategories->count())
                                             <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
-                                            <ul class="sub-menu">
+                                            <ul >
                                                 @foreach ($category->subcategories as $subcategory)
-                                                    <li>
+                                                    <li class="sub-menu">
                                                         <a href="{{ route('subCategory', $subcategory->id) }}">
                                                             {{ app()->getLocale() === 'ar' ? $subcategory->name : $subcategory->name_en }}
                                                         </a>
