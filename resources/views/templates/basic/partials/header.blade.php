@@ -183,4 +183,20 @@
             margin-left: 0;
             margin-right: auto;
         }
+
+
+        /* General RTL submenu styling */
+.rtl .navbar-nav .sub-menu {
+    right: 0; /* Align submenu to the right */
+    left: auto;
+    position: absolute; /* Ensure it’s positioned relative to the parent */
+    top: 100%; /* Position below the parent menu item */
+}
+
+/* Specific styling for the last submenu in RTL */
+.rtl .navbar-nav .main-menu > li:last-child .sub-menu {
+    right: auto; /* Prevent it from overflowing to the right */
+    left: 0; /* Align it to the left for the last item */
+}
+
     </style>
