@@ -151,6 +151,7 @@
     </div>
 </header>
 
+@push('style')
     <style>
         /* RTL Specific Styles */
         .rtl .navbar-nav .main-menu {
@@ -184,3 +185,4 @@
             margin-right: auto;
         }
     </style>
+@endpush
