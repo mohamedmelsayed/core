@@ -1,18 +1,19 @@
-<header class="header-section">
+<header class="header-section {{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
     <div class="header">
         <div class="header-bottom-area">
             <div class="container">
                 <div class="header-menu-content">
                     <nav class="navbar navbar-expand-xl p-0">
-                        <a class="site-logo site-title" href="{{ route('home') }}"><img src="{{ siteLogo() }}"
-                                alt="site-logo"></a>
+                        <a class="site-logo site-title" href="{{ route('home') }}">
+                            <img src="{{ siteLogo() }}" alt="site-logo">
+                        </a>
                         <div class="search-bar d-block d-xl-none ml-auto">
                             <a href="#0"><i class="fas fa-search"></i></a>
                             <div class="header-top-search-area">
                                 <form class="header-search-form" action="{{ route('search') }}">
                                     <input name="search" type="search" placeholder="@lang('Search here')...">
-                                    <button class="header-search-btn" type="submit"><i class="fas fa-search"></i>
-                                    </button>
+                                    <button class="header-search-btn" type="submit"><i
+                                            class="fas fa-search"></i></button>
                                 </form>
                             </div>
                         </div>
@@ -23,52 +24,40 @@
                         </button>
                         <div class="navbar-collapse collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav main-menu ms-auto me-auto">
-
                                 <li><a href="{{ route('home') }}">@lang('Home')</a></li>
-                                <li><a class="nav-link category-nav item"
-                                        href="#" target="none">@lang('PlayLists')</a>
+                                <li><a class="nav-link category-nav item" href="#"
+                                        target="none">@lang('PlayLists')</a>
                                     <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
-                                    <ul class="sub-menu"
-                                        style="{{ app()->getLocale() === 'ar'
-                                            ? ' left: auto;
-                                                                              right: 0;'
-                                            : ' left: 0;
-                                                                              right: auto;' }}">
+                                    <ul class="sub-menu">
                                         @forelse($allPlaylists as $playlist)
                                             <li>
-                                                <a
-                                                    href="{{ route('playlist.play', $playlist->id) }}">{{ app()->getLocale() === 'ar' ? $playlist->title : $playlist->title_en }}</a>
+                                                <a href="{{ route('playlist.play', $playlist->id) }}">
+                                                    {{ app()->getLocale() === 'ar' ? $playlist->title : $playlist->title_en }}
+                                                </a>
                                             </li>
                                         @empty
                                         @endforelse
                                     </ul>
                                 </li>
                                 @foreach ($categories as $category)
-                                    @if ($category->subcategories->count())
-                                        <li><a class="nav-link category-nav item"
-                                                href="{{ route('category', $category->id) }}">{{ app()->getLocale() === 'ar' ? $category->name : $category->name_en }}</a>
+                                    <li>
+                                        <a class="nav-link category-nav item"
+                                            href="{{ route('category', $category->id) }}">
+                                            {{ app()->getLocale() === 'ar' ? $category->name : $category->name_en }}
+                                        </a>
+                                        @if ($category->subcategories->count())
                                             <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
-                                            <ul class="sub-menu"
-                                                style="{{ app()->getLocale() === 'ar'
-                                                    ? ' left: auto;
-                                                                                                  right: 0;'
-                                                    : ' left: 0;
-                                                                                                  right: auto;' }}">
-                                                @forelse($category->subcategories as $subcategory)
+                                            <ul class="sub-menu">
+                                                @foreach ($category->subcategories as $subcategory)
                                                     <li>
-                                                        <a
-                                                            href="{{ route('subCategory', $subcategory->id) }}">{{ app()->getLocale() === 'ar' ? $subcategory->name : $subcategory->name_en }}</a>
+                                                        <a href="{{ route('subCategory', $subcategory->id) }}">
+                                                            {{ app()->getLocale() === 'ar' ? $subcategory->name : $subcategory->name_en }}
+                                                        </a>
                                                     </li>
-                                                @empty
-                                                @endforelse
+                                                @endforeach
                                             </ul>
-                                        </li>
-                                    @else
-                                        <li>
-                                            <a
-                                                href="{{ route('category', $category->id) }}">{{ app()->getLocale() === 'ar' ? $category->name : $category->name_en }}</a>
-                                        </li>
-                                    @endif
+                                        @endif
+                                    </li>
                                 @endforeach
 
                                 <li><a href="{{ route('live.tv') }}">@lang('Live TV')</a></li>
@@ -85,16 +74,11 @@
                                     <li><a href="javascript:void(0)">@lang('More') </a>
                                         <span class="menu__icon"><i class="fas fa-caret-down"></i></span>
                                         <ul class="sub-menu">
-                                            <li>
-                                                <a href="{{ route('user.deposit.history') }}">@lang('Payment History')</a>
-                                            </li>
-                                            <li><a href="{{ route('user.wishlist.index') }}">@lang('My Wishlists')</a>
-                                            </li>
-                                            <li><a href="{{ route('user.watch.history') }}">@lang('Watch History')</a>
-                                            </li>
+                                            <li><a href="{{ route('user.deposit.history') }}">@lang('Payment History')</a></li>
+                                            <li><a href="{{ route('user.wishlist.index') }}">@lang('My Wishlists')</a></li>
+                                            <li><a href="{{ route('user.watch.history') }}">@lang('Watch History')</a></li>
                                             @if (gs('watch_party'))
-                                                <li>
-                                                    <a
+                                                <li><a
                                                         href="{{ route('user.watch.party.history') }}">@lang('Watch Party')</a>
                                                 </li>
                                             @endif
@@ -111,27 +95,24 @@
                                 <div class="header-top-search-area">
                                     <form class="header-search-form" action="{{ route('search') }}">
                                         <input name="search" type="search" placeholder="@lang('Search here')...">
-                                        <button class="header-search-btn" type="submit"><i class="fas fa-search"></i>
-                                        </button>
+                                        <button class="header-search-btn" type="submit"><i
+                                                class="fas fa-search"></i></button>
                                     </form>
                                 </div>
                             </div>
 
                             <div class="header-bottom-right">
-
                                 <div class="language-select-area">
                                     <a class="language-select langSel" id="langSel"
                                         href="{{ app()->getLocale() === 'ar' ? route('change-Lang', 'en') : route('change-Lang', 'ar') }}">
                                         {{ app()->getLocale() === 'ar' ? 'EN' : 'AR' }}
                                     </a>
                                 </div>
-
                                 @auth
                                     <div class="header-right dropdown">
                                         <button class="" data-bs-toggle="dropdown" data-display="static"
-                                            type="button" aria-haspopup="true" aria-expanded="false">
-                                            <div
-                                                class="header-user-area d-flex align-items-center justify-content-between flex-wrap">
+                                            type="button">
+                                            <div class="header-user-area">
                                                 <div class="header-user-content">
                                                     <span>{{ __(auth()->user()->fullname) }}</span>
                                                 </div>
@@ -139,26 +120,19 @@
                                                         class="las la-chevron-circle-down"></i></span>
                                             </div>
                                         </button>
-
-
-                                        <div class="dropdown-menu dropdown-menu--sm dropdown-menu-end border-0 p-0">
-
-                                            <a class="dropdown-menu__item d-flex align-items-center px-3 py-2"
-                                                href="{{ route('user.profile.setting') }}">
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-menu__item" href="{{ route('user.profile.setting') }}">
                                                 <i class="dropdown-menu__icon las la-user-circle"></i>
-                                                <span class="dropdown-menu__caption">@lang('Profile Settings')</span>
+                                                <span>@lang('Profile Settings')</span>
                                             </a>
-                                            <a class="dropdown-menu__item d-flex align-items-center px-3 py-2"
-                                                href="{{ route('user.change.password') }}">
+                                            <a class="dropdown-menu__item" href="{{ route('user.change.password') }}">
                                                 <i class="dropdown-menu__icon las la-key"></i>
-                                                <span class="dropdown-menu__caption">@lang('Change Password')</span>
+                                                <span>@lang('Change Password')</span>
                                             </a>
-                                            <a class="dropdown-menu__item d-flex align-items-center px-3 py-2"
-                                                href="{{ route('user.logout') }}">
+                                            <a class="dropdown-menu__item" href="{{ route('user.logout') }}">
                                                 <i class="dropdown-menu__icon las la-sign-out-alt"></i>
-                                                <span class="dropdown-menu__caption">@lang('Logout')</span>
+                                                <span>@lang('Logout')</span>
                                             </a>
-
                                         </div>
                                     </div>
                                 @else
@@ -176,3 +150,39 @@
         </div>
     </div>
 </header>
+
+@push('style')
+    <style>
+        /* RTL Specific Styles */
+        .rtl .navbar-nav .main-menu {
+            margin-right: auto;
+            margin-left: 0;
+        }
+
+        .rtl .sub-menu {
+            left: auto;
+            right: 0;
+        }
+
+        .rtl .navbar-toggler {
+            margin-right: 0;
+            margin-left: auto;
+        }
+
+        /* LTR Specific Styles (default) */
+        .ltr .navbar-nav .main-menu {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .ltr .sub-menu {
+            right: auto;
+            left: 0;
+        }
+
+        .ltr .navbar-toggler {
+            margin-left: 0;
+            margin-right: auto;
+        }
+    </style>
+@endpush
