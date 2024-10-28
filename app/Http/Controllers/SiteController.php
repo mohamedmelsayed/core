@@ -699,7 +699,7 @@ class SiteController extends Controller
 
         // Check if any of the items has a live stream
         $hasStream = $items->contains(function ($value) {
-            return $value->hasStream();
+            return $value->stream!=null;
         });
 
         // Set the page title dynamically based on the locale
@@ -728,7 +728,7 @@ class SiteController extends Controller
 
         $hasStream = false;
         foreach ($items as  $value) {
-            if ($value->hasStream()) {
+            if ($value->stream!=null) {
                 $hasStream = true;
                 break;
             }
@@ -809,7 +809,7 @@ class SiteController extends Controller
         // Check if there are any live streams among the items
         $hasStream = false;
         foreach ($items as $value) {
-            if ($value->hasStream()) {
+            if ($value->stream!=null) {
                 $hasStream = true;
                 break;
             }
