@@ -190,12 +190,18 @@ class VideoUploader
 
     private function uploadToAWSCDN()
     {
+        $awsCdnConfig = json_decode($this->general->aws_cdn);
+
+        // Ensure it's decoded properly
+        if (is_null($awsCdnConfig)) {
+            throw new \Exception("Failed to decode aws_cdn configuration.");
+        }
         $path = 'videos/' . date('Y/m/d');
         $fileName = $this->file->getClientOriginalName();
 
         try {
             $this->s3->putObject([
-                'Bucket' => $this->general->aws->bucket,
+                'Bucket' => $awsCdnConfig->bucket,
                 'Key' => "$path/$fileName",
                 'Body' => file_get_contents($this->file),
                 'ACL' => 'public-read',
