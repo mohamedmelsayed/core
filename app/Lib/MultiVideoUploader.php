@@ -62,7 +62,6 @@ class MultiVideoUploader {
                 $videoUploader->oldServer = $server;
                 $videoUploader->upload();
                 $error = $videoUploader->error;
-                dd($error);
                 if ($error) {
                     return ['error' => true, 'message' => 'Could not upload the Video'];
                 }

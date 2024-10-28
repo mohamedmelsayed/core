@@ -29,6 +29,8 @@ class VideoUploader
     public function upload()
     {
         $this->uploadedServer = $this->general->server;
+        dd($this->uploadedServer);
+
         try {
             switch ($this->uploadedServer) {
                 case 'current':
