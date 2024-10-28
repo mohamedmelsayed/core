@@ -220,14 +220,17 @@ class VideoUploader
 
     public function initializeS3Client()
     {
+
+
         try{
-            $this->s3 = new S3Client([
-                'version' => 'latest',
+            Config::set("filesystems.disks.s3", [
+                'visibility' => 'public',
+                'driver' =>'s3',
+                'key' => $this->general->aws->key,
+                'secret' => $this->general->aws->secret,
                 'region' => $this->general->aws->region,
-                'credentials' => [
-                    'key' => $this->general->aws->key,
-                    'secret' => $this->general->aws->secret,
-                ],
+                'bucket' => $this->general->aws->bucket,
+                'endpoint' => $this->general->aws->domain,
             ]);
         }
         catch (Exception $ex){
