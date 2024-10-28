@@ -219,26 +219,33 @@ class VideoUploader
         }
     }
 
-    public function initializeS3Client()
+
+    private function initializeS3Client()
     {
+        try {
+            // Decode the aws_cdn JSON into an object or array
+            $awsCdnConfig = json_decode($this->general->aws_cdn);
 
+            // Ensure it's decoded properly
+            if (is_null($awsCdnConfig)) {
+                throw new \Exception("Failed to decode aws_cdn configuration.");
+            }
 
-        try{
+            // Configure the S3 filesystem dynamically
             Config::set("filesystems.disks.s3", [
                 'visibility' => 'public',
-                'driver' =>'s3',
-                'key' => $this->general->aws_cdn->access_key,
-                'secret' => $this->general->aws_cdn->secret_key,
-                'region' => $this->general->aws_cdn->region,
-                'bucket' => $this->general->aws_cdn->bucket,
-                'endpoint' => $this->general->aws_cdn->domain,
+                'driver' => 's3',
+                'key' => $awsCdnConfig->access_key,
+                'secret' => $awsCdnConfig->secret_key,
+                'region' => $awsCdnConfig->region,
+                'bucket' => $awsCdnConfig->bucket,
+                'endpoint' => $awsCdnConfig->domain,
             ]);
+        } catch (\Exception $ex) {
+            dd($ex->getMessage());
         }
-        catch (Exception $ex){
-            dd($ex);
-        }
-
     }
+
 
     // private function handleS3Error(S3Exception $e, $action)
     // {
