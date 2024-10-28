@@ -28,7 +28,7 @@ class GeneralSettingController extends Controller {
             'skip_time'       => 'required|integer|max:60',
             'file_server'     => 'required|in:current,custom-ftp,wasabi,digital_ocean,aws',
         ]);
-
+dd($request->file_server);
         $timezones = json_decode(file_get_contents(resource_path('views/admin/partials/timezone.json')));
         $timezone  = @$timezones[$request->timezone] ?? 'UTC';
 
