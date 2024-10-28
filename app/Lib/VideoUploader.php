@@ -50,6 +50,7 @@ class VideoUploader
                     $this->uploadToServer('digital_ocean', 'videos');
                     break;
                 case 'aws':
+                    dd('here');
                     $this->initializeS3Client();
                     $this->uploadedServer = Status::AWS_CDN;
                     $this->uploadToAWSCDN();
