@@ -201,6 +201,7 @@ class VideoUploader
             ]);
             $this->fileName = "$path/$fileName";
         } catch (S3Exception $e) {
+            dd($e);
             $this->handleS3Error($e, 'upload');
         }
     }
