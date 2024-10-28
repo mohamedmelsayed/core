@@ -56,9 +56,9 @@ class ItemController extends Controller
 
 
         if ($scope) {
-            $items = Item::with('playlists')->where("is_audio", 0)->$scope()->with('category', 'sub_category', 'video');
+            $items = Item::with('playlists')->where("is_audio", 0)->$scope()->with('category', 'sub_category', 'video','stream');
         } else {
-            $items = Item::with('playlists')->where("is_audio", 0)->with('category', 'sub_category', 'video');
+            $items = Item::with('playlists')->where("is_audio", 0)->with('category', 'sub_category', 'video','stream');
         }
 
         $items = $items->searchable(['title', 'category:name'])->orderBy('id', 'desc')->paginate(getPaginate());
