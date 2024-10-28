@@ -39,7 +39,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($item->is_stream))
+                                            @if ($item->is_stream)
                                                 <span class="badge badge--danger">@lang('Stream')</span>
                                             @else
                                                 <span class="badge badge--success">@lang('Normal Video')</span>
