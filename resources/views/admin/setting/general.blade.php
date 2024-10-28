@@ -66,7 +66,7 @@
                                         <option value="custom-ftp" @selected($general->server == 'custom-ftp')>@lang('FTP')</option>
                                         <option value="wasabi" @selected($general->server == 'wasabi')>@lang('Wasabi')</option>
                                         <option value="digital_ocean" @selected($general->server == 'digital_ocean')>@lang('Digital Ocean')</option>
-                                        <option value="digital_ocean" @selected($general->server == 'aws')>@lang('Amazon AWS')</option>
+                                        <option value="AWS" @selected($general->server == 'aws')>@lang('Amazon AWS')</option>
                                     </select>
                                 </div>
                             </div>
