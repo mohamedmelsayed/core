@@ -104,6 +104,13 @@ class Item extends Model
         });
     }
 
+    public function scopeHasStream($query)
+    {
+        return $query->where('status', Status::ENABLE)->where(function ($q) {
+            $q->orWhereHas('stream');
+        });
+    }
+
     public function scopeHasAudio($query)
     {
         return $query->where('status', Status::ENABLE)->where(function ($q) {
