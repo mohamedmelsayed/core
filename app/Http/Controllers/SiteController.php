@@ -339,46 +339,17 @@ class SiteController extends Controller
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
-        if ($item->item_type == Status::EPISODE_ITEM) {
-            $episodes = Episode::hasVideo()->with(['video', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "video");
-            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "audio");
-            $pageTitle = 'Episode Details';
+        /* single Items */
+        $this->storeHistory($item->id);
+        $this->storeVideoReport($item->id);
 
-            if ($episodes->isEmpty()) {
-                $notify[] = ['error', 'Oops! There is no video'];
-                return back()->withNotify($notify);
-            }
+        $pageTitle = 'Movie Details';
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+        $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $episodes = [];
+        $video = $item->video;
+        $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
-            $subscribedUser = auth()->check() && (auth()->user()->exp > now());
-            if ($episodeId) {
-                $episode = Episode::hasVideo()->findOrFail($episodeId);
-                $firstVideo = $episode->video;
-                $isPaidItem = $episode->version ? Status::ENABLE : Status::DISABLE;
-                $activeEpisode = $episode;
-            } else {
-                $firstVideo = $episodes[0]->video;
-                $activeEpisode = $episodes[0];
-                $isPaidItem = $activeEpisode->version ? Status::ENABLE : Status::DISABLE;
-                $episodeId = $activeEpisode->id;
-            }
-
-            $this->storeHistory(episodeId: $activeEpisode->id);
-            $this->storeVideoReport(episodeId: $activeEpisode->id);
-
-            $video = $firstVideo;
-            $checkWatchEligable = $this->checkWatchEligableEpisode($activeEpisode, $userHasSubscribed);
-        } else {
-            $this->storeHistory($item->id);
-            $this->storeVideoReport($item->id);
-
-            $pageTitle = 'Movie Details';
-            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
-            $episodes = [];
-            $video = $item->video;
-            $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        }
 
         $watchEligable = $checkWatchEligable[0];
         $hasSubscribedItem = $checkWatchEligable[1];
@@ -460,22 +431,10 @@ class SiteController extends Controller
                     $item->title = $translate != null ? $translate->translated_title : $item->title;
                     $item->description = $translate != null ? $translate->translated_description : $item->title;
                 }
-                # code...
-
             }
             return $items;
         } else {
-            // Get items based on item type without keywords
 
-            // $items = $type === "video" ? Item::hasVideo()->orderBy('id', 'desc')
-            //     ->where('item_type', $itemType)
-            //     ->where('id', '!=', $itemId)
-            //     ->limit(8)
-            //     ->get() : Item::hasAudio()->orderBy('id', 'desc')
-            //     ->where('item_type', $itemType)
-            //     ->where('id', '!=', $itemId)
-            //     ->limit(8)
-            //     ->get();
             foreach ($items as $item) {
                 if ($lang !== 'ar') {
                     # code...
@@ -680,47 +639,18 @@ class SiteController extends Controller
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
-        if ($item->item_type == Status::EPISODE_ITEM) {
-            $episodes = Episode::hasAudio()->with(['audio', 'item'])->where('item_id', $item->id)->get();
-            $relatedItems = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "video");
-            $relatedAudios = $this->relatedItems($item->id, Status::EPISODE_ITEM, $item->tags, "audio");
-            $pageTitle = 'Episode Details';
 
-            if ($episodes->isEmpty()) {
-                $notify[] = ['error', 'Oops! There is no audio'];
-                return back()->withNotify($notify);
-            }
+        $this->storeHistory($item->id);
+        $this->storeVideoReport($item->id);
 
-            $subscribedUser = auth()->check() && (auth()->user()->exp > now());
-            if ($episodeId) {
-                $episode = Episode::hasAudio()->findOrFail($episodeId);
-                $firstAudio = $episode->audio;
-                $isPaidItem = $episode->version ? Status::ENABLE : Status::DISABLE;
-                $activeEpisode = $episode;
-            } else {
-                $firstAudio = $episodes[0]->audio;
-                $activeEpisode = $episodes[0];
-                $isPaidItem = $activeEpisode->version ? Status::ENABLE : Status::DISABLE;
-                $episodeId = $activeEpisode->id;
-            }
+        $pageTitle = 'Audio Details';
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+        $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
 
-            $this->storeHistory(episodeId: $activeEpisode->id);
-            $this->storeVideoReport(episodeId: $activeEpisode->id);
+        $episodes = [];
+        $audio = $item->audio;
+        $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
-            $audio = $firstAudio;
-            $checkWatchEligable = $this->checkWatchEligableEpisode($activeEpisode, $userHasSubscribed);
-        } else {
-            $this->storeHistory($item->id);
-            $this->storeVideoReport($item->id);
-
-            $pageTitle = 'Audio Details';
-            $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-            $relatedItems = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
-
-            $episodes = [];
-            $audio = $item->audio;
-            $checkWatchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        }
 
         $watchEligable = $checkWatchEligable[0];
         $hasSubscribedItem = $checkWatchEligable[1];
@@ -769,7 +699,7 @@ class SiteController extends Controller
 
         // Check if any of the items has a live stream
         $hasStream = $items->contains(function ($value) {
-            return $value->is_stream;
+            return $value->hasStream();
         });
 
         // Set the page title dynamically based on the locale
@@ -798,7 +728,7 @@ class SiteController extends Controller
 
         $hasStream = false;
         foreach ($items as  $value) {
-            if ($value->is_stream) {
+            if ($value->hasStream()) {
                 $hasStream = true;
                 break;
             }
@@ -879,7 +809,7 @@ class SiteController extends Controller
         // Check if there are any live streams among the items
         $hasStream = false;
         foreach ($items as $value) {
-            if ($value->is_stream) {
+            if ($value->hasStream()) {
                 $hasStream = true;
                 break;
             }
