@@ -39,7 +39,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($item->hasStream())
+                                            @if (@if ($item->stream!=null))
                                                 <span class="badge badge--danger">@lang('Stream')</span>
                                             @else
                                                 <span class="badge badge--success">@lang('Normal Video')</span>
@@ -83,7 +83,7 @@
                                                     @endif
 
                                                     <!-- Stream Configuration -->
-                                                    @if ($item->hasStream())
+                                                    @if (@if ($item->stream!=null))
                                                         <a class="dropdown-item threshold"
                                                             href="{{ route('admin.item.setStream', $item->id) }}">
                                                             <i class="las la-cloud-upload-alt"></i> @lang('Configure Stream')
