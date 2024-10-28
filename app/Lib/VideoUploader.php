@@ -218,7 +218,7 @@ class VideoUploader
 
             // Generate a unique filename and store in AWS S3
             $fileName = $date . '/' . uniqid() . '_' . $file->getClientOriginalName();
-            $this->fileName = Storage::disk('s3')->putFileAs($path, $file, $fileName, 'public');
+            $this->fileName = Storage::disk('s3')->put($fileName, file_get_contents($file), 'public');
 
         } catch (\Exception $e) {
             $this->error = true;
