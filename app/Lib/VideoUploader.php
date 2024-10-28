@@ -53,7 +53,7 @@ class VideoUploader
                 case 'aws':
                     $this->initializeS3Client();
                     $this->uploadedServer = Status::AWS_CDN;
-                    $this->uploadToAwsS3();
+                    $this->uploadToAWSCDN();
                     break;
                 default:
                     throw new \Exception("Invalid upload disk: $this->uploadedServer");
@@ -208,7 +208,6 @@ class VideoUploader
             default => throw new \Exception("Unknown server status: $serverStatus"),
         };
     }
-
     private function uploadToAwsS3()
     {
         try {
@@ -231,6 +230,31 @@ class VideoUploader
         } catch (\Exception $e) {
             $this->error = true;
             Log::error('Error uploading to AWS S3: ' . $e->getMessage());
+        }
+    }
+
+    private function uploadToAWSCDN()
+    {
+        $awsCdnConfig = json_decode($this->general->aws_cdn);
+
+        // Ensure it's decoded properly
+        if (is_null($awsCdnConfig)) {
+            throw new \Exception("Failed to decode aws_cdn configuration.");
+        }
+        $path = 'videos/' . date('Y/m/d');
+        $fileName = $this->file->getClientOriginalName();
+
+        try {
+            $this->s3->putObject([
+                'Bucket' => $awsCdnConfig->bucket,
+                'Key' => "$path/$fileName",
+                'Body' => file_get_contents($this->file),
+                'ACL' => 'public-read',
+            ]);
+            $this->fileName = "$path/$fileName";
+        } catch (S3Exception $e) {
+            dd($e);
+            $this->handleS3Error($e, 'upload');
         }
     }
 
