@@ -219,14 +219,20 @@ class VideoUploader
 
     public function initializeS3Client()
     {
-        $this->s3 = new S3Client([
-            'version' => 'latest',
-            'region' => $this->general->aws->region,
-            'credentials' => [
-                'key' => $this->general->aws->key,
-                'secret' => $this->general->aws->secret,
-            ],
-        ]);
+        try{
+            $this->s3 = new S3Client([
+                'version' => 'latest',
+                'region' => $this->general->aws->region,
+                'credentials' => [
+                    'key' => $this->general->aws->key,
+                    'secret' => $this->general->aws->secret,
+                ],
+            ]);
+        }
+        catch (Exception $ex){
+            dd($ex->getMessage());
+        }
+
     }
 
     // private function handleS3Error(S3Exception $e, $action)
