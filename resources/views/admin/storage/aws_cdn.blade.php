@@ -8,7 +8,7 @@
                 <h5 class="card-title">@lang('Configure AWS S3 Settings')</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.settings.aws') }}" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-4">
