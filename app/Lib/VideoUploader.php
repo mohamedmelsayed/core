@@ -53,7 +53,7 @@ class VideoUploader
                 case 'aws':
                     $this->initializeS3Client();
                     $this->uploadedServer = Status::AWS_CDN;
-                    $this->uploadToAWSCDN();
+                    $this->uploadToAwsS3();
                     break;
                 default:
                     throw new \Exception("Invalid upload disk: $this->uploadedServer");
@@ -209,28 +209,20 @@ class VideoUploader
         };
     }
 
-    private function uploadToAWSCDN()
+    private function uploadToAwsS3()
     {
-        $awsCdnConfig = json_decode($this->general->aws_cdn);
-
-        // Ensure it's decoded properly
-        if (is_null($awsCdnConfig)) {
-            throw new \Exception("Failed to decode aws_cdn configuration.");
-        }
-        $path = 'videos/' . date('Y/m/d');
-        $fileName = $this->file->getClientOriginalName();
-
         try {
-            $this->s3->putObject([
-                'Bucket' => $awsCdnConfig->bucket,
-                'Key' => "$path/$fileName",
-                'Body' => file_get_contents($this->file),
-                'ACL' => 'public-read',
-            ]);
-            $this->fileName = "$path/$fileName";
-        } catch (S3Exception $e) {
-            dd($e);
-            $this->handleS3Error($e, 'upload');
+            $date = date('Y/m/d');
+            $file = $this->file;
+            $path = "assets/videos/$date"; // AWS path prefix
+
+            // Generate a unique filename and store in AWS S3
+            $fileName = $date . '/' . uniqid() . '_' . $file->getClientOriginalName();
+            $this->fileName = Storage::disk('s3')->putFileAs($path, $file, $fileName, 'public');
+
+        } catch (\Exception $e) {
+            $this->error = true;
+            Log::error('Error uploading to AWS S3: ' . $e->getMessage());
         }
     }
 
