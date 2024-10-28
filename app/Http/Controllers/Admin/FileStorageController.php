@@ -28,12 +28,13 @@ class FileStorageController extends Controller
         // Validate the input data
         $validatedData = $request->validate([
             'aws_cdn' => 'required|array',
-            'aws_cdn.domain' => 'nullable|string|url',
+            'aws_cdn.domain' => 'nullable|string|arn',
             'aws_cdn.access_key' => 'nullable|string',
             'aws_cdn.secret_key' => 'nullable|string',
             'aws_cdn.bucket' => 'nullable|string',
             'aws_cdn.region' => 'nullable|string',
         ]);
+
 
         // Convert the validated AWS CDN data to JSON
         $awsCdnJson = json_encode($validatedData['aws_cdn']);
