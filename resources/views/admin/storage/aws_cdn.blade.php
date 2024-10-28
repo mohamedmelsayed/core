@@ -19,7 +19,7 @@
                                     id="aws_cdn_domain"
                                     class="form-control form-control-lg @error('aws_cdn.domain') is-invalid @enderror"
                                     name="aws_cdn[domain]"
-                                    value="{{ old('aws_cdn.domain', @$aws_cdn['domain']) }}"
+                                    value="{{ old('aws_cdn.domain', @$aws_cdn->domain) }}"
                                     placeholder="https://yourdomain.com">
                                 <small class="text-muted d-block">@lang('Please enter the full URL with HTTP/HTTPS protocol')</small>
                                 @error('aws_cdn.domain')
@@ -36,7 +36,7 @@
                                     id="aws_access_key"
                                     class="form-control form-control-lg @error('aws_cdn.access_key') is-invalid @enderror"
                                     name="aws_cdn[access_key]"
-                                    value="{{ old('aws_cdn.access_key', @$aws_cdn['access_key']) }}"
+                                    value="{{ old('aws_cdn.access_key', @$aws_cdn->access_key) }}"
                                     placeholder="Your AWS Access Key">
                                 @error('aws_cdn.access_key')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -52,7 +52,7 @@
                                     id="aws_secret_key"
                                     class="form-control form-control-lg @error('aws_cdn.secret_key') is-invalid @enderror"
                                     name="aws_cdn[secret_key]"
-                                    value="{{ old('aws_cdn.secret_key', @$aws_cdn['secret_key']) }}"
+                                    value="{{ old('aws_cdn.secret_key', @$aws_cdn->secret_key) }}"
                                     placeholder="Your AWS Secret Key">
                                 @error('aws_cdn.secret_key')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -68,7 +68,7 @@
                                     id="aws_bucket"
                                     class="form-control form-control-lg @error('aws_cdn.bucket') is-invalid @enderror"
                                     name="aws_cdn[bucket]"
-                                    value="{{ old('aws_cdn.bucket', @$aws_cdn['bucket']) }}"
+                                    value="{{ old('aws_cdn.bucket', @$aws_cdn->bucket) }}"
                                     placeholder="Your S3 Bucket Name">
                                 @error('aws_cdn.bucket')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -84,7 +84,7 @@
                                     id="aws_region"
                                     class="form-control form-control-lg @error('aws_cdn.region') is-invalid @enderror"
                                     name="aws_cdn[region]"
-                                    value="{{ old('aws_cdn.region', @$aws_cdn['region']) }}"
+                                    value="{{ old('aws_cdn.region', @$aws_cdn->region) }}"
                                     placeholder="e.g., us-east-1">
                                 <small class="text-muted d-block">@lang('The AWS region where your bucket is hosted')</small>
                                 @error('aws_cdn.region')
