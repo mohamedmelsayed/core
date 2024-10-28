@@ -112,6 +112,7 @@ class VideoUploader
             $disk->put("$path/$video", $fileContents);
             $this->fileName = "$path/$video";
         } catch (Exception $ex) {
+            dd($ex);
             $this->error = true;
             Log::error("Error uploading to server $server: " . $ex->getMessage());
         }
