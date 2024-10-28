@@ -15,24 +15,28 @@ class FileStorageController extends Controller {
         $pageTitle = "Amazon AWS CDN Setting";
         return view('admin.storage.aws_cdn', compact('pageTitle'));
     }
-    public function updateAwsCdn(Request $request) {
+    public function updateAwsCdn(Request $request)
+    {
+        // Validate the input data
         $validatedData = $request->validate([
             'aws_cdn' => 'required|array',
-            'aws_cdn.domain' => 'nullable|string',
+            'aws_cdn.domain' => 'nullable|string|url',
             'aws_cdn.access_key' => 'nullable|string',
             'aws_cdn.secret_key' => 'nullable|string',
+            'aws_cdn.bucket' => 'nullable|string',
+            'aws_cdn.region' => 'nullable|string',
         ]);
-    
-        // Convert the array to JSON
+
+        // Convert the validated AWS CDN data to JSON
         $awsCdnJson = json_encode($validatedData['aws_cdn']);
-    
+
         // Update the AWS CDN configuration in the database
-        $setting      = gs();
-        $setting->aws_cdn = $request->aws_cdn;
+        $setting = gs(); // Assuming gs() retrieves the general settings
+        $setting->aws_cdn = $awsCdnJson; // Save as JSON if aws_cdn is a JSON column
         $setting->save();
-    
-       
-        $notify[] = ['success', 'AWS CDN credentials Updated'];
+
+        // Return with a success notification
+        $notify[] = ['success', 'AWS CDN credentials updated successfully'];
         return back()->withNotify($notify);
     }
 

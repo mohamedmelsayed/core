@@ -50,6 +50,7 @@ class VideoUploader
                     $this->uploadToServer('digital_ocean', 'videos');
                     break;
                 case 'aws':
+                    $this->initializeS3Client();
                     $this->uploadedServer = Status::AWS_CDN;
                     $this->uploadToAWSCDN();
                     break;
@@ -188,42 +189,37 @@ class VideoUploader
 
     private function uploadToAWSCDN()
     {
-        $date = date('Y/m/d');
-        $file = $this->file;
-        $path = "videos/$date";
-        $fileName = $file->getClientOriginalName();
+        $path = 'videos/' . date('Y/m/d');
+        $fileName = $this->file->getClientOriginalName();
 
         try {
-            $s3 = $this->initializeS3Client();
-            $s3->putObject([
+            $this->s3->putObject([
                 'Bucket' => $this->general->aws->bucket,
                 'Key' => "$path/$fileName",
-                'Body' => file_get_contents($file),
+                'Body' => file_get_contents($this->file),
                 'ACL' => 'public-read',
             ]);
             $this->fileName = "$path/$fileName";
         } catch (S3Exception $e) {
-            $this->error = true;
-            Log::error('AWS S3 upload error: ' . $e->getMessage());
+            $this->handleS3Error($e, 'upload');
         }
     }
 
     private function removeFromAWSCDN($oldFile)
     {
         try {
-            $s3 = $this->initializeS3Client();
-            $s3->deleteObject([
+            $this->s3->deleteObject([
                 'Bucket' => $this->general->aws->bucket,
                 'Key' => $oldFile,
             ]);
         } catch (S3Exception $e) {
-            Log::error('AWS S3 delete error: ' . $e->getMessage());
+            $this->handleS3Error($e, 'delete');
         }
     }
 
-    private function initializeS3Client()
+    public function initializeS3Client()
     {
-        return new S3Client([
+        $this->s3 = new S3Client([
             'version' => 'latest',
             'region' => $this->general->aws->region,
             'credentials' => [
@@ -232,4 +228,13 @@ class VideoUploader
             ],
         ]);
     }
+
+    // private function handleS3Error(S3Exception $e, $action)
+    // {
+    //     $this->error = true;
+    //     Log::error("AWS S3 $action error: " . $e->getMessage(), [
+    //         'bucket' => $this->bucket,
+    //         'file' => $action === 'upload' ? $this->fileName : $oldFile ?? null,
+    //     ]);
+    // }
 }
