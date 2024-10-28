@@ -227,11 +227,11 @@ class VideoUploader
             Config::set("filesystems.disks.s3", [
                 'visibility' => 'public',
                 'driver' =>'s3',
-                'key' => $this->general->aws->access_key,
-                'secret' => $this->general->aws->secret_key,
-                'region' => $this->general->aws->region,
-                'bucket' => $this->general->aws->bucket,
-                'endpoint' => $this->general->aws->domain,
+                'key' => $this->general->aws_cdn->access_key,
+                'secret' => $this->general->aws_cdn->secret_key,
+                'region' => $this->general->aws_cdn->region,
+                'bucket' => $this->general->aws_cdn->bucket,
+                'endpoint' => $this->general->aws_cdn->domain,
             ]);
         }
         catch (Exception $ex){
