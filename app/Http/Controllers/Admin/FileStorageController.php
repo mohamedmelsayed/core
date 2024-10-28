@@ -16,9 +16,12 @@ class FileStorageController extends Controller
     public function aws()
     {
         $pageTitle = "Amazon AWS CDN Setting";
-        $general = gs(); // Retrieve the settings object where aws_cdn configuration is stored
-        dd($general->aws_cdn);
-        return view('admin.storage.aws_cdn', compact('pageTitle', 'general'));
+        $general = gs(); // Retrieve the general settings instance
+
+        // Decode the JSON data
+        $aws_cdn = json_decode($general->aws_cdn, true);
+
+        return view('admin.storage.aws_cdn', compact('pageTitle', 'aws_cdn'));
     }
     public function updateAwsCdn(Request $request)
     {
