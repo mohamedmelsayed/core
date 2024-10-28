@@ -62,7 +62,7 @@ class MultiVideoUploader {
                 $videoUploader->oldServer = $server;
                 $videoUploader->upload();
                 $error = $videoUploader->error;
-
+                dd($error);
                 if ($error) {
                     return ['error' => true, 'message' => 'Could not upload the Video'];
                 }
@@ -79,7 +79,7 @@ class MultiVideoUploader {
                 $server = Status::LINK;
             }
         }
-        
+
         return ['error' => false, $qualityName => $video, 'server' => $server];
     }
 }
