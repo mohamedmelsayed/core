@@ -191,7 +191,7 @@ class VideoUploader
     private function uploadToAWSCDN()
     {
         $awsCdnConfig = json_decode($this->general->aws_cdn);
-
+dd($awsCdnConfig);
         // Ensure it's decoded properly
         if (is_null($awsCdnConfig)) {
             throw new \Exception("Failed to decode aws_cdn configuration.");
