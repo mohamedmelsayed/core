@@ -234,7 +234,7 @@ class VideoUploader
             ]);
         }
         catch (Exception $ex){
-            dd($ex->getMessage());
+            dd($ex);
         }
 
     }
