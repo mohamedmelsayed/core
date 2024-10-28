@@ -5,20 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class FileStorageController extends Controller {
-    public function ftp() {
+class FileStorageController extends Controller
+{
+    public function ftp()
+    {
         $pageTitle = "FTP Setting";
         return view('admin.storage.ftp', compact('pageTitle'));
     }
 
-    public function aws() {
+    public function aws()
+    {
         $pageTitle = "Amazon AWS CDN Setting";
-        $setting = gs();
-
-        $aws_cdn = json_decode($setting->aws, true);
-
-
-        return view('admin.storage.aws_cdn', compact('pageTitle','aws_cdn'));
+        $general = gs(); // Retrieve the settings object where aws_cdn configuration is stored
+        return view('admin.aws-settings', compact('pageTitle', 'general'));
     }
     public function updateAwsCdn(Request $request)
     {
@@ -45,7 +44,8 @@ class FileStorageController extends Controller {
         return back()->withNotify($notify);
     }
 
-    public function ftpUpdate(Request $request) {
+    public function ftpUpdate(Request $request)
+    {
         $request->validate([
             'ftp.host'     => 'required',
             'ftp.username' => 'required',
@@ -61,12 +61,14 @@ class FileStorageController extends Controller {
         $notify[] = ['success', 'FTP credentials Updated'];
         return back()->withNotify($notify);
     }
-    public function wasabi() {
+    public function wasabi()
+    {
         $pageTitle = "Wasabi Setting";
         return view('admin.storage.wasabi', compact('pageTitle'));
     }
 
-    public function wasabiUpdate(Request $request) {
+    public function wasabiUpdate(Request $request)
+    {
         $request->validate([
             'wasabi.driver'   => 'required',
             'wasabi.key'      => 'required',
@@ -82,13 +84,15 @@ class FileStorageController extends Controller {
         $notify[] = ['success', 'Wasabi credentials updated'];
         return back()->withNotify($notify);
     }
-    public function digitalOcean() {
+    public function digitalOcean()
+    {
         $pageTitle = "Digital Ocean Setting";
         $setting   = gs();
         return view('admin.storage.digital_ocean', compact('pageTitle', 'setting'));
     }
 
-    public function digitalOceanUpdate(Request $request) {
+    public function digitalOceanUpdate(Request $request)
+    {
         $request->validate([
             'digital_ocean.driver'   => 'required',
             'digital_ocean.key'      => 'required',
