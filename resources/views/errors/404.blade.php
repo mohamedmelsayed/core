@@ -24,7 +24,7 @@
                     <img src="{{ asset('assets/errors/images/error-404.png') }}" alt="@lang('image')">
                     <h2><b>@lang('404')</b> @lang('Page not found')</h2>
                     <p>@lang('page you are looking for doesn\'t exist  or an other error ocurred') <br> @lang('or temporarily unavailable.')</p>
-                    <a href="{{ route('home') }}" class="cmn-btn mt-4">@lang('Go to Home')</a>
+                    {{-- <a href="{{ route('home') }}" class="cmn-btn mt-4">@lang('Go to Home')</a> --}}
                 </div>
             </div>
         </div>
