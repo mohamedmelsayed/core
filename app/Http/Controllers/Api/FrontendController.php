@@ -506,7 +506,7 @@ class FrontendController extends Controller
                 $query->where('sub_category_id', $category_id);
             }
             if ($type) {
-                $query->where('sub_category_id', $type);
+                $query->where('type', $type);
             }
         })->limit(12)->get();
     
