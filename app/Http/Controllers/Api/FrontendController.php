@@ -12,6 +12,7 @@ use App\Models\History;
 use App\Models\Item;
 use App\Models\Language;
 use App\Models\LiveTelevision;
+use App\Models\Playlist;
 use App\Models\Slider;
 use App\Models\SubCategory;
 use App\Models\Subscription;
