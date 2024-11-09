@@ -561,7 +561,7 @@ class FrontendController extends Controller
             ]);
         }
 
-        $video    = $item->audio;
+        $audio    = $item->audio;
         $remark   = 'item_audio';
         $notify[] = 'Item Audio';
 
