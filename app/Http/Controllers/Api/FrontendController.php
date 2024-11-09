@@ -306,7 +306,7 @@ class FrontendController extends Controller
 
     public function watchVideo(Request $request)
     {
-        $item = Item::hasVideoOrAudio()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
+        $item = Item::hasVideo()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
 
         if (!$item) {
             return response()->json([
@@ -325,30 +325,68 @@ class FrontendController extends Controller
         $episodePath   = getFilePath('episode');
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-        if ($item->item_type == Status::EPISODE_ITEM) {
-            $episodes = Episode::hasVideoOrAudio()->where('item_id', $request->item_id)->get();
+      
 
-            if ($episodes->count()) {
-                $this->storeHistory(0, $episodes[0]->id);
-                $this->storeVideoReport(0, $episodes[0]->id);
-            }
+        $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
-            $notify[] = 'Episode Video';
+        if (!$watchEligable[0]) {
             return response()->json([
-                'remark'  => 'episode_video',
-                'status'  => 'success',
-                'message' => ['success' => $notify],
+                'remark'  => 'unauthorized_' . $watchEligable[1],
+                'status'  => 'error',
+                'message' => ['error' => 'Unauthorized user'],
                 'data'    => [
                     'item'           => $item,
-                    'episodes'       => $episodes,
-                    'related_items'  => $relatedItems,
                     'portrait_path'  => $imagePath,
                     'landscape_path' => $landscapePath,
-                    'episode_path'   => $episodePath,
+                    'related_items'  => $relatedItems,
                 ],
             ]);
         }
 
+        $this->storeHistory($item->id, 0);
+        $this->storeVideoReport($item->id, 0);
+
+        $notify[] = 'Item Video';
+
+        return response()->json([
+            'remark'  => 'item_video',
+            'status'  => 'success',
+            'message' => ['success' => $notify],
+            'data'    => [
+                'item'           => $item,
+                'related_items'  => $relatedItems,
+                'portrait_path'  => $imagePath,
+                'landscape_path' => $landscapePath,
+                'episode_path'   => $episodePath,
+                'watchEligable'  => $watchEligable[0],
+                'type'           => $watchEligable[1],
+            ],
+        ]);
+    }
+
+
+    public function viewAudio(Request $request)
+    {
+        $item = Item::hasAudio()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
+
+        if (!$item) {
+            return response()->json([
+                'remark'  => 'not_found',
+                'status'  => 'error',
+                'message' => ['error' => 'Item not found'],
+            ]);
+        }
+
+        $item->increment('view');
+
+        $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
+
+        $imagePath     = getFilePath('item_portrait');
+        $landscapePath = getFilePath('item_landscape');
+        $episodePath   = getFilePath('episode');
+
+        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
+     
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
 
         if (!$watchEligable[0]) {
