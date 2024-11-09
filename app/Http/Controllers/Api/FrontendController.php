@@ -495,14 +495,18 @@ class FrontendController extends Controller
     public function playlists(Request $request)
     {
         $category_id = $request->query('category_id');
+        $type = $request->query('type');
     
-        $allPlaylists = Playlist::whereHas('items', function ($query) use ($category_id) {
+        $allPlaylists = Playlist::whereHas('items', function ($query) use ($category_id,$type) {
             $query->where(function ($q) {
                 $q->whereHas('video')->orWhereHas('audio');
             });
     
             if ($category_id) {
                 $query->where('sub_category_id', $category_id);
+            }
+            if ($type) {
+                $query->where('sub_category_id', $type);
             }
         })->limit(12)->get();
     
