@@ -119,7 +119,6 @@ class FrontendController extends Controller
         $audio = Item::active()
             ->hasAudio()
             ->where('item_type', Status::SINGLE_ITEM)
-            ->get()
             ->paginate($perPage);
     
         $imagePath = getFilePath('item_portrait');
@@ -151,7 +150,6 @@ class FrontendController extends Controller
         $videos = Item::active()
             ->hasVideo()
             ->where('item_type', Status::SINGLE_ITEM)
-            ->get()
             ->paginate($perPage);
     
         $imagePath = getFilePath('item_portrait');
