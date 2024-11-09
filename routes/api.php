@@ -179,6 +179,8 @@ Route::namespace('Api')->name('api.')->group(function () {
 
         Route::get('watch-video', 'watchVideo');
         Route::get('view-audio', 'viewAudio');
+        Route::get('list-audio', 'listAudio');
+        Route::get('list-videos', 'listVideo');
         Route::get('play-video', 'playVideo');
         Route::get('play-audio', 'playAudio');
         Route::get('policy-pages', 'policyPages');

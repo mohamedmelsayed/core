@@ -111,6 +111,71 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function listAudio(Request $request)
+    {
+        $notify[] = 'Recently Added';
+        $perPage = $request->query('per_page', 10); // Set a default of 10 items per page if not provided
+    
+        $audio = Item::active()
+            ->hasAudio()
+            ->where('item_type', Status::SINGLE_ITEM)
+            ->apiQuery()
+            ->paginate($perPage);
+    
+        $imagePath = getFilePath('item_portrait');
+        $landscapePath = getFilePath('item_landscape');
+    
+        return response()->json([
+            'remark' => 'recently_added',
+            'status' => 'success',
+            'message' => ['success' => $notify],
+            'data' => [
+                'items' => $audio->items(), // Returns only the data for the current page
+                'portrait_path' => $imagePath,
+                'landscape_path' => $landscapePath,
+                'pagination' => [
+                    'total' => $audio->total(),
+                    'current_page' => $audio->currentPage(),
+                    'last_page' => $audio->lastPage(),
+                    'per_page' => $audio->perPage(),
+                ]
+            ],
+        ]);
+    }
+    
+    public function listVideo(Request $request)
+    {
+        $notify[] = 'Recently Added';
+        $perPage = $request->query('per_page', 10); // Set a default of 10 items per page if not provided
+    
+        $videos = Item::active()
+            ->hasVideo()
+            ->where('item_type', Status::SINGLE_ITEM)
+            ->apiQuery()
+            ->paginate($perPage);
+    
+        $imagePath = getFilePath('item_portrait');
+        $landscapePath = getFilePath('item_landscape');
+    
+        return response()->json([
+            'remark' => 'recently_added',
+            'status' => 'success',
+            'message' => ['success' => $notify],
+            'data' => [
+                'items' => $videos->items(), // Returns only the data for the current page
+                'portrait_path' => $imagePath,
+                'landscape_path' => $landscapePath,
+                'pagination' => [
+                    'total' => $videos->total(),
+                    'current_page' => $videos->currentPage(),
+                    'last_page' => $videos->lastPage(),
+                    'per_page' => $videos->perPage(),
+                ]
+            ],
+        ]);
+    }
+    
+
     public function recentlyAdded()
     {
         $notify[]      = 'Recently Added';
