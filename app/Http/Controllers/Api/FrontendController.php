@@ -491,6 +491,25 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function playlist(Request $request){
+        $allPlaylists = Playlist::whereHas('items', function ($query) {
+            $query->where(function ($q) {
+                $q->whereHas('video')->orWhereHas('audio');
+            });
+        })->limit(12)->get();
+        $notify[] = 'Play Lists';
+
+        return response()->json([
+            'remark'  => $remark,
+            'status'  => 'success',
+            'message' => ['success' => $notify],
+            'data'    => [
+                'playLists'         => $allPlaylists,
+               
+            ],
+        ]);
+    }
+
     public function playAudio(Request $request)
     {
         $validator = Validator::make($request->all(), [
