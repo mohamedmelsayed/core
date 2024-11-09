@@ -491,7 +491,7 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function playlist(Request $request){
+    public function playlists(Request $request){
         $allPlaylists = Playlist::whereHas('items', function ($query) {
             $query->where(function ($q) {
                 $q->whereHas('video')->orWhereHas('audio');
