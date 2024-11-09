@@ -492,32 +492,33 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function playlists(Request $request){
+    public function playlists(Request $request)
+    {
         $category_id = $request->query('category_id');
-
-        $allPlaylists = Playlist::whereHas('items', function ($query) {
+    
+        $allPlaylists = Playlist::whereHas('items', function ($query) use ($category_id) {
             $query->where(function ($q) {
                 $q->whereHas('video')->orWhereHas('audio');
             });
-
+    
             if ($category_id) {
                 $query->where('sub_category_id', $category_id);
             }
-
         })->limit(12)->get();
+    
         $notify[] = 'Play Lists';
-        $remark   = 'play_lists';
-
+        $remark = 'play_lists';
+    
         return response()->json([
-            'remark'  => $remark,
-            'status'  => 'success',
+            'remark' => $remark,
+            'status' => 'success',
             'message' => ['success' => $notify],
-            'data'    => [
-                'playLists'         => $allPlaylists,
-               
+            'data' => [
+                'playLists' => $allPlaylists,
             ],
         ]);
     }
+    
 
     public function playAudio(Request $request)
     {
