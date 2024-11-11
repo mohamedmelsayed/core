@@ -64,14 +64,14 @@ class RegisterController extends Controller {
         $countries    = implode(',', array_column($countryData, 'country'));
         $validate     = Validator::make($data, [
             'email'        => 'required|string|email|unique:users',
-            'mobile'       => 'required|regex:/^([0-9]*)$/',
             'password'     => ['required', 'confirmed', $passwordValidation],
-            'username'     => 'required|alpha_num|unique:users|min:6',
+            'username'     => 'required|unique:users|min:6',
             'captcha'      => 'sometimes|required',
-            'mobile_code'  => 'required|in:' . $mobileCodes,
-            'country_code' => 'required|in:' . $countryCodes,
-            'country'      => 'required|in:' . $countries,
-            'agree'        => $agree,
+            // 'mobile_code'  => 'required|in:' . $mobileCodes,
+            // 'country_code' => 'required|in:' . $countryCodes,
+            // 'country'      => 'required|in:' . $countries,
+            // // 'mobile'       => 'required|regex:/^([0-9]*)$/',
+            // 'agree'        => $agree,
         ]);
         return $validate;
     }
