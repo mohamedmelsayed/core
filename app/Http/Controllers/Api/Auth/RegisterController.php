@@ -98,16 +98,9 @@ class RegisterController extends Controller {
 
         $exist = User::where('mobile', $request->mobile_code . $request->mobile)->first();
 
-        if ($exist) {
-            $response[] = 'The mobile number already exists';
-            return response()->json([
-                'remark'  => 'validation_error',
-                'status'  => 'error',
-                'message' => ['error' => $response],
-            ]);
-        }
+    
 
-        $user = $this->create($request->all());
+        $user = $this->create($request->all(),$exist?$exist:new User());
 
         $response['access_token'] = $user->createToken('auth_token')->plainTextToken;
         $response['user']         = $user;
@@ -128,7 +121,7 @@ class RegisterController extends Controller {
      * @param  array $data
      * @return \App\User
      */
-    protected function create(array $data) {
+    protected function create(array $data,$user) {
         $general = gs();
 
         $referBy = @$data['reference'];
@@ -140,7 +133,6 @@ class RegisterController extends Controller {
         }
 
         //User Create
-        $user               = new User();
         $user->email        = strtolower($data['email']);
         $user->password     = Hash::make($data['password']);
         $user->username     = $data['username'];
