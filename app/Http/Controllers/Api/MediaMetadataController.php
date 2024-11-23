@@ -48,7 +48,7 @@ class MediaMetadataController extends Controller
             $waveform = [];
             if ($streams->audios()->count()) {
                 // Example for waveform generation (pseudo)
-                $waveform = $this->generateWaveform($filePath);
+                $waveform = $this->generateWaveform($filePath,$duration);
             }
 
             return response()->json([
@@ -76,19 +76,34 @@ class MediaMetadataController extends Controller
      * @param string $filePath
      * @return array
      */
-    private function generateWaveform(string $filePath): array
+    private function generateWaveform($filePath, $duration)
     {
-        $waveformData = [];
-
-        // Using FFmpeg to generate waveform points (example logic)
-        $ffmpeg = FFMpeg::create();
-        $audio = $ffmpeg->open($filePath);
-
-        $frameRate = 100; // Extract points at intervals
-        $audio->waveform($frameRate, function ($data) use (&$waveformData) {
-            $waveformData[] = $data; // Simplified example
-        });
-
-        return $waveformData;
+        // Set the number of points you want to return in the waveform (higher number = more detailed waveform)
+        $numPoints = 1000; // You can adjust this based on how detailed you want the waveform to be
+        $sampleRate = $duration / $numPoints;  // Sample rate for extracting points
+    
+        $waveform = [];
+        for ($i = 0; $i < $numPoints; $i++) {
+            $time = $i * $sampleRate;
+            $amplitude = $this->getAmplitudeAtTime($filePath, $time);
+            $waveform[] = $amplitude;
+        }
+    
+        return $waveform;
+    }
+    
+    // This function uses FFmpeg to extract the amplitude at a specific time in the audio file
+    private function getAmplitudeAtTime($filePath, $time)
+    {
+        // Use FFmpeg to get the raw audio data at the given time
+        $cmd = "ffmpeg -i $filePath -filter_complex 'sine=frequency=1000' -t 0.1 -ss $time -f wav -";
+        $output = shell_exec($cmd);
+    
+        // Process the output to get the amplitude (this step depends on your specific FFmpeg output)
+        // You can use tools like `sox` or `ffmpeg` with proper audio filters to extract the amplitude.
+        // For simplicity, here we're assuming an amplitude is being extracted from the raw audio stream.
+    
+        // Placeholder: simulate amplitude data, replace with your processing logic
+        return rand(0, 100); // This is a placeholder, replace with actual data extraction logic
     }
 }
