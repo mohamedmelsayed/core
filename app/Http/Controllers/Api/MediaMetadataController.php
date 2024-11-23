@@ -38,15 +38,7 @@ class MediaMetadataController extends Controller
             
         }
 
-        $meta=[
-            'duration' => $duration,
-            'codec' => $codec,
-            'bitrate' => $bitrate,
-            'size' => $size,
-            'waveform' => $waveform,
-        ];
-        $item->meta = json_encode($meta); // Store waveform data in a text column
-        $item->save();
+     
         // Verify if the file exists on the server
         if (!file_exists($filePath)) {
             return response()->json([
@@ -73,6 +65,15 @@ class MediaMetadataController extends Controller
                 // Example for waveform generation (pseudo)
                 $waveform = $this->generateWaveform($filePath,$duration);
             }
+            $meta=[
+                'duration' => $duration,
+                'codec' => $codec,
+                'bitrate' => $bitrate,
+                'size' => $size,
+                'waveform' => $waveform,
+            ];
+            $item->meta = json_encode($meta); // Store waveform data in a text column
+            $item->save();
 
             return response()->json([
                 'success' => true,
