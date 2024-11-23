@@ -19,11 +19,33 @@ class MediaMetadataController extends Controller
     public function getMediaMetadata(Request $request)
     {
         $request->validate([
-            'file_path' => 'required|string', // Path of the file on the server
+            'item_id' => 'required|string', // Path of the file on the server
         ]);
 
-        $filePath = $request->input('file_path');
+        $item=Item::where("id",$request->item_id)->first();
+        if($item->meta!=null){
+            return response()->json([
+                'success' => true,
+                'data' => json_decode($item->meta)
+            ]);
+        }
+        if($item->is_audio){
+            $filePath='assets/audio/'.$item->audio()->content;
+        }
+        else{
+            $filePath='assets/video/'.$item->video()->seven_twenty_video;
+            
+        }
 
+        $meta=[
+            'duration' => $duration,
+            'codec' => $codec,
+            'bitrate' => $bitrate,
+            'size' => $size,
+            'waveform' => $waveform,
+        ];
+        $item->meta = json_encode($meta); // Store waveform data in a text column
+        $item->save();
         // Verify if the file exists on the server
         if (!file_exists($filePath)) {
             return response()->json([
