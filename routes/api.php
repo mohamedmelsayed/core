@@ -194,7 +194,7 @@ Route::namespace('Api')->name('api.')->group(function () {
 
     });
 
-    Route::post('/media/metadata', [MediaMetadataController::class, 'getMediaMetadata']);
+    Route::get('/media/metadata', [MediaMetadataController::class, 'getMediaMetadata']);
 
 
 
