@@ -2,7 +2,6 @@
 
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\MediaMetadataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -194,7 +193,11 @@ Route::namespace('Api')->name('api.')->group(function () {
 
     });
 
-    Route::get('/media/metadata', [MediaMetadataController::class, 'getMediaMetadata']);
+    Route::controller('MediaMetadataController')->group(function () {
+        Route::get('/media/metadata', 'getMediaMetadata');
+
+    });
+
 
 
 
