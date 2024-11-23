@@ -626,8 +626,7 @@ class FrontendController extends Controller
 
     public function playlist( $id)
     {
-        $category_id = $request->query('category_id');
-        $type = $request->query('type');
+       
 
         $playlist=playlist::where("id",$id)->with('items')->first();
 
