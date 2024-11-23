@@ -187,6 +187,7 @@ Route::namespace('Api')->name('api.')->group(function () {
         Route::get('language/{code?}', 'language');
         Route::get('pop-up/ads', 'popUpAds');
         Route::get('playlists', 'playlists');
+        Route::get('playlist/{id}', 'playlist');
 
     });
 

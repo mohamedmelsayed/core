@@ -623,6 +623,32 @@ class FrontendController extends Controller
             ],
         ]);
     }
+
+    public function playlist( $id)
+    {
+        $category_id = $request->query('category_id');
+        $type = $request->query('type');
+
+        $playlist=playlist::where("id",$id)->with('items')->first();
+
+
+
+
+    
+       
+    
+        $notify[] = 'Play List details';
+        $remark = 'play_list details';
+    
+        return response()->json([
+            'remark' => $remark,
+            'status' => 'success',
+            'message' => ['success' => $notify],
+            'data' => [
+                'playList' => $playlist??[],
+            ],
+        ]);
+    }
     
 
     public function playAudio(Request $request)
