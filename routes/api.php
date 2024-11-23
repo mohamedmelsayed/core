@@ -2,6 +2,7 @@
 
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MediaMetadataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -189,7 +190,11 @@ Route::namespace('Api')->name('api.')->group(function () {
         Route::get('playlists', 'playlists');
         Route::get('playlist/{id}', 'playlist');
 
+
+
     });
+
+    Route::post('/media/metadata', [MediaMetadataController::class, 'getMediaMetadata']);
 
 
 

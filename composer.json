@@ -31,7 +31,8 @@
         "stripe/stripe-php": "^7.72",
         "textmagic/sdk": "dev-master",
         "twilio/sdk": "^6.23",
-        "vonage/client": "^2.4"
+        "vonage/client": "^2.4",
+        "php-ffmpeg/php-ffmpeg": "^1.1"
     },
     "require-dev": {
         "beyondcode/laravel-query-detector": "^1.5",
