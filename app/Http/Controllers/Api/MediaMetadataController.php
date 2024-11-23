@@ -31,10 +31,10 @@ class MediaMetadataController extends Controller
             ]);
         }
         if($item->is_audio){
-            $filePath='assets/audio/'.$item->audio->content;
+            $filePath='assets/audios/'.$item->audio->content;
         }
         else{
-            $filePath='assets/video/'.$item->video->seven_twenty_video;
+            $filePath='assets/videos/'.$item->video->seven_twenty_video;
             
         }
 
