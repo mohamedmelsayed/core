@@ -2,7 +2,7 @@
 
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MediaMetadataController;
+use App\Http\Controllers\Api\MediaMetadataController;
 
 /*
 |--------------------------------------------------------------------------
