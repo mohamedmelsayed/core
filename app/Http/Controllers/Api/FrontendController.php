@@ -627,13 +627,16 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function playlist( $id)
+    public function playlist( $id,Request $request)
     {
        
 
         $playlist=playlist::where("id",$id)->with('items')->first();
 
-
+        foreach ($playlist->item as $item) {
+            # code...
+            $item=$this->getTranslatedContent($item,$request);
+        }
 
 
     
