@@ -922,7 +922,7 @@ class FrontendController extends Controller
 
     private function getTranslatedContent($item,$request)
     {
-        $lang = $request->header('Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
+        $lang = $request->header('Accept-Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
 
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
