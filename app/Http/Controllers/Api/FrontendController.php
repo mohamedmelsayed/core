@@ -933,7 +933,7 @@ class FrontendController extends Controller
             $item->tags= $item->meta_keywords ?? [];
             $item->description = strLimit(strip_tags($item->description), 150);
         }
-    
+        $item->meta=$item->meta??json_decode($item->meta);
         return $item;
     }
 }
