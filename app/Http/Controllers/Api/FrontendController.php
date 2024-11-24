@@ -6,6 +6,7 @@ use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Advertise;
 use App\Models\Category;
+use App\Models\ContentTranslation;
 use App\Models\Episode;
 use App\Models\Frontend;
 use App\Models\History;
@@ -391,6 +392,8 @@ class FrontendController extends Controller
       
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+        $this->getTranslatedContent($item,$request);
+
 
         if (!$watchEligable[0]) {
             return response()->json([
@@ -451,7 +454,7 @@ class FrontendController extends Controller
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
      
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-
+        $this->getTranslatedContent($item,$request);
         if (!$watchEligable[0]) {
             return response()->json([
                 'remark'  => 'unauthorized_' . $watchEligable[1],
@@ -915,5 +918,22 @@ class FrontendController extends Controller
                 'imagePath' => $imagePath,
             ],
         ]);
+    }
+
+    private function getTranslatedContent($item,$request)
+    {
+        $lang = $request->header('Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
+
+        $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
+        if ($translate != null) {
+            $item->tags= $translate->translated_tags ?? $item->tags;
+            $item->title = $translate->translated_title;
+            $item->description = strLimit(strip_tags($translate->translated_description), 150);
+        } else {
+            $item->tags= $item->meta_keywords ?? [];
+            $item->description = strLimit(strip_tags($item->description), 150);
+        }
+    
+        return $item;
     }
 }
