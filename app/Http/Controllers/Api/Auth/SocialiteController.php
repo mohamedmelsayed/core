@@ -17,7 +17,7 @@ class SocialiteController extends Controller {
         $userData = User::where('username', $request->id)->first();
         if (!$userData) {
             $emailExists = User::where('email', @$request->email)->exists();
-            $oldUserData = User::where('email', @$request->email)->exists();
+            $oldUserData = User::where('email', @$request->email)->first();
              $tokenResult = $oldUserData->createToken('auth_token')->plainTextToken;
 
             if ($emailExists) {
