@@ -20,7 +20,7 @@ class SocialiteController extends Controller {
              $tokenResult = $userData->createToken('auth_token')->plainTextToken;
 
             if ($emailExists) {
-                $response[] = 'Email already exists';
+                $response[] = 'login_success';
                 return response()->json([
                     'remark'  => 'login_success',
                     'status'  => 'success',
