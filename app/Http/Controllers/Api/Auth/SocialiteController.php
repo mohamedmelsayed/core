@@ -17,12 +17,20 @@ class SocialiteController extends Controller {
         $userData = User::where('username', $request->id)->first();
         if (!$userData) {
             $emailExists = User::where('email', @$request->email)->exists();
+             $tokenResult = $userData->createToken('auth_token')->plainTextToken;
+
             if ($emailExists) {
                 $notify[] = 'Email already exists';
                 return response()->json([
-                    'remark'  => 'already_exists',
-                    'status'  => 'error',
-                    'message' => ['error' => $notify],
+                    'remark'  => 'login_success',
+                    'status'  => 'success',
+                    'message' => ['success' => $response],
+                    'data'    => [
+                        'user'         => $userData,
+                        'access_token' => $tokenResult,
+                        'message' => $notify,
+                        'token_type'   => 'Bearer',
+                    ],
                 ]);
             }
             $userData = $this->createUser($request);
