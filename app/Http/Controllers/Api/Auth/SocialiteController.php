@@ -17,7 +17,8 @@ class SocialiteController extends Controller {
         $userData = User::where('username', $request->id)->first();
         if (!$userData) {
             $emailExists = User::where('email', @$request->email)->exists();
-             $tokenResult = $userData->createToken('auth_token')->plainTextToken;
+            $oldUserData = User::where('email', @$request->email)->exists();
+             $tokenResult = $oldUserData->createToken('auth_token')->plainTextToken;
 
             if ($emailExists) {
                 $response[] = 'login_success';
@@ -26,7 +27,7 @@ class SocialiteController extends Controller {
                     'status'  => 'success',
                     'message' => ['success' => $response],
                     'data'    => [
-                        'user'         => $userData,
+                        'user'         => $oldUserData,
                         'access_token' => $tokenResult,
                         'token_type'   => 'Bearer',
                     ],
