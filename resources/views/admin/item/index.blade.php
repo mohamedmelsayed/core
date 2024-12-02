@@ -114,6 +114,13 @@
                                                                     @lang('Upload Video')
                                                                 </a>
                                                             @endif
+                                                            @if ($item->is_stream)
+                                                                <a class="dropdown-item threshold"
+                                                                    href="{{ route('admin.item.setStream', $item->id) }}">
+                                                                    <i class="las la-cloud-upload-alt"></i>
+                                                                    @lang('Configure Stream')
+                                                                </a>
+                                                            @endif
                                                         @endif
                                                     @endif
                                                     <a class="dropdown-item threshold"
