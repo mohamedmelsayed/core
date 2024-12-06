@@ -677,71 +677,91 @@ class SiteController extends Controller
     {
         // Find the main category
         $category = Category::findOrFail($id);
-
+    
         // Get the subcategories that belong to this main category
-
         $subcategories = SubCategory::where('category_id', $id)->pluck('id')->toArray();
-
+    
         // Get playlists that belong to the subcategories
         $playlists = Playlist::whereIn('sub_category_id', $subcategories)->orderBy('id', 'desc')->get();
-
-
+    
         // Check the category type (video/audio)
         if ($category->type === "vid") {
-
-            // Get items that have video in the main category
-            $items = Item::hasVideo()->with('stream')->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
-        }
-        if ($category->type === "aud") {
+            // Get items that have video in the main category with eager loading for stream
+            $items = Item::hasVideo()
+                ->where('category_id', $id)
+                ->when($category->type === 'vid', function ($query) {
+                    $query->with('stream');
+                })
+                ->orderBy('id', 'desc')
+                ->limit(12)
+                ->get();
+        } elseif ($category->type === "aud") {
             // Get audio items from the main category
-            $items = Item::hasAudio()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+            $items = Item::hasAudio()
+                ->where('category_id', $id)
+                ->orderBy('id', 'desc')
+                ->limit(12)
+                ->get();
         }
-
+    
         // Check if any of the items has a live stream
         $hasStream = $items->contains(function ($value) {
             return $value->hasStream();
         });
-
+    
         // Set the page title dynamically based on the locale
         $pageTitle = app()->getLocale() == 'ar' ? $category->name : $category->name_en;
+    
         $allPlaylists = Playlist::whereHas('items', function ($query) {
             $query->where(function ($q) {
                 $q->whereHas('video')->orWhereHas('audio');
             });
         })->limit(12)->get();
-
+    
         // Return the view with the collected data
         return view($this->activeTemplate . 'items', compact('pageTitle', 'items', 'allPlaylists', 'playlists', 'category', 'hasStream'));
     }
-
+    
     public function subCategory($id)
     {
         $subcategory = SubCategory::findOrFail($id);
-
+    
         if ($subcategory->type === "vid") {
-            $items = Item::hasVideo()->with('stream')>where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+            // Get video items with eager loading for stream
+            $items = Item::hasVideo()
+                ->where('sub_category_id', $id)
+                ->when($subcategory->type === 'vid', function ($query) {
+                    $query->with('stream');
+                })
+                ->orderBy('id', 'desc')
+                ->limit(12)
+                ->get();
+        } elseif ($subcategory->type === "aud") {
+            // Get audio items
+            $items = Item::hasAudio()
+                ->where('sub_category_id', $id)
+                ->orderBy('id', 'desc')
+                ->limit(12)
+                ->get();
         }
-        if ($subcategory->type === "aud") {
-            $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
-        }
+    
         $playlists = Playlist::where('sub_category_id', $id)->orderBy('id', 'desc')->get();
-
-        $hasStream = false;
-        foreach ($items as  $value) {
-            if ($value->hasStream()) {
-                $hasStream = true;
-                break;
-            }
-        }
+    
+        $hasStream = $items->contains(function ($value) {
+            return $value->hasStream();
+        });
+    
         $pageTitle = app()->getLocale() == 'ar' ? $subcategory->name : $subcategory->name_en;
+    
         $allPlaylists = Playlist::whereHas('items', function ($query) {
             $query->where(function ($q) {
                 $q->whereHas('video')->orWhereHas('audio');
             });
         })->limit(12)->get();
-
+    
         return view($this->activeTemplate . 'items', compact('pageTitle', 'allPlaylists', 'items', 'subcategory', 'hasStream', 'playlists'));
     }
+    
 
     public function loadMore(Request $request)
     {
