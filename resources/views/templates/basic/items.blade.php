@@ -23,7 +23,7 @@
                             @endif
                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                                 <div class="movie-item">
-                                    <div class="movie-thumb" data-start-at="{{ $item->stream-()>start_at }}">
+                                    <div class="movie-thumb" data-start-at="{{ $item->stream->()start_at }}">
                                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
                                             alt="movie">
 
