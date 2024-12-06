@@ -690,7 +690,7 @@ class SiteController extends Controller
         if ($category->type === "vid") {
 
             // Get items that have video in the main category
-            $items = Item::hasVideo()->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+            $items = Item::hasVideo()->with('stream')->where('category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
         if ($category->type === "aud") {
             // Get audio items from the main category
@@ -719,7 +719,7 @@ class SiteController extends Controller
         $subcategory = SubCategory::findOrFail($id);
 
         if ($subcategory->type === "vid") {
-            $items = Item::hasVideo()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
+            $items = Item::hasVideo()-->with('stream')>where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
         }
         if ($subcategory->type === "aud") {
             $items = Item::hasAudio()->where('sub_category_id', $id)->orderBy('id', 'desc')->limit(12)->get();
