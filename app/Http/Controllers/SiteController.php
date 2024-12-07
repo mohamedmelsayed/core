@@ -706,7 +706,7 @@ class SiteController extends Controller
         
     
         // Check if any of the items has a live stream
-        $hasStream =false;
+        $hasStream =true;
         foreach ($items as $item) {
             # code...
             if($item->is_stream){
