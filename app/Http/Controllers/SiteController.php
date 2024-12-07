@@ -687,7 +687,7 @@ class SiteController extends Controller
         // Check the category type (video/audio)
         if ($category->type === "vid") {
             // Get items that have video in the main category with conditional eager loading for stream
-            $items = Item::hasVideoOrStream()
+            $items = Item::hasVideoOrStream()->with('stream')
                 ->where('category_id', $id)
                
                 ->orderBy('id', 'desc')
@@ -732,7 +732,8 @@ class SiteController extends Controller
     
         if ($subcategory->type === "vid") {
             // Get video items with eager loading for stream
-            $items = Item::hasVideoOrStream()
+            $items = Item::hasVideoOrStream()->with('stream')
+
                 ->where('sub_category_id', $id)
                
                 ->orderBy('id', 'desc')
