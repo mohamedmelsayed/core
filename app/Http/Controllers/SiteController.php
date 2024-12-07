@@ -11,8 +11,6 @@ use App\Models\DeviceToken;
 use App\Models\Episode;
 use App\Models\Frontend;
 use App\Models\History;
-use Illuminate\Support\Facades\DB;
-
 use App\Models\Item;
 use App\Models\Language;
 use App\Models\LiveTelevision;
@@ -688,19 +686,13 @@ class SiteController extends Controller
     
         // Check the category type (video/audio)
         if ($category->type === "vid") {
-            $items = DB::select("
-            SELECT items.* 
-            FROM items 
-            LEFT JOIN videos ON videos.item_id = items.id
-            LEFT JOIN streams ON streams.item_id = items.id
-            WHERE items.category_id = :category_id 
-              AND ((items.is_stream = 0 AND videos.id IS NOT NULL) 
-                   OR (items.is_stream = 1 AND streams.id IS NOT NULL))
-            ORDER BY items.id DESC 
-            LIMIT 12
-        ", ['category_id' => $id]);
-        
-        
+            // Get items that have video in the main category with conditional eager loading for stream
+            $items = Item::hasHasVideoOrStream()
+                ->where('category_id', $id)
+               
+                ->orderBy('id', 'desc')
+                ->limit(12)
+                ->get();
         } elseif ($category->type === "aud") {
             // Get audio items from the main category
             $items = Item::hasAudio()
@@ -740,11 +732,9 @@ class SiteController extends Controller
     
         if ($subcategory->type === "vid") {
             // Get video items with eager loading for stream
-            $items = Item::hasVideo()
+            $items = Item::hasHasVideoOrStream()
                 ->where('sub_category_id', $id)
-                ->when(true, function ($query) {
-                    $query->where('is_stream', true)->with('stream');
-                })
+               
                 ->orderBy('id', 'desc')
                 ->limit(12)
                 ->get();

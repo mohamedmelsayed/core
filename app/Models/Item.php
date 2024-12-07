@@ -79,6 +79,14 @@ class Item extends Model
         });
     }
 
+    public function scopeHasVideoOrStream($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereHas('video')
+                ->orWhereHas('stream');
+        });
+    }
+
 
     public function getVersionNameAttribute()
     {
