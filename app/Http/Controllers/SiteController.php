@@ -686,11 +686,14 @@ class SiteController extends Controller
     
         // Check the category type (video/audio)
         if ($category->type === "vid") {
-            // Get items that have video in the main category with eager loading for stream
+            // Get items that have video in the main category with conditional eager loading for stream
             $items = Item::hasVideo()
                 ->where('category_id', $id)
-                ->when($category->type === 'vid', function ($query) {
-                    $query->with('stream');
+                ->when(true, function ($query) {
+                    // Eager load 'stream' only for items with is_stream == true
+                    $query->with(['stream' => function ($q) {
+                        $q->where('is_stream', true);
+                    }]);
                 })
                 ->orderBy('id', 'desc')
                 ->limit(12)
@@ -703,6 +706,7 @@ class SiteController extends Controller
                 ->limit(12)
                 ->get();
         }
+        
     
         // Check if any of the items has a live stream
         $hasStream = $items->contains(function ($value) {
@@ -730,8 +734,11 @@ class SiteController extends Controller
             // Get video items with eager loading for stream
             $items = Item::hasVideo()
                 ->where('sub_category_id', $id)
-                ->when($subcategory->type === 'vid', function ($query) {
-                    $query->with('stream');
+                ->when(true, function ($query) {
+                    // Eager load 'stream' only for items with is_stream == true
+                    $query->with(['stream' => function ($q) {
+                        $q->where('is_stream', true);
+                    }]);
                 })
                 ->orderBy('id', 'desc')
                 ->limit(12)

@@ -14,7 +14,7 @@
                 </div>
                 <div class="row justify-content-center mb-30-none ajaxLoad">
                     @forelse($items as $item)
-                        @if ($item->stream()!=null)
+                        @if ($item->stream!=null)
                             @if ($loop->last)
                                 <span class="data_id d-none" data-id="{{ $item->id }}"></span>
                                 <span class="category_id d-none" data-category_id="{{ @$category->id }}"></span>
@@ -23,7 +23,7 @@
                             @endif
                             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
                                 <div class="movie-item">
-                                    <div class="movie-thumb" data-start-at="{{ $item->stream()->start_at }}">
+                                    <div class="movie-thumb" data-start-at="{{ $item->stream->start_at }}">
                                         <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
                                             alt="movie">
 
