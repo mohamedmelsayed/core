@@ -93,6 +93,23 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function streamlist()
+    {
+        $notify[]    = 'Live Television';
+        $streamlist = Item::hasStream()->where('is_stream', 1)->apiQuery();
+        $imagePath   = getFilePath('television');
+
+        return response()->json([
+            'remark'  => 'live_television',
+            'status'  => 'success',
+            'message' => ['success' => $notify],
+            'data'    => [
+                'streamlist' => $streamlist,
+                'image_path'  => $imagePath,
+            ],
+        ]);
+    }
+
     public function featured()
     {
         $notify[]     = 'Featured';
@@ -371,6 +388,68 @@ class FrontendController extends Controller
     public function watchVideo(Request $request)
     {
         $item = Item::hasVideo()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
+
+        if (!$item) {
+            return response()->json([
+                'remark'  => 'not_found',
+                'status'  => 'error',
+                'message' => ['error' => 'Item not found'],
+            ]);
+        }
+
+        $item->increment('view');
+
+        $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
+
+        $imagePath     = getFilePath('item_portrait');
+        $landscapePath = getFilePath('item_landscape');
+        $episodePath   = getFilePath('episode');
+
+        $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
+      
+
+        $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+        $this->getTranslatedContent($item,$request);
+
+
+        if (!$watchEligable[0]) {
+            return response()->json([
+                'remark'  => 'unauthorized_' . $watchEligable[1],
+                'status'  => 'error',
+                'message' => ['error' => 'Unauthorized user'],
+                'data'    => [
+                    'item'           => $item,
+                    'portrait_path'  => $imagePath,
+                    'landscape_path' => $landscapePath,
+                    'related_items'  => $relatedItems,
+                ],
+            ]);
+        }
+
+        $this->storeHistory($item->id, 0);
+        $this->storeVideoReport($item->id, 0);
+
+        $notify[] = 'Item Video';
+
+        return response()->json([
+            'remark'  => 'item_video',
+            'status'  => 'success',
+            'message' => ['success' => $notify],
+            'data'    => [
+                'item'           => $item,
+                'related_items'  => $relatedItems,
+                'portrait_path'  => $imagePath,
+                'landscape_path' => $landscapePath,
+                'episode_path'   => $episodePath,
+                'watchEligable'  => $watchEligable[0],
+                'type'           => $watchEligable[1],
+            ],
+        ]);
+    }
+
+    public function watchStream(Request $request)
+    {
+        $item = Item::with('stream')->hasStream()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
 
         if (!$item) {
             return response()->json([
