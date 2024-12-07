@@ -706,9 +706,14 @@ class SiteController extends Controller
         
     
         // Check if any of the items has a live stream
-        $hasStream = $items->contains(function ($value) {
-            return $value->hasStream();
-        });
+        $hasStream =false;
+        foreach ($items as $item) {
+            # code...
+            if($item->is_stream){
+                $hasStream=true;
+                break;
+            }
+        }
     
         // Set the page title dynamically based on the locale
         $pageTitle = app()->getLocale() == 'ar' ? $category->name : $category->name_en;
@@ -748,9 +753,17 @@ class SiteController extends Controller
     
         $playlists = Playlist::where('sub_category_id', $id)->orderBy('id', 'desc')->get();
     
-        $hasStream = $items->contains(function ($value) {
-            return $value->hasStream();
-        });
+
+        $hasStream =false;
+
+        foreach ($items as $item) {
+            # code...
+            if($item->is_stream){
+                $hasStream=true;
+                break;
+            }
+        }
+    
     
         $pageTitle = app()->getLocale() == 'ar' ? $subcategory->name : $subcategory->name_en;
     
