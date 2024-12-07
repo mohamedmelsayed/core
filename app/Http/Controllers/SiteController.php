@@ -686,15 +686,20 @@ class SiteController extends Controller
     
         // Check the category type (video/audio)
         if ($category->type === "vid") {
-            // Get items that have video in the main category with conditional eager loading for stream
-            $items = Item::hasVideo()
-                ->where('category_id', $id)
-                ->when(true, function ($query) {
-                    $query->where('is_stream', true)->with('stream');
-                })
-                ->orderBy('id', 'desc')
-                ->limit(12)
-                ->get();
+            $items = Item::query()
+            ->where('category_id', $id)
+            ->when($category->type === "vid", function ($query) {
+                // Items that are videos (not streams)
+                $query->where('is_stream', false)->hasVideo();
+            })
+            ->when($category->type === "vid" && request()->has('is_stream'), function ($query) {
+                // Items that are streams
+                $query->where('is_stream', true)->with('stream');
+            })
+            ->orderBy('id', 'desc')
+            ->limit(12)
+            ->get();
+        
         } elseif ($category->type === "aud") {
             // Get audio items from the main category
             $items = Item::hasAudio()
@@ -706,7 +711,7 @@ class SiteController extends Controller
         
     
         // Check if any of the items has a live stream
-        $hasStream =true;
+        $hasStream =false;
         foreach ($items as $item) {
             # code...
             if($item->is_stream){
