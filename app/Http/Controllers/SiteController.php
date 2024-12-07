@@ -692,7 +692,7 @@ class SiteController extends Controller
                 // Items that are videos (not streams)
                 $query->where('is_stream', false)->hasVideo();
             })
-            ->when($category->type === "vid" && request()->has('is_stream'), function ($query) {
+            ->when($category->type === "vid", function ($query) {
                 // Items that are streams
                 $query->where('is_stream', true)->with('stream');
             })
