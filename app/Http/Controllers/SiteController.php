@@ -690,10 +690,7 @@ class SiteController extends Controller
             $items = Item::hasVideo()
                 ->where('category_id', $id)
                 ->when(true, function ($query) {
-                    // Eager load 'stream' only for items with is_stream == true
-                    $query->with(['stream' => function ($q) {
-                        $q->where('is_stream', true);
-                    }]);
+                    $query->where('is_stream', true)->with('stream');
                 })
                 ->orderBy('id', 'desc')
                 ->limit(12)
@@ -735,10 +732,7 @@ class SiteController extends Controller
             $items = Item::hasVideo()
                 ->where('sub_category_id', $id)
                 ->when(true, function ($query) {
-                    // Eager load 'stream' only for items with is_stream == true
-                    $query->with(['stream' => function ($q) {
-                        $q->where('is_stream', true);
-                    }]);
+                    $query->where('is_stream', true)->with('stream');
                 })
                 ->orderBy('id', 'desc')
                 ->limit(12)
