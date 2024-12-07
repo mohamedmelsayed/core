@@ -11,6 +11,8 @@ use App\Models\DeviceToken;
 use App\Models\Episode;
 use App\Models\Frontend;
 use App\Models\History;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Item;
 use App\Models\Language;
 use App\Models\LiveTelevision;
