@@ -709,7 +709,7 @@ class SiteController extends Controller
         $hasStream =false;
         foreach ($items as $item) {
             # code...
-            if($item->is_stream,true){
+            if($item->is_stream){
                 $hasStream=true;
                 break;
             }
@@ -758,7 +758,7 @@ class SiteController extends Controller
 
         foreach ($items as $item) {
             # code...
-            if($item->is_stream,true){
+            if($item->is_stream){
                 $hasStream=true;
                 break;
             }
