@@ -24,9 +24,6 @@
                                     </div>
                                 @else
 
-                                <div class="main-video position-relative" data-start-at="{{ $item->stream->start_at ?? '' }}"
-    style="background-image: url('{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}'); background-size: cover; background-position: center;">
-    <div id="video-content">
         @if ($item->stream && $item->stream->embed_code)
             {!! $item->stream->embed_code !!}
         @else
@@ -37,8 +34,6 @@
                 </div>
             </div>
         @endif
-    </div>
-</div>
 
                                     <!-- Countdown Timer (hidden if the stream already started) -->
                                     @include($activeTemplate .'partials.countdown-timer', ['item' => $item])
