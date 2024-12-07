@@ -13,58 +13,47 @@
                     </div>
                 </div>
                 <div class="row justify-content-center mb-30-none ajaxLoad">
-                    @forelse($items as $item)
-                        @if ($item->stream!=null)
-                            @if ($loop->last)
-                                <span class="data_id d-none" data-id="{{ $item->id }}"></span>
-                                <span class="category_id d-none" data-category_id="{{ @$category->id }}"></span>
-                                <span class="subcategory_id d-none" data-subcategory_id="{{ @$subcategory->id }}"></span>
-                                <span class="search d-none" data-search="{{ @$search }}"></span>
-                            @endif
-                            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
-                                <div class="movie-item">
-                                    <div class="movie-thumb" data-start-at="{{ $item->stream->start_at }}">
-                                        <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}"
-                                            alt="movie">
+                @forelse($items as $item)
+    @if ($item->stream)
+        @if ($loop->last)
+            <span class="data_id d-none" data-id="{{ $item->id }}"></span>
+            <span class="category_id d-none" data-category_id="{{ $category->id ?? '' }}"></span>
+            <span class="subcategory_id d-none" data-subcategory_id="{{ $subcategory->id ?? '' }}"></span>
+            <span class="search d-none" data-search="{{ $search ?? '' }}"></span>
+        @endif
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6 mb-30">
+            <div class="movie-item">
+                <div class="movie-thumb" data-start-at="{{ $item->stream->start_at }}">
+                    <img src="{{ getImage(getFilePath('item_portrait') . '/' . $item->image->portrait) }}" alt="movie">
 
-                                        <!-- Display "Paid" if the item is not free with a yellow badge -->
-                                        @if ($item->version != 0)
-                                            <span class="movie-badge"
-                                                style="background-color: yellow; color: black;">@lang('Paid')</span>
-                                        @else
-                                            <span class="movie-badge">@lang('Free')</span>
-                                        @endif
+                    <!-- Movie Badge -->
+                    <span class="movie-badge {{ $item->version != 0 ? 'badge-paid' : 'badge-free' }}">
+                        {{ $item->version != 0 ? __('Paid') : __('Free') }}
+                    </span>
 
-                                        <!-- Media type icon -->
-                                        <span class="media-type"
-                                            style="position: absolute; bottom: 10px; right: 10px; color: #fff; padding: 5px 10px; border-radius: 5px;">
-                                            @if ($item->is_audio)
-                                                <i class="fas fa-headphones" style="scale: 150%"></i> <!-- Audio Icon -->
-                                            @else
-                                                <i class="fas fa-video" style="scale: 150%"></i> <!-- Video Icon -->
-                                            @endif
-                                        </span>
+                    <!-- Media Type Icon -->
+                    <span class="media-type media-icon">
+                        <i class="fas {{ $item->is_audio ? 'fa-headphones' : 'fa-video' }}"></i>
+                    </span>
 
-                                        <!-- Countdown timer tag -->
-                                        @include($activeTemplate . 'partials.countdown-timer', [
-                                            'item' => $item,
-                                        ])
+                    <!-- Countdown Timer -->
+                    @include($activeTemplate . 'partials.countdown-timer', ['item' => $item])
 
+                    <div class="movie-thumb-overlay">
+                        <a class="video-icon" href="{{ route('watch.live', $item->slug) }}">
+                            <i class="fas fa-play"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+@empty
+    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
+        <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="No Results">
+    </div>
+@endforelse
 
-                                        <div class="movie-thumb-overlay">
-                                            <a class="video-icon" href="{{ route('watch.live', $item->slug) }}">
-                                                <i class="fas fa-play"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @empty
-                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-30">
-                            <img src="{{ asset($activeTemplateTrue . 'images/no-results.png') }}" alt="">
-                        </div>
-                    @endforelse
                 </div>
 
             </div>
