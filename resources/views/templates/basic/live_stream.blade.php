@@ -27,9 +27,9 @@
                                 @else
                                     <!-- Embedded Stream -->
                                     @if ($item->stream && $item->stream->embed_code)
-                                        <div class="embed-stream">
+                                       
                                             {!! $item->stream->embed_code !!}
-                                        </div>
+                                        
                                     @else
                                         <div class="main-video-lock">
                                             <div class="main-video-lock-content">
