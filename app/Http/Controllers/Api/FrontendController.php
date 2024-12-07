@@ -449,7 +449,7 @@ class FrontendController extends Controller
 
     public function watchStream(Request $request)
     {
-        $item = Item::with('stream')->hasStream()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
+        $item = Item::with('stream')->getStream()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
 
         if (!$item) {
             return response()->json([
