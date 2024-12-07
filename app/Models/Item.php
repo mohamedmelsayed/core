@@ -116,6 +116,10 @@ class Item extends Model
     {
         return $query->where('status', Status::ENABLE)->whereHas('stream')->exists();
     }
+    public function scopeGetStream($query)
+    {
+        return $query->where('status', Status::ENABLE)->whereHas('stream');
+    }
 
     public function scopeHasAudio($query)
     {

@@ -96,7 +96,7 @@ class FrontendController extends Controller
     public function streamlist()
     {
         $notify[]    = 'Live Television';
-        $streamlist = Item::hasStream()->apiQuery();
+        $streamlist = Item::getStream()->apiQuery();
         $imagePath   = getFilePath('television');
 
         return response()->json([
