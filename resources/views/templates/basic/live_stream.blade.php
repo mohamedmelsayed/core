@@ -23,6 +23,23 @@
                                         </div>
                                     </div>
                                 @else
+
+                                <div class="main-video position-relative" data-start-at="{{ $item->stream->start_at ?? '' }}"
+    style="background-image: url('{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}'); background-size: cover; background-position: center;">
+    <div id="video-content">
+        @if ($item->stream && $item->stream->embed_code)
+            {!! $item->stream->embed_code !!}
+        @else
+            <div class="main-video-lock">
+                <div class="main-video-lock-content">
+                    <span class="icon"><i class="las la-lock"></i></span>
+                    <p class="title">@lang('Live stream not available')</p>
+                </div>
+            </div>
+        @endif
+    </div>
+</div>
+
                                     <!-- Countdown Timer (hidden if the stream already started) -->
                                     @include($activeTemplate .'partials.countdown-timer', ['item' => $item])
 
