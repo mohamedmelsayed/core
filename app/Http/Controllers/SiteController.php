@@ -688,11 +688,11 @@ class SiteController extends Controller
         if ($category->type === "vid") {
             $items = Item::query()
             ->where('category_id', $id)
-            ->when($category->type === "vid", function ($query) {
+            ->when(true, function ($query) {
                 // Items that are videos (not streams)
                 $query->where('is_stream', false)->hasVideo();
             })
-            ->when($category->type === "vid", function ($query) {
+            ->when(true, function ($query) {
                 // Items that are streams
                 $query->where('is_stream', true)->with('stream');
             })
