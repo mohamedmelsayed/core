@@ -686,19 +686,18 @@ class SiteController extends Controller
     
         // Check the category type (video/audio)
         if ($category->type === "vid") {
-            $items = Item::query()
-            ->where('category_id', $id)
-            ->when(true, function ($query) {
-                // Items that are videos (not streams)
-                $query->where('is_stream', false)->hasVideo();
-            })
-            ->when(true, function ($query) {
-                // Items that are streams
-                $query->where('is_stream', true)->with('stream');
-            })
-            ->orderBy('id', 'desc')
-            ->limit(12)
-            ->get();
+            $items = DB::select("
+            SELECT items.* 
+            FROM items 
+            LEFT JOIN videos ON videos.item_id = items.id
+            LEFT JOIN streams ON streams.item_id = items.id
+            WHERE items.category_id = :category_id 
+              AND ((items.is_stream = 0 AND videos.id IS NOT NULL) 
+                   OR (items.is_stream = 1 AND streams.id IS NOT NULL))
+            ORDER BY items.id DESC 
+            LIMIT 12
+        ", ['category_id' => $id]);
+        
         
         } elseif ($category->type === "aud") {
             // Get audio items from the main category
