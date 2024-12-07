@@ -216,7 +216,7 @@
     </section>
 @endsection
 
-@push('style')
+<!-- @push('style')
     <style>
         .main-video {
             position: relative;
@@ -356,4 +356,4 @@
         }
     </style>
 @endpush
-
+ -->
