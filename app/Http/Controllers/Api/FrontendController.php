@@ -1066,4 +1066,54 @@ class FrontendController extends Controller
             return $items;
         }
     }
+
+    private function getMatchingItems($userKeywords, $type, $itemType, $itemId)
+    {
+        // Convert user keywords into an array, trim whitespace, and remove empty elements
+        $keywordsArray = array_filter(array_map('trim', explode(',', $userKeywords)));
+
+        // Return early if no keywords are provided
+        if (empty($keywordsArray)) {
+            return collect(); // Return an empty collection if no keywords are provided
+        }
+
+        // Initialize the query based on item type
+        $query = $type === "video" ? Item::hasVideo()->where('is_audio', 0) : Item::hasAudio()->where('is_audio', 1);
+
+        // Add a condition to match items with any of the keywords
+        $query->where(function ($subQuery) use ($keywordsArray) {
+            foreach ($keywordsArray as $keyword) {
+                // Check each keyword using FIND_IN_SET
+                $subQuery->orWhereRaw("FIND_IN_SET(?, tags) > 0", [$keyword]);
+            }
+        });
+
+        // Apply the orderBy before calling get()
+        $items = $query->where('item_type', $itemType)
+            ->where('id', '!=', $itemId)->get();
+
+        // Filter items to return only those that have at least 2 matching keywords
+        $filteredItems = $items->filter(function ($item) use ($keywordsArray) {
+            $tagArray = explode(',', $item->tags);
+            $matchCount = 0;
+
+            // Count how many keywords match the tags
+            foreach ($keywordsArray as $keyword) {
+                if (in_array($keyword, $tagArray)) {
+                    $matchCount++;
+                }
+
+                // If two or more keywords match, return true
+                if ($matchCount >= 2) {
+                    return true;
+                }
+            }
+
+            // If less than two keywords match, return false
+            return false;
+        });
+
+        return $filteredItems;
+    }
+
 }
