@@ -313,7 +313,7 @@ class FrontendController extends Controller
     public function categories()
     {
         $notify[]   = 'All Categories';
-        $categories = Category::where('status', Status::ENABLE)->apiQuery();
+        $categories = Category::with('subcategories')->where('status', Status::ENABLE)->apiQuery();
         return response()->json([
             'remark'  => 'all-categories',
             'status'  => 'success',
