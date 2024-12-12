@@ -399,7 +399,9 @@ class FrontendController extends Controller
 
         $item->increment('view');
 
-        $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
+        // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+        $relatedVideos= $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
 
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
@@ -421,7 +423,8 @@ class FrontendController extends Controller
                     'item'           => $item,
                     'portrait_path'  => $imagePath,
                     'landscape_path' => $landscapePath,
-                    'related_items'  => $relatedItems,
+                    'related_audios'  => $relatedAudios,
+                    'related_videos'  => $relatedVideos,
                 ],
             ]);
         }
@@ -437,7 +440,8 @@ class FrontendController extends Controller
             'message' => ['success' => $notify],
             'data'    => [
                 'item'           => $item,
-                'related_items'  => $relatedItems,
+                'related_audios'  => $relatedAudios,
+                    'related_videos'  => $relatedVideos,
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
                 'episode_path'   => $episodePath,
@@ -461,8 +465,9 @@ class FrontendController extends Controller
 
         $item->increment('view');
 
-        $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
-
+        // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+        $relatedVideos= $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
         $episodePath   = getFilePath('episode');
@@ -483,7 +488,8 @@ class FrontendController extends Controller
                     'item'           => $item,
                     'portrait_path'  => $imagePath,
                     'landscape_path' => $landscapePath,
-                    'related_items'  => $relatedItems,
+                    'related_audios'  => $relatedAudios,
+                    'related_videos'  => $relatedVideos,
                 ],
             ]);
         }
@@ -499,7 +505,8 @@ class FrontendController extends Controller
             'message' => ['success' => $notify],
             'data'    => [
                 'item'           => $item,
-                'related_items'  => $relatedItems,
+                'related_audios'  => $relatedAudios,
+                'related_videos'  => $relatedVideos,
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
                 'episode_path'   => $episodePath,
@@ -524,8 +531,9 @@ class FrontendController extends Controller
 
         $item->increment('view');
 
-        $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
-
+        // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
+        $relatedVideos= $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
         $episodePath   = getFilePath('episode');
@@ -543,7 +551,8 @@ class FrontendController extends Controller
                     'item'           => $item,
                     'portrait_path'  => $imagePath,
                     'landscape_path' => $landscapePath,
-                    'related_items'  => $relatedItems,
+                    'related_audios'  => $relatedAudios,
+                    'related_videos'  => $relatedVideos,
                 ],
             ]);
         }
@@ -559,7 +568,8 @@ class FrontendController extends Controller
             'message' => ['success' => $notify],
             'data'    => [
                 'item'           => $item,
-                'related_items'  => $relatedItems,
+                'related_audios'  => $relatedAudios,
+                'related_videos'  => $relatedVideos,
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
                 'episode_path'   => $episodePath,
@@ -1017,5 +1027,43 @@ class FrontendController extends Controller
         }
         $item->meta=$item->meta??json_decode($item->meta);
         return $item;
+    }
+
+    private function relatedItems($itemId, $itemType, $keyword, $type)
+    {
+        $lang = app()->getLocale();
+
+
+        if ($keyword != null) {
+            // Get matching items based on keywords and item type
+            $items = $this->getMatchingItems($keyword, $type, $itemType, $itemId);
+            // Apply additional filters before executing the query
+            // $itemstoreturn = $items->where('item_type', $itemType)
+            //     ->where('id', '!=', $itemId)
+            //     ->orderBy('id', 'desc')
+            //     ->limit(8)
+            //     ->get();
+            foreach ($items as $item) {
+                if ($lang !== 'ar') {
+                    $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
+
+                    $item->title = $translate != null ? $translate->translated_title : $item->title;
+                    $item->description = $translate != null ? $translate->translated_description : $item->title;
+                }
+            }
+            return $items;
+        } else {
+
+            foreach ($items as $item) {
+                if ($lang !== 'ar') {
+                    # code...
+                    $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
+
+                    $item->title = $translate != null ? $translate->translated_title : $item->title;
+                    $item->description = $translate != null ? $translate->translated_description : $item->title;
+                }
+            }
+            return $items;
+        }
     }
 }
