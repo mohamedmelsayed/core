@@ -53,7 +53,7 @@ class VideoUploader
                 case 'aws':
                     $this->initializeS3Client();
                     $this->uploadedServer = Status::AWS_CDN;
-                    $this->uploadToAWSCDN();
+                    $this->uploadToServers3();
                     break;
                 default:
                     throw new \Exception("Invalid upload disk: $this->uploadedServer");
