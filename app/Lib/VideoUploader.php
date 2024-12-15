@@ -53,7 +53,7 @@ class VideoUploader
                 case 'aws':
                     $this->initializeS3Client();
                     $this->uploadedServer = Status::AWS_CDN;
-                    $this->uploadToAWSCDN();
+                    $this->uploadToAwsS3();
                     break;
                 default:
                     throw new \Exception("Invalid upload disk: $this->uploadedServer");
@@ -218,7 +218,7 @@ class VideoUploader
             // Generate a unique filename and store in AWS S3
             $fileName = $date . '/' . uniqid() . '_' . $file->getClientOriginalName();
             $s3Path = Storage::disk('s3')->putFileAs($path, $file, $fileName, 'public');
-            dd($s3Path);
+            // dd($s3Path);
             // Check if the upload was successful
             if ($s3Path) {
                 $this->fileName = $s3Path; // Set the full path in S3 to the filename attribute
