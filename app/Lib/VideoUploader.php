@@ -53,7 +53,7 @@ class VideoUploader
                 case 'aws':
                     $this->initializeS3Client();
                     $this->uploadedServer = Status::AWS_CDN;
-                    $this->uploadToServers3();
+                    $this->uploadToServers3('videos');
                     break;
                 default:
                     throw new \Exception("Invalid upload disk: $this->uploadedServer");
@@ -97,7 +97,7 @@ class VideoUploader
         }
     }
 
-    private function uploadToServers3($server, $param)
+    private function uploadToServers3( $param)
     {
         $date = date('Y/m/d');
         $file = $this->file;
@@ -114,7 +114,7 @@ class VideoUploader
         } catch (Exception $ex) {
             dd($ex);
             $this->error = true;
-            Log::error("Error uploading to server $server: " . $ex->getMessage());
+            Log::error("Error uploading to server : " . $ex->getMessage());
         }
     }
 
