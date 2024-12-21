@@ -1113,7 +1113,7 @@ class FrontendController extends Controller
             return false;
         });
 
-        return $filteredItems;
+        return $filteredItems->values();
     }
 
 }
