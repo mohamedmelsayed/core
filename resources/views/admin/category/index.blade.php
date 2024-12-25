@@ -11,7 +11,7 @@
                                 <tr>
                                     <th>@lang('Name')</th>
                                     <th>@lang('English Name')</th>
-                                    <th>@lang('type')</th>
+                                    <th>@lang('Type')</th>
                                     <th>@lang('Status')</th>
                                     <th>@lang('Action')</th>
                                 </tr>
@@ -22,7 +22,6 @@
                                         <td data-label="@lang('Name')">{{ __($category->name) }}</td>
                                         <td data-label="@lang('English Name')">{{ __($category->name_en) }}</td>
                                         <td data-label="@lang('Type')">{{ __($category->type) }}</td>
-
                                         <td data-label="@lang('Status')">
                                             @if ($category->status == 1)
                                                 <span class="badge badge--success">@lang('Enabled')</span>
@@ -54,7 +53,7 @@
         </div>
     </div>
 
-    <!--Category Modal -->
+    <!-- Category Modal -->
     <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -77,16 +76,18 @@
                         </div>
                         <div class="form-group">
                             <label>@lang('Category Type')</label>
-                            <select name="type" class="form-control">
+                            <select name="type" class="form-control" required>
                                 <option value="">-- @lang('Select One') --</option>
-                                <option value="vid">@lang('video')</option>
-                                <option value="aud">@lang('audio')</option>
+                                <option value="vid">@lang('Video')</option>
+                                <option value="aud">@lang('Audio')</option>
                             </select>
                         </div>
                         <div class="form-group statusGroup">
                             <label>@lang('Status')</label>
-                            <input type="checkbox" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%" name="status" >
-
+                            <input type="hidden" name="status" value="0"> <!-- Hidden field for status -->
+                            <input type="checkbox" data-onstyle="-success" data-offstyle="-danger" data-toggle="toggle"
+                                data-on="@lang('Active')" data-off="@lang('Inactive')" data-width="100%" name="status"
+                                value="1">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -98,7 +99,6 @@
     </div>
 @endsection
 
-
 @push('breadcrumb-plugins')
     <button class="btn btn-sm btn-outline--primary addBtn"><i class="las la-plus"></i>@lang('Add New')</button>
 @endpush
@@ -106,26 +106,26 @@
 @push('script')
     <script>
         (function($) {
-            "use strict"
+            "use strict";
 
             var modal = $('#categoryModal');
 
+            // Add button logic
             $('.addBtn').on('click', function() {
                 modal.find('.modal-title').text(`@lang('Add Category')`);
                 modal.find('form').attr('action', `{{ route('admin.category.store') }}`);
                 modal.find('.statusGroup').hide();
                 modal.modal('show');
-            })
+            });
 
+            // Edit button logic
             $('.editBtn').on('click', function() {
                 var category = $(this).data('category');
                 modal.find('.modal-title').text(`@lang('Update Category')`);
 
-                // Correct the field name for 'type'
                 modal.find('select[name=type]').val(category.type);
-
-                modal.find('input[name=name_en]').val(category.name_en);
                 modal.find('input[name=name]').val(category.name);
+                modal.find('input[name=name_en]').val(category.name_en);
 
                 modal.find('form').attr('action', `{{ route('admin.category.store', '') }}/${category.id}`);
                 modal.find('.statusGroup').show();
@@ -136,19 +136,13 @@
                     modal.find('input[name=status]').bootstrapToggle('off');
                 }
 
-
                 modal.modal('show');
             });
 
-
-            $('.removeBtn').on('click', function() {
-                let modal = $('#removeModal');
-                modal.find('input[name=id]').val($(this).data('id'))
-                modal.modal('show');
-            });
-
+            // Reset modal on close
             modal.on('hidden.bs.modal', function() {
                 modal.find('form')[0].reset();
+                modal.find('input[name=status]').bootstrapToggle('off');
             });
         })(jQuery);
     </script>
