@@ -328,13 +328,12 @@ class FrontendController extends Controller
             ],
         ]);
     }
-
     public function subcategories(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category_id' => 'required',
+            'category_id' => 'required|exists:categories,id',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'remark'  => 'validation_error',
@@ -342,25 +341,28 @@ class FrontendController extends Controller
                 'message' => ['error' => $validator->errors()->all()],
             ]);
         }
-
-        $notify[]      = 'SubCategories';
-        $subcategories = SubCategory::where('category_id', $request->category_id)->where('status', Status::ENABLE)->apiQuery();
-
+    
+        $notify = ['SubCategories'];
+        $subcategories = SubCategory::where('category_id', $request->category_id)
+            ->where('status', Status::ENABLE)
+            ->apiQuery()
+            ->get(); // Ensure you execute the query
+    
         return response()->json([
             'remark'  => 'sub-categories',
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'subcategories' => $subcategories->map(function ($subcategories) {
+                'subcategories' => $subcategories->map(function ($subcategory) {
                     return [
-                        'id' => $subcategories->id,
-                        'name' => $subcategories->dynamic_name,
+                        'id'   => $subcategory->id,
+                        'name' => $subcategory->dynamic_name,
                     ];
-                }),,
+                }),
             ],
         ]);
     }
-
+    
     public function search(Request $request)
     {
         $notify[] = 'Search';
