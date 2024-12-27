@@ -351,7 +351,7 @@ class FrontendController extends Controller
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'subcategories' => $subcategories->map(function ($category) {
+                'subcategories' => $subcategories->map(function ($subcategories) {
                     return [
                         'id' => $category->id,
                         'name' => $category->dynamic_name,
