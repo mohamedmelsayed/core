@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubCategory extends Model {
     use GlobalStatus, Searchable, ApiQuery;
+    
     protected $guarded = ['id'];
 
     public function category() {
@@ -18,6 +19,6 @@ class SubCategory extends Model {
     public function getDynamicNameAttribute() {
         $language = request()->header('Language', 'en'); // Default to 'en'
         $language = in_array($language, ['ar', 'en']) ? $language : 'en'; // Ensure valid value
-        return $language === 'ar' ? $this->name : $this->name_en;
+        return $language === 'ar' ? ($this->name ?? '') : ($this->name_en ?? '');
     }
 }
