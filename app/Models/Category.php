@@ -1,7 +1,5 @@
-
 <?php
 namespace App\Models;
-
 
 use App\Traits\ApiQuery;
 use App\Traits\GlobalStatus;
@@ -10,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model {
     use GlobalStatus, Searchable, ApiQuery;
-    protected $fillable = ["name","name_en"];
+
+    protected $fillable = ["name", "name_en"];
 
     public function scopeActive() {
         return $this->where('status', 1);
@@ -20,15 +19,9 @@ class Category extends Model {
         return $this->hasMany(SubCategory::class);
     }
 
-    /**
-     * Accessor for dynamic name based on language.
-     */
     public function getDynamicNameAttribute() {
-        $language = request()->header('Language', 'en'); // Default to 'en'
-        $language = in_array($language, ['ar', 'en']) ? $language : 'en'; // Ensure valid value
+        $language = request()->header('Language', 'en');
+        $language = in_array($language, ['ar', 'en']) ? $language : 'en';
         return $language === 'ar' ? $this->name : $this->name_en;
     }
-    
-
-   
 }
