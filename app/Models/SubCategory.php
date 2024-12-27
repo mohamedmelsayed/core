@@ -14,4 +14,10 @@ class SubCategory extends Model {
     public function category() {
         return $this->belongsTo(Category::class);
     }
+
+    public function getDynamicNameAttribute() {
+        $language = request()->header('Language', 'en'); // Default to 'en'
+        $language = in_array($language, ['ar', 'en']) ? $language : 'en'; // Ensure valid value
+        return $language === 'ar' ? $this->name : $this->name_en;
+    }
 }

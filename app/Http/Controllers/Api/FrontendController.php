@@ -319,7 +319,12 @@ class FrontendController extends Controller
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'categories' => $categories,
+                'categories' => $categories->map(function ($category) {
+                    return [
+                        'id' => $category->id,
+                        'name' => $category->dynamic_name,
+                    ];
+                }),
             ],
         ]);
     }
@@ -346,7 +351,12 @@ class FrontendController extends Controller
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'subcategories' => $subcategories,
+                'subcategories' => $subcategories->map(function ($category) {
+                    return [
+                        'id' => $category->id,
+                        'name' => $category->dynamic_name,
+                    ];
+                }),,
             ],
         ]);
     }
