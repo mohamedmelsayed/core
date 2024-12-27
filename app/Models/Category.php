@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Models;
@@ -18,4 +19,14 @@ class Category extends Model {
     public function subcategories() {
         return $this->hasMany(SubCategory::class);
     }
+
+    /**
+     * Accessor for dynamic name based on language.
+     */
+    public function getDynamicNameAttribute() {
+        $language = request()->header('Language', 'en'); // Default to 'en'
+        return $language === 'ar' ? $this->name : $this->name_en;
+    }
+
+   
 }
