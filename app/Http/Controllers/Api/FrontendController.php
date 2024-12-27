@@ -329,8 +329,17 @@ class FrontendController extends Controller
                                 'name' => $subcategory->dynamic_name,
                             ];
                         }),
+                        
                     ];
                 }),
+                'pagination' => [
+                    'total'        => $categories->total(),
+                    'per_page'     => $categories->perPage(),
+                    'current_page' => $categories->currentPage(),
+                    'last_page'    => $categories->lastPage(),
+                    'from'         => $categories->firstItem(),
+                    'to'           => $categories->lastItem(),
+                ],
             ],
         ]);
     }
@@ -365,7 +374,16 @@ class FrontendController extends Controller
                         'name' => $subcategory->dynamic_name,
                     ];
                 }),
+                'pagination'    => [
+                'total'        => $subcategories->total(),
+                'per_page'     => $subcategories->perPage(),
+                'current_page' => $subcategories->currentPage(),
+                'last_page'    => $subcategories->lastPage(),
+                'from'         => $subcategories->firstItem(),
+                'to'           => $subcategories->lastItem(),
             ],
+            ],
+            
         ]);
     }
     
