@@ -1,7 +1,7 @@
 
 <?php
-
 namespace App\Models;
+
 
 use App\Traits\ApiQuery;
 use App\Traits\GlobalStatus;
