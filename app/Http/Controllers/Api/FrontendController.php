@@ -321,8 +321,14 @@ class FrontendController extends Controller
             'data'    => [
                 'categories' => $categories->map(function ($category) {
                     return [
-                        'id' => $category->id,
-                        'name' => $category->dynamic_name,
+                        'id'           => $category->id,
+                        'name'         => $category->dynamic_name,
+                        'subcategories' => $category->subcategories->map(function ($subcategory) {
+                            return [
+                                'id'   => $subcategory->id,
+                                'name' => $subcategory->dynamic_name,
+                            ];
+                        }),
                     ];
                 }),
             ],
