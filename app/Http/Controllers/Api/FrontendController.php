@@ -720,24 +720,48 @@ class FrontendController extends Controller
             ],
         ]);
     }
-
     public function playlists(Request $request)
     {
         $category_id = $request->query('category_id');
         $type = $request->query('type');
     
-        $allPlaylists = Playlist::whereHas('items', function ($query) use ($category_id,$type) {
-            $query->where(function ($q) {
-                $q->whereHas('video')->orWhereHas('audio');
-            });
+        // Fetch playlists with related items
+        $allPlaylists = Playlist::with('items')
+            ->whereHas('items', function ($query) use ($category_id, $type) {
+                $query->where(function ($q) {
+                    $q->whereHas('video')->orWhereHas('audio');
+                });
     
-            if ($category_id) {
-                $query->where('sub_category_id', $category_id);
-            }
-            if ($type) {
-                $query->where('type', $type);
-            }
-        })->limit(12)->get();
+                if ($category_id) {
+                    $query->where('sub_category_id', $category_id);
+                }
+                if ($type) {
+                    $query->where('type', $type);
+                }
+            })
+            ->limit(12)
+            ->get();
+    
+        // Map the playlists to include dynamic title, description, and related items
+        $playlists = $allPlaylists->map(function ($playlist) use ($request) {
+            return [
+                'id'           => $playlist->id,
+                'title'        => $playlist->dynamic_title,
+                'description'  => $playlist->dynamic_description,
+                'type'         => $playlist->type,
+                'cover_image'  => $playlist->cover_image,
+                'items'        => $playlist->items->map(function ($item) use ($request) {
+                    $translatedItem = $this->getTranslatedContent($item, $request);
+                    return [
+                        'id'          => $translatedItem->id,
+                        'name'        => $translatedItem->title,
+                        'tags'        => $translatedItem->tags,
+                        'description' => $translatedItem->description,
+                        'type'        => $translatedItem->type, // Assuming the item has a 'type' field
+                    ];
+                }),
+            ];
+        });
     
         $notify[] = 'Play Lists';
         $remark = 'play_lists';
@@ -747,10 +771,12 @@ class FrontendController extends Controller
             'status' => 'success',
             'message' => ['success' => $notify],
             'data' => [
-                'playLists' => $allPlaylists,
+                'playLists' => $playlists,
             ],
         ]);
     }
+    
+    
 
     public function playlist( $id,Request $request)
     {

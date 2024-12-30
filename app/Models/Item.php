@@ -18,6 +18,14 @@ class Item extends Model
         'thumbnail' => 'object',
     ];
 
+       // Accessor for dynamic title
+       public function getDynamicTitleAttribute()
+       {
+           $language = request()->header('Language', 'en'); // Default to 'en'
+           $language = in_array($language, ['ar', 'en']) ? $language : 'en'; // Ensure valid value
+           return $language === 'ar' ? $this->title : $this->title_en;
+       }
+
     public function video()
     {
         return $this->hasOne(Video::class);

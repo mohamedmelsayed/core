@@ -34,4 +34,20 @@ class Playlist extends Model
     {
         return $this->subCategory->category();
     }
+
+    // Accessor for dynamic title
+    public function getDynamicTitleAttribute()
+    {
+        $language = request()->header('Language', 'en'); // Default to 'en'
+        $language = in_array($language, ['ar', 'en']) ? $language : 'en'; // Ensure valid value
+        return $language === 'ar' ? $this->title : $this->title_en;
+    }
+
+    // Accessor for dynamic description
+    public function getDynamicDescriptionAttribute()
+    {
+        $language = request()->header('Language', 'en'); // Default to 'en'
+        $language = in_array($language, ['ar', 'en']) ? $language : 'en'; // Ensure valid value
+        return $language === 'ar' ? $this->description : $this->description_en;
+    }
 }
