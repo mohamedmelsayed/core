@@ -778,20 +778,15 @@ class FrontendController extends Controller
     
     
 
-    public function playlist( $id,Request $request)
+    public function playlist($id, Request $request)
     {
-       
-
-        $playlist=playlist::where("id",$id)->with('items')->first();
-
-        foreach ($playlist->items as $item) {
-            # code...
-            $item=$this->getTranslatedContent($item,$request);
-        }
-
-
+        $playlist = Playlist::where("id", $id)->with('items')->first();
     
-       
+        if ($playlist) {
+            $playlist->items = $playlist->items->map(function ($item) use ($request) {
+                return $this->getTranslatedContent($item, $request);
+            });
+        }
     
         $notify[] = 'Play List details';
         $remark = 'play_list details';
@@ -801,11 +796,16 @@ class FrontendController extends Controller
             'status' => 'success',
             'message' => ['success' => $notify],
             'data' => [
-                'playList' => $playlist??[],
+                'playList' => [
+                    'id'          => $playlist->id,
+                    'title'       => $playlist->dynamic_title,
+                    'description' => $playlist->dynamic_description,
+                    'items'       => $playlist->items,
+                ],
             ],
         ]);
     }
-    
+     
 
     public function playAudio(Request $request)
     {
