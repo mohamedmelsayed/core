@@ -72,7 +72,6 @@ class UserController extends Controller {
             ],
         ]);
     }
-    
     /**
      * Apply translation to a collection of items.
      */
