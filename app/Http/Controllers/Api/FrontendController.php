@@ -112,34 +112,34 @@ class FrontendController extends Controller
 
     public function featured(Request $request)
     {
-        $notify[]     = 'Featured';
-        $featured     = Item::active()->hasVideoOrAudio()->where('featured', Status::ENABLE)->apiQuery();
-        $imagePath    = getFilePath('item_landscape');
+        $notify[] = 'Featured';
+        $featured = Item::active()->hasVideoOrAudio()->where('featured', Status::ENABLE)->apiQuery();
+        $imagePath = getFilePath('item_landscape');
         $portraitPath = getFilePath('item_portrait');
-
+    
         $featured = $featured->map(function ($item) use ($request) {
             $translatedItem = $this->getTranslatedContent($item, $request);
-
-            // Assign translated values to the item
-            $item->name = $translatedItem->title;
-            $item->tags = $translatedItem->tags;
-            $item->description = $translatedItem->description;
-            $item->type = $translatedItem->type;
-
-            return $item; // Return the modified item
+    
+            // Add translated content without losing original fields
+            $item->translated_title = $translatedItem->title;
+            $item->translated_tags = $translatedItem->tags;
+            $item->translated_description = $translatedItem->description;
+    
+            return $item;
         });
-
+    
         return response()->json([
-            'remark'  => 'featured',
-            'status'  => 'success',
+            'remark' => 'featured',
+            'status' => 'success',
             'message' => ['success' => $notify],
-            'data'    => [
-                'featured'       => $featured,
+            'data' => [
+                'featured' => $featured,
                 'landscape_path' => $imagePath,
-                'portrait_path'  => $portraitPath,
+                'portrait_path' => $portraitPath,
             ],
         ]);
     }
+    
 
     public function listAudio(Request $request)
     {
@@ -206,89 +206,89 @@ class FrontendController extends Controller
 
     public function recentlyAdded(Request $request)
     {
-        $notify[]      = 'Recently Added';
+        $notify[] = 'Recently Added';
         $recentlyAdded = Item::active()->hasVideoOrAudio()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
-        $imagePath     = getFilePath('item_portrait');
+        $imagePath = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-
+    
         $recentlyAdded = $recentlyAdded->map(function ($item) use ($request) {
             $translatedItem = $this->getTranslatedContent($item, $request);
-
-            // Assign translated values to the item
-            $item->name = $translatedItem->title;
+    
+            // Assign translated values to the original item fields
+            $item->title = $translatedItem->title;
             $item->tags = $translatedItem->tags;
             $item->description = $translatedItem->description;
-            $item->type = $translatedItem->type;
-
+    
             return $item; // Return the modified item
         });
-
+    
         return response()->json([
-            'remark'  => 'recently_added',
-            'status'  => 'success',
+            'remark' => 'recently_added',
+            'status' => 'success',
             'message' => ['success' => $notify],
-            'data'    => [
-                'recent'         => $recentlyAdded,
-                'portrait_path'  => $imagePath,
+            'data' => [
+                'recent' => $recentlyAdded,
+                'portrait_path' => $imagePath,
                 'landscape_path' => $landscapePath,
             ],
         ]);
     }
+    
 
 
     public function latestSeries(Request $request)
     {
-        $notify[]      = 'Latest Series';
-        $latestSeries  = Item::active()->hasVideoOrAudio()->where('item_type', Status::EPISODE_ITEM)->apiQuery();
-        $imagePath     = getFilePath('item_portrait');
+        $notify[] = 'Latest Series';
+        $latestSeries = Item::active()->hasVideoOrAudio()->where('item_type', Status::EPISODE_ITEM)->apiQuery();
+        $imagePath = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-
-        // Apply translation for each item
+    
         $latestSeries = $latestSeries->map(function ($item) use ($request) {
             $translatedItem = $this->getTranslatedContent($item, $request);
-
-            // Assign translated values to the item
-            $item->name = $translatedItem->title;
+    
+            // Assign translated values to the original item fields
+            $item->title = $translatedItem->title;
             $item->tags = $translatedItem->tags;
             $item->description = $translatedItem->description;
-            $item->type = $translatedItem->type;
-
+    
             return $item; // Return the modified item
         });
-
+    
         return response()->json([
-            'remark'  => 'latest-series',
-            'status'  => 'success',
+            'remark' => 'latest-series',
+            'status' => 'success',
             'message' => ['success' => $notify],
-            'data'    => [
-                'latest'         => $latestSeries,
-                'portrait_path'  => $imagePath,
+            'data' => [
+                'latest' => $latestSeries,
+                'portrait_path' => $imagePath,
                 'landscape_path' => $landscapePath,
             ],
         ]);
     }
+    
 
 
     public function single(Request $request)
     {
         $notify[] = 'Single Item';
-
+    
         $single = Item::active()->hasVideoOrAudio()->where('single', 1)->with('category')->apiQuery();
-
+    
         $single = $single->map(function ($item) use ($request) {
             $translatedItem = $this->getTranslatedContent($item, $request);
-
+    
+            // Assign translated values while keeping original properties
             $item->name = $translatedItem->title;
             $item->tags = $translatedItem->tags;
             $item->description = $translatedItem->description;
             $item->type = $translatedItem->type;
-
+    
             return $item;
         });
-
+    
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-
+    
         return response()->json([
             'remark'  => 'single',
             'status'  => 'success',
@@ -300,63 +300,59 @@ class FrontendController extends Controller
             ],
         ]);
     }
+    
 
     public function trailer(Request $request)
-    {
-        $notify[] = 'Trailer';
-        $trailer  = Item::active()->hasVideoOrAudio()
-            ->where('item_type', Status::SINGLE_ITEM)
-            ->where('is_trailer', Status::TRAILER)
-            ->apiQuery();
+{
+    $notify[] = 'Trailer';
+    $trailer  = Item::active()->hasVideoOrAudio()->where('item_type', Status::SINGLE_ITEM)->where('is_trailer', Status::TRAILER)->apiQuery();
 
-        $trailer = $trailer->map(function ($item) use ($request) {
-            $translatedItem = $this->getTranslatedContent($item, $request);
+    $trailer = $trailer->map(function ($item) use ($request) {
+        $translatedItem = $this->getTranslatedContent($item, $request);
 
-            $item->name = $translatedItem->title;
-            $item->tags = $translatedItem->tags;
-            $item->description = $translatedItem->description;
-            $item->type = $translatedItem->type;
+        $item->name = $translatedItem->title;
+        $item->tags = $translatedItem->tags;
+        $item->description = $translatedItem->description;
+        $item->type = $translatedItem->type;
 
-            return $item;
-        });
+        return $item;
+    });
 
-        $imagePath     = getFilePath('item_portrait');
-        $landscapePath = getFilePath('item_landscape');
+    $imagePath     = getFilePath('item_portrait');
+    $landscapePath = getFilePath('item_landscape');
 
-        return response()->json([
-            'remark'  => 'trailer',
-            'status'  => 'success',
-            'message' => ['success' => $notify],
-            'data'    => [
-                'trailer'        => $trailer,
-                'portrait_path'  => $imagePath,
-                'landscape_path' => $landscapePath,
-            ],
-        ]);
-    }
+    return response()->json([
+        'remark'  => 'trailer',
+        'status'  => 'success',
+        'message' => ['success' => $notify],
+        'data'    => [
+            'trailer'        => $trailer,
+            'portrait_path'  => $imagePath,
+            'landscape_path' => $landscapePath,
+        ],
+    ]);
+}
+
 
     public function rent(Request $request)
     {
         $notify[] = 'Rent';
-        $rent     = Item::active()->hasVideoOrAudio()
-            ->where('item_type', Status::SINGLE_ITEM)
-            ->where('version', Status::RENT_VERSION)
-            ->apiQuery();
-
+        $rent     = Item::active()->hasVideoOrAudio()->where('item_type', Status::SINGLE_ITEM)->where('version', Status::RENT_VERSION)->apiQuery();
+    
         $rent = $rent->map(function ($item) use ($request) {
             $translatedItem = $this->getTranslatedContent($item, $request);
-
+    
             $item->name = $translatedItem->title;
             $item->tags = $translatedItem->tags;
             $item->description = $translatedItem->description;
             $item->type = $translatedItem->type;
-
+    
             return $item;
         });
-
+    
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-
+    
         return response()->json([
             'remark'  => 'rent',
             'status'  => 'success',
@@ -368,26 +364,27 @@ class FrontendController extends Controller
             ],
         ]);
     }
+    
 
     public function freeZone(Request $request)
     {
-        $notify[] = 'Free Zone';
-        $freeZone = Item::active()->hasVideoOrAudio()->free()->orderBy('id', 'desc')->apiQuery();
-
+        $notify[]      = 'Free Zone';
+        $freeZone      = Item::active()->hasVideoOrAudio()->free()->orderBy('id', 'desc')->apiQuery();
+    
         $freeZone = $freeZone->map(function ($item) use ($request) {
             $translatedItem = $this->getTranslatedContent($item, $request);
-
+    
             $item->name = $translatedItem->title;
             $item->tags = $translatedItem->tags;
             $item->description = $translatedItem->description;
             $item->type = $translatedItem->type;
-
+    
             return $item;
         });
-
+    
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-
+    
         return response()->json([
             'remark'  => 'free_zone',
             'status'  => 'success',
@@ -399,6 +396,7 @@ class FrontendController extends Controller
             ],
         ]);
     }
+    
 
     public function categories()
     {
