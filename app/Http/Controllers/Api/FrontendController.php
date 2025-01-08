@@ -1082,10 +1082,11 @@ class FrontendController extends Controller
         if ($translate != null) {
             $item->tags= $translate->translated_tags ?? $item->tags;
             $item->title = $translate->translated_title;
-            $item->description = strLimit(strip_tags($translate->translated_description), 150);
+            $item->description = $item->description;
+
         } else {
             $item->tags= $item->meta_keywords ?? [];
-            $item->description = strLimit(strip_tags($item->description), 150);
+            $item->description = $item->description;
         }
         $item->meta=$item->meta??json_decode($item->meta);
         return $item;
