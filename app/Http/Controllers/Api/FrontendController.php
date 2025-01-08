@@ -120,12 +120,9 @@ class FrontendController extends Controller
         $featured = $featured->map(function ($item) use ($request) {
             $translatedItem = $this->getTranslatedContent($item, $request);
     
-            // Add translated content without losing original fields
-            $item->title = $translatedItem->title;
-            $item->tags = $translatedItem->tags;
-            $item->description = $translatedItem->description;
+           
     
-            return $item;
+            return $translatedItem;
         });
     
         return response()->json([
