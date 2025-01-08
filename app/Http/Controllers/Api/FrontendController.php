@@ -1190,24 +1190,24 @@ class FrontendController extends Controller
             //     ->limit(8)
             //     ->get();
             foreach ($items as $item) {
-                if ($lang !== 'ar') {
+             
                     $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
 
                     $item->title = $translate != null ? $translate->translated_title : $item->title;
                     $item->description = $translate != null ? $translate->translated_description : $item->title;
-                }
+                
             }
             return $items;
         } else {
 
             foreach ($items as $item) {
-                if ($lang !== 'ar') {
+              
                     # code...
                     $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
 
                     $item->title = $translate != null ? $translate->translated_title : $item->title;
                     $item->description = $translate != null ? $translate->translated_description : $item->title;
-                }
+                
             }
             return $items;
         }
