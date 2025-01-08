@@ -110,12 +110,24 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function featured()
+    public function featured(Request $request)
     {
         $notify[]     = 'Featured';
-        $featured     = Item::active()->hasVideo()->where('featured', Status::ENABLE)->apiQuery();
+        $featured     = Item::active()->hasVideoOrAudio()->where('featured', Status::ENABLE)->apiQuery();
         $imagePath    = getFilePath('item_landscape');
         $portraitPath = getFilePath('item_portrait');
+
+        $featured = $featured->map(function ($item) use ($request) {
+            $translatedItem = $this->getTranslatedContent($item, $request);
+
+            // Assign translated values to the item
+            $item->name = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
+            $item->type = $translatedItem->type;
+
+            return $item; // Return the modified item
+        });
 
         return response()->json([
             'remark'  => 'featured',
@@ -133,15 +145,15 @@ class FrontendController extends Controller
     {
         $notify[] = 'Recently Added';
         $perPage = $request->query('per_page', 10); // Set a default of 10 items per page if not provided
-    
+
         $audio = Item::active()
             ->hasAudio()
             ->where('item_type', Status::SINGLE_ITEM)
             ->paginate($perPage);
-    
+
         $imagePath = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-    
+
         return response()->json([
             'remark' => 'recently_added',
             'status' => 'success',
@@ -159,20 +171,20 @@ class FrontendController extends Controller
             ],
         ]);
     }
-    
+
     public function listVideo(Request $request)
     {
         $notify[] = 'Recently Added';
         $perPage = $request->query('per_page', 10); // Set a default of 10 items per page if not provided
-    
+
         $videos = Item::active()
             ->hasVideo()
             ->where('item_type', Status::SINGLE_ITEM)
             ->paginate($perPage);
-    
+
         $imagePath = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-    
+
         return response()->json([
             'remark' => 'recently_added',
             'status' => 'success',
@@ -190,14 +202,26 @@ class FrontendController extends Controller
             ],
         ]);
     }
-    
 
-    public function recentlyAdded()
+
+    public function recentlyAdded(Request $request)
     {
         $notify[]      = 'Recently Added';
         $recentlyAdded = Item::active()->hasVideoOrAudio()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
+
+        $recentlyAdded = $recentlyAdded->map(function ($item) use ($request) {
+            $translatedItem = $this->getTranslatedContent($item, $request);
+
+            // Assign translated values to the item
+            $item->name = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
+            $item->type = $translatedItem->type;
+
+            return $item; // Return the modified item
+        });
 
         return response()->json([
             'remark'  => 'recently_added',
@@ -211,12 +235,26 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function latestSeries()
+
+    public function latestSeries(Request $request)
     {
         $notify[]      = 'Latest Series';
         $latestSeries  = Item::active()->hasVideoOrAudio()->where('item_type', Status::EPISODE_ITEM)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
+
+        // Apply translation for each item
+        $latestSeries = $latestSeries->map(function ($item) use ($request) {
+            $translatedItem = $this->getTranslatedContent($item, $request);
+
+            // Assign translated values to the item
+            $item->name = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
+            $item->type = $translatedItem->type;
+
+            return $item; // Return the modified item
+        });
 
         return response()->json([
             'remark'  => 'latest-series',
@@ -230,11 +268,23 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function single()
+
+    public function single(Request $request)
     {
         $notify[] = 'Single Item';
 
         $single = Item::active()->hasVideoOrAudio()->where('single', 1)->with('category')->apiQuery();
+
+        $single = $single->map(function ($item) use ($request) {
+            $translatedItem = $this->getTranslatedContent($item, $request);
+
+            $item->name = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
+            $item->type = $translatedItem->type;
+
+            return $item;
+        });
 
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
@@ -251,10 +301,24 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function trailer()
+    public function trailer(Request $request)
     {
         $notify[] = 'Trailer';
-        $trailer  = Item::active()->hasVideoOrAudio()->where('item_type', Status::SINGLE_ITEM)->where('is_trailer', Status::TRAILER)->apiQuery();
+        $trailer  = Item::active()->hasVideoOrAudio()
+            ->where('item_type', Status::SINGLE_ITEM)
+            ->where('is_trailer', Status::TRAILER)
+            ->apiQuery();
+
+        $trailer = $trailer->map(function ($item) use ($request) {
+            $translatedItem = $this->getTranslatedContent($item, $request);
+
+            $item->name = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
+            $item->type = $translatedItem->type;
+
+            return $item;
+        });
 
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
@@ -271,10 +335,24 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function rent()
+    public function rent(Request $request)
     {
         $notify[] = 'Rent';
-        $rent     = Item::active()->hasVideoOrAudio()->where('item_type', Status::SINGLE_ITEM)->where('version', Status::RENT_VERSION)->apiQuery();
+        $rent     = Item::active()->hasVideoOrAudio()
+            ->where('item_type', Status::SINGLE_ITEM)
+            ->where('version', Status::RENT_VERSION)
+            ->apiQuery();
+
+        $rent = $rent->map(function ($item) use ($request) {
+            $translatedItem = $this->getTranslatedContent($item, $request);
+
+            $item->name = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
+            $item->type = $translatedItem->type;
+
+            return $item;
+        });
 
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
@@ -291,10 +369,22 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function freeZone()
+    public function freeZone(Request $request)
     {
-        $notify[]      = 'Free Zone';
-        $freeZone      = Item::active()->hasVideoOrAudio()->free()->orderBy('id', 'desc')->apiQuery();
+        $notify[] = 'Free Zone';
+        $freeZone = Item::active()->hasVideoOrAudio()->free()->orderBy('id', 'desc')->apiQuery();
+
+        $freeZone = $freeZone->map(function ($item) use ($request) {
+            $translatedItem = $this->getTranslatedContent($item, $request);
+
+            $item->name = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
+            $item->type = $translatedItem->type;
+
+            return $item;
+        });
+
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
 
@@ -329,7 +419,7 @@ class FrontendController extends Controller
                                 'name' => $subcategory->dynamic_name,
                             ];
                         }),
-                        
+
                     ];
                 }),
                 'pagination' => [
@@ -348,7 +438,7 @@ class FrontendController extends Controller
         $validator = Validator::make($request->all(), [
             'category_id' => 'required|exists:categories,id',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'remark'  => 'validation_error',
@@ -356,13 +446,13 @@ class FrontendController extends Controller
                 'message' => ['error' => $validator->errors()->all()],
             ]);
         }
-    
+
         $notify = ['SubCategories'];
         $subcategories = SubCategory::where('category_id', $request->category_id)
             ->where('status', Status::ENABLE)
             ->apiQuery()
             ->get(); // Ensure you execute the query
-    
+
         return response()->json([
             'remark'  => 'sub-categories',
             'status'  => 'success',
@@ -375,18 +465,18 @@ class FrontendController extends Controller
                     ];
                 }),
                 'pagination'    => [
-                'total'        => $subcategories->total(),
-                'per_page'     => $subcategories->perPage(),
-                'current_page' => $subcategories->currentPage(),
-                'last_page'    => $subcategories->lastPage(),
-                'from'         => $subcategories->firstItem(),
-                'to'           => $subcategories->lastItem(),
+                    'total'        => $subcategories->total(),
+                    'per_page'     => $subcategories->perPage(),
+                    'current_page' => $subcategories->currentPage(),
+                    'last_page'    => $subcategories->lastPage(),
+                    'from'         => $subcategories->firstItem(),
+                    'to'           => $subcategories->lastItem(),
+                ],
             ],
-            ],
-            
+
         ]);
     }
-    
+
     public function search(Request $request)
     {
         $notify[] = 'Search';
@@ -437,17 +527,17 @@ class FrontendController extends Controller
 
         // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
         $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-        $relatedVideos= $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
 
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
         $episodePath   = getFilePath('episode');
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-      
+
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        $this->getTranslatedContent($item,$request);
+        $this->getTranslatedContent($item, $request);
 
 
         if (!$watchEligable[0]) {
@@ -477,7 +567,7 @@ class FrontendController extends Controller
             'data'    => [
                 'item'           => $item,
                 'related_audios'  => $relatedAudios,
-                    'related_videos'  => $relatedVideos,
+                'related_videos'  => $relatedVideos,
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
                 'episode_path'   => $episodePath,
@@ -503,16 +593,16 @@ class FrontendController extends Controller
 
         // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
         $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-        $relatedVideos= $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
         $episodePath   = getFilePath('episode');
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-      
+
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        $this->getTranslatedContent($item,$request);
+        $this->getTranslatedContent($item, $request);
 
 
         if (!$watchEligable[0]) {
@@ -569,15 +659,15 @@ class FrontendController extends Controller
 
         // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
         $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-        $relatedVideos= $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
         $episodePath   = getFilePath('episode');
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
-     
+
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        $this->getTranslatedContent($item,$request);
+        $this->getTranslatedContent($item, $request);
         if (!$watchEligable[0]) {
             return response()->json([
                 'remark'  => 'unauthorized_' . $watchEligable[1],
@@ -678,7 +768,7 @@ class FrontendController extends Controller
             ]);
         }
 
-   
+
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
@@ -724,14 +814,14 @@ class FrontendController extends Controller
     {
         $category_id = $request->query('category_id');
         $type = $request->query('type');
-    
+
         // Fetch playlists with related items
         $allPlaylists = Playlist::with('items')
             ->whereHas('items', function ($query) use ($category_id, $type) {
                 $query->where(function ($q) {
                     $q->whereHas('video')->orWhereHas('audio');
                 });
-    
+
                 if ($category_id) {
                     $query->where('sub_category_id', $category_id);
                 }
@@ -741,7 +831,7 @@ class FrontendController extends Controller
             })
             ->limit(12)
             ->get();
-    
+
         // Map the playlists to include dynamic title, description, and related items
         $playlists = $allPlaylists->map(function ($playlist) use ($request) {
             return [
@@ -762,10 +852,10 @@ class FrontendController extends Controller
                 }),
             ];
         });
-    
+
         $notify[] = 'Play Lists';
         $remark = 'play_lists';
-    
+
         return response()->json([
             'remark' => $remark,
             'status' => 'success',
@@ -775,22 +865,22 @@ class FrontendController extends Controller
             ],
         ]);
     }
-    
-    
+
+
 
     public function playlist($id, Request $request)
     {
         $playlist = Playlist::where("id", $id)->with('items')->first();
-    
+
         if ($playlist) {
             $playlist->items = $playlist->items->map(function ($item) use ($request) {
                 return $this->getTranslatedContent($item, $request);
             });
         }
-    
+
         $notify[] = 'Play List details';
         $remark = 'play_list details';
-    
+
         return response()->json([
             'remark' => $remark,
             'status' => 'success',
@@ -805,7 +895,7 @@ class FrontendController extends Controller
             ],
         ]);
     }
-     
+
 
     public function playAudio(Request $request)
     {
@@ -830,7 +920,7 @@ class FrontendController extends Controller
             ]);
         }
 
-    
+
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
@@ -1074,21 +1164,20 @@ class FrontendController extends Controller
         ]);
     }
 
-    private function getTranslatedContent($item,$request)
+    private function getTranslatedContent($item, $request)
     {
         $lang = $request->header('Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
 
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
-            $item->tags= $translate->translated_tags ?? $item->tags;
+            $item->tags = $translate->translated_tags ?? $item->tags;
             $item->title = $translate->translated_title;
             $item->description = $item->description;
-
         } else {
-            $item->tags= $item->meta_keywords ?? [];
+            $item->tags = $item->meta_keywords ?? [];
             $item->description = $item->description;
         }
-        $item->meta=$item->meta??json_decode($item->meta);
+        $item->meta = $item->meta ?? json_decode($item->meta);
         return $item;
     }
 
@@ -1178,5 +1267,4 @@ class FrontendController extends Controller
 
         return $filteredItems->values();
     }
-
 }
