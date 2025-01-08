@@ -118,11 +118,10 @@ class FrontendController extends Controller
         $portraitPath = getFilePath('item_portrait');
     
         $featured = $featured->map(function ($item) use ($request) {
-            $translatedItem = $this->getTranslatedContent($item, $request);
+            $$item = $this->getTranslatedContent($item, $request);
     
            
     
-            return $translatedItem;
         });
     
         return response()->json([
