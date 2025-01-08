@@ -6,7 +6,6 @@ use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Models\AdminNotification;
 use App\Models\Advertise;
-use App\Models\ContentTranslation;
 use App\Models\Deposit;
 use App\Models\DeviceToken;
 use App\Models\Episode;
@@ -36,76 +35,34 @@ class UserController extends Controller {
         return back();
     }
 
-    public function dashboard(Request $request)
-    {
-        $notify[] = 'Dashboard Data';
-        $items = Item::active()->hasVideo();
-        
-        // Fetch data with relationships
-        $data['sliders'] = Slider::with('item', 'item.category', 'item.sub_category')->latest()->limit(4)->get();
-        $data['televisions'] = LiveTelevision::where('status', 1)->latest()->limit(4)->get();
-        
-        // Fetch items with translation applied
-        $data['featured'] = $this->applyTranslation((clone $items)->where('featured', Status::ENABLE)->latest()->limit(10)->get(), $request);
-        $data['recently_added'] = $this->applyTranslation((clone $items)->orderBy('id', 'desc')->where('item_type', Status::SINGLE_ITEM)->latest()->limit(10)->get(), $request);
-        $data['latest_series'] = $this->applyTranslation((clone $items)->orderBy('id', 'desc')->where('item_type', Status::EPISODE_ITEM)->latest()->limit(10)->get(), $request);
-        $data['single'] = $this->applyTranslation((clone $items)->orderBy('id', 'desc')->where('single', 1)->with('category')->latest()->limit(10)->get(), $request);
-        $data['trailer'] = $this->applyTranslation((clone $items)->where('item_type', Status::SINGLE_ITEM)->where('is_trailer', Status::TRAILER)->latest()->limit(10)->get(), $request);
-        $data['rent'] = $this->applyTranslation((clone $items)->where('item_type', Status::SINGLE_ITEM)->where('version', Status::RENT_VERSION)->latest()->limit(10)->get(), $request);
-        $data['free_zone'] = $this->applyTranslation((clone $items)->free()->latest()->limit(10)->get(), $request);
-        
-        $data['advertise'] = Advertise::where('device', 2)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
-        
-        // Paths for images
-        $imagePath['portrait'] = getFilePath('item_portrait');
-        $imagePath['landscape'] = getFilePath('item_landscape');
+    public function dashboard() {
+        $data['sliders']        = Slider::with('item', 'item.category', 'item.sub_category')->latest()->limit(4)->get();
+        $data['televisions']    = LiveTelevision::where('status', 1)->latest()->limit(4)->get();
+        $items                  = Item::active()->hasVideo();
+        $data['featured']       = (clone $items)->where('featured', Status::ENABLE)->latest()->limit(10)->get();
+        $data['recently_added'] = (clone $items)->orderBy('id', 'desc')->where('item_type', Status::SINGLE_ITEM)->latest()->limit(10)->get();
+        $data['latest_series']  = (clone $items)->orderBy('id', 'desc')->where('item_type', Status::EPISODE_ITEM)->latest()->limit(10)->get();
+        $data['single']         = (clone $items)->orderBy('id', 'desc')->where('single', 1)->with('category')->latest()->limit(10)->get();
+        $data['trailer']        = (clone $items)->where('item_type', Status::SINGLE_ITEM)->where('is_trailer', Status::TRAILER)->latest()->limit(10)->get();
+        $data['rent']           = (clone $items)->where('item_type', Status::SINGLE_ITEM)->where('version', Status::RENT_VERSION)->latest()->limit(10)->get();
+        $data['free_zone']      = (clone $items)->free()->latest()->limit(10)->get();
+        $data['advertise']      = Advertise::where('device', 2)->where('ads_show', 1)->where('ads_type', 'banner')->inRandomOrder()->first();
+
+        $imagePath['portrait']   = getFilePath('item_portrait');
+        $imagePath['landscape']  = getFilePath('item_landscape');
         $imagePath['television'] = getFilePath('television');
-        $imagePath['ads'] = getFilePath('ads');
-    
+        $imagePath['ads']        = getFilePath('ads');
+
         return response()->json([
-            'remark' => 'dashboard',
-            'status' => 'success',
-            'message' => ['success' => $notify],
-            'data' => [
+            'remark'  => 'dashboard',
+            'status'  => 'success',
+            'message' => ['success' => 'Dashboard Data'],
+            'data'    => [
                 'data' => $data,
                 'path' => $imagePath,
             ],
         ]);
     }
-    
-    /**
-     * Apply translation to a collection of items.
-     */
-    private function applyTranslation($items, $request)
-    {
-        return $items->map(function ($item) use ($request) {
-            $translatedItem = $this->getTranslatedContent($item, $request);
-            
-            // Add translated fields without losing original data
-            $item->translated_title = $translatedItem->title;
-            $item->translated_tags = $translatedItem->tags;
-            $item->translated_description = $translatedItem->description;
-            
-            return $item;
-        });
-    }
-    private function getTranslatedContent($item, $request)
-    {
-        $lang = $request->header('Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
-
-        $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
-        if ($translate != null) {
-            $item->tags = $translate->translated_tags ?? $item->tags;
-            $item->title = $translate->translated_title;
-            $item->description = $item->description;
-        } else {
-            $item->tags = $item->meta_keywords ?? [];
-            $item->description = $item->description;
-        }
-        $item->meta = $item->meta ?? json_decode($item->meta);
-        return $item;
-    }
-
 
     public function userInfo() {
         $notify[] = 'User information';
