@@ -121,9 +121,9 @@ class FrontendController extends Controller
             $translatedItem = $this->getTranslatedContent($item, $request);
     
             // Add translated content without losing original fields
-            $item->translated_title = $translatedItem->title;
-            $item->translated_tags = $translatedItem->tags;
-            $item->translated_description = $translatedItem->description;
+            $item->title = $translatedItem->title;
+            $item->tags = $translatedItem->tags;
+            $item->description = $translatedItem->description;
     
             return $item;
         });
