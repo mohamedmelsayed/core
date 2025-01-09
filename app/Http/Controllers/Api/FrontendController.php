@@ -531,7 +531,7 @@ class FrontendController extends Controller
 
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        $this->getTranslatedContent($item, $request);
+        $item=$this->getTranslatedContent($item, $request);
 
 
         if (!$watchEligable[0]) {
@@ -596,8 +596,8 @@ class FrontendController extends Controller
 
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        $this->getTranslatedContent($item, $request);
 
+        $item=$this->getTranslatedContent($item, $request);
 
         if (!$watchEligable[0]) {
             return response()->json([
@@ -662,6 +662,7 @@ class FrontendController extends Controller
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $this->getTranslatedContent($item, $request);
+
         if (!$watchEligable[0]) {
             return response()->json([
                 'remark'  => 'unauthorized_' . $watchEligable[1],
