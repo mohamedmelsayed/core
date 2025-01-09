@@ -1166,13 +1166,9 @@ class FrontendController extends Controller
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
             $item->tags = $translate->translated_tags ?? $item->tags;
-            $item->title = $translate->translated_title;
-            $item->description = $translate->translated_description;
-        } else {
-            $item->tags = $item->meta_keywords ?? [];
-            $item->description = $item->description;
-        }
-        $item->meta = $item->meta ?? json_decode($item->meta);
+            $item->title = $translate->translated_title??$item->title;
+            $item->description = $translate->translated_description??$item->description;
+        } 
         return $item;
     }
 
