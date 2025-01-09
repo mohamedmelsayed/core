@@ -661,7 +661,7 @@ class FrontendController extends Controller
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
-        $this->getTranslatedContent($item, $request);
+        $item=$this->getTranslatedContent($item, $request);
 
         if (!$watchEligable[0]) {
             return response()->json([
