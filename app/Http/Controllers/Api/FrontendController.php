@@ -1167,7 +1167,7 @@ class FrontendController extends Controller
         if ($translate != null) {
             $item->tags = $translate->translated_tags ?? $item->tags;
             $item->title = $translate->translated_title;
-            $item->description = $item->description;
+            $item->description = $translate->translated_description;
         } else {
             $item->tags = $item->meta_keywords ?? [];
             $item->description = $item->description;
