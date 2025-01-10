@@ -1163,6 +1163,15 @@ class FrontendController extends Controller
     {
         $lang = $request->header('Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
 
+        // Get translated content for category (if exists)
+        if ($item->category) {
+            $item->category->name = $item->category->dynamic_name; 
+        }
+
+        // Get translated content for sub_category (if exists)
+        if ($item->sub_category) {
+            $item->sub_category->name =   $item->sub_category->dynamic_name;
+        }
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
         if ($translate != null) {
             $item->tags = $translate->translated_tags ?? $item->tags;
