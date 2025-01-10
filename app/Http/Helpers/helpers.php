@@ -135,7 +135,7 @@ function titleToKey($text) {
     return strtolower(str_replace(' ', '_', $text));
 }
 
-function strLimit($title = null, $length = 10) {
+function strLimit($title = null, $length = 30) {
     return Str::limit($title, $length);
 }
 
