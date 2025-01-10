@@ -618,13 +618,13 @@ class SiteController extends Controller
         if ($translate != null) {
             $seoContents['keywords'] = $translate->translated_tags ?? $item->tags;
             $seoContents['social_title'] = $translate->translated_title;
-            $seoContents['description'] = strLimit(strip_tags($translate->translated_description), 150);
-            $seoContents['social_description'] = strLimit(strip_tags($translate->translated_description), 150);
+            $seoContents['description'] = $translate->translated_description;
+            $seoContents['social_description'] = $translate->translated_description;
         } else {
             $seoContents['keywords'] = $item->meta_keywords ?? [];
             $seoContents['social_title'] = $item->title;
-            $seoContents['description'] = strLimit(strip_tags($item->description), 150);
-            $seoContents['social_description'] = strLimit(strip_tags($item->description), 150);
+            $seoContents['description'] = $item->description;
+            $seoContents['social_description'] = $item->description;
         }
         $seoContents['image'] = getImage(getFilePath('item_landscape') . '/' . $item->image->landscape);
         $seoContents['image_size'] = '900x600';
