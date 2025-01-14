@@ -98,21 +98,11 @@ class RegisterController extends Controller {
 
         $exist = User::where('mobile', $request->mobile_code . $request->mobile)->first();
 
-        $user->activation_token = Str::random(60);
-        $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
-        $type           = 'email';
-        $pageTitle      = 'Verify Email';
-        $notifyTemplate = 'EVER_LINK';
+       
 
        
         $user = $this->create($request->all(),$exist?$exist:new User());
-         // Send verification email with the new activation token
-         $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
-         // dd($verificationUrl);
-         notify($user, $notifyTemplate, [
-             'link' => $verificationUrl,
-         ], [$type]);
-
+       
 
         $response['access_token'] = $user->createToken('auth_token')->plainTextToken;
         $response['user']         = $user;
@@ -195,7 +185,21 @@ class RegisterController extends Controller {
 
         $userLogin->browser = @$userAgent['browser'];
         $userLogin->os      = @$userAgent['os_platform'];
+
+        $user->verification_token = Str::random(60);
+        $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
+        $type           = 'email';
+        $pageTitle      = 'Verify Email';
+        $notifyTemplate = 'EVER_LINK';
         $userLogin->save();
+
+          // Send verification email with the new activation token
+          $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+          // dd($verificationUrl);
+          notify($user, $notifyTemplate, [
+              'link' => $verificationUrl,
+          ], [$type]);
+ 
 
         return $user;
     }
