@@ -1161,52 +1161,73 @@ class FrontendController extends Controller
 
     private function getTranslatedContent($item, $request)
     {
-        $lang = $request->header('Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
-
+        $lang = $request->header('Language', 'en'); // Default to 'en'
+    
         // Get translated content for category (if exists)
         if ($item->category) {
-            $item->category->name = $item->category->dynamic_name; 
+            $item->category->name = $this->translateDynamicName($item->category, $lang);
         }
-
+    
         // Get translated content for sub_category (if exists)
         if ($item->sub_category) {
-            $item->sub_category->name =   $item->sub_category->dynamic_name;
+            $item->sub_category->name = $this->translateDynamicName($item->sub_category, $lang);
         }
+    
+        // Get translated content for item
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
-        if ($translate != null) {
-            $item->tags = $translate->translated_tags ?? $item->tags;
-            $item->title = $translate->translated_title??$item->title;
-            $item->description = $translate->translated_description??$item->description;
-        } 
+        if ($translate) {
+            $item->tags        = $translate->translated_tags ?? $item->tags;
+            $item->title       = $translate->translated_title ?? $item->title;
+            $item->description = $translate->translated_description ?? $item->description;
+        }
+    
+        // Translate team details (if exists)
         if (!empty($item->team)) {
             $item->team = [
-                'director' => $this->translateCommaSeparatedValues($item->team->director ?? ''),
-                'producer' => $this->translateCommaSeparatedValues($item->team->producer ?? ''),
-                
-                'casts'    => __($item->team->casts ?? ''),
-                'genres'   => __($item->team->genres ?? ''),
-                'language' => __($item->team->language ?? ''),
+                'director' => $this->translateCommaSeparatedValues($item->team->director ?? '', $lang),
+                'producer' => $this->translateCommaSeparatedValues($item->team->producer ?? '', $lang),
+                'casts'    => $this->translateValue($item->team->casts ?? '', $lang),
+                'genres'   => $this->translateValue($item->team->genres ?? '', $lang),
+                'language' => $this->translateValue($item->team->language ?? '', $lang),
             ];
         }
+    
         return $item;
     }
-
+    
     /**
- * Translate comma-separated values.
- */
-private function translateCommaSeparatedValues($values)
-{
-    if (empty($values)) {
-        return '';
+     * Translate comma-separated values.
+     */
+    private function translateCommaSeparatedValues($values, $lang)
+    {
+        if (empty($values)) {
+            return '';
+        }
+    
+        return collect(explode(',', $values))
+            ->map(function ($value) use ($lang) {
+                return $this->translateValue(trim($value), $lang);
+            })
+            ->implode(', ');
     }
-
-    // Split the string by commas, translate each part, and join them back
-    return collect(explode(',', $values))
-        ->map(function ($value) {
-            return __(trim($value));
-        })
-        ->implode(', ');
-}
+    
+    /**
+     * Translate a single value based on language.
+     */
+    private function translateValue($value, $lang)
+    {
+        // Example logic for translation (modify as needed for your setup)
+        return __($value, [], $lang);
+    }
+    
+    /**
+     * Translate dynamic name for category or sub-category.
+     */
+    private function translateDynamicName($entity, $lang)
+    {
+        return $entity->{"dynamic_name_$lang"} ?? $entity->dynamic_name;
+    }
+    
 
     private function relatedItems($itemId, $itemType, $keyword, $type)
     {
