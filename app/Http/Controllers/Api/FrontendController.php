@@ -1180,8 +1180,9 @@ class FrontendController extends Controller
         } 
         if (!empty($item->team)) {
             $item->team = [
-                'director' => __($item->team->director ?? ''),
-                'producer' => __($item->team->producer ?? ''),
+                'director' => $this->translateCommaSeparatedValues($item->team->director ?? ''),
+                'producer' => $this->translateCommaSeparatedValues($item->team->producer ?? ''),
+                
                 'casts'    => __($item->team->casts ?? ''),
                 'genres'   => __($item->team->genres ?? ''),
                 'language' => __($item->team->language ?? ''),
@@ -1189,6 +1190,23 @@ class FrontendController extends Controller
         }
         return $item;
     }
+
+    /**
+ * Translate comma-separated values.
+ */
+private function translateCommaSeparatedValues($values)
+{
+    if (empty($values)) {
+        return '';
+    }
+
+    // Split the string by commas, translate each part, and join them back
+    return collect(explode(',', $values))
+        ->map(function ($value) {
+            return __(trim($value));
+        })
+        ->implode(', ');
+}
 
     private function relatedItems($itemId, $itemType, $keyword, $type)
     {
