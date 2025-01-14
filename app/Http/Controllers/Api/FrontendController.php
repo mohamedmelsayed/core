@@ -1179,7 +1179,7 @@ class FrontendController extends Controller
             $item->description = $translate->translated_description??$item->description;
         } 
         if (!empty($item->team)) {
-            $item->translated_team = [
+            $item->team = [
                 'director' => __($item->team->director ?? ''),
                 'producer' => __($item->team->producer ?? ''),
                 'casts'    => __($item->team->casts ?? ''),
