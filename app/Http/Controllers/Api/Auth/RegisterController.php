@@ -165,13 +165,6 @@ class RegisterController extends Controller {
          
         $user->save();
 
-         // Send verification email with the new activation token
-         $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
-         // dd($verificationUrl);
-         notify($user, $notifyTemplate, [
-             'link' => $verificationUrl,
-         ], [$type]);
-
         $adminNotification            = new AdminNotification();
         $adminNotification->user_id   = $user->id;
         $adminNotification->title     = 'New member registered';
