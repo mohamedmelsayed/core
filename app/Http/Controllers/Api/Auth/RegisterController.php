@@ -98,10 +98,9 @@ class RegisterController extends Controller {
 
         $exist = User::where('mobile', $request->mobile_code . $request->mobile)->first();
 
-        event(new Registered($user = $this->create($request->all(),$exist?$exist:new User())));
     
 
-        // $user = $this->create($request->all(),$exist?$exist:new User());
+        $user = $this->create($request->all(),$exist?$exist:new User());
 
         $response['access_token'] = $user->createToken('auth_token')->plainTextToken;
         $response['user']         = $user;
