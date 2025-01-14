@@ -100,15 +100,18 @@ class RegisterController extends Controller {
 
         $user->activation_token = Str::random(60);
         $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
-
+        $type           = 'email';
+        $pageTitle      = 'Verify Email';
+        $notifyTemplate = 'EVER_LINK';
 
        
         $user = $this->create($request->all(),$exist?$exist:new User());
          // Send verification email with the new activation token
-         Mail::send('emails.verify', ['token' => $user->verification_token, 'user' => $user], function($message) use ($user) {
-            $message->to($user->email);
-            $message->subject('Account Verification');
-        });
+         $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+         // dd($verificationUrl);
+         notify($user, $notifyTemplate, [
+             'link' => $verificationUrl,
+         ], [$type]);
 
 
         $response['access_token'] = $user->createToken('auth_token')->plainTextToken;
