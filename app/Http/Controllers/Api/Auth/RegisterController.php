@@ -134,37 +134,36 @@ class RegisterController extends Controller {
             $referUser = null;
         }
 
-        $user->fill([
-            'email'        => strtolower($data['email']),
-            'password'     => Hash::make($data['password']),
-            'username'     => $data['username'],
-            'country_code' => $data['country_code'],
-            'mobile'       => $data['mobile_code'] . $data['mobile'],
-            'address'      => [
-                'address' => '',
-                'state'   => '',
-                'zip'     => '',
-                'country' => $data['country'],
-                'city'    => '',
-            ],
-            'status'       => Status::ACTIVE,
-            'ev'           => $general->ev ? Status::UNVERIFIED : Status::VERIFIED,
-            'sv'           => $general->sv ? Status::UNVERIFIED : Status::VERIFIED,
-            'verification_token'             => Str::random(60),
-            'verification_token_expires_at'  => now()->addHours(6),
-        ]);
+        //User Create
+        $user->email        = strtolower($data['email']);
+        $user->password     = Hash::make($data['password']);
+        $user->username     = $data['username'];
+        $user->country_code = $data['country_code'];
+        $user->mobile       = $data['mobile_code'] . $data['mobile'];
+        $user->address      = [
+            'address' => '',
+            'state'   => '',
+            'zip'     => '',
+            'country' => isset($data['country']) ? $data['country'] : null,
+            'city'    => '',
+        ];
+        $user->status = 1;
+        $user->ev     = $general->ev ? Status::UNVERIFIED : Status::VERIFIED;
+        $user->sv     = $general->sv ? Status::UNVERIFIED : Status::VERIFIED;
+        $user->verification_token = Str::random(60);
+        $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
    
-          // Send verification email
-          try {
-            $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
-            notify($user, 'EVER_LINK', ['link' => $verificationUrl], ['email']);
-        } catch (\Exception $e) {
-            // Log the error for debugging purposes
-            \Log::error('Email notification failed: ' . $e->getMessage());
-        }
          
         $user->save();
 
+      // Send verification email
+      try {
+        $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+        notify($user, 'EVER_LINK', ['link' => $verificationUrl], ['email']);
+    } catch (\Exception $e) {
+        // Log the error for debugging purposes
+        \Log::error('Email notification failed: ' . $e->getMessage());
+    }
         $adminNotification            = new AdminNotification();
         $adminNotification->user_id   = $user->id;
         $adminNotification->title     = 'New member registered';
