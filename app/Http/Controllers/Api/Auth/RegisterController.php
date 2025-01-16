@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Constants\Status;
 use App\Http\Controllers\Controller;
 use App\Models\AdminNotification;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\UserLogin;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -151,16 +152,19 @@ class RegisterController extends Controller {
         $user->status = 1;
         $user->ev     = $general->ev ? Status::UNVERIFIED : Status::VERIFIED;
         $user->sv     = $general->sv ? Status::UNVERIFIED : Status::VERIFIED;
-        $user->verification_token = Str::random(60);
-        $user->verification_token_expires_at = now()->addHours(6);  // Set token expiration time
+        $user->ver_code         = verificationCode(6);
+        $user->ver_code_send_at = Carbon::now();
    
          
         $user->save();
 
       // Send verification email
       try {
-        $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
-        notify($user, 'EVER_LINK', ['link' => $verificationUrl], ['email']);
+        // $verificationUrl = route('verify.mail', ['token' => $user->verification_token]);
+        notify($user, 'EVER_CODE', [
+                        'code' => $user->ver_code,
+                    ], ['email']);
+        // notify($user, 'EVER_LINK', ['link' => $verificationUrl], ['email']);
     } catch (\Exception $e) {
         // Log the error for debugging purposes
         \Log::error('Email notification failed: ' . $e->getMessage());
