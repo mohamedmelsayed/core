@@ -1231,7 +1231,7 @@ class FrontendController extends Controller
 
     private function relatedItems($itemId, $itemType, $keyword, $type)
     {
-        $lang = app()->getLocale();
+        $lang = $request->header('Language', 'en'); 
 
 
         if ($keyword != null) {
