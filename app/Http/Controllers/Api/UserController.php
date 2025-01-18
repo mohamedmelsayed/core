@@ -83,14 +83,72 @@ class UserController extends Controller {
     }
     private function getTranslatedContent($item, $request)
     {
-        $lang = $request->header('Language', 'en'); // Default to 'en'        $language = $request->header('Accept-Language', 'en'); // Default to 'en'
-
+        $lang = $request->header('Language', 'en'); // Default to 'en'
+    
+        // Get translated content for category (if exists)
+        if ($item->category) {
+            $item->category->name = $this->translateDynamicName($item->category, $lang);
+        }
+    
+        // Get translated content for sub_category (if exists)
+        if ($item->sub_category) {
+            $item->sub_category->name = $this->translateDynamicName($item->sub_category, $lang);
+        }
+    
+        // Get translated content for item
         $translate = ContentTranslation::where("item_id", $item->id)->where("language", $lang)->first();
-        if ($translate != null) {
-            $item->title = $translate->translated_title;
-            $item->description = $item->description;
-        } 
+        if ($translate) {
+            $item->tags        = $translate->translated_tags ?? $item->tags;
+            $item->title       = $translate->translated_title ?? $item->title;
+            $item->description = $translate->translated_description ?? $item->description;
+        }
+    
+        // Translate team details (if exists)
+        if (!empty($item->team)) {
+            $item->team = [
+                'director' => $this->translateCommaSeparatedValues($item->team->director ?? '', $lang),
+                'producer' => $this->translateCommaSeparatedValues($item->team->producer ?? '', $lang),
+                'casts'    => $this->translateValue($item->team->casts ?? '', $lang),
+                'genres'   => $this->translateValue($item->team->genres ?? '', $lang),
+                'language' => $this->translateValue($item->team->language ?? '', $lang),
+            ];
+        }
+    
         return $item;
+    }
+    
+     
+    /**
+     * Translate comma-separated values.
+     */
+    private function translateCommaSeparatedValues($values, $lang)
+    {
+        if (empty($values)) {
+            return '';
+        }
+    
+        return collect(explode(',', $values))
+            ->map(function ($value) use ($lang) {
+                return $this->translateValue(trim($value), $lang);
+            })
+            ->implode(', ');
+    }
+    
+    /**
+     * Translate a single value based on language.
+     */
+    private function translateValue($value, $lang)
+    {
+        // Example logic for translation (modify as needed for your setup)
+        return __($value, [], $lang);
+    }
+    
+    /**
+     * Translate dynamic name for category or sub-category.
+     */
+    private function translateDynamicName($entity, $lang)
+    {
+        return $entity->{"dynamic_name_$lang"} ?? $entity->dynamic_name;
     }
 
 
@@ -790,6 +848,7 @@ class UserController extends Controller {
         }
 
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
+        $item=$this->getTranslatedContent($item, $request);
 
         if (!$watchEligable[0]) {
             return response()->json([
@@ -947,6 +1006,7 @@ class UserController extends Controller {
         $subtitles    = $video->subtitles()->get();
         $adsTime      = $video->getAds();
         $subtitlePath = getFilePath('subtitle');
+        $item=$this->getTranslatedContent($item, $request);
 
         return response()->json([
             'remark'  => $remark,
