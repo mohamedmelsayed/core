@@ -1192,7 +1192,7 @@ class FrontendController extends Controller
             ];
         }
     
-        return $item;
+        dd( $item);
     }
     
     /**
