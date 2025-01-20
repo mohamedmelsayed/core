@@ -507,6 +507,7 @@ class FrontendController extends Controller
 
     public function watchVideo(Request $request)
     {
+        $lang = $request->header('Language', 'en');
         $item = Item::hasVideo()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
 
         if (!$item) {
@@ -520,8 +521,8 @@ class FrontendController extends Controller
         $item->increment('view');
 
         // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
-        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio",$lang);
+        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video",$lang);
 
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
@@ -573,6 +574,7 @@ class FrontendController extends Controller
 
     public function watchStream(Request $request)
     {
+        $lang = $request->header('Language', 'en');
         $item = Item::with('stream')->getStream()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
 
         if (!$item) {
@@ -586,8 +588,8 @@ class FrontendController extends Controller
         $item->increment('view');
 
         // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
-        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio",$lang);
+        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video",$lang);
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
         $episodePath   = getFilePath('episode');
@@ -640,7 +642,7 @@ class FrontendController extends Controller
     public function viewAudio(Request $request)
     {
         $item = Item::hasAudio()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
-
+        $lang = $request->header('Language', 'en');
         if (!$item) {
             return response()->json([
                 'remark'  => 'not_found',
@@ -652,8 +654,8 @@ class FrontendController extends Controller
         $item->increment('view');
 
         // $relatedItems = Item::hasVideoOrAudio()->orderBy('id', 'desc')->where('category_id', $item->category_id)->where('id', '!=', $request->item_id)->limit(6)->get();
-        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio");
-        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video");
+        $relatedAudios =  $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "audio",$lang);
+        $relatedVideos = $this->relatedItems($item->id, Status::SINGLE_ITEM, $item->tags, "video",$lang);
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
         $episodePath   = getFilePath('episode');
@@ -1208,9 +1210,9 @@ private function translateCommaSeparatedValues($values)
         ->implode(', ');
 }
 
-    private function relatedItems($itemId, $itemType, $keyword, $type)
+    private function relatedItems($itemId, $itemType, $keyword, $type,$lang)
     {
-        $lang = $request->header('Language', 'en'); 
+        
 
 
         if ($keyword != null) {
