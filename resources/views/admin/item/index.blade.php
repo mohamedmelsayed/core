@@ -83,7 +83,7 @@
                                                     @endif
 
                                                     <!-- Stream Configuration -->
-                                                    @if ($item->sis_stream==1)
+                                                    @if ($item->is_stream==1)
                                                         <a class="dropdown-item threshold"
                                                             href="{{ route('admin.item.setStream', $item->id) }}">
                                                             <i class="las la-cloud-upload-alt"></i> @lang('Configure Stream')
