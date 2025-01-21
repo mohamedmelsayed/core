@@ -27,6 +27,9 @@
                                         </div>
                                     </div>
                                 @else
+                                <div class="embed-container">
+                                            {!! $item->stream->embed_code !!}
+                                        </div>
                                     <!-- Live Stream Embed -->
                                     @if ($item->is_stream && $item->stream->embed_code)
                                         <div class="embed-container">
