@@ -5,52 +5,44 @@
             <div class="row justify-content-center mb-30-none">
                 <div class="col-xl-8 col-lg-8 mb-30">
                     <!-- Movie Main Content -->
-                    <div class="movie-item">
-                        <div class="main-video position-relative" 
-                             data-start-at="{{ $item->stream->start_at ?? '' }}" 
-                             style="background-image: url('{{ getImage(getFilePath('item_landscape') . '/' . $item->image->landscape) }}'); background-size: cover; background-position: center;">
-                            <div id="video-content">
-                                @if ($item->version == Status::RENT_VERSION || !$watchEligable)
-                                    <!-- Locked Video Display -->
-                                    <div class="main-video-lock">
-                                        <div class="main-video-lock-content">
-                                            <span class="icon"><i class="las la-lock"></i></span>
-                                            <p class="title">@lang('Purchase Now')</p>
-                                            <p class="price">
-                                                <span class="price-amount">
-                                                    {{ $general->cur_sym }}{{ showAmount($item->rent_price) }}
-                                                </span>
-                                                <span class="small-text ms-3">
-                                                    @lang('For') {{ $item->rental_period }} @lang('Days')
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                @else
-                                <div class="embed-container">
-                                            {!! $item->stream->embed_code !!}
-                                        </div>
-                                    <!-- Live Stream Embed -->
-                                    @if ($item->is_stream && $item->stream->embed_code)
-                                        <div class="embed-container">
-                                            {!! $item->stream->embed_code !!}
-                                        </div>
-                                    @else
-                                        <!-- Stream Not Available -->
-                                        <div class="main-video-lock">
-                                            <div class="main-video-lock-content">
-                                                <span class="icon"><i class="las la-lock"></i></span>
-                                                <p class="title">@lang('Live stream not available')</p>
-                                            </div>
-                                        </div>
-                                    @endif
+                    <div id="video-content">
+    @php
+        $streamAvailable = $item->stream && $item->is_stream && $item->stream->embed_code;
+    @endphp
 
-                                    <!-- Countdown Timer -->
-                                    @include($activeTemplate . 'partials.countdown-timer', ['item' => $item])
-                                @endif
-                            </div>
-                        </div>
-                    </div>
+    @if ($item->version == Status::RENT_VERSION || !$watchEligable)
+        <!-- Locked Video Display -->
+        <div class="main-video-lock">
+            <div class="main-video-lock-content">
+                <span class="icon"><i class="las la-lock"></i></span>
+                <p class="title">@lang('Purchase Now')</p>
+                <p class="price">
+                    <span class="price-amount">
+                        {{ $general->cur_sym }}{{ showAmount($item->rent_price) }}
+                    </span>
+                    <span class="small-text ms-3">
+                        @lang('For') {{ $item->rental_period }} @lang('Days')
+                    </span>
+                </p>
+            </div>
+        </div>
+    @elseif ($streamAvailable)
+        <!-- Live Stream Embed -->
+        <div class="embed-container">
+            {!! $item->stream->embed_code !!}
+        </div>
+        <!-- Countdown Timer -->
+        @include($activeTemplate . 'partials.countdown-timer', ['item' => $item])
+    @else
+        <!-- Stream Not Available -->
+        <div class="main-video-lock">
+            <div class="main-video-lock-content">
+                <span class="icon"><i class="las la-lock"></i></span>
+                <p class="title">@lang('Live stream not available')</p>
+            </div>
+        </div>
+    @endif
+</div>
 
                     <!-- Ad Video Section -->
                     <div class="ad-video position-relative d-none">
