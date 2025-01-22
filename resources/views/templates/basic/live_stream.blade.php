@@ -29,12 +29,9 @@
                             </div>
                         @elseif ($streamAvailable)
                             <!-- Live Stream Embed -->
-    <div class="embed-container">
-        <video id="hls-player" controls autoplay width="100%" height="100%" style="background-color: black;">
-            <source src="{{ $item->stream->embed_code }}" type="application/vnd.apple.mpegurl">
-            @lang('Your browser does not support live streaming.')
-        </video>
-    </div>
+                            <div class="embed-container">
+                                {!! $item->stream->embed_code !!}
+                            </div>
                             <!-- Countdown Timer -->
                             @include($activeTemplate . 'partials.countdown-timer', ['item' => $item])
                         @else
@@ -221,22 +218,7 @@
 @endpush
 
 @push('script')
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-         document.addEventListener('DOMContentLoaded', function () {
-            const video = document.getElementById('hls-player');
-            const streamUrl = "{{ $item->stream->embed_code }}";
-
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(streamUrl);
-                hls.attachMedia(video);
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = streamUrl; // For Safari and other HLS-compatible browsers
-            } else {
-                console.error("HLS is not supported in this browser.");
-            }
-        });
         $(document).ready(function () {
             // Handle Ad Video Playback
             if ($('#ad-video').length > 0) {
