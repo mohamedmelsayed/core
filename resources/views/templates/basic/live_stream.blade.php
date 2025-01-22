@@ -28,10 +28,10 @@
                                 </div>
                             </div>
                         @elseif ($streamAvailable)
-                            <!-- Live Stream Embed -->
-                            <div class="embed-container">
-                                {!! $item->stream->embed_code !!}
-                            </div>
+                            <!-- Live Stream Embed with HLS -->
+    <div id="video-container" class="embed-container">
+        <video id="hls-player" controls autoplay></video>
+    </div>
                             <!-- Countdown Timer -->
                             @include($activeTemplate . 'partials.countdown-timer', ['item' => $item])
                         @else
@@ -230,6 +230,26 @@
                     $('.ad-video').hide();
                     $('.main-video').show();
                 });
+            }
+        });
+    </script>
+@endpush
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('hls-player');
+            const streamUrl = "{{ $item->stream->embed_code }}";
+
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamUrl;
+            } else {
+                console.error("HLS is not supported on this browser.");
             }
         });
     </script>
