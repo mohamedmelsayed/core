@@ -1056,7 +1056,7 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function movies()
+    public function movies(Request $request)
     {
         $notify[]      = 'All Movies';
         $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
@@ -1076,7 +1076,7 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function audios()
+    public function audios(Request $request)
     {
         $notify[]      = 'All Movies';
         $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
