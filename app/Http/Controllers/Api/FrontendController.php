@@ -1069,7 +1069,7 @@ class FrontendController extends Controller
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'movies'         => $movies,
+                'items'         => $movies,
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
             ],
@@ -1090,7 +1090,7 @@ class FrontendController extends Controller
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'movies'         => $movies,
+                'items'         => $movies,
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
             ],
