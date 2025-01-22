@@ -1056,11 +1056,10 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function movies(Request $request)
+    public function movies()
     {
         $notify[]      = 'All Movies';
-        $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
-        $movies        = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage);
+        $movies        = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
 
@@ -1076,12 +1075,10 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function audios(Request $request)
+    public function audios()
     {
         $notify[]      = 'All Movies';
-        $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
-
-        $movies        = Item::active()->hasAudio()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage);
+        $movies        = Item::active()->hasAudio()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
 
