@@ -1071,11 +1071,8 @@ class FrontendController extends Controller
             'data'    => [
                 'movies'         => $movies->items(), // Movies for the current page
                 'portrait_path'  => $imagePath,
-                'landscape_path' => $landscapePath,
-                'total'          => $movies->total(), // Total number of movies
-                'current_page'   => $movies->currentPage(), // Current page number
-                'last_page'      => $movies->lastPage(), // Last page number
-                'per_page'       => $movies->perPage(), // Items per page
+                'landscape_path' => $landscapePath
+   
             ],
         ]);
     }
@@ -1095,11 +1092,8 @@ class FrontendController extends Controller
             'data'    => [
                 'audios'         => $audios->items(), // Audios for the current page
                 'portrait_path'  => $imagePath,
-                'landscape_path' => $landscapePath,
-                'total'          => $audios->total(), // Total number of audios
-                'current_page'   => $audios->currentPage(), // Current page number
-                'last_page'      => $audios->lastPage(), // Last page number
-                'per_page'       => $audios->perPage(), // Items per page
+                'landscape_path' => $landscapePath
+                
             ],
         ]);
     }
