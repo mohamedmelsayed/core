@@ -181,9 +181,39 @@
             background: rgba(0, 0, 0, 0.5);
         }
 
-        .embed-container iframe {
-            border: 0;
-        }
+        .embed-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    margin: 0 auto; /* Center the container */
+}
+
+.embed-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Mobile Devices (up to 767px) */
+@media (max-width: 767px) {
+    .embed-container {
+        width: calc(100% - 40px); /* 20px margin on left and right */
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+/* Desktop Devices (768px and above) */
+@media (min-width: 768px) {
+    .embed-container {
+        width: 80%; /* 10% margin on left and right */
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
     </style>
 @endpush
 
