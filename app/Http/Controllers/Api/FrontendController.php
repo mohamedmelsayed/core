@@ -1056,44 +1056,43 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function movies(Request $request)
+    public function movies()
     {
         $notify[]      = 'All Movies';
         $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
-        $movies        = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage);
+        $movies        = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage)->apiQuery();
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-    
+
         return response()->json([
             'remark'  => 'all_movies',
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'movies'         => $movies->items(), // Movies for the current page
+                'movies'         => $movies,
                 'portrait_path'  => $imagePath,
-                'landscape_path' => $landscapePath
-   
+                'landscape_path' => $landscapePath,
             ],
         ]);
     }
 
-    public function audios(Request $request)
+    public function audios()
     {
-        $notify[]      = 'All Audios';
+        $notify[]      = 'All Movies';
         $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
-        $audios        = Item::active()->hasAudio()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage);
+
+        $movies        = Item::active()->hasAudio()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage)-->apiQuery();
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-    
+
         return response()->json([
-            'remark'  => 'all_audios',
+            'remark'  => 'all_movies',
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'audios'         => $audios->items(), // Audios for the current page
+                'movies'         => $movies,
                 'portrait_path'  => $imagePath,
-                'landscape_path' => $landscapePath
-                
+                'landscape_path' => $landscapePath,
             ],
         ]);
     }
