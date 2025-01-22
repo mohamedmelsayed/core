@@ -1069,18 +1069,17 @@ class FrontendController extends Controller
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'movies'         => $movies->items(),
+                'movies'         => $movies->items(), // Movies for the current page
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
-                'pagination'     => [
-                    'total'        => $movies->total(),
-                    'current_page' => $movies->currentPage(),
-                    'last_page'    => $movies->lastPage(),
-                    'per_page'     => $movies->perPage(),
-                ],
+                'total'          => $movies->total(), // Total number of movies
+                'current_page'   => $movies->currentPage(), // Current page number
+                'last_page'      => $movies->lastPage(), // Last page number
+                'per_page'       => $movies->perPage(), // Items per page
             ],
         ]);
     }
+
     public function audios(Request $request)
     {
         $notify[]      = 'All Audios';
@@ -1094,15 +1093,13 @@ class FrontendController extends Controller
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'audios'         => $audios->items(),
+                'audios'         => $audios->items(), // Audios for the current page
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
-                'pagination'     => [
-                    'total'        => $audios->total(),
-                    'current_page' => $audios->currentPage(),
-                    'last_page'    => $audios->lastPage(),
-                    'per_page'     => $audios->perPage(),
-                ],
+                'total'          => $audios->total(), // Total number of audios
+                'current_page'   => $audios->currentPage(), // Current page number
+                'last_page'      => $audios->lastPage(), // Last page number
+                'per_page'       => $audios->perPage(), // Items per page
             ],
         ]);
     }
