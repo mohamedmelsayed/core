@@ -1075,6 +1075,25 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function audios()
+    {
+        $notify[]      = 'All Movies';
+        $movies        = Item::active()->hasAudio()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
+        $imagePath     = getFilePath('item_portrait');
+        $landscapePath = getFilePath('item_landscape');
+
+        return response()->json([
+            'remark'  => 'all_movies',
+            'status'  => 'success',
+            'message' => ['success' => $notify],
+            'data'    => [
+                'movies'         => $movies,
+                'portrait_path'  => $imagePath,
+                'landscape_path' => $landscapePath,
+            ],
+        ]);
+    }
+
     public function episodes()
     {
         $notify[]      = 'All Episodes';
