@@ -1056,40 +1056,53 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function movies()
+    public function movies(Request $request)
     {
         $notify[]      = 'All Movies';
-        $movies        = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
+        $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
+        $movies        = Item::active()->hasVideo()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage);
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-
+    
         return response()->json([
             'remark'  => 'all_movies',
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'movies'         => $movies,
+                'movies'         => $movies->items(),
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
+                'pagination'     => [
+                    'total'        => $movies->total(),
+                    'current_page' => $movies->currentPage(),
+                    'last_page'    => $movies->lastPage(),
+                    'per_page'     => $movies->perPage(),
+                ],
             ],
         ]);
     }
-
-    public function audios()
+    public function audios(Request $request)
     {
-        $notify[]      = 'All Movies';
-        $movies        = Item::active()->hasAudio()->where('item_type', Status::SINGLE_ITEM)->apiQuery();
+        $notify[]      = 'All Audios';
+        $perPage       = $request->input('per_page', 10); // Get per_page from request or default to 10
+        $audios        = Item::active()->hasAudio()->where('item_type', Status::SINGLE_ITEM)->paginate($perPage);
         $imagePath     = getFilePath('item_portrait');
         $landscapePath = getFilePath('item_landscape');
-
+    
         return response()->json([
-            'remark'  => 'all_movies',
+            'remark'  => 'all_audios',
             'status'  => 'success',
             'message' => ['success' => $notify],
             'data'    => [
-                'movies'         => $movies,
+                'audios'         => $audios->items(),
                 'portrait_path'  => $imagePath,
                 'landscape_path' => $landscapePath,
+                'pagination'     => [
+                    'total'        => $audios->total(),
+                    'current_page' => $audios->currentPage(),
+                    'last_page'    => $audios->lastPage(),
+                    'per_page'     => $audios->perPage(),
+                ],
             ],
         ]);
     }
