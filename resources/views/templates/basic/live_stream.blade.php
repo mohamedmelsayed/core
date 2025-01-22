@@ -29,8 +29,8 @@
                             </div>
                         @elseif ($streamAvailable)
                             <!-- Live Stream Embed -->
-                            <div class="embed-container">
-                                {!! $item->stream->embed_code !!}
+                            <div id="video-container" class="embed-container">
+                                <video id="live-stream" controls autoplay></video>
                             </div>
                             <!-- Countdown Timer -->
                             @include($activeTemplate . 'partials.countdown-timer', ['item' => $item])
@@ -43,24 +43,6 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
-
-                    <!-- Ad Video Section (Hidden by Default) -->
-                    <div class="ad-video position-relative d-none">
-                        <video class="ad-player" id="ad-video"></video>
-                        <div class="ad-links d-none">
-                            @foreach ($adsTime ?? [] as $ads)
-                                <source src="{{ $ads }}" type="video/mp4" />
-                            @endforeach
-                        </div>
-                        <div class="skip-video d-flex justify-content-between align-items-center">
-                            <span class="advertise-text d-none">
-                                @lang('Advertisement') - <span class="remains-ads-time">00:52</span>
-                            </span>
-                            <button class="skipButton d-none" id="skip-button" data-skip-time="0">
-                                @lang('Skip Ad')
-                            </button>
-                        </div>
                     </div>
 
                     <!-- Movie Details Section -->
@@ -81,14 +63,6 @@
                             </div>
                             <div class="movie-content-right">
                                 <div class="movie-widget-area">
-                                    @auth
-                                        @if ($watchEligable && gs('watch_party'))
-                                            <button class="watch-party-btn">
-                                                <i class="las la-desktop base--color"></i>
-                                                <span>@lang('Watch party')</span>
-                                            </button>
-                                        @endif
-                                    @endauth
                                     <span class="movie-widget">
                                         <i class="lar la-star text--warning"></i> {{ getAmount($item->ratings) }}
                                     </span>
@@ -143,13 +117,14 @@
 
 @push('style')
     <style>
-        .main-video {
+        .embed-container {
             position: relative;
             width: 100%;
             padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background-color: black;
         }
 
-        .main-video iframe {
+        .embed-container video {
             position: absolute;
             top: 0;
             left: 0;
@@ -170,66 +145,28 @@
             justify-content: center;
             color: #fff;
         }
-
-        .ad-video {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .embed-container {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 Aspect Ratio */
-    margin: 0 auto; /* Center the container */
-}
-
-.embed-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-}
-
-/* Mobile Devices (up to 767px) */
-@media (max-width: 767px) {
-    .embed-container {
-        width: calc(100% - 40px); /* 20px margin on left and right */
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-}
-
-/* Desktop Devices (768px and above) */
-@media (min-width: 768px) {
-    .embed-container {
-        width: 80%; /* 10% margin on left and right */
-        margin-left: 10%;
-        margin-right: 10%;
-    }
-}
     </style>
 @endpush
 
 @push('script')
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        $(document).ready(function () {
-            // Handle Ad Video Playback
-            if ($('#ad-video').length > 0) {
-                const adPlayer = new Plyr('#ad-video');
-                adPlayer.on('ready', () => adPlayer.play());
+        document.addEventListener('DOMContentLoaded', function () {
+            const video = document.getElementById('live-stream');
+            const streamUrl = "{{ $item->stream->embed_code }}"; // Ensure this contains the .m3u8 URL
 
-                $('#skip-button').on('click', function () {
-                    adPlayer.stop();
-                    $('.ad-video').hide();
-                    $('.main-video').show();
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    console.error('HLS error:', data);
                 });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamUrl; // Native HLS support for Safari
+            } else {
+                console.error('HLS is not supported in this browser.');
+                alert('Your browser does not support live streaming.');
             }
         });
     </script>
