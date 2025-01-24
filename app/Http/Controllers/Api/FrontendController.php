@@ -592,14 +592,15 @@ class FrontendController extends Controller
     
         $item->increment('view');
     
-        // Process embed_code to ensure it contains an iframe
         if ($item->stream && $item->stream->embed_code) {
             $embedCode = $item->stream->embed_code;
     
             // Check if the embed_code contains an iframe
             if (strpos($embedCode, '<iframe') === false) {
                 // If not, convert the URL into an iframe
-                $embedCode = '<iframe src="' . $embedCode . '" frameborder="0" allowfullscreen></iframe>';
+                $embedCode = '<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
+                    <iframe src="' . $embedCode . '" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+                </div>';
             }
     
             // Update the embed_code in the stream
