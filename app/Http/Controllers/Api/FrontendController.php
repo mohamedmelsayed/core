@@ -575,14 +575,35 @@ class FrontendController extends Controller
     public function watchStream(Request $request)
     {
         $lang = $request->header('Language', 'en');
-        $item = Item::with('stream')->getStream()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
-
+        $item = Item::with('stream')
+            ->getStream()
+            ->where('status', 1)
+            ->where('id', $request->item_id)
+            ->with('category', 'sub_category')
+            ->first();
+    
         if (!$item) {
             return response()->json([
                 'remark'  => 'not_found',
                 'status'  => 'error',
                 'message' => ['error' => 'Item not found'],
             ]);
+        }
+    
+        $item->increment('view');
+    
+        // Process embed_code to ensure it contains an iframe
+        if ($item->stream && $item->stream->embed_code) {
+            $embedCode = $item->stream->embed_code;
+    
+            // Check if the embed_code contains an iframe
+            if (strpos($embedCode, '<iframe') === false) {
+                // If not, convert the URL into an iframe
+                $embedCode = '<iframe src="' . $embedCode . '" frameborder="0" allowfullscreen></iframe>';
+            }
+    
+            // Update the embed_code in the stream
+            $item->stream->embed_code = $embedCode;
         }
 
         $item->increment('view');
