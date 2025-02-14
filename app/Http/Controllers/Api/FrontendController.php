@@ -507,19 +507,7 @@ class FrontendController extends Controller
 
     public function watchVideo(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'item_id'    => 'required',
-            'playlist_id' => 'nullable|exists:playlists,id', // Validate playlist_id if provided
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json([
-                'remark'  => 'validation_error',
-                'status'  => 'error',
-                'message' => ['error' => $validator->errors()->all()],
-            ]);
-        }
-
+     
 
         $lang = $request->header('Language', 'en');
         $item = Item::hasVideo()->where('status', 1)->where('id', $request->item_id)->with('category', 'sub_category')->first();
@@ -548,16 +536,7 @@ class FrontendController extends Controller
         $watchEligable = $this->checkWatchEligableItem($item, $userHasSubscribed);
         $item=$this->getTranslatedContent($item, $request);
 
-            // Handle playlist logic if playlist_id is provided
-        $nextItem = null;
-        if ($request->has('playlist_id')) {
-            $playlist = Playlist::find($request->playlist_id);
-
-            if ($playlist) {
-                // Determine the next item in the playlist
-                $nextItem = $playlist->getNextItem($item->id, 'asc'); // Sort order can be 'asc' or 'desc'
-            }
-        }
+ 
 
         if (!$watchEligable[0]) {
             return response()->json([
@@ -570,11 +549,7 @@ class FrontendController extends Controller
                     'landscape_path' => $landscapePath,
                     'related_audios'  => $relatedAudios,
                     'related_videos'  => $relatedVideos,
-                    'nextItem'      => $nextItem ? [
-                        'id'          => $nextItem->id,
-                        'title'       => $nextItem->title,
-                        'audioFile'   => $this->audioList($nextItem->audio), // Include audio details for the next item
-                    ] : null,
+                   
                 ],
             ]);
         }
@@ -796,9 +771,10 @@ class FrontendController extends Controller
     public function playVideo(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'item_id' => 'required',
+            'item_id'    => 'required',
+            'playlist_id' => 'nullable|exists:playlists,id', // Validate playlist_id if provided
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'remark'  => 'validation_error',
@@ -806,6 +782,7 @@ class FrontendController extends Controller
                 'message' => ['error' => $validator->errors()->all()],
             ]);
         }
+
 
         $item = Item::hasVideo()->where('status', 1)->where('id', $request->item_id)->first();
         if (!$item) {
@@ -817,6 +794,16 @@ class FrontendController extends Controller
         }
 
 
+            // Handle playlist logic if playlist_id is provided
+            $nextItem = null;
+            if ($request->has('playlist_id')) {
+                $playlist = Playlist::find($request->playlist_id);
+    
+                if ($playlist) {
+                    // Determine the next item in the playlist
+                    $nextItem = $playlist->getNextItem($item->id, 'asc'); // Sort order can be 'asc' or 'desc'
+                }
+            }
 
         $userHasSubscribed = (auth()->check() && auth()->user()->exp > now()) ? Status::ENABLE : Status::DISABLE;
 
@@ -855,6 +842,11 @@ class FrontendController extends Controller
                 'subtitlePath'  => $subtitlePath,
                 'watchEligable' => $watchEligable[0],
                 'type'          => $watchEligable[1],
+                'nextItem'      => $nextItem ? [
+                    'id'          => $nextItem->id,
+                    'slug'       => $nextItem->slug,
+                    'audioFile'   => $this->videoList($nextItem->video), // Include audio details for the next item
+                ] : null,
             ],
         ]);
     }
@@ -1015,7 +1007,7 @@ class FrontendController extends Controller
                 'type'          => $watchEligable[1],
                 'nextItem'      => $nextItem ? [
                     'id'          => $nextItem->id,
-                    'title'       => $nextItem->title,
+                    'slug'       => $nextItem->slug,
                     'audioFile'   => $this->audioList($nextItem->audio), // Include audio details for the next item
                 ] : null,
                 
