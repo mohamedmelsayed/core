@@ -53,22 +53,31 @@ class Playlist extends Model
 
 
     public function getNextItem(int $currentItemId, string $sortOrder = 'asc')
-{
-    // Fetch items from the playlist with the specified order
-    $items = $this->items()->orderBy('id', $sortOrder)->get();
-
-    // Find the index of the current item
-    $currentIndex = $items->search(function ($item) use ($currentItemId) {
-        return $item->id === $currentItemId;
-    });
-
-    // If the current item is found and there is a next item, return it
-    if ($currentIndex !== false && isset($items[$currentIndex + 1])) {
-        return $items[$currentIndex + 1];
+    {
+        // Fetch items from the playlist with the specified order
+        $items = $this->items()->orderBy('id', $sortOrder)->get();
+    
+        // If no items are found, return null
+        if ($items->isEmpty()) {
+            return null;
+        }
+    
+        // Find the index of the current item
+        $currentIndex = $items->search(function ($item) use ($currentItemId) {
+            return $item->id === $currentItemId;
+        });
+    
+        // If current item is not found, return the first item (start from beginning)
+        if ($currentIndex === false) {
+            return $items->first();
+        }
+    
+        // Calculate the next index (wrap around using modulo)
+        $nextIndex = ($currentIndex + 1) % $items->count();
+    
+        // Return the next item
+        return $items[$nextIndex];
     }
-
-    // Otherwise, return null or handle wrapping back to the first item
-    return null;
-}
+    
 
 }
