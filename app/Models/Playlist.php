@@ -50,4 +50,25 @@ class Playlist extends Model
         $language = in_array($language, ['ar', 'en']) ? $language : 'en'; // Ensure valid value
         return $language === 'ar' ? $this->description : $this->description_en;
     }
+
+
+    public function getNextItem(int $currentItemId, string $sortOrder = 'asc')
+{
+    // Fetch items from the playlist with the specified order
+    $items = $this->items()->orderBy('id', $sortOrder)->get();
+
+    // Find the index of the current item
+    $currentIndex = $items->search(function ($item) use ($currentItemId) {
+        return $item->id === $currentItemId;
+    });
+
+    // If the current item is found and there is a next item, return it
+    if ($currentIndex !== false && isset($items[$currentIndex + 1])) {
+        return $items[$currentIndex + 1];
+    }
+
+    // Otherwise, return null or handle wrapping back to the first item
+    return null;
+}
+
 }
